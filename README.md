@@ -17,3 +17,4 @@ spoiler alert, I want to have a six-pack.
 - Sharing what I know with like-minded and interested people 🎯
 - Sport and mainly body building and a v-taper ABS 💪
 - Gaming, watching movies/series and reading books 📚
+- Traveling and experiencing/exploring new adventures ✈️
