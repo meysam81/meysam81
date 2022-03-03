@@ -12,7 +12,10 @@ spoiler alert, I want to have a six-pack.
 
 # What excites you the most?
 
-- Learning in general, be it language, technology, piano, carpentry, etc. 🎼
+- Learning in general, be it language, technology,
+[piano](https://youtube.com/playlist?list=PLSJGEi3_apk_fn0qp3WqNaB0OJw8tRXWE),
+[craftsmanship](https://youtube.com/playlist?list=PLSJGEi3_apk_oPDvZrxZVLs75_v1y98fS),
+etc. 🎼
 - Talking with intellect people who challenge my beliefs and my worldview 🗣
 - Sharing what I know with like-minded and interested people 🎯
 - Sport and mainly body building and a v-taper ABS 💪
