@@ -8,7 +8,7 @@ my life 🧗‍♀️. As a perfectionist, I either don't start anything, or I g
 possible self to the task at hand; because mediocrity doesn't satisfy me. I'm
 also a huge fan of body-building so when I'm not [writing](https://meysam81.com) ✍️,
 or [coding](https://github.com/meysam81) 🤓, I'm in the gym lifting heavy weights 💪;
-spoiler alert, I want to have a six-pack.
+spoiler alert, I want to grow a six-pack.
 
 # What excites you the most?
 
