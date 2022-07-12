@@ -6,7 +6,7 @@ software engineering 😍 (that is in fact if I'm alive by then). I have a huge
 passion for growth and learning and as long as I'm learning, there's a meaning in
 my life 🧗‍♀️. As a perfectionist, I either don't start anything, or I give my best
 possible self to the task at hand; because mediocrity doesn't satisfy me. I'm
-also a huge fan of body-building so when I'm not [writing](https://meysam81.com) ✍️,
+also a huge fan of body-building so when I'm not [writing](https://meysam81.medium.com) ✍️,
 or [coding](https://github.com/meysam81) 🤓, I'm in the gym lifting heavy weights 💪;
 spoiler alert, I want to grow a six-pack.
 
