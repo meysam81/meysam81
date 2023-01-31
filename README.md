@@ -24,9 +24,12 @@ etc. 🎼
 
 # Show off 😇
 
-[![Meysam GitHub Stats](https://github-readme-stats.vercel.app/api?username=meysam81&show_icons=true&count_private=true)](https://github.com/meysam81)
 <p align="center">
+
+[![Meysam GitHub Stats](https://github-readme-stats.vercel.app/api?username=meysam81&show_icons=true&count_private=true)](https://github.com/meysam81)
+
 <a href="https://meysam.io" target="_blank"><img alt="Blog" src="https://img.shields.io/badge/Blog-meysam.io-red?style=flat&logo=firefox"></a>
 <a href="https://www.linkedin.com/in/meysamazad/" target="_blank"><img alt="LinkedIn" src="https://img.shields.io/badge/LinkedIn-meysamazad-blue?style=flat&logo=linkedin"></a>
 <a href="mailto:contact@meysam.io"><img alt="Email" src="https://img.shields.io/badge/Email-contact@meysam.io-blue?style=flat&logo=gmail"></a>
+
 </p>
