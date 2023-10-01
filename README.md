@@ -1,6 +1,6 @@
 # Introduce yourself in one paragraph
 
-I have a passion for software engineering 🧑‍💻 and a constant desire to learn and grow 🧗‍♀️. As a perfectionist, I strive for excellence in everything I do. In my free time, I enjoy reading non-fiction 📖, [writing technical articles](https://meysam.io/) 🖊️, gaming 🎮, and lifting weights in the gym 💪.
+I have a passion for software engineering 🧑‍💻 and a constant desire to learn and grow 🧗‍♀️. As a perfectionist, I strive for excellence in everything I do. In my free time, I enjoy reading non-fiction 📖, [writing technical articles](https://meysam.io/) 🖊️, playing piano 🎹, gaming 🎮, and lifting weights in the gym 💪.
 
 # Tech Stack
 
