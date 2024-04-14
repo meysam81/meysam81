@@ -1,6 +1,23 @@
-# Introduce yourself in one paragraph
+Hell, and welcome to my profile 👋
 
-I have a passion for software engineering 🧑‍💻 and a constant desire to learn and grow 🧗‍♀️. As a perfectionist, I strive for excellence in everything I do. In my free time, I enjoy [reading non-fiction](https://goodreads.com/meysam81) 📖, [writing technical articles](https://developer-friendly.blog/) 🖊️, [playing piano](https://youtube.com/@meysam) 🎹, [gaming](https://www.twitch.tv/developerfriendly) 🎮, and lifting weights in the gym 💪.
+I am a Senior Site Reliability with 7+ years of experience managing production workloads using automation and orchestration.
+
+I write technical contents on the [Developer Friendly Blog][dev-blog] using the knowledge and expertise I've gathered over the years.
+
+I provide deep-dive tutorials and blog posts that help hundreds of professionals improve their system administration skills and become better engineers.
+
+I have learned much managing production systems, and I share the following topics, among many, on the blog:
+
+- Kubernetes ☸️
+- Linux 🐧
+- GitOps 🔃
+- Ansible 🅰️
+- Terraform 🔨
+- Cloud Providers, e.g., AWS, Azure, etc. ☁️
+
+
+[dev-blog]: https://developer-friendly.blog/
+
 
 # Tech Stack
 
