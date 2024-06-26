@@ -56,6 +56,6 @@ I have learned much managing production systems, and I share the following topic
 
 <a href="https://developer-friendly.blog" target="_blank"><img alt="Blog" src="https://img.shields.io/badge/Blog-Developer%20Friendly-red?style=flat&logo=firefox"></a>
 <a href="https://www.linkedin.com/in/meysamazad/" target="_blank"><img alt="LinkedIn" src="https://img.shields.io/badge/LinkedIn-meysamazad-blue?style=flat&logo=linkedin"></a>
-<a href="mailto:contact@meysam.io"><img alt="Email" src="https://img.shields.io/badge/Email-contact@meysam.io-blue?style=flat&logo=gmail"></a>
+<a href="mailto:meysam@developer-friendly.blog"><img alt="Email" src="https://img.shields.io/badge/Email-meysam@developer--friendly.blog-blue?style=flat&logo=gmail"></a>
 
 </p>
