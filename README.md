@@ -1,4 +1,4 @@
-Hell, and welcome to my profile 👋
+Hello, and welcome to my profile 👋
 
 I am a Senior Site Reliability with 7+ years of experience managing production workloads using automation and orchestration.
 
