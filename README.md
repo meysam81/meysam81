@@ -1,6 +1,6 @@
 Hello, and welcome to my profile 👋
 
-I am a Senior Site Reliability with 7+ years of experience managing production workloads using automation and orchestration.
+I am a Senior Site Reliability Engineer with 7+ years of experience managing production workloads using automation and orchestration.
 
 I write technical contents on the [Developer Friendly Blog][dev-blog] using the knowledge and expertise I've gathered over the years.
 
