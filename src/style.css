@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-color: #ffffff;
+  --text-color: #1f2937;
+  --accent-color: #2563eb;
+}
+
+.dark {
+  --bg-color: #1f2937;
+  --text-color: #e5e7eb;
+  --accent-color: #60a5fa;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  margin: 0;
+  padding: 0;
+}
+
+@media (max-width: 768px) {
+  .md\:grid-cols-\[1fr_2fr\] {
+    grid-template-columns: 1fr;
+  }
+}

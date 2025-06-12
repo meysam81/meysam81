@@ -1,320 +1,139 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" itemscope itemtype="https://schema.org/Person">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Meysam Azad - Site Reliability Engineer</title>
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-      rel="stylesheet"
+    
+    <!-- Primary Meta Tags -->
+    <title>Meysam Azad | Senior Site Reliability Engineer | SRE & DevOps Expert</title>
+    <meta
+      name="title"
+      content="Meysam Azad | Senior Site Reliability Engineer | SRE & DevOps Expert"
     />
-    <style>
-      :root {
-        --bg-color: #1a1a1a;
-        --text-color: #e0e0e0;
-        --accent-color: #64ffda;
-        --section-bg: #252525;
-        --hover-color: #2d2d2d;
+    <meta
+      name="description"
+      content="Meysam Azad - Senior Site Reliability Engineer with 8+ years of experience in SRE, DevOps, Kubernetes, and cloud infrastructure. Expert in CI/CD, IAM, OAuth2, and technical blogging. Available for consulting and full-time opportunities."
+    />
+    <meta
+      name="keywords"
+      content="Site Reliability Engineer, SRE, DevOps Engineer, Kubernetes Expert, Terraform, Ansible, CI/CD Pipeline, AWS Cloud, Azure, Google Cloud Platform, Go Developer, Python Developer, IAM Specialist, OAuth2, Technical Blog Writer, Infrastructure as Code, Container Orchestration, Microservices, Cloud Native, System Architecture"
+    />
+    <meta name="author" content="Meysam Azad" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="language" content="English" />
+    <meta name="revisit-after" content="7 days" />
+    <link rel="canonical" href="https://meysamazad.dev" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="profile" />
+    <meta property="og:url" content="https://meysamazad.dev" />
+    <meta property="og:title" content="Meysam Azad | Senior Site Reliability Engineer | SRE & DevOps Expert" />
+    <meta
+      property="og:description"
+      content="Senior Site Reliability Engineer with 8+ years of experience in SRE, DevOps, Kubernetes, and cloud infrastructure. Expert in CI/CD, IAM, and technical blogging."
+    />
+    <meta property="og:image" content="https://meysamazad.dev/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Meysam Azad - Senior Site Reliability Engineer" />
+    <meta property="og:site_name" content="Meysam Azad Portfolio" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="profile:first_name" content="Meysam" />
+    <meta property="profile:last_name" content="Azad" />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://meysamazad.dev" />
+    <meta property="twitter:title" content="Meysam Azad | Senior Site Reliability Engineer | SRE & DevOps Expert" />
+    <meta
+      property="twitter:description"
+      content="Senior Site Reliability Engineer with 8+ years of experience in SRE, DevOps, Kubernetes, and cloud infrastructure. Expert in CI/CD, IAM, and technical blogging."
+    />
+    <meta property="twitter:image" content="https://meysamazad.dev/og-image.jpg" />
+    <meta property="twitter:image:alt" content="Meysam Azad - Senior Site Reliability Engineer" />
+    <meta property="twitter:creator" content="@meysamazad" />
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Meysam Azad",
+      "jobTitle": "Senior Site Reliability Engineer",
+      "url": "https://meysamazad.dev",
+      "sameAs": [
+        "https://linkedin.com/in/meysamazad",
+        "https://github.com/meysamazad",
+        "https://twitter.com/meysamazad"
+      ],
+      "worksFor": {
+        "@type": "Organization",
+        "name": "Technology Industry"
+      },
+      "knowsAbout": [
+        "Site Reliability Engineering",
+        "DevOps",
+        "Kubernetes",
+        "Cloud Infrastructure",
+        "CI/CD",
+        "Terraform",
+        "Ansible",
+        "AWS",
+        "Azure",
+        "Google Cloud Platform",
+        "Go Programming",
+        "Python Programming",
+        "Identity and Access Management",
+        "OAuth2",
+        "Technical Writing"
+      ],
+      "alumniOf": {
+        "@type": "EducationalOrganization",
+        "name": "University"
+      },
+      "hasOccupation": {
+        "@type": "Occupation",
+        "name": "Site Reliability Engineer",
+        "occupationLocation": {
+          "@type": "Place",
+          "name": "Remote"
+        },
+        "description": "Experienced Site Reliability Engineer specializing in cloud infrastructure, Kubernetes orchestration, and DevOps practices with 8+ years of industry experience."
       }
-
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
-      body {
-        font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
-        background-color: var(--bg-color);
-        color: var(--text-color);
-        line-height: 1.6;
-        padding: 2rem;
-        max-width: 1200px;
-        margin: 0 auto;
-      }
-
-      header {
-        text-align: center;
-        margin-bottom: 3rem;
-      }
-
-      h1 {
-        font-size: 2.5rem;
-        color: var(--accent-color);
-        margin-bottom: 1rem;
-      }
-
-      .contact-info {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 1rem;
-        margin-bottom: 2rem;
-      }
-
-      .contact-info a {
-        color: var(--text-color);
-        text-decoration: none;
-        padding: 0.5rem 1rem;
-        background-color: var(--section-bg);
-        border-radius: 4px;
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
-      a > i:first-child {
-        margin-right: 0.5rem;
-      }
-
-      .contact-info a:hover {
-        background-color: var(--hover-color);
-        transform: translateY(-2px);
-        color: var(--accent-color);
-      }
-
-      section {
-        background-color: var(--section-bg);
-        padding: 2rem;
-        border-radius: 8px;
-        margin-bottom: 2rem;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      }
-
-      h2 {
-        color: var(--accent-color);
-        margin-bottom: 1.5rem;
-        font-size: 1.8rem;
-      }
-
-      .job {
-        margin-bottom: 2rem;
-        padding-bottom: 2rem;
-        border-bottom: 1px solid #333;
-      }
-
-      .job:last-child {
-        border-bottom: none;
-        margin-bottom: 0;
-        padding-bottom: 0;
-      }
-
-      .job-header {
-        margin-bottom: 1rem;
-      }
-
-      .job-title {
-        font-size: 1.3rem;
-        font-weight: bold;
-        color: var(--accent-color);
-      }
-
-      .company {
-        font-weight: 500;
-      }
-
-      .period,
-      .location {
-        color: #888;
-        font-size: 0.9rem;
-      }
-
-      .skills-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: 1rem;
-      }
-
-      .skill-item {
-        background-color: var(--hover-color);
-        padding: 0.75rem 1rem;
-        border-radius: 4px;
-        transition: all 0.3s ease;
-      }
-
-      .skill-item:hover {
-        transform: translateY(-2px);
-        background-color: #333;
-      }
-
-      ul {
-        list-style-position: inside;
-        margin-left: 1rem;
-      }
-
-      li {
-        margin-bottom: 0.5rem;
-      }
-
-      @media (max-width: 768px) {
-        body {
-          padding: 1rem;
-        }
-
-        .contact-info {
-          flex-direction: column;
-        }
-
-        section {
-          padding: 1.5rem;
-        }
-      }
-    </style>
+    }
+    </script>
+    
+    <!-- Favicon and Icons -->
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛠️</text></svg>"
+    />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    
+    <!-- Preconnect for Performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <!-- Additional SEO Tags -->
+    <meta name="theme-color" content="#1a202c" />
+    <meta name="msapplication-TileColor" content="#1a202c" />
+    <meta name="format-detection" content="telephone=no" />
+    
+    <!-- Microdata -->
+    <meta itemprop="name" content="Meysam Azad" />
+    <meta itemprop="description" content="Senior Site Reliability Engineer with 8+ years of experience in SRE, DevOps, Kubernetes, and cloud infrastructure." />
+    <meta itemprop="image" content="https://meysamazad.dev/og-image.jpg" />
   </head>
-  <body>
+  <body itemscope itemtype="https://schema.org/WebPage">
     <header>
-      <h1>Meysam Azad</h1>
-      <div class="contact-info">
-        <a href="https://developer-friendly.blog" target="_blank"
-          ><i class="fas fa-globe"></i>Blog</a
-        >
-        <a href="https://linkedin.com/in/meysamazad" target="_blank"
-          ><i class="fab fa-linkedin"></i>LinkedIn</a
-        >
-        <a href="https://github.com/meysam81" target="_blank"
-          ><i class="fab fa-github"></i>GitHub</a
-        >
-        <a href="mailto:meysam@developer-friendly.blog"
-          ><i class="fas fa-envelope"></i>Email</a
-        >
-        <a href="https://cal.com/meysam" target="_blank"
-          ><i class="fas fa-video"></i>Book a Call</a
-        >
-        <a href="#"><i class="fas fa-map-marker-alt"></i>Indonesia (GMT +7)</a>
-      </div>
+      <h1 class="sr-only">Meysam Azad - Senior Site Reliability Engineer Portfolio</h1>
     </header>
-
-    <section>
-      <h2>Professional Summary</h2>
-      <p>
-        Proven Senior SRE with 7+ Years Experience | Kubernetes & Automation
-        Expert | Fostering Reliability & Knowledge Sharing | High-Achiever,
-        Customer-Obsessed and Reliable
-      </p>
-    </section>
-
-    <section>
-      <h2>Work Experience</h2>
-
-      <div class="job">
-        <div class="job-header">
-          <div class="job-title">Senior Site Reliability Engineer</div>
-          <div class="company">Licenseware</div>
-          <div class="period">2021 - Present</div>
-          <div class="location">
-            Remote, Romania • Software & IT Asset Management
-          </div>
-        </div>
-        <ul>
-          <li>
-            Led the successful migration from AWS cloud provider to Azure in a
-            scheduled maintenance window and improved the platform performance
-            by double.
-          </li>
-          <li>
-            Led the successful adoption of Kubernetes through automation and
-            GitOps with the tech stack of Terraform, Ansible & FluxCD.
-          </li>
-          <li>
-            Set up monitoring, logging, and tracing for all the workloads with
-            Prometheus, Loki, and OpenTelemetry, and prepare the SLO with the
-            development team and business stakeholders' collaboration.
-          </li>
-        </ul>
-      </div>
-
-      <div class="job">
-        <div class="job-header">
-          <div class="job-title">Backend Developer | Python</div>
-          <div class="company">Arman Creative Solutions</div>
-          <div class="period">2020 - 2021</div>
-          <div class="location">Tehran, Iran • Social Networking</div>
-        </div>
-        <ul>
-          <li>
-            Integrated a new publishing app with a social awareness platform,
-            enabling brand interaction and unified comment engagement.
-          </li>
-          <li>
-            Maintained the successful social awareness platform written in
-            Python with a team of genius & dedicated engineers.
-          </li>
-        </ul>
-      </div>
-
-      <div class="job">
-        <div class="job-header">
-          <div class="job-title">Site Reliability Engineer</div>
-          <div class="company">Amer Andish Hooshmand</div>
-          <div class="period">2018 - 2020</div>
-          <div class="location">
-            Tehran, Iran • Machine Learning & Artificial Intelligence
-          </div>
-        </div>
-        <ul>
-          <li>
-            Optimized product delivery for a team of ML engineers using CI/CD
-            pipelines, developer tools, and robust monitoring.
-          </li>
-          <li>
-            Successfully deployed self-managed HAProxy for load-balancing and
-            fault-tolerance across different deployment regions.
-          </li>
-        </ul>
-      </div>
-
-      <div class="job">
-        <div class="job-header">
-          <div class="job-title">Backend Developer | Erlang</div>
-          <div class="company">Bisphone Co.</div>
-          <div class="period">2017 - 2018</div>
-          <div class="location">Tehran, Iran • Social Networking</div>
-        </div>
-        <ul>
-          <li>
-            Enhanced real-time messaging, maintaining a low-latency messaging
-            platform on top of gRPC/Protobuf and high-performance Erlang
-            backend.
-          </li>
-          <li>
-            Kept a minimal IDE setup using Emacs & Tmux and kept the entire
-            development process to the Linux terminal.
-          </li>
-        </ul>
-      </div>
-    </section>
-
-    <section>
-      <h2>Skills</h2>
-      <div class="skills-grid">
-        <div class="skill-item">Kubernetes, Docker, Helm, Cilium</div>
-        <div class="skill-item">GitOps, FluxCD</div>
-        <div class="skill-item">Prometheus, VictoriaMetrics, Alertmanager</div>
-        <div class="skill-item">Loki, Promtail</div>
-        <div class="skill-item">Grafana, SLI, SLO</div>
-        <div class="skill-item">Infrastructure as Code, Ansible, Terraform</div>
-        <div class="skill-item">Linux, Bash, Git</div>
-        <div class="skill-item">Rust, Golang, Python</div>
-        <div class="skill-item">Automation, CI/CD, GitHub Actions</div>
-        <div class="skill-item">AWS, CloudFormation</div>
-        <div class="skill-item">Tracing, OpenTelemetry, Jaeger</div>
-        <div class="skill-item">SQL, PostgreSQL, MySQL</div>
-        <div class="skill-item">NoSQL, MongoDB</div>
-        <div class="skill-item">
-          TDD, Unit, Integration & Performance Testing
-        </div>
-        <div class="skill-item">Blue/Green, Canary, A/B Testing</div>
-        <div class="skill-item">Networking, DNS, TCP/IP</div>
-        <div class="skill-item">
-          Load Balancer, Reverse Proxy, HAProxy, Nginx
-        </div>
-        <div class="skill-item">
-          Ory Products: Kratos, Oathkeeper, Keto, Hydra
-        </div>
-        <div class="skill-item">JSON, GraphQL, gRPC/Protobuf</div>
-        <div class="skill-item">Redis</div>
-        <div class="skill-item">RabbitMQ</div>
-      </div>
-    </section>
+    <main role="main">
+      <div id="app"></div>
+    </main>
+    <script type="module" src="/src/main.js"></script>
   </body>
 </html>
