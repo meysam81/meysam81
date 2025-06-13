@@ -6,9 +6,15 @@
           <h1 class="text-3xl font-bold text-gray-800 dark:text-white">{{ candidate.name }}</h1>
           <p class="text-lg text-gray-600 dark:text-gray-300">{{ candidate.title }}</p>
         </div>
-        <button @click="toggleDarkMode" class="p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white">
-          {{ isDarkMode ? '☀️' : '🌙' }}
-        </button>
+        <div class="flex items-center space-x-2">
+          <button v-if="showInstallPrompt" @click="installPWA"
+                  class="px-3 py-2 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
+            📱 Install App
+          </button>
+          <button @click="toggleDarkMode" class="p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white">
+            {{ isDarkMode ? '☀️' : '🌙' }}
+          </button>
+        </div>
       </div>
     </header>
     <main class="container mx-auto px-4 py-8 grid gap-8 md:grid-cols-[1fr_2fr]">
@@ -93,6 +99,8 @@ export default defineComponent({
   setup: function setup() {
     var isDarkMode = ref(window.matchMedia('(prefers-color-scheme: dark)').matches)
     var candidate = ref(candidateData)
+    var deferredPrompt = ref(null)
+    var showInstallPrompt = ref(false)
 
     var currentYear = computed(function computeCurrentYear() {
       return new Date().getFullYear()
@@ -103,15 +111,45 @@ export default defineComponent({
       document.documentElement.classList.toggle('dark', isDarkMode.value)
     }
 
+    function installPWA() {
+      if (deferredPrompt.value) {
+        deferredPrompt.value.prompt()
+        deferredPrompt.value.userChoice.then(function handleChoice(choiceResult) {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('User accepted the install prompt')
+          }
+          deferredPrompt.value = null
+          showInstallPrompt.value = false
+        })
+      }
+    }
+
+    function handleBeforeInstallPrompt(e) {
+      e.preventDefault()
+      deferredPrompt.value = e
+      showInstallPrompt.value = true
+    }
+
+    function handleAppInstalled() {
+      console.log('PWA was installed')
+      showInstallPrompt.value = false
+      deferredPrompt.value = null
+    }
+
     onMounted(function onMountedHook() {
       document.documentElement.classList.toggle('dark', isDarkMode.value)
+
+      window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
+      window.addEventListener('appinstalled', handleAppInstalled)
     })
 
     return {
       isDarkMode,
       candidate,
       currentYear,
-      toggleDarkMode
+      showInstallPrompt,
+      toggleDarkMode,
+      installPWA
     }
   }
 })
