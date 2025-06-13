@@ -1,17 +1,10 @@
 {
-  "name": "meysam-cv",
-  "version": "1.0.0",
-  "type": "module",
-  "scripts": {
-    "start": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
-  },
   "dependencies": {
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/container-queries": "^0.1.1",
     "@tailwindcss/forms": "^0.5.10",
     "@tailwindcss/typography": "^0.5.16",
+    "loglevel": "^1.9.2",
     "vue": "^3.3.0",
     "xlsx": "^0.18.5"
   },
@@ -25,5 +18,13 @@
     "vite-plugin-compression": "^0.5.1",
     "vite-plugin-pwa": "^1.0.0",
     "vue-router": "^4.5.1"
-  }
+  },
+  "name": "meysam-cv",
+  "scripts": {
+    "build": "vite build",
+    "preview": "vite preview",
+    "start": "vite"
+  },
+  "type": "module",
+  "version": "1.0.0"
 }

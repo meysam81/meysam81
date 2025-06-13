@@ -136,7 +136,7 @@ export default {
         '4xl': '2rem',
         '5xl': '2.5rem'
       },
-      typography: function(theme) {
+      typography: function typography(theme) {
         return {
           DEFAULT: {
             css: {
@@ -179,8 +179,8 @@ export default {
     require('@tailwindcss/container-queries'),
     function addUtilities(api) {
       var addUtilities = api.addUtilities;
-      var theme = api.theme;
-      
+
+
       var newUtilities = {
         '.text-balance': {
           'text-wrap': 'balance'
@@ -200,7 +200,7 @@ export default {
           'print-color-adjust': 'exact'
         }
       };
-      
+
       addUtilities(newUtilities);
     }
   ],

@@ -52,8 +52,10 @@
         </section>
         <section>
           <h2 class="text-xl font-semibold text-gray-800 dark:text-white border-b-2 pb-2">Education</h2>
-          <p class="text-gray-700 dark:text-gray-300">{{ candidate.education.degree }}</p>
-          <p class="text-gray-600 dark:text-gray-400">{{ candidate.education.institution }} • {{ candidate.education.dates }}</p>
+          <div v-for="edu in candidate.education" :key="edu.degree" class="mb-4">
+            <p class="text-gray-700 dark:text-gray-300">{{ edu.degree }}</p>
+            <p class="text-gray-600 dark:text-gray-400">{{ edu.institution }} • {{ edu.dates }}</p>
+          </div>
         </section>
         <section>
           <h2 class="text-xl font-semibold text-gray-800 dark:text-white border-b-2 pb-2">Publications/Blogging</h2>
@@ -74,19 +76,19 @@ import { candidateData } from './data/candidate.js'
 
 export default {
   name: 'App',
-  data: function() {
+  data: function data() {
     return {
       isDarkMode: window.matchMedia('(prefers-color-scheme: dark)').matches,
       candidate: candidateData
     }
   },
   methods: {
-    toggleDarkMode: function() {
+    toggleDarkMode: function toggleDarkMode() {
       this.isDarkMode = !this.isDarkMode
       document.documentElement.classList.toggle('dark', this.isDarkMode)
     }
   },
-  mounted: function() {
+  mounted: function mounted() {
     document.documentElement.classList.toggle('dark', this.isDarkMode)
   }
 }
