@@ -1,7 +1,3 @@
-import consts from "@/data/config.js";
-
-const YOE = __CURRENT_YEAR__ - consts.CAREER_START_YEAR;
-
 export var candidateData = {
   name: "Meysam Azad",
   title: "Senior Site Reliability Engineer",
@@ -14,6 +10,7 @@ export var candidateData = {
   },
   badges: [
     "Kubernetes",
+    "GitOps",
     "Docker",
     "Terraform",
     "AWS",
@@ -23,11 +20,12 @@ export var candidateData = {
     "Python",
     "VictoriaMetrics",
     "Prometheus",
-    "GitOps",
+    "OpenTelemetry",
+    "Grafana",
     "Linux",
     "Ansible",
   ],
-  summary: `Seasoned Site Reliability Engineer with over ${YOE} years of experience in designing and maintaining robust cloud infrastructure for B2B and B2C applications. Expert in Kubernetes orchestration, infrastructure-as-code, and CI/CD automation, with a proven track record of enhancing system reliability and deployment efficiency. Proficient in Go and Python, with deep expertise in IAM & OAuth2 using Ory tools. Passionate about technical blogging and knowledge sharing.`,
+  summary: `Expert in Kubernetes orchestration, infrastructure-as-code, and CI/CD automation, with a proven track record of enhancing system reliability and deployment efficiency. Proficient in Go and Python, with deep expertise in IAM & OAuth2 using Ory tools. Passionate about technical blogging and knowledge sharing.`,
   competencies: [
     "Site Reliability Engineering (SRE)",
     "DevOps Practices",
@@ -46,13 +44,24 @@ export var candidateData = {
       role: "Senior Site Reliability Engineer",
       company: "Licenseware",
       location: "Remote, Romania",
-      dates: "Jan 2021 - Present",
+      dates: "Oct 2021 - Present",
       achievements: [
         "Migrated infrastructure across AWS, Azure, and GCP with zero downtime.",
         "Deployed all infrastructure as code using Terraform and Ansible, adopting a GitOps approach with FluxCD.",
         "Provisioned and maintained high-availability Kubernetes clusters with zero downtime rollouts.",
         "Delivered monitoring infrastructure using VictoriaMetrics/Prometheus and OpenTelemetry.",
-        "Documented infrastructure and implemented developer tools, reducing developer overhead and improving user experience.",
+        "Documented technical decisions, improved developer experience with state-of-the-art tools and preview environments.",
+      ],
+    },
+    {
+      role: "Senior Backend Engineer",
+      company: "Arman Solutions Co.",
+      location: "Tehran, Iran",
+      dates: "Jan 2021 - Jun 2021",
+      achievements: [
+        "Led migration of legacy monolithic applications to microservices architecture using Docker",
+        "Implemented CI/CD pipelines with GitHub Actions, replacing clunky Ansible-based deployments.",
+        "Developed social publishing platform with Python and integration to the established microservices.",
       ],
     },
     {
@@ -62,15 +71,15 @@ export var candidateData = {
       dates: "May 2018 - Dec 2020",
       achievements: [
         "Single-handedly managed entire SRE operations including CI/CD, deployments, and monitoring.",
-        "Dockerized Python applications and maintained high availability across production systems.",
-        "Implemented comprehensive backup strategies and operational monitoring the whole team.",
+        "Dockerized AI/ML Python applications and maintained high availability across production systems.",
+        "Implemented comprehensive backup strategies and operational monitoring for the whole team.",
       ],
     },
     {
       role: "Backend Developer",
       company: "Bisphone Co.",
       location: "Tehran, Iran",
-      dates: "Jun 2016 - Apr 2018",
+      dates: "Jun 2017 - Apr 2018",
       achievements: [
         "Developed Erlang-based B2C chat application serving thousands of daily users.",
         "Built custom messaging infrastructure from scratch, replacing ejabberd components.",
