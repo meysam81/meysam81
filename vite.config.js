@@ -73,6 +73,7 @@ export default defineConfig(function configureVite({ command }) {
       hmr: {
         overlay: true,
       },
+      compress: true,
     },
 
     preview: {

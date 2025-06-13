@@ -122,6 +122,7 @@
 <script>
 import { ref, computed, onMounted, defineComponent } from 'vue'
 import { candidateData } from './data/candidate.js'
+import log from 'loglevel';
 
 export default defineComponent({
   name: 'App',
@@ -145,7 +146,7 @@ export default defineComponent({
         deferredPrompt.value.prompt()
         deferredPrompt.value.userChoice.then(function handleChoice(choiceResult) {
           if (choiceResult.outcome === 'accepted') {
-            console.log('User accepted the install prompt')
+            log.info('User accepted the install prompt')
           }
           deferredPrompt.value = null
           showInstallPrompt.value = false
@@ -160,7 +161,7 @@ export default defineComponent({
     }
 
     function handleAppInstalled() {
-      console.log('PWA was installed')
+      log.info('PWA was installed')
       showInstallPrompt.value = false
       deferredPrompt.value = null
     }
