@@ -22,7 +22,6 @@
   "name": "meysam-cv",
   "scripts": {
     "build": "vite build",
-    "preview": "vite preview",
     "start": "vite"
   },
   "type": "module",
