@@ -1,4 +1,4 @@
-import consts from "@/data/const.js";
+import consts from "@/data/config.js";
 
 const YOE = __CURRENT_YEAR__ - consts.CAREER_START_YEAR;
 

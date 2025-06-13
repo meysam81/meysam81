@@ -1,10 +1,31 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import "./style.css";
-import log from 'loglevel';
+import log from "loglevel";
+
+if (import.meta.env.DEV) {
+  log.setDefaultLevel("debug");
+} else {
+  log.setDefaultLevel("warn");
+}
+
+log.info("🚀 Professional CV Portfolio - Initializing Meysam Azad's application...");
 
 function initializeApp() {
   var app = createApp(App);
+
+  app.config.errorHandler = function handleError(err, instance, info) {
+    log.error("Application error:", err, info);
+  };
+
+  app.config.warnHandler = function handleWarn(msg, instance, trace) {
+    if (import.meta.env.DEV) {
+      log.warn("Application warning:", msg, trace);
+    }
+  };
+
+  app.config.performance = true;
+
   app.mount("#app");
 }
 
@@ -39,3 +60,5 @@ if (document.readyState === "loading") {
 } else {
   deferNonCriticalWork();
 }
+
+log.info("✨ CV Portfolio successfully mounted and ready for professional presentation");
