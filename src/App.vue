@@ -25,7 +25,11 @@
             class="text-xl font-semibold text-gray-800 dark:text-white border-b-2 border-gray-300 dark:border-gray-600 pb-3">
             Contact</h2>
           <div class="space-y-3">
-            <p class="text-gray-700 dark:text-gray-300">{{ candidate.contact.email }}</p>
+            <p class="text-gray-700 dark:text-gray-300">
+              <a :href="'mailto:' + candidate.contact.email" class="text-blue-600 dark:text-blue-400 hover:underline">
+                {{ candidate.contact.email }}
+              </a>
+            </p>
             <p class="text-gray-700 dark:text-gray-300">{{ candidate.contact.location }}</p>
             <div class="space-y-2">
               <div><a :href="'https://' + candidate.contact.blog" target="_blank"
