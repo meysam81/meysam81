@@ -11,7 +11,7 @@
 <!-- Technical Blog & Community -->
 
 [![Blog](https://img.shields.io/badge/📝_Blog-developer--friendly-FF6B35?style=for-the-badge&logo=hashnode)](https://developer-friendly.blog)
-[![Blog Readers](https://img.shields.io/badge/Monthly_Readers-1500+-orange?style=for-the-badge&logo=rss)](https://developer-friendly.blog)
+[![Blog Readers](https://img.shields.io/badge/Monthly_Readers-1,500+-orange?style=for-the-badge&logo=rss)](https://developer-friendly.blog)
 [![GitHub](https://img.shields.io/badge/GitHub-meysam81-181717?style=for-the-badge&logo=github)](https://github.com/meysam81)
 [![Zulip Community](https://img.shields.io/badge/💬_Community-Zulip-52c41a?style=for-the-badge&logo=zulip)](https://developer-friendly.zulipchat.com/)
 
@@ -31,13 +31,6 @@ I have learned much managing production systems, and I share knowledge on topics
 
 <div align="center">
 
-## 🏆 Professional Certifications
-
-[![CKA](https://img.shields.io/badge/CKA-Certified-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white)](https://www.credly.com/badges/26aeebda-3d8c-4da7-9e91-6823d30dd89e)
-[![CKS](https://img.shields.io/badge/CKS-Certified-FF6B6B?style=for-the-badge&logo=kubernetes&logoColor=white)](https://www.credly.com/badges/78684692-9ac4-4c0d-aef8-59d6ac398769)
-[![CKAD](https://img.shields.io/badge/CKAD-Certified-2496ED?style=for-the-badge&logo=kubernetes&logoColor=white)](https://www.credly.com/badges/72c82d73-7020-486a-8fad-bbc71b996e35)
-[![AWS Solutions Architect](https://img.shields.io/badge/AWS-Solutions_Architect-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white)](https://www.credly.com/badges/dde5f0e8-af0b-4b34-bdf7-26a640fc3fef)
-
 ## 💻 Core Technologies
 
 [![Kubernetes](https://img.shields.io/badge/kubernetes-%23326ce5.svg?style=for-the-badge&logo=kubernetes&logoColor=white)](https://developer-friendly.blog/blog/category/kubernetes/)
@@ -45,6 +38,7 @@ I have learned much managing production systems, and I share knowledge on topics
 [![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)](https://developer-friendly.blog/blog/category/python/)
 [![Rust](https://img.shields.io/badge/rust-%23000000.svg?style=for-the-badge&logo=rust&logoColor=white)](https://github.com/meysam81?tab=repositories&language=rust)
 [![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)](https://developer-friendly.blog/blog/category/linux/)
+[![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)](https://developer-friendly.blog/blog/category/docker/)
 
 ## ☁️ Cloud & Infrastructure
 
@@ -52,7 +46,6 @@ I have learned much managing production systems, and I share knowledge on topics
 [![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)](https://developer-friendly.blog/blog/category/aws/)
 [![Azure](https://img.shields.io/badge/Azure-Advanced-0078D4?style=for-the-badge&logo=microsoftazure&logoColor=white)](https://azure.microsoft.com/)
 [![GCP](https://img.shields.io/badge/GCP-Advanced-4285F4?style=for-the-badge&logo=googlecloud&logoColor=white)](https://cloud.google.com/)
-[![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)](https://developer-friendly.blog/blog/category/docker/)
 
 ## 🛠️ DevOps & Automation
 
