@@ -83,7 +83,7 @@ Simplifies Docker image building, pushing, and scanning. Combines multi-platform
 
 ### [🩺 Liveness Check](https://github.com/meysam81/liveness-check) - Kubernetes Health Checker
 
-Production-ready Kubernetes tool that automatically finds recently deployed pods and verifies they're healthy before considering deployment successful. Perfect for CI/CD pipelines and preview deployments.
+Production-ready Kubernetes tool that automatically finds recently deployed pods and verifies they're healthy before considering deployment successful. Perfect for preview deployments.
 
 ### [⚡ Prometheus Command Timer](https://github.com/meysam81/prometheus-command-timer) - Monitoring Utility
 
