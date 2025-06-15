@@ -81,9 +81,9 @@ Revolutionary blogging platform that transforms emails into blog posts. Single b
 
 Simplifies Docker image building, pushing, and scanning. Combines multi-platform builds, security scanning, and GitHub cache optimization into a single action.
 
-### [🔒 Default Backend](https://github.com/meysam81/default-backend) - Minimal 404 Service
+### [🩺 Liveness Check](https://github.com/meysam81/liveness-check) - Kubernetes Health Checker
 
-Lightweight, security-focused 404 page in a distroless container (~2MB). Perfect for load balancers and Kubernetes ingress controllers with dark mode support.
+Production-ready Kubernetes tool that automatically finds recently deployed pods and verifies they're healthy before considering deployment successful. Perfect for CI/CD pipelines and preview deployments.
 
 ### [⚡ Prometheus Command Timer](https://github.com/meysam81/prometheus-command-timer) - Monitoring Utility
 
