@@ -138,7 +138,7 @@
                       </div>
                     </div>
                     <ul class="space-y-3">
-                      <li v-for="achievement in job.achievements" :key="achievement" 
+                      <li v-for="achievement in job.achievements" :key="achievement"
                           class="flex items-start gap-3">
                         <span class="text-accent-emerald mt-1 flex-shrink-0">▸</span>
                         <span class="leading-relaxed">{{ achievement }}</span>
@@ -153,7 +153,7 @@
                 <h2 class="section-header mb-8">Core Competencies</h2>
                 <div class="professional-card">
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div v-for="skill in candidate.competencies" :key="skill" 
+                    <div v-for="skill in candidate.competencies" :key="skill"
                          class="flex items-center gap-3 p-3 rounded-lg bg-secondary">
                       <span class="text-accent-blue">✓</span>
                       <span class="font-medium">{{ skill }}</span>
@@ -179,7 +179,7 @@
                 <h2 class="section-header mb-8">Publications & Thought Leadership</h2>
                 <div class="professional-card">
                   <ul class="space-y-3">
-                    <li v-for="pub in candidate.publications" :key="pub" 
+                    <li v-for="pub in candidate.publications" :key="pub"
                         class="flex items-start gap-3">
                       <span class="text-accent-purple mt-1">📚</span>
                       <span class="leading-relaxed">{{ pub }}</span>
@@ -268,7 +268,7 @@ export default defineComponent({
         if (section) {
           var sectionTop = section.offsetTop
           var sectionHeight = section.offsetHeight
-          
+
           if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
             activeSection.value = sections[i]
             break
@@ -295,7 +295,7 @@ export default defineComponent({
       window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
       window.addEventListener('appinstalled', handleAppInstalled)
       window.addEventListener('scroll', handleScroll)
-      
+
       handleScroll()
     })
 
