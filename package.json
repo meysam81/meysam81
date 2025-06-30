@@ -10,7 +10,7 @@
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^5.2.4",
+    "@vitejs/plugin-vue": "^6.0.0",
     "autoprefixer": "^10.4.21",
     "postcss": "^8.5.5",
     "rollup-plugin-visualizer": "^6.0.3",
