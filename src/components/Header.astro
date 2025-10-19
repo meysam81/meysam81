@@ -1,0 +1,90 @@
+---
+// Header.astro - Sticky navigation component
+const currentPath = Astro.url.pathname;
+---
+
+<header class="header">
+  <nav class="nav container">
+    <a href="/" class="logo">
+      Meysam
+    </a>
+
+    <div class="nav-links">
+      <a href="/#projects" class="nav-link">Projects</a>
+      <a href="/blog" class="nav-link">Blog</a>
+      <a href="/#newsletter" class="btn btn-primary btn-sm">Newsletter</a>
+    </div>
+  </nav>
+</header>
+
+<style scoped>
+  .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(10, 10, 10, 0.8);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem var(--space-lg);
+    max-width: var(--container-max);
+  }
+
+  .logo {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-text);
+    letter-spacing: -0.02em;
+  }
+
+  .logo:hover {
+    color: var(--color-accent-light);
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+  }
+
+  .nav-link {
+    color: var(--color-text-muted);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    transition: color var(--transition-fast);
+  }
+
+  .nav-link:hover {
+    color: var(--color-text);
+  }
+
+  .btn-sm {
+    padding: 0.625rem 1.25rem;
+    font-size: 0.9375rem;
+  }
+
+  @media (max-width: 768px) {
+    .nav {
+      padding: 1rem var(--space-md);
+    }
+
+    .nav-links {
+      gap: var(--space-sm);
+    }
+
+    .nav-link {
+      display: none;
+    }
+
+    .nav-link:last-child {
+      display: block;
+    }
+  }
+</style>
