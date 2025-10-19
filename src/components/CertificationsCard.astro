@@ -1,0 +1,18 @@
+---
+export interface Props {
+  certifications: string[];
+}
+
+const { certifications } = Astro.props;
+---
+
+<div class="glass-card p-6">
+  <h3 class="section-header mb-6">Certifications</h3>
+  <div class="space-y-3">
+    {certifications.map((cert) => (
+      <div class="certification-badge">
+        <div class="font-medium text-sm">{cert}</div>
+      </div>
+    ))}
+  </div>
+</div>

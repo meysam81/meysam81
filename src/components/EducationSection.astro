@@ -1,0 +1,24 @@
+---
+export interface Props {
+  education: Array<{
+    degree: string;
+    institution: string;
+    dates: string;
+  }>;
+}
+
+const { education } = Astro.props;
+---
+
+<section>
+  <h2 class="section-header mb-8">Education</h2>
+  <div class="space-y-4">
+    {education.map((edu) => (
+      <div class="professional-card">
+        <h3 class="font-semibold mb-2">{edu.degree}</h3>
+        <div class="text-gradient font-medium mb-1">{edu.institution}</div>
+        <div class="text-sm text-tertiary">{edu.dates}</div>
+      </div>
+    ))}
+  </div>
+</section>

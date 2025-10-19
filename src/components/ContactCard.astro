@@ -1,0 +1,39 @@
+---
+export interface Props {
+  contact: {
+    email: string;
+    location: string;
+    blog: string;
+    linkedin: string;
+    github: string;
+  };
+}
+
+const { contact } = Astro.props;
+---
+
+<div class="glass-card p-6">
+  <h3 class="section-header mb-6">Contact</h3>
+  <div class="space-y-4">
+    <a href={`mailto:${contact.email}`} class="contact-link">
+      <span>📧</span>
+      <span>{contact.email}</span>
+    </a>
+    <div class="contact-link">
+      <span>📍</span>
+      <span>{contact.location}</span>
+    </div>
+    <a href={`https://${contact.blog}`} target="_blank" rel="noopener noreferrer" class="contact-link">
+      <span>📝</span>
+      <span>Blog</span>
+    </a>
+    <a href={`https://${contact.linkedin}`} target="_blank" rel="noopener noreferrer" class="contact-link">
+      <span>💼</span>
+      <span>LinkedIn</span>
+    </a>
+    <a href={`https://${contact.github}`} target="_blank" rel="noopener noreferrer" class="contact-link">
+      <span>🐙</span>
+      <span>GitHub</span>
+    </a>
+  </div>
+</div>

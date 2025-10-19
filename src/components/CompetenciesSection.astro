@@ -1,0 +1,21 @@
+---
+export interface Props {
+  competencies: string[];
+}
+
+const { competencies } = Astro.props;
+---
+
+<section>
+  <h2 class="section-header mb-8">Core Competencies</h2>
+  <div class="professional-card">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {competencies.map((skill) => (
+        <div class="flex items-center gap-3 p-3 rounded-lg bg-secondary">
+          <span class="text-accent-blue">✓</span>
+          <span class="font-medium">{skill}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

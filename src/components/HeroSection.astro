@@ -1,0 +1,41 @@
+---
+import ThemeToggle from './ThemeToggle.vue';
+import PWAInstall from './PWAInstall.vue';
+
+export interface Props {
+  name: string;
+  title: string;
+  summary: string;
+  email: string;
+}
+
+const { name, title, summary, email } = Astro.props;
+const summaryFirstSentence = summary.split('.')[0] + '.';
+---
+
+<header id="hero" class="hero-header py-16 lg:py-24">
+  <div class="hero-content container mx-auto px-6">
+    <div class="flex flex-col lg:flex-row items-center justify-between gap-12">
+      <div class="flex-1 text-center lg:text-left animate-fade-in">
+        <div class="space-y-6">
+          <div class="space-y-2">
+            <h1 class="text-white font-bold">{name}</h1>
+            <div class="text-gradient text-xl lg:text-2xl font-semibold">{title}</div>
+          </div>
+          <p class="text-gray-200 text-lg lg:text-xl max-w-2xl leading-relaxed">
+            {summaryFirstSentence}
+          </p>
+          <div class="flex flex-wrap gap-3 justify-center lg:justify-start">
+            <PWAInstall client:load />
+            <a href={`mailto:${email}`} class="btn-primary">
+              📧 Get In Touch
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="flex-shrink-0 animate-slide-up">
+        <ThemeToggle client:load />
+      </div>
+    </div>
+  </div>
+</header>

@@ -1,3 +1,21 @@
+---
+import '../style.css';
+
+export interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+}
+
+const {
+  title = "Meysam Azad | Senior Site Reliability Engineer | Kubernetes & Cloud Infrastructure Expert",
+  description = "Senior Site Reliability Engineer with 8+ years mastering production systems at scale. Expert in Kubernetes orchestration, multi-cloud infrastructure, CI/CD automation, and zero-downtime deployments.",
+  image = "https://meysam.io/logo.png"
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+
 <!DOCTYPE html>
 <html lang="en" itemscope itemtype="https://schema.org/Person">
   <head>
@@ -7,27 +25,27 @@
     <!-- Performance Optimization -->
     <link rel="dns-prefetch" href="//fonts.googleapis.com">
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"></noscript>
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
     <!-- Primary Meta Tags -->
-    <title>Meysam Azad | Senior Site Reliability Engineer | Kubernetes & Cloud Infrastructure Expert</title>
-    <meta name="title" content="Meysam Azad | Senior Site Reliability Engineer | Kubernetes & Cloud Infrastructure Expert" />
-    <meta name="description" content="Senior Site Reliability Engineer with 8+ years mastering production systems at scale. Expert in Kubernetes orchestration, multi-cloud infrastructure, CI/CD automation, and zero-downtime deployments. Available for senior SRE roles and consulting." />
+    <title>{title}</title>
+    <meta name="title" content={title} />
+    <meta name="description" content={description} />
     <meta name="keywords" content="Senior Site Reliability Engineer, Principal SRE, Kubernetes Expert, Multi-Cloud Infrastructure, Platform Engineering, DevOps Leadership, Production Systems, Zero Downtime, High Availability, Incident Response, Infrastructure as Code, Terraform Expert, Observability, Monitoring, SLI SLO SLA, Disaster Recovery, Capacity Planning, Performance Engineering" />
     <meta name="author" content="Meysam Azad" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <meta name="language" content="English" />
     <meta name="revisit-after" content="3 days" />
     <meta name="rating" content="general" />
-    <link rel="canonical" href="https://meysam.io" />
+    <link rel="canonical" href={canonicalURL} />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="profile" />
-    <meta property="og:url" content="https://meysam.io" />
-    <meta property="og:title" content="Meysam Azad | Senior Site Reliability Engineer | Kubernetes & Cloud Expert" />
-    <meta property="og:description" content="Senior SRE with 8+ years mastering production systems at scale. Expert in Kubernetes, multi-cloud infrastructure, and zero-downtime deployments." />
-    <meta property="og:image" content="https://meysam.io/logo.png" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={image} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="Meysam Azad - Senior Site Reliability Engineer specializing in Kubernetes and Cloud Infrastructure" />
@@ -41,20 +59,19 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@meysamazing" />
     <meta name="twitter:creator" content="@meysamazing" />
-    <meta name="twitter:url" content="https://meysam.io" />
-    <meta name="twitter:title" content="Meysam Azad | Senior Site Reliability Engineer" />
-    <meta name="twitter:description" content="Senior SRE with 8+ years mastering production systems. Expert in Kubernetes, multi-cloud infrastructure, and zero-downtime deployments." />
-    <meta name="twitter:image" content="https://meysam.io/logo.png" />
+    <meta name="twitter:url" content={canonicalURL} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={image} />
     <meta name="twitter:image:alt" content="Meysam Azad - Senior Site Reliability Engineer" />
 
     <!-- Enhanced Structured Data -->
-    <script type="application/ld+json">
-    {
+    <script type="application/ld+json" set:html={JSON.stringify({
       "@context": "https://schema.org",
       "@type": "Person",
       "name": "Meysam Azad",
       "jobTitle": "Senior Site Reliability Engineer",
-      "description": "Senior Site Reliability Engineer with 8+ years mastering production systems at scale. Expert in Kubernetes orchestration, multi-cloud infrastructure, CI/CD automation, and zero-downtime deployments.",
+      "description": description,
       "url": "https://meysam.io",
       "sameAs": [
         "https://linkedin.com/in/meysamazad",
@@ -76,12 +93,22 @@
         "@type": "EducationalOrganization",
         "name": "Amirkabir University of Technology"
       }
-    }
-    </script>
+    })} />
 
-    <!-- Resource Hints -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="64x64" href="/favicon-64x64.png" />
+    <link rel="icon" type="image/png" sizes="128x128" href="/favicon-128x128.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+    <!-- Web Manifest -->
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- Sitemap -->
+    <link rel="sitemap" href="/sitemap-index.xml" />
   </head>
   <body>
     <noscript>
@@ -90,7 +117,6 @@
         <p>This application requires JavaScript to run. Please enable JavaScript in your browser.</p>
       </div>
     </noscript>
-    <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
+    <slot />
   </body>
 </html>

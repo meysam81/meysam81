@@ -1,0 +1,74 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import FloatingNav from '@/components/FloatingNav.vue';
+import HeroSection from '@/components/HeroSection.astro';
+import AboutSection from '@/components/AboutSection.astro';
+import ContactCard from '@/components/ContactCard.astro';
+import TechnicalStack from '@/components/TechnicalStack.astro';
+import CertificationsCard from '@/components/CertificationsCard.astro';
+import ExperienceSection from '@/components/ExperienceSection.astro';
+import CompetenciesSection from '@/components/CompetenciesSection.astro';
+import EducationSection from '@/components/EducationSection.astro';
+import PublicationsSection from '@/components/PublicationsSection.astro';
+import FooterSection from '@/components/FooterSection.astro';
+import { candidateData } from '@/data/candidate.js';
+import config from '@/data/config.js';
+
+const currentYear = new Date().getFullYear();
+const experienceYears = currentYear - config.CAREER_START_YEAR;
+---
+
+<BaseLayout>
+  <div class="min-h-screen transition-all duration-300">
+    <!-- Floating Navigation -->
+    <FloatingNav client:load />
+
+    <!-- Hero Header -->
+    <HeroSection
+      name={candidateData.name}
+      title={candidateData.title}
+      summary={candidateData.summary}
+      email={candidateData.contact.email}
+    />
+
+    <!-- Main Content -->
+    <main class="relative">
+      <!-- Professional Summary -->
+      <AboutSection
+        summary={candidateData.summary}
+        experienceYears={experienceYears}
+        certificationsCount={candidateData.certifications.length}
+        badgesCount={candidateData.badges.length}
+      />
+
+      <!-- Main Grid Layout -->
+      <section class="py-8 lg:py-12">
+        <div class="container mx-auto px-6">
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
+            <!-- Sidebar -->
+            <aside class="lg:col-span-1 space-y-8 animate-slide-up">
+              <ContactCard contact={candidateData.contact} />
+              <TechnicalStack badges={candidateData.badges} />
+              <CertificationsCard certifications={candidateData.certifications} />
+            </aside>
+
+            <!-- Main Content -->
+            <div class="lg:col-span-2 space-y-12 animate-fade-in">
+              <ExperienceSection experience={candidateData.experience} />
+              <CompetenciesSection competencies={candidateData.competencies} />
+              <EducationSection education={candidateData.education} />
+              <PublicationsSection publications={candidateData.publications} />
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <FooterSection
+      name={candidateData.name}
+      email={candidateData.contact.email}
+      currentYear={currentYear}
+    />
+  </div>
+</BaseLayout>

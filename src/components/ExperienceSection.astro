@@ -1,0 +1,39 @@
+---
+export interface Props {
+  experience: Array<{
+    role: string;
+    company: string;
+    location: string;
+    dates: string;
+    achievements: string[];
+  }>;
+}
+
+const { experience } = Astro.props;
+---
+
+<section id="experience">
+  <h2 class="section-header mb-8">Professional Experience</h2>
+  <div class="space-y-6">
+    {experience.map((job) => (
+      <article class="experience-card">
+        <div class="mb-6">
+          <h3 class="text-xl font-semibold mb-2">{job.role}</h3>
+          <div class="text-gradient font-medium mb-1">{job.company}</div>
+          <div class="flex flex-wrap gap-4 text-sm text-tertiary">
+            <span>📍 {job.location}</span>
+            <span>📅 {job.dates}</span>
+          </div>
+        </div>
+        <ul class="space-y-3">
+          {job.achievements.map((achievement) => (
+            <li class="flex items-start gap-3">
+              <span class="text-accent-emerald mt-1 flex-shrink-0">▸</span>
+              <span class="leading-relaxed">{achievement}</span>
+            </li>
+          ))}
+        </ul>
+      </article>
+    ))}
+  </div>
+</section>

@@ -1,0 +1,35 @@
+---
+export interface Props {
+  summary: string;
+  experienceYears: number;
+  certificationsCount: number;
+  badgesCount: number;
+}
+
+const { summary, experienceYears, certificationsCount, badgesCount } = Astro.props;
+---
+
+<section id="about" class="py-16 lg:py-20">
+  <div class="container mx-auto px-6">
+    <div class="max-w-4xl mx-auto">
+      <h2 class="section-header text-center mb-12">Professional Overview</h2>
+      <div class="glass-card p-8 lg:p-12 text-center animate-fade-in">
+        <p class="text-lg lg:text-xl leading-relaxed mb-8">{summary}</p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="professional-card text-center">
+            <div class="text-3xl font-bold text-gradient mb-2">{experienceYears}+</div>
+            <div class="text-sm font-medium text-tertiary">Years Experience</div>
+          </div>
+          <div class="professional-card text-center">
+            <div class="text-3xl font-bold text-gradient mb-2">{certificationsCount}</div>
+            <div class="text-sm font-medium text-tertiary">Certifications</div>
+          </div>
+          <div class="professional-card text-center">
+            <div class="text-3xl font-bold text-gradient mb-2">{badgesCount}+</div>
+            <div class="text-sm font-medium text-tertiary">Technologies</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

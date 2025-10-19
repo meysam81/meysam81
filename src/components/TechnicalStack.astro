@@ -1,0 +1,16 @@
+---
+export interface Props {
+  badges: string[];
+}
+
+const { badges } = Astro.props;
+---
+
+<div class="glass-card p-6">
+  <h3 class="section-header mb-6">Technical Expertise</h3>
+  <div class="flex flex-wrap gap-2">
+    {badges.map((badge) => (
+      <span class="skill-badge">{badge}</span>
+    ))}
+  </div>
+</div>

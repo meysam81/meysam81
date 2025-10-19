@@ -1,0 +1,21 @@
+---
+export interface Props {
+  publications: string[];
+}
+
+const { publications } = Astro.props;
+---
+
+<section>
+  <h2 class="section-header mb-8">Publications & Thought Leadership</h2>
+  <div class="professional-card">
+    <ul class="space-y-3">
+      {publications.map((pub) => (
+        <li class="flex items-start gap-3">
+          <span class="text-accent-purple mt-1">📚</span>
+          <span class="leading-relaxed">{pub}</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
