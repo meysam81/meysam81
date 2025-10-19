@@ -7,8 +7,10 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.4",
     "@astrojs/mdx": "^4.3.7",
+    "@tailwindcss/vite": "^4.1.14",
     "oxlint": "^1.23.0",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vite-plugin-compression2": "^2.3.0"
   },
   "name": "meysam-io",
   "scripts": {
