@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@astrojs/sitemap": "^3.6.0",
     "astro": "^5.14.6",
     "loglevel": "^1.9.2"
   },
