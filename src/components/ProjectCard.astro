@@ -6,9 +6,10 @@ interface Props {
   url: string;
   badge?: string;
   featured?: boolean;
+  linkText?: string;
 }
 
-const { title, description, url, badge, featured = false } = Astro.props;
+const { title, description, url, badge, featured = false, linkText } = Astro.props;
 ---
 
 <div class={`project-card ${featured ? 'project-featured' : ''}`}>
@@ -18,7 +19,7 @@ const { title, description, url, badge, featured = false } = Astro.props;
   <p class="project-description">{description}</p>
 
   <a href={url} target="_blank" rel="noopener noreferrer" class="project-link">
-    {featured ? 'Try FindForce' : 'Learn More'}
+    {linkText || (featured ? 'Try FindForce' : 'Learn More')}
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <line x1="5" y1="12" x2="19" y2="12"></line>
       <polyline points="12 5 19 12 12 19"></polyline>

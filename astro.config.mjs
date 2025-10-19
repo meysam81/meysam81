@@ -11,13 +11,31 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export default defineConfig({
   site: "https://meysam.io",
   integrations: [sitemap(), mdx()],
+  prefetch: {
+    prefetchAll: true,
+    defaultStrategy: "viewport",
+  },
+  image: {
+    service: {
+      entrypoint: "astro/assets/services/sharp",
+    },
+    remotePatterns: [{ protocol: "https" }],
+  },
   build: {
     inlineStylesheets: "auto",
     minify: true,
+    assets: "_astro",
   },
   compressHTML: true,
   vite: {
-    plugins: [tailwindcss(), compression()],
+    plugins: [
+      tailwindcss(),
+      compression({
+        algorithm: "brotliCompress",
+        exclude: [/\.(br)$/, /\.(gz)$/],
+        threshold: 1024,
+      }),
+    ],
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "./src"),
@@ -26,6 +44,21 @@ export default defineConfig({
     build: {
       minify: "esbuild",
       cssMinify: true,
+      cssCodeSplit: true,
+      rollupOptions: {
+        output: {
+          manualChunks: function manualChunks(id) {
+            if (id.includes("node_modules")) {
+              return "vendor";
+            }
+          },
+        },
+      },
+      chunkSizeWarningLimit: 1000,
+      assetsInlineLimit: 4096,
+    },
+    css: {
+      transformer: "lightningcss",
     },
   },
 });
