@@ -104,6 +104,28 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         });
       });
     </script>
+
+    <!-- Analytics - Delayed Load -->
+    <script is:inline>
+      function loadAnalytics() {
+        var script = document.createElement('script');
+        script.src = 'https://api.pirsch.io/pa.js';
+        script.id = 'pianjs';
+        script.defer = true;
+        script.setAttribute('data-code', 'm9Chz179Udt3YeVXRHXyxWthr2A3vbLb');
+        document.head.appendChild(script);
+      }
+
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(function idleCallback() {
+          loadAnalytics();
+        }, { timeout: 2000 });
+      } else {
+        setTimeout(function timeoutCallback() {
+          loadAnalytics();
+        }, 2000);
+      }
+    </script>
   </body>
 </html>
 
