@@ -52,7 +52,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <meta name="twitter:creator" content="@meysamazing" />
 
     <!-- Structured Data -->
-    <script type="application/ld+json">
+    <script is:inline type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "Person",
@@ -85,6 +85,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <script>
       document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function clickHandler(e) {
+          // @ts-ignore
           const href = this.getAttribute('href');
           if (href === '#') {return;}
 
