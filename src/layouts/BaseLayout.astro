@@ -12,7 +12,7 @@ interface Props {
 const {
   title = "Meysam Azad - Indie Hacker Building Bootstrapped SaaS",
   description = "Technical engineer with 8 years of DevOps/SRE experience, now finding problems worth solving. Join me as I document customer discovery, product validation, and building with production-grade discipline.",
-  ogImage = "https://meysam.io/og-image.jpg"
+  ogImage = "https://meysam.io/og-image.png"
 } = Astro.props;
 
 const fullTitle = title.includes("Meysam") ? title : `${title} | Meysam Azad`;
@@ -58,7 +58,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         "@type": "Person",
         "name": "Meysam Azad",
         "url": "https://meysam.io",
-        "image": "https://meysam.io/og-image.jpg",
+        "image": "https://meysam.io/og-image.png",
         "jobTitle": "Technical Founder & DevOps Engineer",
         "description": "Technical engineer building bootstrapped SaaS products",
         "sameAs": [
