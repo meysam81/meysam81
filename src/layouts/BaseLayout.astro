@@ -1,5 +1,4 @@
 ---
-// BaseLayout.astro - Base layout with SEO and consistent structure
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
 import '@/styles/global.css';
@@ -85,9 +84,9 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <!-- Smooth scroll for anchor links -->
     <script>
       document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
+        anchor.addEventListener('click', function clickHandler(e) {
           const href = this.getAttribute('href');
-          if (href === '#') return;
+          if (href === '#') {return;}
 
           e.preventDefault();
           const target = document.querySelector(href);

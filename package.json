@@ -1,6 +1,7 @@
 {
   "dependencies": {
-    "astro": "^5.14.6"
+    "astro": "^5.14.6",
+    "loglevel": "^1.9.2"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.4",
@@ -10,6 +11,7 @@
   "name": "meysam-io",
   "scripts": {
     "build": "astro check && astro build",
+    "convert:images": "bun ./scripts/convert-svgs.js",
     "start": "astro dev"
   },
   "type": "module",

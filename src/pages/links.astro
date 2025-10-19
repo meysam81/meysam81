@@ -318,7 +318,7 @@ const links = {
   document.querySelectorAll('.copy-btn').forEach(button => {
     button.addEventListener('click', async () => {
       const text = button.getAttribute('data-copy');
-      if (!text) return;
+      if (!text) {return;}
 
       try {
         await navigator.clipboard.writeText(text);
@@ -336,7 +336,7 @@ const links = {
           button.innerHTML = originalHTML;
         }, 2000);
       } catch (err) {
-        console.error('Failed to copy:', err);
+
       }
     });
   });

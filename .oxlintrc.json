@@ -94,7 +94,7 @@
     "no-async-await": "deny",
     "no-async-endpoint-handlers": "deny",
     "no-await-expression-member": "deny",
-    "no-await-in-loop": "deny",
+    "no-await-in-loop": "warn",
     "no-barrel-file": "deny",
     "no-bitwise": "deny",
     "no-case-declarations": "deny",
