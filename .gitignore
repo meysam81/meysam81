@@ -2,4 +2,3 @@ node_modules/
 dist
 index.html.bk
 .astro
-src/content/blog/example-post.md
