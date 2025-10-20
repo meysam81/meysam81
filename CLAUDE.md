@@ -78,7 +78,7 @@ src/
 │   ├── Header.astro       # Sticky navigation bar
 │   ├── Footer.astro       # Site footer with links
 │   ├── Newsletter.astro   # Email capture form component
-│   └── ProjectCard.astro  # Reusable card for projects
+│   └── ContentCard.astro  # Reusable card for projects and blog posts
 ├── layouts/
 │   └── BaseLayout.astro   # Base layout with SEO, meta tags, structured data
 ├── pages/
@@ -133,9 +133,9 @@ Sticky navigation component positioned at the top. Main content has 80px top pad
 
 Reusable email signup component. Form action points to newsletter signup endpoint.
 
-#### ProjectCard.astro
+#### ContentCard.astro
 
-Reusable component for displaying projects. Used on homepage.
+Reusable component for displaying content items (projects, blog posts, etc). Used on homepage and blog listing page.
 
 ### Styling Approach
 
@@ -165,7 +165,7 @@ The conversion script (`scripts/convert-svgs.js`) uses Sharp library for image p
 
 ### Adding/Updating Projects
 
-Edit the projects array in `src/pages/index.astro` (look for the Projects Section).
+Edit the projects array in `src/pages/index.astro` (look for the Projects Section). Uses the `ContentCard` component.
 
 ### Updating Links
 

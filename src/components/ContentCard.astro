@@ -1,5 +1,4 @@
 ---
-// ProjectCard.astro - Reusable project card component
 interface Props {
   title: string;
   description: string;
@@ -7,20 +6,38 @@ interface Props {
   badge?: string;
   featured?: boolean;
   linkText?: string;
+  target?: string;
+  rel?: string;
 }
 
-const { title, description, url, badge, featured = false, linkText } = Astro.props;
+var {
+  title,
+  description,
+  url,
+  badge,
+  featured = false,
+  linkText,
+  target = "",
+  rel = "",
+} = Astro.props;
 ---
 
-<div class={`project-card ${featured ? 'project-featured' : ''}`}>
-  {badge && <span class="project-badge">{badge}</span>}
+<div class={`content-card ${featured ? "content-featured" : ""}`}>
+  {badge && <span class="content-badge">{badge}</span>}
 
-  <h3 class="project-title">{title}</h3>
-  <p class="project-description">{description}</p>
+  <h3 class="content-title">{title}</h3>
+  <p class="content-description">{description}</p>
 
-  <a href={url} target="_blank" rel="noopener noreferrer" class="project-link">
-    {linkText || (featured ? 'Try FindForce' : 'Learn More')}
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+  <a href={url} target={target} rel={rel} class="content-link">
+    {linkText || "Learn More"}
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+    >
       <line x1="5" y1="12" x2="19" y2="12"></line>
       <polyline points="12 5 19 12 12 19"></polyline>
     </svg>
@@ -28,7 +45,7 @@ const { title, description, url, badge, featured = false, linkText } = Astro.pro
 </div>
 
 <style scoped>
-  .project-card {
+  .content-card {
     position: relative;
     padding: var(--space-lg);
     background: var(--color-bg-card);
@@ -40,23 +57,27 @@ const { title, description, url, badge, featured = false, linkText } = Astro.pro
     flex-direction: column;
   }
 
-  .project-card:hover {
+  .content-card:hover {
     border-color: var(--color-text-dim);
     transform: translateY(-4px);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
   }
 
-  .project-featured {
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(0, 0, 0, 0) 100%);
+  .content-featured {
+    background: linear-gradient(
+      135deg,
+      rgba(59, 130, 246, 0.1) 0%,
+      rgba(0, 0, 0, 0) 100%
+    );
     border-color: var(--color-accent);
   }
 
-  .project-featured:hover {
+  .content-featured:hover {
     border-color: var(--color-accent-light);
     box-shadow: 0 20px 40px rgba(59, 130, 246, 0.3);
   }
 
-  .project-badge {
+  .content-badge {
     position: absolute;
     top: var(--space-md);
     right: var(--space-md);
@@ -72,24 +93,24 @@ const { title, description, url, badge, featured = false, linkText } = Astro.pro
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
-  .project-featured .project-badge {
+  .content-featured .content-badge {
     background: var(--color-accent);
   }
 
-  .project-title {
+  .content-title {
     font-size: 1.5rem;
     margin-bottom: var(--space-sm);
     color: var(--color-text);
   }
 
-  .project-description {
+  .content-description {
     color: var(--color-text-muted);
     font-size: 1rem;
     margin-bottom: var(--space-md);
     flex-grow: 1;
   }
 
-  .project-link {
+  .content-link {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
@@ -98,16 +119,16 @@ const { title, description, url, badge, featured = false, linkText } = Astro.pro
     transition: all var(--transition-fast);
   }
 
-  .project-link:hover {
+  .content-link:hover {
     color: var(--color-accent);
     gap: 0.75rem;
   }
 
-  .project-link svg {
+  .content-link svg {
     transition: transform var(--transition-fast);
   }
 
-  .project-link:hover svg {
+  .content-link:hover svg {
     transform: translateX(4px);
   }
 </style>

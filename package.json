@@ -2,7 +2,8 @@
   "dependencies": {
     "@astrojs/sitemap": "^3.6.0",
     "astro": "^5.14.6",
-    "loglevel": "^1.9.2"
+    "loglevel": "^1.9.2",
+    "pagefind": "^1.4.0"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.4",
@@ -16,6 +17,7 @@
   "scripts": {
     "build": "astro check && astro build",
     "convert:images": "bun ./scripts/convert-svgs.js",
+    "pagefind": "pagefind --site dist",
     "start": "astro dev"
   },
   "type": "module",

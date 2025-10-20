@@ -2,7 +2,7 @@
 // index.astro - Homepage
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Newsletter from '@/components/Newsletter.astro';
-import ProjectCard from '@/components/ProjectCard.astro';
+import ContentCard from '@/components/ContentCard.astro';
 ---
 
 <BaseLayout>
@@ -77,37 +77,45 @@ import ProjectCard from '@/components/ProjectCard.astro';
 
       <!-- Featured Project -->
       <div class="featured-project mb-xl">
-        <ProjectCard
+        <ContentCard
           title="FindForce.io"
           description="Business email finder Chrome extension with 95% accuracy. Shipped product, validated I can build. Learned customer acquisition is harder than code. Now applying those lessons to find better market fit."
           url="https://findforce.io"
           badge="🚀 Shipped"
           featured={true}
           linkText="Try FindForce Email Finder Extension"
+          target="_blank"
+          rel="noopener noreferrer"
         />
       </div>
 
       <!-- Other Projects Grid -->
       <div class="grid grid-3">
-        <ProjectCard
+        <ContentCard
           title="developer-friendly.blog"
           description="Production DevOps insights from years in the trenches. Real-world SRE lessons. 1,500+ engineers reading monthly. No theory, just battle-tested solutions."
           url="https://developer-friendly.blog"
           linkText="Read DevOps and SRE Articles"
+          target="_blank"
+          rel="noopener noreferrer"
         />
 
-        <ProjectCard
+        <ContentCard
           title="Tarzan"
           description="Email-based blogging platform. Send markdown via email, get published instantly. Built to explore simple publishing workflows for technical writers."
           url="https://tarzan.meysam.io"
           linkText="Explore Email-to-Blog Platform"
+          target="_blank"
+          rel="noopener noreferrer"
         />
 
-        <ProjectCard
+        <ContentCard
           title="Open Source"
           description="Building and publishing internal tools publicly. Production-ready utilities I use daily. Shared for anyone who needs them."
           url="https://github.com/meysam81"
           linkText="View Open Source Projects on GitHub"
+          target="_blank"
+          rel="noopener noreferrer"
         />
       </div>
     </div>

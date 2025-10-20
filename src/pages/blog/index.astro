@@ -1,0 +1,159 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ContentCard from '@/components/ContentCard.astro';
+import { getCollection } from 'astro:content';
+
+var allPosts = await getCollection('blog');
+
+var publishedPosts = allPosts
+  .filter(function filterDrafts(post) {
+    return import.meta.env.DEV || !post.data.draft;
+  })
+  .sort(function sortByDate(a, b) {
+    return b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
+  });
+
+var featuredPosts = publishedPosts.filter(function filterFeatured(post) {
+  return post.data.featured;
+});
+
+var regularPosts = publishedPosts.filter(function filterRegular(post) {
+  return !post.data.featured;
+});
+
+function formatDate(date: Date) {
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  }).format(date);
+}
+---
+
+<BaseLayout
+  title="Blog - Building in Public"
+  description="Technical insights, customer discovery learnings, and honest updates from building bootstrapped SaaS products. DevOps lessons applied to product development."
+>
+  <section class="blog-hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1 class="hero-title">Building in Public</h1>
+        <p class="hero-subtitle">
+          Customer discovery insights, production DevOps lessons, and honest updates from the journey of finding problems worth solving.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="blog-content">
+    <div class="container">
+      {featuredPosts.length > 0 && (
+        <div class="featured-section mb-xl">
+          <h2 class="section-label">Featured Posts</h2>
+          <div class="grid grid-2">
+            {featuredPosts.map(function mapFeatured(post) {
+              return (
+                <ContentCard
+                  title={post.data.title}
+                  description={post.data.description}
+                  url={`/blog/${post.id}`}
+                  badge={formatDate(post.data.pubDate)}
+                  featured={true}
+                  linkText="Read Article"
+                />
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      <div class="posts-section">
+        <h2 class="section-label">All Posts</h2>
+        <div class="grid grid-3">
+          {regularPosts.map(function mapRegular(post) {
+            return (
+              <ContentCard
+                title={post.data.title}
+                description={post.data.description}
+                url={`/blog/${post.id}`}
+                badge={formatDate(post.data.pubDate)}
+                linkText="Read Article"
+              />
+            );
+          })}
+        </div>
+      </div>
+
+      {publishedPosts.length === 0 && (
+        <div class="empty-state">
+          <h3>No posts yet</h3>
+          <p>Check back soon for customer discovery insights and technical content.</p>
+        </div>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .blog-hero {
+    padding: var(--space-3xl) 0 var(--space-2xl);
+    text-align: center;
+  }
+
+  .hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .hero-title {
+    background: linear-gradient(135deg, var(--color-text) 0%, var(--color-accent-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: var(--space-md);
+  }
+
+  .hero-subtitle {
+    font-size: 1.25rem;
+    color: var(--color-text-muted);
+    line-height: 1.7;
+  }
+
+  .blog-content {
+    padding-bottom: var(--space-3xl);
+  }
+
+  .section-label {
+    font-size: 1.25rem;
+    color: var(--color-text-muted);
+    font-weight: 600;
+    margin-bottom: var(--space-lg);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.875rem;
+  }
+
+  .featured-section {
+    margin-bottom: var(--space-2xl);
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: var(--space-3xl) 0;
+  }
+
+  .empty-state h3 {
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-sm);
+  }
+
+  .empty-state p {
+    color: var(--color-text-dim);
+  }
+
+  @media (max-width: 768px) {
+    .blog-hero {
+      padding: var(--space-2xl) 0 var(--space-xl);
+    }
+  }
+</style>

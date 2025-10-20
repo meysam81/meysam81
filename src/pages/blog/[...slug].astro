@@ -1,0 +1,35 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BlogPostLayout from '@/layouts/BlogPostLayout.astro';
+
+export async function getStaticPaths() {
+  var posts = await getCollection('blog');
+  return posts
+    .filter(function filterDrafts(post) {
+      return import.meta.env.DEV || !post.data.draft;
+    })
+    .map(function mapPosts(post) {
+      return {
+        params: { slug: post.id },
+        props: post,
+      };
+    });
+}
+
+type Props = CollectionEntry<'blog'>;
+
+var post = Astro.props;
+var { Content } = await post.render();
+---
+
+<BlogPostLayout
+  title={post.data.title}
+  description={post.data.description}
+  pubDate={post.data.pubDate}
+  updatedDate={post.data.updatedDate}
+  author={post.data.author}
+  tags={post.data.tags}
+  ogImage={post.data.ogImage}
+>
+  <Content />
+</BlogPostLayout>
