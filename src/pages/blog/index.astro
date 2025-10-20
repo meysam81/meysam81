@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import ContentCard from '@/components/ContentCard.astro';
+import SearchBox from '@/components/SearchBox.astro';
 import { getCollection } from 'astro:content';
 
 var allPosts = await getCollection('blog');
@@ -20,6 +21,10 @@ var featuredPosts = publishedPosts.filter(function filterFeatured(post) {
 var regularPosts = publishedPosts.filter(function filterRegular(post) {
   return !post.data.featured;
 });
+
+var allTags = [...new Set(publishedPosts.flatMap(function flatMapTags(post) {
+  return post.data.tags;
+}))].sort();
 
 function formatDate(date: Date) {
   return new Intl.DateTimeFormat('en-US', {
@@ -47,6 +52,24 @@ function formatDate(date: Date) {
 
   <section class="blog-content">
     <div class="container">
+      <SearchBox />
+
+      {allTags.length > 0 && (
+        <div class="tags-filter mb-xl">
+          <h3 class="filter-label">Filter by Tag:</h3>
+          <div class="tags-list">
+            <button class="tag-button active" data-tag="all">All Posts</button>
+            {allTags.map(function mapTags(tag) {
+              return (
+                <button class="tag-button" data-tag={tag}>
+                  {tag}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       {featuredPosts.length > 0 && (
         <div class="featured-section mb-xl">
           <h2 class="section-label">Featured Posts</h2>
@@ -69,16 +92,19 @@ function formatDate(date: Date) {
 
       <div class="posts-section">
         <h2 class="section-label">All Posts</h2>
-        <div class="grid grid-3">
+        <div class="grid grid-3" id="posts-grid">
           {regularPosts.map(function mapRegular(post) {
+            var postTags = post.data.tags.join(',');
             return (
-              <ContentCard
-                title={post.data.title}
-                description={post.data.description}
-                url={`/blog/${post.id}`}
-                badge={formatDate(post.data.pubDate)}
-                linkText="Read Article"
-              />
+              <div class="post-item" data-tags={postTags}>
+                <ContentCard
+                  title={post.data.title}
+                  description={post.data.description}
+                  url={`/blog/${post.id}`}
+                  badge={formatDate(post.data.pubDate)}
+                  linkText="Read Article"
+                />
+              </div>
             );
           })}
         </div>
@@ -123,6 +149,51 @@ function formatDate(date: Date) {
     padding-bottom: var(--space-3xl);
   }
 
+  .tags-filter {
+    padding: var(--space-lg);
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+  }
+
+  .filter-label {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-md);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .tags-list {
+    display: flex;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+  }
+
+  .tag-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+    color: var(--color-text-muted);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .tag-button:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent-light);
+  }
+
+  .tag-button.active {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: white;
+  }
+
   .section-label {
     font-size: 1.25rem;
     color: var(--color-text-muted);
@@ -135,6 +206,14 @@ function formatDate(date: Date) {
 
   .featured-section {
     margin-bottom: var(--space-2xl);
+  }
+
+  .post-item {
+    transition: opacity var(--transition-base);
+  }
+
+  .post-item.hidden {
+    display: none;
   }
 
   .empty-state {
@@ -155,5 +234,45 @@ function formatDate(date: Date) {
     .blog-hero {
       padding: var(--space-2xl) 0 var(--space-xl);
     }
+
+    .tags-filter {
+      padding: var(--space-md);
+    }
   }
 </style>
+
+<script>
+  function initTagFilter() {
+    var tagButtons = document.querySelectorAll('.tag-button');
+    var postItems = document.querySelectorAll('.post-item');
+
+    tagButtons.forEach(function forEachButton(button) {
+      button.addEventListener('click', function handleClick() {
+        var selectedTag = button.getAttribute('data-tag');
+
+        tagButtons.forEach(function forEachBtn(btn) {
+          btn.classList.remove('active');
+        });
+        button.classList.add('active');
+
+        postItems.forEach(function forEachPost(post) {
+          var postTags = post.getAttribute('data-tags');
+
+          if (selectedTag === 'all' || postTags?.includes(selectedTag || '')) {
+            post.classList.remove('hidden');
+          } else {
+            post.classList.add('hidden');
+          }
+        });
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function handleLoad() {
+      initTagFilter();
+    });
+  } else {
+    initTagFilter();
+  }
+</script>

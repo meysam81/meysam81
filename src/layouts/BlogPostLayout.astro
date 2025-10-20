@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Newsletter from '@/components/Newsletter.astro';
+import TableOfContents from '@/components/TableOfContents.astro';
 
 interface Props {
   title: string;
@@ -10,9 +11,15 @@ interface Props {
   author: string;
   tags: string[];
   ogImage?: string;
+  headings: Array<{
+    depth: number;
+    slug: string;
+    text: string;
+  }>;
+  readingTime: number;
 }
 
-var { title, description, pubDate, updatedDate, author, tags, ogImage } = Astro.props;
+var { title, description, pubDate, updatedDate, author, tags, ogImage, headings, readingTime } = Astro.props;
 
 var formattedPubDate = new Intl.DateTimeFormat('en-US', {
   year: 'numeric',
@@ -63,16 +70,30 @@ var formattedUpdatedDate = updatedDate
               </div>
             </>
           )}
+          <div class="meta-divider">•</div>
+          <div class="meta-item">
+            <svg class="meta-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            <span class="meta-value">{readingTime} min read</span>
+          </div>
         </div>
 
         {tags.length > 0 && (
           <div class="post-tags">
             {tags.map(function mapTags(tag) {
-              return <span class="tag">{tag}</span>;
+              return (
+                <a href={`/blog?tag=${encodeURIComponent(tag)}`} class="tag">
+                  {tag}
+                </a>
+              );
             })}
           </div>
         )}
       </header>
+
+      <TableOfContents headings={headings} />
 
       <div class="post-content">
         <slot />
@@ -152,6 +173,11 @@ var formattedUpdatedDate = updatedDate
     font-size: 0.9375rem;
   }
 
+  .meta-icon {
+    color: var(--color-text-dim);
+    flex-shrink: 0;
+  }
+
   .meta-label {
     color: var(--color-text-dim);
   }
@@ -185,6 +211,7 @@ var formattedUpdatedDate = updatedDate
   .tag:hover {
     border-color: var(--color-accent);
     color: var(--color-accent-light);
+    background: rgba(59, 130, 246, 0.1);
   }
 
   .post-content {

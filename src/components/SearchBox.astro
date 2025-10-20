@@ -1,0 +1,125 @@
+---
+---
+
+<div class="search-container">
+  <div class="search-box">
+    <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="11" cy="11" r="8"></circle>
+      <path d="m21 21-4.35-4.35"></path>
+    </svg>
+    <div id="search"></div>
+  </div>
+</div>
+
+<style scoped>
+  .search-container {
+    margin-bottom: var(--space-xl);
+  }
+
+  .search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-md);
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    transition: border-color var(--transition-fast);
+  }
+
+  .search-box:focus-within {
+    border-color: var(--color-accent);
+  }
+
+  .search-icon {
+    flex-shrink: 0;
+    color: var(--color-text-muted);
+  }
+
+  #search {
+    flex: 1;
+  }
+
+  #search :global(.pagefind-ui__search-input) {
+    background: transparent;
+    border: none;
+    color: var(--color-text);
+    font-size: 1rem;
+    padding: 0;
+    width: 100%;
+  }
+
+  #search :global(.pagefind-ui__search-input::placeholder) {
+    color: var(--color-text-dim);
+  }
+
+  #search :global(.pagefind-ui__search-input:focus) {
+    outline: none;
+  }
+
+  #search :global(.pagefind-ui__results) {
+    margin-top: var(--space-md);
+  }
+
+  #search :global(.pagefind-ui__result) {
+    padding: var(--space-md);
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+    margin-bottom: var(--space-sm);
+    transition: all var(--transition-fast);
+  }
+
+  #search :global(.pagefind-ui__result:hover) {
+    border-color: var(--color-accent);
+    transform: translateY(-2px);
+  }
+
+  #search :global(.pagefind-ui__result-title) {
+    color: var(--color-text);
+    font-weight: 600;
+    margin-bottom: var(--space-xs);
+  }
+
+  #search :global(.pagefind-ui__result-excerpt) {
+    color: var(--color-text-muted);
+    font-size: 0.9375rem;
+  }
+
+  #search :global(mark) {
+    background: var(--color-accent);
+    color: white;
+    padding: 0.125rem 0.25rem;
+    border-radius: 2px;
+  }
+</style>
+
+<script>
+  import * as pagefind from "pagefind";
+
+  async function initSearch() {
+    var searchElement = document.getElementById("search");
+    if (!searchElement) {return;}
+
+    await pagefind.options({
+      bundlePath: "/_pagefind/",
+    });
+
+    var ui = new pagefind.PagefindUI({
+      element: "#search",
+      showSubResults: true,
+      showImages: false,
+      excerptLength: 15,
+      resetStyles: false,
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", function handleLoad() {
+      initSearch();
+    });
+  } else {
+    initSearch();
+  }
+</script>
