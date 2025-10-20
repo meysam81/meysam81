@@ -7,7 +7,13 @@
       <circle cx="11" cy="11" r="8"></circle>
       <path d="m21 21-4.35-4.35"></path>
     </svg>
-    <div id="search"></div>
+    <input
+      type="search"
+      id="search-input"
+      placeholder="Search posts..."
+      aria-label="Search blog posts"
+    />
+    <div id="search-results"></div>
   </div>
 </div>
 
@@ -37,89 +43,172 @@
     color: var(--color-text-muted);
   }
 
-  #search {
+  #search-input {
     flex: 1;
-  }
-
-  #search :global(.pagefind-ui__search-input) {
     background: transparent;
     border: none;
     color: var(--color-text);
     font-size: 1rem;
     padding: 0;
     width: 100%;
-  }
-
-  #search :global(.pagefind-ui__search-input::placeholder) {
-    color: var(--color-text-dim);
-  }
-
-  #search :global(.pagefind-ui__search-input:focus) {
     outline: none;
   }
 
-  #search :global(.pagefind-ui__results) {
-    margin-top: var(--space-md);
+  #search-input::placeholder {
+    color: var(--color-text-dim);
   }
 
-  #search :global(.pagefind-ui__result) {
-    padding: var(--space-md);
+  #search-results {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    left: 0;
+    right: 0;
     background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: var(--space-md);
+    max-height: 400px;
+    overflow-y: auto;
+    z-index: 100;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    display: none;
+  }
+
+  .search-result {
+    display: block;
+    padding: var(--space-md);
+    background: var(--color-bg-elevated);
     border: 1px solid var(--color-border);
     border-radius: var(--border-radius-sm);
     margin-bottom: var(--space-sm);
     transition: all var(--transition-fast);
+    text-decoration: none;
+    color: inherit;
   }
 
-  #search :global(.pagefind-ui__result:hover) {
+  .search-result:last-child {
+    margin-bottom: 0;
+  }
+
+  .search-result:hover {
     border-color: var(--color-accent);
     transform: translateY(-2px);
   }
 
-  #search :global(.pagefind-ui__result-title) {
+  .search-result h3 {
     color: var(--color-text);
     font-weight: 600;
-    margin-bottom: var(--space-xs);
+    margin: 0 0 var(--space-xs) 0;
+    font-size: 1rem;
   }
 
-  #search :global(.pagefind-ui__result-excerpt) {
+  .search-result p {
     color: var(--color-text-muted);
     font-size: 0.9375rem;
+    margin: 0;
+    line-height: 1.4;
   }
 
-  #search :global(mark) {
+  .search-result :global(mark) {
     background: var(--color-accent);
     color: white;
     padding: 0.125rem 0.25rem;
     border-radius: 2px;
   }
+
+  .no-results {
+    padding: var(--space-md);
+    color: var(--color-text-muted);
+    text-align: center;
+    margin: 0;
+  }
 </style>
 
 <script>
-  import * as pagefind from "pagefind";
+  document.addEventListener("DOMContentLoaded", function handleDOMLoaded() {
+    var searchInput = document.getElementById("search-input");
+    var searchResults = document.getElementById("search-results");
 
-  async function initSearch() {
-    var searchElement = document.getElementById("search");
-    if (!searchElement) {return;}
+    if (!searchInput || !searchResults) {
+      return;
+    }
 
-    await pagefind.options({
-      bundlePath: "/_pagefind/",
+    var pagefind;
+    var isProduction = import.meta.env.PROD;
+    var pagefindPath = isProduction ? "/pagefind/pagefind.js" : "/dist/pagefind/pagefind.js";
+
+    searchInput.addEventListener(
+      "focus",
+      async function handleFocus() {
+        if (!pagefind) {
+          try {
+            pagefind = await import(pagefindPath);
+            await pagefind.init();
+          } catch (e) {
+            searchResults.innerHTML = isProduction
+              ? '<p class="no-results">Search is currently unavailable</p>'
+              : '<p class="no-results">Search unavailable in development. Run build first.</p>';
+            searchResults.style.display = "block";
+          }
+        }
+      },
+      { once: true }
+    );
+
+    var debounceTimer;
+    searchInput.addEventListener("input", function searchInputHandler(e) {
+      clearTimeout(debounceTimer);
+      var query = e.target.value.trim();
+
+      if (query.length < 2) {
+        searchResults.innerHTML = "";
+        searchResults.style.display = "none";
+        return;
+      }
+
+      debounceTimer = setTimeout(async function performSearch() {
+        if (!pagefind) {
+          return;
+        }
+
+        try {
+          var search = await pagefind.search(query);
+
+          if (search.results.length === 0) {
+            searchResults.innerHTML = '<p class="no-results">No results found</p>';
+            searchResults.style.display = "block";
+            return;
+          }
+
+          var results = await Promise.all(
+            search.results.slice(0, 5).map(function mapData(r) {
+              return r.data();
+            })
+          );
+
+          searchResults.innerHTML = results
+            .map(function renderResult(result) {
+              return `
+                <a href="${result.url}" class="search-result">
+                  <h3>${result.meta?.title || result.url}</h3>
+                  <p>${result.excerpt}</p>
+                </a>
+              `;
+            })
+            .join("");
+
+          searchResults.style.display = "block";
+        } catch (e) {
+          searchResults.innerHTML = '<p class="no-results">Search error occurred</p>';
+          searchResults.style.display = "block";
+        }
+      }, 300);
     });
 
-    var ui = new pagefind.PagefindUI({
-      element: "#search",
-      showSubResults: true,
-      showImages: false,
-      excerptLength: 15,
-      resetStyles: false,
+    document.addEventListener("click", function handleClickOutside(e) {
+      if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+        searchResults.style.display = "none";
+      }
     });
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", function handleLoad() {
-      initSearch();
-    });
-  } else {
-    initSearch();
-  }
+  });
 </script>

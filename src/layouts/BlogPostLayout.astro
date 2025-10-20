@@ -84,7 +84,7 @@ var formattedUpdatedDate = updatedDate
           <div class="post-tags">
             {tags.map(function mapTags(tag) {
               return (
-                <a href={`/blog?tag=${encodeURIComponent(tag)}`} class="tag">
+                <a href={`/blog/tags/${tag}`} class="tag">
                   {tag}
                 </a>
               );

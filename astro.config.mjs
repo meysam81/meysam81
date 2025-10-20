@@ -10,7 +10,21 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   site: "https://meysam.io",
-  integrations: [sitemap(), mdx()],
+  integrations: [
+    sitemap(),
+    mdx(),
+    {
+      name: "pagefind-integration",
+      hooks: {
+        "astro:build:done": async function buildDone({ dir }) {
+          var { execSync } = await import("child_process");
+          execSync(`bunx pagefind --site ${dir.pathname}`, {
+            stdio: "inherit",
+          });
+        },
+      },
+    },
+  ],
   prefetch: {
     prefetchAll: true,
     defaultStrategy: "viewport",
@@ -42,6 +56,7 @@ export default defineConfig({
       },
     },
     build: {
+      external: ["/pagefind/pagefind.js"],
       minify: "esbuild",
       cssMinify: true,
       cssCodeSplit: true,

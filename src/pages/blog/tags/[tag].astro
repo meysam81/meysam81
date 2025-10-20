@@ -1,0 +1,131 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ContentCard from '@/components/ContentCard.astro';
+
+export async function getStaticPaths() {
+  var posts = await getCollection('blog', function filterPosts(post) {
+    return import.meta.env.PROD ? !post.data.draft : true;
+  });
+
+  var allTags = new Set();
+  posts.forEach(function collectTags(post) {
+    if (post.data.tags) {
+      post.data.tags.forEach(function addTag(tag) {
+        allTags.add(tag);
+      });
+    }
+  });
+
+  return Array.from(allTags).map(function createPath(tag) {
+    var tagPosts = posts.filter(function filterByTag(post) {
+      // @ts-ignore
+      return post.data.tags && post.data.tags.includes(tag);
+    });
+
+    tagPosts.sort(function sortPosts(a, b) {
+      return b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
+    });
+
+    return {
+      params: { tag },
+      props: { tag, posts: tagPosts },
+    };
+  });
+}
+
+var { tag, posts } = Astro.props;
+
+function formatDate(date: Date) {
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  }).format(date);
+}
+---
+
+<BaseLayout
+  title={`Posts tagged "${tag}" - Meysam Azad`}
+  description={`All blog posts tagged with ${tag}`}
+>
+  <section class="tag-page">
+    <div class="container-narrow">
+      <div class="header">
+        <a href="/blog" class="back-link">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          Back to Blog
+        </a>
+
+        <h1>Posts tagged "{tag}"</h1>
+        <p class="subtitle">{posts.length} post{posts.length !== 1 ? 's' : ''} found</p>
+      </div>
+
+      <div class="grid grid-3">
+        {posts.map(function mapPosts(post) {
+          var postSlug = post.slug || post.id;
+          return (
+            <ContentCard
+              title={post.data.title}
+              description={post.data.description}
+              url={`/blog/${postSlug}`}
+              badge={formatDate(post.data.pubDate)}
+              linkText="Read Article"
+            />
+          );
+        })}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style scoped>
+  .tag-page {
+    padding: var(--space-2xl) 0;
+  }
+
+  .header {
+    margin-bottom: var(--space-2xl);
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-text-muted);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    margin-bottom: var(--space-lg);
+    transition: all var(--transition-fast);
+  }
+
+  .back-link:hover {
+    color: var(--color-text);
+    gap: 0.75rem;
+  }
+
+  .back-link svg {
+    transition: transform var(--transition-fast);
+  }
+
+  .back-link:hover svg {
+    transform: translateX(-4px);
+  }
+
+  .header h1 {
+    margin-bottom: var(--space-sm);
+    background: linear-gradient(135deg, var(--color-text) 0%, var(--color-accent-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .subtitle {
+    color: var(--color-text-muted);
+    font-size: 1.125rem;
+    margin: 0;
+  }
+</style>

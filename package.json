@@ -15,7 +15,7 @@
   },
   "name": "meysam-io",
   "scripts": {
-    "build": "astro check && astro build && bun run pagefind",
+    "build": "astro check && astro build",
     "convert:images": "bun ./scripts/convert-svgs.js",
     "pagefind": "pagefind --site dist",
     "start": "astro dev"

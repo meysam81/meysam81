@@ -75,11 +75,12 @@ function formatDate(date: Date) {
           <h2 class="section-label">Featured Posts</h2>
           <div class="grid grid-2">
             {featuredPosts.map(function mapFeatured(post) {
+              var postSlug = post.slug || post.id;
               return (
                 <ContentCard
                   title={post.data.title}
                   description={post.data.description}
-                  url={`/blog/${post.id}`}
+                  url={`/blog/${postSlug}`}
                   badge={formatDate(post.data.pubDate)}
                   featured={true}
                   linkText="Read Article"
@@ -95,12 +96,13 @@ function formatDate(date: Date) {
         <div class="grid grid-3" id="posts-grid">
           {regularPosts.map(function mapRegular(post) {
             var postTags = post.data.tags.join(',');
+            var postSlug = post.slug || post.id;
             return (
               <div class="post-item" data-tags={postTags}>
                 <ContentCard
                   title={post.data.title}
                   description={post.data.description}
-                  url={`/blog/${post.id}`}
+                  url={`/blog/${postSlug}`}
                   badge={formatDate(post.data.pubDate)}
                   linkText="Read Article"
                 />
@@ -258,7 +260,9 @@ function formatDate(date: Date) {
         postItems.forEach(function forEachPost(post) {
           var postTags = post.getAttribute('data-tags');
 
-          if (selectedTag === 'all' || postTags?.includes(selectedTag || '')) {
+          if (selectedTag === 'all') {
+            post.classList.remove('hidden');
+          } else if (postTags && postTags.split(',').includes(selectedTag || '')) {
             post.classList.remove('hidden');
           } else {
             post.classList.add('hidden');

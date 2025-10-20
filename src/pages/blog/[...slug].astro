@@ -10,8 +10,9 @@ export async function getStaticPaths() {
       return import.meta.env.DEV || !post.data.draft;
     })
     .map(function mapPosts(post) {
+      var slug = post.slug || post.id;
       return {
-        params: { slug: post.id },
+        params: { slug: slug },
         props: post,
       };
     });

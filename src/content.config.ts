@@ -12,6 +12,7 @@ var blogCollection = defineCollection({
     draft: z.boolean().default(false),
     featured: z.boolean().default(false),
     ogImage: z.string().optional(),
+    slug: z.string().optional(),
   }),
 });
 
