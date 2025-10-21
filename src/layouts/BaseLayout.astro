@@ -36,6 +36,15 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <!-- Keywords -->
     <meta name="keywords" content="indie hacker, solopreneur, SaaS, bootstrapped startup, DevOps, SRE, technical founder, customer discovery, product validation, building in public" />
 
+    <!-- webmention.io -->
+    <link rel="webmention" href="https://webmention.io/meysam.io/webmention" />
+
+    <!-- mastodon -->
+    <meta name="fediverse:creator" content="@meysam81@mastodon.social">
+
+    <!-- IndieAuth -->
+    <link rel="me" href="https://github.com/meysam81">
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonicalURL} />
