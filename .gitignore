@@ -2,3 +2,4 @@ node_modules/
 dist
 index.html.bk
 .astro
+sitemap_links-*.csv
