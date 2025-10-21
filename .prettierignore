@@ -1,0 +1,5 @@
+dist
+.astro
+.claude
+.oxlintrc.json
+tsconfig.json

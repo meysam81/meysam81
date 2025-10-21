@@ -3,6 +3,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import ContentCard from '@/components/ContentCard.astro';
 import SearchBox from '@/components/SearchBox.astro';
 import { getCollection } from 'astro:content';
+import { slugify } from '@/utils/slug';
 
 var allPosts = await getCollection('blog');
 
@@ -75,7 +76,7 @@ function formatDate(date: Date) {
           <h2 class="section-label">Featured Posts</h2>
           <div class="grid grid-2">
             {featuredPosts.map(function mapFeatured(post) {
-              var postSlug = post.slug || post.id;
+              var postSlug = post.slug || slugify(post.data.title);
               return (
                 <ContentCard
                   title={post.data.title}
@@ -96,7 +97,7 @@ function formatDate(date: Date) {
         <div class="grid grid-3" id="posts-grid">
           {regularPosts.map(function mapRegular(post) {
             var postTags = post.data.tags.join(',');
-            var postSlug = post.slug || post.id;
+            var postSlug = post.slug || slugify(post.data.title);
             return (
               <div class="post-item" data-tags={postTags}>
                 <ContentCard
