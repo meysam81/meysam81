@@ -158,7 +158,11 @@
     var debounceTimer;
     searchInput.addEventListener("input", function searchInputHandler(e) {
       clearTimeout(debounceTimer);
-      var query = e.target.value.trim();
+      var target = e.target;
+      if (!(target instanceof HTMLInputElement)) {
+        return;
+      }
+      var query = target.value.trim();
 
       if (query.length < 2) {
         searchResults.innerHTML = "";
@@ -206,7 +210,11 @@
     });
 
     document.addEventListener("click", function handleClickOutside(e) {
-      if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+      var target = e.target;
+      if (!(target instanceof Node)) {
+        return;
+      }
+      if (!searchInput.contains(target) && !searchResults.contains(target)) {
         searchResults.style.display = "none";
       }
     });

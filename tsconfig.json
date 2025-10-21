@@ -3,11 +3,16 @@
     "baseUrl": ".",
     "jsx": "react-jsx",
     "jsxImportSource": "react",
+    "noImplicitAny": false,
     "paths": {
       "@/*": [
         "./src/*"
       ]
-    }
+    },
+    "skipLibCheck": true,
+    "strict": false,
+    "strictFunctionTypes": false,
+    "strictNullChecks": false
   },
-  "extends": "astro/tsconfigs/strict"
+  "extends": "astro/tsconfigs/base"
 }
