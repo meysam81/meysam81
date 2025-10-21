@@ -1,28 +1,24 @@
 {
   "dependencies": {
-    "@tailwindcss/aspect-ratio": "^0.4.2",
-    "@tailwindcss/container-queries": "^0.1.1",
-    "@tailwindcss/forms": "^0.5.10",
-    "@tailwindcss/typography": "^0.5.16",
+    "@astrojs/sitemap": "^3.6.0",
+    "astro": "^5.14.6",
     "loglevel": "^1.9.2",
-    "vue": "^3.5.16",
-    "vue-router": "^4.5.1",
-    "xlsx": "^0.18.5"
+    "pagefind": "^1.4.0"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^5.2.4",
-    "autoprefixer": "^10.4.21",
-    "postcss": "^8.5.5",
-    "rollup-plugin-visualizer": "^6.0.3",
-    "tailwindcss": "^3.4.17",
-    "vite": "^4.5.14",
-    "vite-plugin-compression": "^0.5.1",
-    "vite-plugin-pwa": "^1.0.0"
+    "@astrojs/check": "^0.9.4",
+    "@astrojs/mdx": "^4.3.7",
+    "@tailwindcss/vite": "^4.1.14",
+    "oxlint": "^1.23.0",
+    "typescript": "^5.9.3",
+    "vite-plugin-compression2": "^2.3.0"
   },
-  "name": "meysam-cv",
+  "name": "meysam-io",
   "scripts": {
-    "build": "vite build",
-    "start": "vite"
+    "build": "astro check && astro build",
+    "convert:images": "bun ./scripts/convert-svgs.js",
+    "pagefind": "pagefind --site dist",
+    "start": "astro dev"
   },
   "type": "module",
   "version": "1.0.0"

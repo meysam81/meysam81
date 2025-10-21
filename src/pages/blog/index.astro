@@ -1,0 +1,283 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ContentCard from '@/components/ContentCard.astro';
+import SearchBox from '@/components/SearchBox.astro';
+import { getCollection } from 'astro:content';
+import { slugify } from '@/utils/slug';
+
+var allPosts = await getCollection('blog');
+
+var publishedPosts = allPosts
+  .filter(function filterDrafts(post) {
+    return import.meta.env.DEV || !post.data.draft;
+  })
+  .sort(function sortByDate(a, b) {
+    return b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
+  });
+
+var featuredPosts = publishedPosts.filter(function filterFeatured(post) {
+  return post.data.featured;
+});
+
+var regularPosts = publishedPosts.filter(function filterRegular(post) {
+  return !post.data.featured;
+});
+
+var allTags = [...new Set(publishedPosts.flatMap(function flatMapTags(post) {
+  return post.data.tags;
+}))].sort();
+
+function formatDate(date: Date) {
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  }).format(date);
+}
+---
+
+<BaseLayout
+  title="Blog - Building in Public"
+  description="Technical insights, customer discovery learnings, and honest updates from building bootstrapped SaaS products. DevOps lessons applied to product development."
+>
+  <section class="blog-hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1 class="hero-title">Building in Public</h1>
+        <p class="hero-subtitle">
+          Customer discovery insights, production DevOps lessons, and honest updates from the journey of finding problems worth solving.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="blog-content">
+    <div class="container">
+      <SearchBox />
+
+      {allTags.length > 0 && (
+        <div class="tags-filter mb-xl">
+          <h3 class="filter-label">Filter by Tag:</h3>
+          <div class="tags-list">
+            <button class="tag-button active" data-tag="all">All Posts</button>
+            {allTags.map(function mapTags(tag) {
+              return (
+                <button class="tag-button" data-tag={tag}>
+                  {tag}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {featuredPosts.length > 0 && (
+        <div class="featured-section mb-xl">
+          <h2 class="section-label">Featured Posts</h2>
+          <div class="grid grid-2">
+            {featuredPosts.map(function mapFeatured(post) {
+              var postSlug = post.slug || slugify(post.data.title);
+              return (
+                <ContentCard
+                  title={post.data.title}
+                  description={post.data.description}
+                  url={`/blog/${postSlug}`}
+                  badge={formatDate(post.data.pubDate)}
+                  featured={true}
+                  linkText="Read Article"
+                />
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      <div class="posts-section">
+        <h2 class="section-label">All Posts</h2>
+        <div class="grid grid-3" id="posts-grid">
+          {regularPosts.map(function mapRegular(post) {
+            var postTags = post.data.tags.join(',');
+            var postSlug = post.slug || slugify(post.data.title);
+            return (
+              <div class="post-item" data-tags={postTags}>
+                <ContentCard
+                  title={post.data.title}
+                  description={post.data.description}
+                  url={`/blog/${postSlug}`}
+                  badge={formatDate(post.data.pubDate)}
+                  linkText="Read Article"
+                />
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {publishedPosts.length === 0 && (
+        <div class="empty-state">
+          <h3>No posts yet</h3>
+          <p>Check back soon for customer discovery insights and technical content.</p>
+        </div>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .blog-hero {
+    padding: var(--space-3xl) 0 var(--space-2xl);
+    text-align: center;
+  }
+
+  .hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .hero-title {
+    background: linear-gradient(135deg, var(--color-text) 0%, var(--color-accent-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: var(--space-md);
+  }
+
+  .hero-subtitle {
+    font-size: 1.25rem;
+    color: var(--color-text-muted);
+    line-height: 1.7;
+  }
+
+  .blog-content {
+    padding-bottom: var(--space-3xl);
+  }
+
+  .tags-filter {
+    padding: var(--space-lg);
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+  }
+
+  .filter-label {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-md);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .tags-list {
+    display: flex;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+  }
+
+  .tag-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+    color: var(--color-text-muted);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .tag-button:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent-light);
+  }
+
+  .tag-button.active {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: white;
+  }
+
+  .section-label {
+    font-size: 1.25rem;
+    color: var(--color-text-muted);
+    font-weight: 600;
+    margin-bottom: var(--space-lg);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.875rem;
+  }
+
+  .featured-section {
+    margin-bottom: var(--space-2xl);
+  }
+
+  .post-item {
+    transition: opacity var(--transition-base);
+  }
+
+  .post-item.hidden {
+    display: none;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: var(--space-3xl) 0;
+  }
+
+  .empty-state h3 {
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-sm);
+  }
+
+  .empty-state p {
+    color: var(--color-text-dim);
+  }
+
+  @media (max-width: 768px) {
+    .blog-hero {
+      padding: var(--space-2xl) 0 var(--space-xl);
+    }
+
+    .tags-filter {
+      padding: var(--space-md);
+    }
+  }
+</style>
+
+<script>
+  function initTagFilter() {
+    var tagButtons = document.querySelectorAll('.tag-button');
+    var postItems = document.querySelectorAll('.post-item');
+
+    tagButtons.forEach(function forEachButton(button) {
+      button.addEventListener('click', function handleClick() {
+        var selectedTag = button.getAttribute('data-tag');
+
+        tagButtons.forEach(function forEachBtn(btn) {
+          btn.classList.remove('active');
+        });
+        button.classList.add('active');
+
+        postItems.forEach(function forEachPost(post) {
+          var postTags = post.getAttribute('data-tags');
+
+          if (selectedTag === 'all') {
+            post.classList.remove('hidden');
+          } else if (postTags && postTags.split(',').includes(selectedTag || '')) {
+            post.classList.remove('hidden');
+          } else {
+            post.classList.add('hidden');
+          }
+        });
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function handleLoad() {
+      initTagFilter();
+    });
+  } else {
+    initTagFilter();
+  }
+</script>

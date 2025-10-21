@@ -1,0 +1,134 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  url: string;
+  badge?: string;
+  featured?: boolean;
+  linkText?: string;
+  target?: string;
+  rel?: string;
+}
+
+var {
+  title,
+  description,
+  url,
+  badge,
+  featured = false,
+  linkText,
+  target = "",
+  rel = "",
+} = Astro.props;
+---
+
+<div class={`content-card ${featured ? "content-featured" : ""}`}>
+  {badge && <span class="content-badge">{badge}</span>}
+
+  <h3 class="content-title">{title}</h3>
+  <p class="content-description">{description}</p>
+
+  <a href={url} target={target} rel={rel} class="content-link">
+    {linkText || "Learn More"}
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+    >
+      <line x1="5" y1="12" x2="19" y2="12"></line>
+      <polyline points="12 5 19 12 12 19"></polyline>
+    </svg>
+  </a>
+</div>
+
+<style scoped>
+  .content-card {
+    position: relative;
+    padding: var(--space-lg);
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    transition: all var(--transition-base);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .content-card:hover {
+    border-color: var(--color-text-dim);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  }
+
+  .content-featured {
+    background: linear-gradient(
+      135deg,
+      rgba(59, 130, 246, 0.1) 0%,
+      rgba(0, 0, 0, 0) 100%
+    );
+    border-color: var(--color-accent);
+  }
+
+  .content-featured:hover {
+    border-color: var(--color-accent-light);
+    box-shadow: 0 20px 40px rgba(59, 130, 246, 0.3);
+  }
+
+  .content-badge {
+    position: absolute;
+    top: var(--space-md);
+    right: var(--space-md);
+    padding: 0.375rem 0.875rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    background: var(--color-success);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.075em;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .content-featured .content-badge {
+    background: var(--color-accent);
+  }
+
+  .content-title {
+    font-size: 1.5rem;
+    margin-bottom: var(--space-sm);
+    color: var(--color-text);
+  }
+
+  .content-description {
+    color: var(--color-text-muted);
+    font-size: 1rem;
+    margin-bottom: var(--space-md);
+    flex-grow: 1;
+  }
+
+  .content-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-accent-light);
+    font-weight: 500;
+    transition: all var(--transition-fast);
+  }
+
+  .content-link:hover {
+    color: var(--color-accent);
+    gap: 0.75rem;
+  }
+
+  .content-link svg {
+    transition: transform var(--transition-fast);
+  }
+
+  .content-link:hover svg {
+    transform: translateX(4px);
+  }
+</style>

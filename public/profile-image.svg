@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" width="1000" height="1000">
+  <!-- Background -->
+  <rect width="1000" height="1000" fill="#0a0a0a"/>
+
+  <!-- Gradient definitions -->
+  <defs>
+    <linearGradient id="profileBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0a0a;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#1a1a1a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0a0a0a;stop-opacity:1" />
+    </linearGradient>
+
+    <linearGradient id="profileAccent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#60a5fa;stop-opacity:1" />
+    </linearGradient>
+
+    <radialGradient id="glow">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:0" />
+    </radialGradient>
+  </defs>
+
+  <rect width="1000" height="1000" fill="url(#profileBg)"/>
+
+  <!-- Glow effect behind logo -->
+  <circle cx="500" cy="500" r="350" fill="url(#glow)"/>
+
+  <!-- Main circle with gradient border -->
+  <circle cx="500" cy="500" r="300" fill="#0a0a0a" stroke="url(#profileAccent)" stroke-width="8"/>
+
+  <!-- Large M logo -->
+  <text x="500" y="600" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="320" font-weight="700" fill="url(#profileAccent)" text-anchor="middle">M</text>
+
+  <!-- Name below -->
+  <text x="500" y="850" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="48" font-weight="600" fill="#f5f5f5" text-anchor="middle">
+    Meysam Azad
+  </text>
+
+  <!-- Tagline -->
+  <text x="500" y="910" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="32" font-weight="400" fill="#6a6a6a" text-anchor="middle">
+    Building in Public
+  </text>
+</svg>

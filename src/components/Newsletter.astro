@@ -1,0 +1,161 @@
+---
+// Newsletter.astro - Email capture component
+interface Props {
+  variant?: 'hero' | 'section';
+}
+
+const { variant = 'section' } = Astro.props;
+---
+
+<div class={`newsletter newsletter-${variant}`}>
+  {variant === 'section' && (
+    <h2>Build Alongside Me</h2>
+    <p class="newsletter-description">
+      Join technical founders getting weekly insights on customer discovery, product validation, and building with production-grade discipline.
+    </p>
+  )}
+
+  <div class="newsletter-benefits">
+    <div class="benefit">
+      <svg class="benefit-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+      </svg>
+      <span>Customer discovery insights as I interview potential users</span>
+    </div>
+    <div class="benefit">
+      <svg class="benefit-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+      </svg>
+      <span>Production DevOps lessons applied to product development</span>
+    </div>
+    <div class="benefit">
+      <svg class="benefit-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+      </svg>
+      <span>Honest updates—experiments, failures, and what I'm learning</span>
+    </div>
+    <div class="benefit">
+      <svg class="benefit-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+      </svg>
+      <span>Early access to new tools and experiments</span>
+    </div>
+  </div>
+
+  <form class="newsletter-form" action="https://meysam.io/subscribe" method="get">
+    <div class="form-group">
+      <input
+        type="email"
+        name="email"
+        placeholder="your@email.com"
+        required
+        aria-label="Email address"
+        class="email-input"
+      />
+      <button type="submit" class="btn btn-primary">
+        Join 1,500+ Engineers
+      </button>
+    </div>
+    <p class="form-note">No spam. Unsubscribe anytime. Privacy respected.</p>
+  </form>
+</div>
+
+<style scoped>
+  .newsletter {
+    padding: var(--space-2xl);
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+  }
+
+  .newsletter-hero {
+    text-align: center;
+    margin-top: var(--space-xl);
+  }
+
+  .newsletter-section {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .newsletter-section h2 {
+    text-align: center;
+    margin-bottom: var(--space-md);
+  }
+
+  .newsletter-description {
+    text-align: center;
+    font-size: 1.125rem;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-xl);
+  }
+
+  .newsletter-benefits {
+    display: grid;
+    gap: var(--space-md);
+    margin-bottom: var(--space-xl);
+  }
+
+  .benefit {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-sm);
+  }
+
+  .benefit-icon {
+    flex-shrink: 0;
+    color: var(--color-success);
+    margin-top: 2px;
+  }
+
+  .benefit span {
+    color: var(--color-text-muted);
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .newsletter-form {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .form-group {
+    display: flex;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
+  }
+
+  .email-input {
+    flex: 1;
+    font-size: 1rem;
+  }
+
+  .form-group button {
+    white-space: nowrap;
+  }
+
+  .form-note {
+    text-align: center;
+    font-size: 0.875rem;
+    color: var(--color-text-dim);
+    margin: 0;
+  }
+
+  @media (max-width: 768px) {
+    .newsletter {
+      padding: var(--space-lg);
+    }
+
+    .form-group {
+      flex-direction: column;
+    }
+
+    .form-group button {
+      width: 100%;
+    }
+  }
+</style>

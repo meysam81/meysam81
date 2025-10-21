@@ -1,0 +1,138 @@
+---
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import '@/styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+}
+
+const {
+  title = "Meysam Azad - Indie Hacker Building Bootstrapped SaaS",
+  description = "Technical engineer with 8 years of DevOps/SRE experience, now finding problems worth solving. Join me as I document customer discovery, product validation, and building with production-grade discipline.",
+  ogImage = "https://meysam.io/og-image.png"
+} = Astro.props;
+
+const fullTitle = title.includes("Meysam") ? title : `${title} | Meysam Azad`;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Primary Meta Tags -->
+    <title>{fullTitle}</title>
+    <meta name="title" content={fullTitle} />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Keywords -->
+    <meta name="keywords" content="indie hacker, solopreneur, SaaS, bootstrapped startup, DevOps, SRE, technical founder, customer discovery, product validation, building in public" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonicalURL} />
+    <meta property="twitter:title" content={fullTitle} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={ogImage} />
+    <meta name="twitter:creator" content="@meysamazing" />
+
+    <!-- Structured Data -->
+    <script is:inline type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Meysam Azad",
+        "url": "https://meysam.io",
+        "image": "https://meysam.io/og-image.png",
+        "jobTitle": "Technical Founder & DevOps Engineer",
+        "description": "Technical engineer building bootstrapped SaaS products",
+        "sameAs": [
+          "https://x.com/meysamazing",
+          "https://github.com/meysam81",
+          "https://linkedin.com/in/meysamazad",
+          "https://youtube.com/@meysam"
+        ]
+      }
+    </script>
+
+    <!-- Performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+  </head>
+  <body>
+    <Header />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+
+    <!-- Smooth scroll for anchor links -->
+    <script>
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function clickHandler(e) {
+          // @ts-ignore
+          const href = this.getAttribute('href');
+          if (href === '#') {return;}
+
+          e.preventDefault();
+          const target = document.querySelector(href);
+          if (target) {
+            const headerOffset = 80;
+            const elementPosition = target.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+            window.scrollTo({
+              top: offsetPosition,
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
+    </script>
+
+    <!-- Analytics - Delayed Load -->
+    <script is:inline>
+      function loadAnalytics() {
+        var script = document.createElement('script');
+        script.src = 'https://api.pirsch.io/pa.js';
+        script.id = 'pianjs';
+        script.defer = true;
+        script.setAttribute('data-code', 'm9Chz179Udt3YeVXRHXyxWthr2A3vbLb');
+        document.head.appendChild(script);
+      }
+
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(function idleCallback() {
+          loadAnalytics();
+        }, { timeout: 2000 });
+      } else {
+        setTimeout(function timeoutCallback() {
+          loadAnalytics();
+        }, 2000);
+      }
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  /* Page spacing to account for fixed header */
+  main {
+    padding-top: 80px;
+    min-height: calc(100vh - 80px);
+  }
+</style>

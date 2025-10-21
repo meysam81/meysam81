@@ -1,0 +1,332 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Newsletter from '@/components/Newsletter.astro';
+import TableOfContents from '@/components/TableOfContents.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  updatedDate?: Date;
+  author: string;
+  tags: string[];
+  ogImage?: string;
+  headings: Array<{
+    depth: number;
+    slug: string;
+    text: string;
+  }>;
+  readingTime: number;
+}
+
+var { title, description, pubDate, updatedDate, author, tags, ogImage, headings, readingTime } = Astro.props;
+
+var formattedPubDate = new Intl.DateTimeFormat('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric'
+}).format(pubDate);
+
+var formattedUpdatedDate = updatedDate
+  ? new Intl.DateTimeFormat('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    }).format(updatedDate)
+  : null;
+---
+
+<BaseLayout title={title} description={description} ogImage={ogImage}>
+  <article class="blog-post">
+    <div class="container-narrow">
+      <header class="post-header">
+        <a href="/blog" class="back-link">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          Back to Blog
+        </a>
+
+        <h1 class="post-title">{title}</h1>
+        <p class="post-description">{description}</p>
+
+        <div class="post-meta">
+          <div class="meta-item">
+            <span class="meta-label">By</span>
+            <span class="meta-value">{author}</span>
+          </div>
+          <div class="meta-divider">•</div>
+          <div class="meta-item">
+            <span class="meta-label">Published</span>
+            <time datetime={pubDate.toISOString()} class="meta-value">{formattedPubDate}</time>
+          </div>
+          {formattedUpdatedDate && (
+            <>
+              <div class="meta-divider">•</div>
+              <div class="meta-item">
+                <span class="meta-label">Updated</span>
+                <time datetime={updatedDate!.toISOString()} class="meta-value">{formattedUpdatedDate}</time>
+              </div>
+            </>
+          )}
+          <div class="meta-divider">•</div>
+          <div class="meta-item">
+            <svg class="meta-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            <span class="meta-value">{readingTime} min read</span>
+          </div>
+        </div>
+
+        {tags.length > 0 && (
+          <div class="post-tags">
+            {tags.map(function mapTags(tag) {
+              return (
+                <a href={`/blog/tags/${tag}`} class="tag">
+                  {tag}
+                </a>
+              );
+            })}
+          </div>
+        )}
+      </header>
+
+      <TableOfContents headings={headings} />
+
+      <div class="post-content">
+        <slot />
+      </div>
+
+      <footer class="post-footer">
+        <div class="newsletter-cta">
+          <Newsletter variant="section" />
+        </div>
+      </footer>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .blog-post {
+    padding: var(--space-2xl) 0;
+  }
+
+  .post-header {
+    margin-bottom: var(--space-2xl);
+    padding-bottom: var(--space-xl);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-text-muted);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    margin-bottom: var(--space-lg);
+    transition: all var(--transition-fast);
+  }
+
+  .back-link:hover {
+    color: var(--color-text);
+    gap: 0.75rem;
+  }
+
+  .back-link svg {
+    transition: transform var(--transition-fast);
+  }
+
+  .back-link:hover svg {
+    transform: translateX(-4px);
+  }
+
+  .post-title {
+    margin-bottom: var(--space-md);
+    background: linear-gradient(135deg, var(--color-text) 0%, var(--color-accent-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .post-description {
+    font-size: 1.25rem;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-lg);
+    line-height: 1.7;
+  }
+
+  .post-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+    margin-bottom: var(--space-md);
+  }
+
+  .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: 0.9375rem;
+  }
+
+  .meta-icon {
+    color: var(--color-text-dim);
+    flex-shrink: 0;
+  }
+
+  .meta-label {
+    color: var(--color-text-dim);
+  }
+
+  .meta-value {
+    color: var(--color-text-muted);
+    font-weight: 500;
+  }
+
+  .meta-divider {
+    color: var(--color-text-dim);
+  }
+
+  .post-tags {
+    display: flex;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    padding: 0.375rem 0.875rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+    color: var(--color-text-muted);
+    transition: all var(--transition-fast);
+  }
+
+  .tag:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent-light);
+    background: rgba(59, 130, 246, 0.1);
+  }
+
+  .post-content {
+    margin-bottom: var(--space-3xl);
+  }
+
+  .post-content :global(h2) {
+    margin-top: var(--space-2xl);
+    margin-bottom: var(--space-md);
+    padding-top: var(--space-sm);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .post-content :global(h3) {
+    margin-top: var(--space-xl);
+    margin-bottom: var(--space-sm);
+  }
+
+  .post-content :global(h4),
+  .post-content :global(h5),
+  .post-content :global(h6) {
+    margin-top: var(--space-lg);
+    margin-bottom: var(--space-sm);
+  }
+
+  .post-content :global(p) {
+    margin-bottom: var(--space-md);
+    font-size: 1.0625rem;
+    line-height: 1.8;
+  }
+
+  .post-content :global(ul),
+  .post-content :global(ol) {
+    margin-bottom: var(--space-md);
+    padding-left: var(--space-lg);
+    color: var(--color-text-muted);
+  }
+
+  .post-content :global(li) {
+    margin-bottom: var(--space-sm);
+    line-height: 1.8;
+  }
+
+  .post-content :global(code) {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    padding: 0.125rem 0.375rem;
+    color: var(--color-accent-light);
+  }
+
+  .post-content :global(pre) {
+    margin-bottom: var(--space-md);
+    padding: var(--space-md);
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+    overflow-x: auto;
+  }
+
+  .post-content :global(pre code) {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 0.875rem;
+    color: var(--color-text);
+  }
+
+  .post-content :global(blockquote) {
+    margin: var(--space-lg) 0;
+    padding-left: var(--space-lg);
+    border-left: 3px solid var(--color-accent);
+    color: var(--color-text-muted);
+    font-style: italic;
+  }
+
+  .post-content :global(img) {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--border-radius-sm);
+    margin: var(--space-lg) 0;
+  }
+
+  .post-content :global(a) {
+    color: var(--color-accent-light);
+    border-bottom: 1px solid transparent;
+    transition: border-color var(--transition-fast);
+  }
+
+  .post-content :global(a:hover) {
+    border-bottom-color: var(--color-accent);
+  }
+
+  .post-footer {
+    margin-top: var(--space-3xl);
+    padding-top: var(--space-2xl);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .newsletter-cta {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 768px) {
+    .post-meta {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-xs);
+    }
+
+    .meta-divider {
+      display: none;
+    }
+  }
+</style>
