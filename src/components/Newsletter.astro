@@ -1,11 +1,11 @@
 ---
-// Newsletter.astro - Email capture component
 interface Props {
   variant?: 'hero' | 'section';
 }
 
-const { variant = 'section' } = Astro.props;
+var { variant = 'section' } = Astro.props;
 ---
+
 
 <div class={`newsletter newsletter-${variant}`}>
   {variant === 'section' && (
@@ -46,7 +46,15 @@ const { variant = 'section' } = Astro.props;
     </div>
   </div>
 
-  <form class="newsletter-form" action="https://meysam.io/subscribe" method="get">
+  <form
+    class="newsletter-form"
+    data-pirsch-event="subscribe"
+    data-pirsch-meta-page_url={Astro.url.pathname}
+    data-pirsch-meta-variant={variant}
+    data-pirsch-non-interactive
+    action="https://newsletter.meysam.io/subscribe"
+    method="post"
+    >
     <div class="form-group">
       <input
         type="email"
@@ -63,6 +71,45 @@ const { variant = 'section' } = Astro.props;
     <p class="form-note">No spam. Unsubscribe anytime. Privacy respected.</p>
   </form>
 </div>
+
+<script>
+  import log from 'loglevel';
+  import { getScrollPercentage, updateScrollPercentage, subscribe } from '@/stores/scrollStore';
+
+  function updateFormScroll() {
+    var scrollPercentage = getScrollPercentage();
+    var forms = document.querySelectorAll('.newsletter-form');
+    forms.forEach(function handleForm(form) {
+      form.setAttribute('data-pirsch-meta-scroll', String(scrollPercentage));
+      log.debug('Updated scroll percentage to', scrollPercentage);
+    });
+  }
+
+  function handleScroll() {
+    updateScrollPercentage();
+    updateFormScroll();
+  }
+
+  function handleFormSubmit(event) {
+    updateFormScroll();
+  }
+
+  document.addEventListener('DOMContentLoaded', function initialize() {
+    updateScrollPercentage();
+    updateFormScroll();
+
+    subscribe(function onScrollChange(percentage) {
+      log.debug('Scroll percentage changed to', percentage);
+    });
+
+    window.addEventListener('scroll', handleScroll);
+
+    var forms = document.querySelectorAll('.newsletter-form');
+    forms.forEach(function attachSubmitHandler(form) {
+      form.addEventListener('submit', handleFormSubmit);
+    });
+  });
+</script>
 
 <style scoped>
   .newsletter {
