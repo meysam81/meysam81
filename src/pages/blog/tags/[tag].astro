@@ -36,6 +36,14 @@ export async function getStaticPaths() {
 
 var { tag, posts } = Astro.props;
 
+var allPosts = await getCollection('blog', function filterPosts(post) {
+  return import.meta.env.PROD ? !post.data.draft : true;
+});
+
+var allTags = [...new Set(allPosts.flatMap(function flatMapTags(post) {
+  return post.data.tags || [];
+}))].sort();
+
 function formatDate(date: Date) {
   return new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
@@ -50,7 +58,7 @@ function formatDate(date: Date) {
   description={`All blog posts tagged with ${tag}`}
 >
   <section class="tag-page">
-    <div class="container-narrow">
+    <div class="container">
       <div class="header">
         <a href="/blog" class="back-link">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -63,6 +71,25 @@ function formatDate(date: Date) {
         <h1>Posts tagged "{tag}"</h1>
         <p class="subtitle">{posts.length} post{posts.length !== 1 ? 's' : ''} found</p>
       </div>
+
+      {allTags.length > 0 && (
+        <div class="tags-filter mb-xl">
+          <h3 class="filter-label">Filter by Tag:</h3>
+          <div class="tags-list">
+            <a href="/blog" class="tag-button">All Posts</a>
+            {allTags.map(function mapTags(tagItem) {
+              return (
+                <a
+                  href={`/blog/tags/${tagItem}`}
+                  class={tagItem === tag ? 'tag-button active' : 'tag-button'}
+                >
+                  {tagItem}
+                </a>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       <div class="grid grid-3">
         {posts.map(function mapPosts(post) {
@@ -127,5 +154,52 @@ function formatDate(date: Date) {
     color: var(--color-text-muted);
     font-size: 1.125rem;
     margin: 0;
+  }
+
+  .tags-filter {
+    padding: var(--space-lg);
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+  }
+
+  .filter-label {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-md);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .tags-list {
+    display: flex;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+  }
+
+  .tag-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+    color: var(--color-text-muted);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .tag-button:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent-light);
+  }
+
+  .tag-button.active {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: white;
   }
 </style>
