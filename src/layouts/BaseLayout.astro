@@ -2,6 +2,7 @@
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
 import '@/styles/global.css';
+import "@/main.js";
 
 interface Props {
   title?: string;
@@ -82,8 +83,9 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <!-- Performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://newsletter.meysam.io" />
+    <link rel="dns-prefetch" href="https://newsletter.meysam.io" />
 
-    <script is:inline type="module" src="/src/main.js" defer></script>
   </head>
   <body>
     <Header />
