@@ -6,10 +6,11 @@
  * Usage: node convert-svgs.js
  */
 
-import sharp from "sharp";
 import log from "loglevel";
+import sharp from "sharp";
 
-import { join } from "path";
+import { access, constants } from "fs/promises";
+import { basename, dirname, extname, join } from "path";
 
 const conversions = [
   // OG Images (1200x630)
@@ -77,6 +78,55 @@ const conversions = [
   { input: "favicon.svg", output: "favicon-512.png", width: 512, height: 512 },
 ];
 
+async function isValidSVG(filepath) {
+  try {
+    await access(filepath, constants.R_OK);
+    var extension = extname(filepath).toLowerCase();
+    return extension === ".svg";
+  } catch (error) {
+    log.error(`File access error for ${filepath}:`, error);
+    return false;
+  }
+}
+
+async function convertCustomSVG(filepath, customWidth, customHeight) {
+  var filename = basename(filepath, ".svg");
+  var dir = dirname(filepath);
+  var outputPath = join(dir, `${filename}.png`);
+
+  try {
+    var metadata = await sharp(filepath).metadata();
+    var width = customWidth || metadata.width || 1024;
+    var height = customHeight || metadata.height || 1024;
+
+    var resizeOptions = {
+      width: width,
+      height: height,
+      fit: "inside",
+      withoutEnlargement: false,
+    };
+
+    if (customWidth && customHeight) {
+      resizeOptions.fit = "fill";
+    } else if (customWidth || customHeight) {
+      resizeOptions.fit = "inside";
+    }
+
+    await sharp(filepath)
+      .resize(resizeOptions)
+      .png()
+      .toFile(outputPath);
+
+    log.info(
+      `Successfully converted ${filepath} to ${outputPath} (${width}x${height})`
+    );
+    return true;
+  } catch (error) {
+    log.error(`Failed to convert ${filepath}:`, error);
+    return false;
+  }
+}
+
 async function convertSVGtoPNG() {
   const publicDir = "./public";
 
@@ -108,6 +158,71 @@ async function convertSVGtoPNG() {
   );
 }
 
+function parseArguments(args) {
+  var filepaths = [];
+  var width = null;
+  var height = null;
+
+  for (var i = 0; i < args.length; i++) {
+    var arg = args[i];
+
+    if (arg === "--width" || arg === "-w") {
+      i++;
+      if (i < args.length) {
+        var parsedWidth = parseInt(args[i], 10);
+        if (!isNaN(parsedWidth) && parsedWidth > 0) {
+          width = parsedWidth;
+        }
+      }
+    } else if (arg === "--height" || arg === "-h") {
+      i++;
+      if (i < args.length) {
+        var parsedHeight = parseInt(args[i], 10);
+        if (!isNaN(parsedHeight) && parsedHeight > 0) {
+          height = parsedHeight;
+        }
+      }
+    } else {
+      filepaths.push(arg);
+    }
+  }
+
+  return { filepaths: filepaths, width: width, height: height };
+}
+
+async function main() {
+  var args = process.argv.slice(2);
+
+  if (args.length === 0) {
+    await convertSVGtoPNG();
+  } else {
+    var parsed = parseArguments(args);
+    var successful = 0;
+    var failed = 0;
+
+    for (var i = 0; i < parsed.filepaths.length; i++) {
+      var filepath = parsed.filepaths[i];
+      var isValid = await isValidSVG(filepath);
+
+      if (isValid) {
+        var result = await convertCustomSVG(filepath, parsed.width, parsed.height);
+        if (result) {
+          successful++;
+        } else {
+          failed++;
+        }
+      } else {
+        log.error(`Invalid or inaccessible SVG file: ${filepath}`);
+        failed++;
+      }
+    }
+
+    log.info(
+      `Custom SVG conversion completed: ${successful} successful, ${failed} failed.`
+    );
+  }
+}
+
 // Run the conversion
 // eslint-disable-next-line no-console
-convertSVGtoPNG().catch(console.error);
+main().catch(console.error);
