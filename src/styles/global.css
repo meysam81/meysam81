@@ -239,6 +239,10 @@ textarea::placeholder {
   color: var(--color-text-dim);
 }
 
+.hidden {
+  display: none;
+}
+
 .mt-sm {
   margin-top: var(--space-sm);
 }

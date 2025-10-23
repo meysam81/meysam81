@@ -6,8 +6,7 @@ interface Props {
 var { variant = 'section' } = Astro.props;
 ---
 
-
-<div class={`newsletter newsletter-${variant}`}>
+<div class:list={['newsletter', `newsletter-${variant}`]}>
   {variant === 'section' && (
     <h2>Build Alongside Me</h2>
     <p class="newsletter-description">
@@ -85,7 +84,7 @@ var { variant = 'section' } = Astro.props;
 
     <button type="submit" class="btn btn-primary submit-button">
       <span class="button-text">Join 1,500+ Engineers</span>
-      <span class="button-loader" style="display: none;">
+      <span class="button-loader hidden">
         <svg class="spinner" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M21 12a9 9 0 1 1-6.219-8.56"></path>
         </svg>
@@ -96,7 +95,7 @@ var { variant = 'section' } = Astro.props;
     <p class="form-note">No spam. Unsubscribe anytime. Privacy respected.</p>
   </form>
 
-  <div class="success-message" style="display: none;">
+  <div class="success-message hidden">
     <div class="success-icon">
       <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
@@ -134,9 +133,8 @@ var { variant = 'section' } = Astro.props;
     var container = formElement.parentElement;
     var successMessage = container.querySelector('.success-message');
 
-    formElement.style.display = 'none';
-    successMessage.style.display = 'block';
-
+    formElement.classList.add('hidden');
+    successMessage.classList.remove('hidden');
     successMessage.classList.add('fade-in');
 
     var resendLink = successMessage.querySelector('.resend-link');
@@ -147,10 +145,10 @@ var { variant = 'section' } = Astro.props;
   }
 
   function resetFormAndScrollTo(formElement, successMessage) {
-    successMessage.style.display = 'none';
+    successMessage.classList.add('hidden');
     successMessage.classList.remove('fade-in');
 
-    formElement.style.display = 'block';
+    formElement.classList.remove('hidden');
     formElement.reset();
 
     var submitButton = formElement.querySelector('.submit-button');
@@ -158,8 +156,8 @@ var { variant = 'section' } = Astro.props;
     var buttonLoader = submitButton.querySelector('.button-loader');
 
     submitButton.disabled = false;
-    buttonText.style.display = 'inline-flex';
-    buttonLoader.style.display = 'none';
+    buttonText.classList.remove('hidden');
+    buttonLoader.classList.add('hidden');
 
     var existingError = formElement.querySelector('.error-message');
     if (existingError) {
@@ -203,8 +201,8 @@ var { variant = 'section' } = Astro.props;
     var buttonLoader = submitButton.querySelector('.button-loader');
 
     submitButton.disabled = true;
-    buttonText.style.display = 'none';
-    buttonLoader.style.display = 'inline-flex';
+    buttonText.classList.add('hidden');
+    buttonLoader.classList.remove('hidden');
 
     updateFormScroll();
 
@@ -228,8 +226,8 @@ var { variant = 'section' } = Astro.props;
         log.error('Subscription error:', error);
         showErrorMessage(form, 'Unable to subscribe. Please try again.');
         submitButton.disabled = false;
-        buttonText.style.display = 'inline-flex';
-        buttonLoader.style.display = 'none';
+        buttonText.classList.remove('hidden');
+        buttonLoader.classList.add('hidden');
       });
   }
 
@@ -439,6 +437,10 @@ var { variant = 'section' } = Astro.props;
     font-size: 0.875rem;
   }
 
+  .hidden {
+    display: none;
+  }
+
   @media (max-width: 768px) {
     .newsletter {
       padding: var(--space-lg);
@@ -462,16 +464,6 @@ var { variant = 'section' } = Astro.props;
 
     .success-description {
       font-size: 1rem;
-    }
-
-    .button-loader {
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: 0;
-      bottom: 0;
-      margin: auto;
-      height: fit-content;
     }
   }
 </style>
