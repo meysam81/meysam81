@@ -41,4 +41,9 @@ function updateScrollPercentage() {
   setScrollPercentage(newPercentage);
 }
 
-export { getScrollPercentage, subscribe, updateScrollPercentage, calculateScrollPercentage };
+export {
+  getScrollPercentage,
+  subscribe,
+  updateScrollPercentage,
+  calculateScrollPercentage,
+};

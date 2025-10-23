@@ -15,8 +15,9 @@
   --color-success: #10b981;
 
   /* Typography */
-  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", sans-serif;
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
+    sans-serif;
   --font-mono: "SF Mono", "Monaco", "Cascadia Code", "Courier New", monospace;
 
   /* Spacing */

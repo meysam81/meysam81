@@ -82,3 +82,10 @@ repos:
       - id: dockerfmt
         args:
           - --indent=4
+  - repo: local
+    hooks:
+      - id: prettier
+        name: prettier
+        language: system
+        pass_filenames: false
+        entry: bunx prettier --write .

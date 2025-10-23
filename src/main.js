@@ -1,7 +1,7 @@
-import log from 'loglevel';
+import log from "loglevel";
 
-log.setLevel('info');
+log.setLevel("info");
 
 if (import.meta.env.DEV) {
-  log.setLevel('debug');
+  log.setLevel("debug");
 }
