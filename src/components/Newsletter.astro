@@ -84,11 +84,33 @@ var { variant = 'section' } = Astro.props;
     <script type="module" src="https://newsletter.meysam.io/public/static/altcha.umd.js" async defer></script>
 
     <button type="submit" class="btn btn-primary submit-button">
-      Join 1,500+ Engineers
+      <span class="button-text">Join 1,500+ Engineers</span>
+      <span class="button-loader" style="display: none;">
+        <svg class="spinner" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 12a9 9 0 1 1-6.219-8.56"></path>
+        </svg>
+        Subscribing...
+      </span>
     </button>
 
     <p class="form-note">No spam. Unsubscribe anytime. Privacy respected.</p>
   </form>
+
+  <div class="success-message" style="display: none;">
+    <div class="success-icon">
+      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+      </svg>
+    </div>
+    <h3 class="success-title">Check Your Email!</h3>
+    <p class="success-description">
+      We've sent a confirmation link to your inbox. Click it to complete your subscription and start receiving weekly insights.
+    </p>
+    <p class="success-note">
+      Don't see it? Check your spam folder or <a href="#" class="resend-link">click here to resend</a>.
+    </p>
+  </div>
 </div>
 
 <script>
@@ -108,8 +130,107 @@ var { variant = 'section' } = Astro.props;
     updateFormScroll();
   }
 
+  function showSuccessMessage(formElement) {
+    var container = formElement.parentElement;
+    var successMessage = container.querySelector('.success-message');
+
+    formElement.style.display = 'none';
+    successMessage.style.display = 'block';
+
+    successMessage.classList.add('fade-in');
+
+    var resendLink = successMessage.querySelector('.resend-link');
+    resendLink.addEventListener('click', function handleResend(e) {
+      e.preventDefault();
+      resetFormAndScrollTo(formElement, successMessage);
+    });
+  }
+
+  function resetFormAndScrollTo(formElement, successMessage) {
+    successMessage.style.display = 'none';
+    successMessage.classList.remove('fade-in');
+
+    formElement.style.display = 'block';
+    formElement.reset();
+
+    var submitButton = formElement.querySelector('.submit-button');
+    var buttonText = submitButton.querySelector('.button-text');
+    var buttonLoader = submitButton.querySelector('.button-loader');
+
+    submitButton.disabled = false;
+    buttonText.style.display = 'inline-flex';
+    buttonLoader.style.display = 'none';
+
+    var existingError = formElement.querySelector('.error-message');
+    if (existingError) {
+      existingError.remove();
+    }
+
+    formElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    setTimeout(function focusEmail() {
+      var emailInput = formElement.querySelector('.email-input');
+      if (emailInput) {
+        emailInput.focus();
+      }
+    }, 500);
+  }
+
+  function showErrorMessage(formElement, message) {
+    var existingError = formElement.querySelector('.error-message');
+    if (existingError) {
+      existingError.remove();
+    }
+
+    var errorDiv = document.createElement('div');
+    errorDiv.className = 'error-message';
+    errorDiv.textContent = message || 'Something went wrong. Please try again.';
+
+    var submitButton = formElement.querySelector('.submit-button');
+    formElement.insertBefore(errorDiv, submitButton);
+
+    setTimeout(function removeError() {
+      errorDiv.remove();
+    }, 5000);
+  }
+
   function handleFormSubmit(event) {
+    event.preventDefault();
+
+    var form = event.target;
+    var submitButton = form.querySelector('.submit-button');
+    var buttonText = submitButton.querySelector('.button-text');
+    var buttonLoader = submitButton.querySelector('.button-loader');
+
+    submitButton.disabled = true;
+    buttonText.style.display = 'none';
+    buttonLoader.style.display = 'inline-flex';
+
     updateFormScroll();
+
+    var formData = new FormData(form);
+
+    fetch(form.action, {
+      method: 'POST',
+      body: formData,
+    })
+      .then(function handleResponse(response) {
+        if (response.ok) {
+          return response;
+        }
+        throw new Error('Subscription failed');
+      })
+      .then(function onSuccess() {
+        log.info('Subscription successful');
+        showSuccessMessage(form);
+      })
+      .catch(function onError(error) {
+        log.error('Subscription error:', error);
+        showErrorMessage(form, 'Unable to subscribe. Please try again.');
+        submitButton.disabled = false;
+        buttonText.style.display = 'inline-flex';
+        buttonLoader.style.display = 'none';
+      });
   }
 
   document.addEventListener('DOMContentLoaded', function initialize() {
@@ -213,6 +334,42 @@ var { variant = 'section' } = Astro.props;
     white-space: nowrap;
     width: 100%;
     margin-bottom: var(--space-sm);
+    position: relative;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .button-text,
+  .button-loader {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-xs);
+  }
+
+  .button-loader {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    height: fit-content;
+  }
+
+  .spinner {
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
   }
 
   .form-note {
@@ -220,6 +377,66 @@ var { variant = 'section' } = Astro.props;
     font-size: 0.875rem;
     color: var(--color-text-dim);
     margin: 0;
+  }
+
+  .success-message {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+    padding: var(--space-xl);
+  }
+
+  .success-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto var(--space-md);
+    color: var(--color-success);
+  }
+
+  .success-icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .success-title {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: var(--space-sm);
+  }
+
+  .success-description {
+    font-size: 1.125rem;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-md);
+    line-height: 1.6;
+  }
+
+  .success-note {
+    font-size: 0.875rem;
+    color: var(--color-text-dim);
+    margin: 0;
+  }
+
+  .resend-link {
+    color: var(--color-accent-light);
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .resend-link:hover {
+    color: var(--color-accent);
+  }
+
+  .error-message {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #fca5a5;
+    padding: var(--space-sm);
+    border-radius: var(--border-radius-sm);
+    margin-bottom: var(--space-md);
+    text-align: center;
+    font-size: 0.875rem;
   }
 
   @media (max-width: 768px) {
@@ -233,6 +450,28 @@ var { variant = 'section' } = Astro.props;
 
     .submit-button {
       width: 100%;
+    }
+
+    .success-message {
+      padding: var(--space-lg);
+    }
+
+    .success-title {
+      font-size: 1.5rem;
+    }
+
+    .success-description {
+      font-size: 1rem;
+    }
+
+    .button-loader {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      margin: auto;
+      height: fit-content;
     }
   }
 </style>
