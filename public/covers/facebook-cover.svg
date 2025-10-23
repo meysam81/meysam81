@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 312" width="820" height="312">
+  <!-- Background -->
+  <rect width="820" height="312" fill="#0a0a0a"/>
+
+  <!-- Gradient definitions -->
+  <defs>
+    <linearGradient id="fbBgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0a0a;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#151515;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0a0a0a;stop-opacity:1" />
+    </linearGradient>
+
+    <linearGradient id="fbAccent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#60a5fa;stop-opacity:1" />
+    </linearGradient>
+
+    <radialGradient id="fbGlow">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.25" />
+      <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:0" />
+    </radialGradient>
+  </defs>
+
+  <rect width="820" height="312" fill="url(#fbBgGradient)"/>
+
+  <!-- Subtle grid -->
+  <g opacity="0.03">
+    <line x1="0" y1="78" x2="820" y2="78" stroke="#3b82f6" stroke-width="1"/>
+    <line x1="0" y1="156" x2="820" y2="156" stroke="#3b82f6" stroke-width="1"/>
+    <line x1="0" y1="234" x2="820" y2="234" stroke="#3b82f6" stroke-width="1"/>
+    <line x1="205" y1="0" x2="205" y2="312" stroke="#3b82f6" stroke-width="1"/>
+    <line x1="410" y1="0" x2="410" y2="312" stroke="#3b82f6" stroke-width="1"/>
+    <line x1="615" y1="0" x2="615" y2="312" stroke="#3b82f6" stroke-width="1"/>
+  </g>
+
+  <!-- Glow -->
+  <circle cx="90" cy="156" r="150" fill="url(#fbGlow)"/>
+
+  <!-- Left accent -->
+  <rect x="0" y="0" width="3" height="312" fill="url(#fbAccent)"/>
+
+  <!-- Logo mark -->
+  <circle cx="80" cy="156" r="45" fill="#0a0a0a" stroke="url(#fbAccent)" stroke-width="2"/>
+  <text x="80" y="178" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="58" font-weight="700" fill="url(#fbAccent)" text-anchor="middle">M</text>
+
+  <!-- Content -->
+  <g transform="translate(160, 0)">
+    <!-- Name -->
+    <text x="0" y="120" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="44" font-weight="700" fill="#f5f5f5" letter-spacing="-1">
+      Meysam Azad
+    </text>
+
+    <!-- Headline -->
+    <text x="0" y="165" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="26" font-weight="600" fill="url(#fbAccent)">
+      Shipping SaaS with DevOps Discipline
+    </text>
+
+    <!-- Tagline -->
+    <text x="0" y="205" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18" font-weight="400" fill="#a0a0a0">
+      Technical engineer • Building in public • 1,500+ readers
+    </text>
+
+    <!-- Badge -->
+    <g transform="translate(0, 225)">
+      <rect x="0" y="0" width="180" height="38" rx="19" fill="#1a1a1a" stroke="url(#fbAccent)" stroke-width="1"/>
+      <text x="90" y="25" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="16" font-weight="600" fill="#f5f5f5" text-anchor="middle">
+        meysam.io
+      </text>
+    </g>
+  </g>
+</svg>

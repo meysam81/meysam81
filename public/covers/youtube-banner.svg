@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2560 1440" width="2560" height="1440">
+  <!-- Background -->
+  <rect width="2560" height="1440" fill="#0a0a0a"/>
+
+  <!-- Gradient definitions -->
+  <defs>
+    <linearGradient id="ytBgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0a0a;stop-opacity:1" />
+      <stop offset="30%" style="stop-color:#151515;stop-opacity:1" />
+      <stop offset="70%" style="stop-color:#151515;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0a0a0a;stop-opacity:1" />
+    </linearGradient>
+
+    <linearGradient id="ytAccent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#60a5fa;stop-opacity:1" />
+    </linearGradient>
+
+    <radialGradient id="ytGlow">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.2" />
+      <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:0" />
+    </radialGradient>
+  </defs>
+
+  <rect width="2560" height="1440" fill="url(#ytBgGradient)"/>
+
+  <!-- Subtle grid pattern -->
+  <g opacity="0.03">
+    <line x1="0" y1="360" x2="2560" y2="360" stroke="#3b82f6" stroke-width="2"/>
+    <line x1="0" y1="720" x2="2560" y2="720" stroke="#3b82f6" stroke-width="2"/>
+    <line x1="0" y1="1080" x2="2560" y2="1080" stroke="#3b82f6" stroke-width="2"/>
+    <line x1="640" y1="0" x2="640" y2="1440" stroke="#3b82f6" stroke-width="2"/>
+    <line x1="1280" y1="0" x2="1280" y2="1440" stroke="#3b82f6" stroke-width="2"/>
+    <line x1="1920" y1="0" x2="1920" y2="1440" stroke="#3b82f6" stroke-width="2"/>
+  </g>
+
+  <!-- Glows -->
+  <circle cx="400" cy="720" r="500" fill="url(#ytGlow)"/>
+  <circle cx="2160" cy="720" r="500" fill="url(#ytGlow)"/>
+
+  <!-- Safe area guide (comment out in production) -->
+  <!-- Safe area is 1546×423 centered at 1280×720 -->
+  <!-- <rect x="507" y="508.5" width="1546" height="423" fill="none" stroke="red" stroke-width="2" stroke-dasharray="10,5" opacity="0.3"/> -->
+
+  <!-- All content must be within safe area -->
+  <!-- Safe area starts at x=507, y=508.5, width=1546, height=423 -->
+
+  <!-- Logo mark (in safe area) -->
+  <circle cx="680" cy="720" r="90" fill="#0a0a0a" stroke="url(#ytAccent)" stroke-width="4"/>
+  <text x="680" y="762" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="115" font-weight="700" fill="url(#ytAccent)" text-anchor="middle">M</text>
+
+  <!-- Main content (centered in safe area) -->
+  <g transform="translate(840, 0)">
+    <!-- Name -->
+    <text x="0" y="660" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="82" font-weight="700" fill="#f5f5f5" letter-spacing="-2">
+      Meysam Azad
+    </text>
+
+    <!-- Headline -->
+    <text x="0" y="745" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="48" font-weight="600" fill="url(#ytAccent)">
+      DevOps Insights &amp; Building in Public
+    </text>
+
+    <!-- Description -->
+    <text x="0" y="805" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="32" font-weight="400" fill="#a0a0a0">
+      Production systems • Customer discovery • Technical founder journey
+    </text>
+  </g>
+
+  <!-- Right side domain (in safe area) -->
+  <text x="1980" y="900" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="36" font-weight="500" fill="#6a6a6a" text-anchor="end">
+    meysam.io
+  </text>
+</svg>

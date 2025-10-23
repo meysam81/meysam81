@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 500" width="1500" height="500">
+  <!-- Background -->
+  <rect width="1500" height="500" fill="#0a0a0a"/>
+
+  <!-- Gradient definitions -->
+  <defs>
+    <linearGradient id="thBgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0a0a;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#151515;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0a0a0a;stop-opacity:1" />
+    </linearGradient>
+
+    <linearGradient id="thAccent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#60a5fa;stop-opacity:1" />
+    </linearGradient>
+
+    <radialGradient id="thGlow">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:0" />
+    </radialGradient>
+  </defs>
+
+  <rect width="1500" height="500" fill="url(#thBgGradient)"/>
+
+  <!-- Thread-like pattern -->
+  <g opacity="0.04">
+    <path d="M 200,100 Q 400,120 600,100 T 1000,100 T 1400,100" stroke="#3b82f6" stroke-width="2" fill="none"/>
+    <path d="M 200,200 Q 400,220 600,200 T 1000,200 T 1400,200" stroke="#3b82f6" stroke-width="2" fill="none"/>
+    <path d="M 200,300 Q 400,320 600,300 T 1000,300 T 1400,300" stroke="#3b82f6" stroke-width="2" fill="none"/>
+    <path d="M 200,400 Q 400,420 600,400 T 1000,400 T 1400,400" stroke="#3b82f6" stroke-width="2" fill="none"/>
+  </g>
+
+  <!-- Glow -->
+  <circle cx="180" cy="250" r="250" fill="url(#thGlow)"/>
+
+  <!-- Accent bar -->
+  <rect x="0" y="0" width="5" height="500" fill="url(#thAccent)"/>
+
+  <!-- Logo mark -->
+  <circle cx="140" cy="250" r="70" fill="#0a0a0a" stroke="url(#thAccent)" stroke-width="3"/>
+  <text x="140" y="280" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="90" font-weight="700" fill="url(#thAccent)" text-anchor="middle">M</text>
+
+  <!-- Content -->
+  <g transform="translate(260, 0)">
+    <!-- Name -->
+    <text x="0" y="190" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="68" font-weight="700" fill="#f5f5f5" letter-spacing="-2">
+      Meysam Azad
+    </text>
+
+    <!-- Headline -->
+    <text x="0" y="260" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="38" font-weight="600" fill="url(#thAccent)">
+      Building in Public • DevOps Insights
+    </text>
+
+    <!-- Description -->
+    <text x="0" y="320" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="24" font-weight="400" fill="#a0a0a0">
+      Sharing the journey from SRE engineer to technical founder
+    </text>
+  </g>
+
+  <!-- Links badge -->
+  <g transform="translate(260, 355)">
+    <rect x="0" y="0" width="550" height="52" rx="26" fill="#1a1a1a" stroke="url(#thAccent)" stroke-width="1.5"/>
+    <text x="275" y="35" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="20" font-weight="500" fill="#a0a0a0" text-anchor="middle">
+      meysam.io • developer-friendly.blog • 1,500+ readers
+    </text>
+  </g>
+</svg>

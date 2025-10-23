@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 320" width="1280" height="320">
+  <!-- Background -->
+  <rect width="1280" height="320" fill="#0a0a0a"/>
+
+  <!-- Gradient definitions -->
+  <defs>
+    <linearGradient id="ghBgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0a0a;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#151515;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0a0a0a;stop-opacity:1" />
+    </linearGradient>
+
+    <linearGradient id="ghAccent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#60a5fa;stop-opacity:1" />
+    </linearGradient>
+
+    <radialGradient id="ghGlow">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:0" />
+    </radialGradient>
+  </defs>
+
+  <rect width="1280" height="320" fill="url(#ghBgGradient)"/>
+
+  <!-- Code-style decorative lines -->
+  <g opacity="0.05">
+    <rect x="180" y="80" width="1000" height="3" rx="1.5" fill="#3b82f6"/>
+    <rect x="180" y="120" width="750" height="3" rx="1.5" fill="#3b82f6"/>
+    <rect x="180" y="160" width="900" height="3" rx="1.5" fill="#3b82f6"/>
+    <rect x="180" y="200" width="680" height="3" rx="1.5" fill="#3b82f6"/>
+    <rect x="180" y="240" width="820" height="3" rx="1.5" fill="#3b82f6"/>
+  </g>
+
+  <!-- Glow -->
+  <circle cx="140" cy="160" r="200" fill="url(#ghGlow)"/>
+
+  <!-- Left accent -->
+  <rect x="0" y="0" width="4" height="320" fill="url(#ghAccent)"/>
+
+  <!-- Logo mark -->
+  <circle cx="100" cy="160" r="55" fill="#0a0a0a" stroke="url(#ghAccent)" stroke-width="2.5"/>
+  <text x="100" y="187" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="72" font-weight="700" fill="url(#ghAccent)" text-anchor="middle">M</text>
+
+  <!-- Content -->
+  <g transform="translate(200, 0)">
+    <!-- Name -->
+    <text x="0" y="125" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="52" font-weight="700" fill="#f5f5f5" letter-spacing="-1.5">
+      Meysam Azad
+    </text>
+
+    <!-- Headline -->
+    <text x="0" y="175" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="30" font-weight="600" fill="url(#ghAccent)">
+      SRE Engineer → Technical Founder
+    </text>
+
+    <!-- Description -->
+    <text x="0" y="220" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="22" font-weight="400" fill="#a0a0a0">
+      Building production-grade tools • Open source contributor • Writing at meysam.io
+    </text>
+  </g>
+
+  <!-- Stats/Links on right -->
+  <g transform="translate(900, 240)">
+    <!-- Box 1 -->
+    <rect x="0" y="0" width="160" height="50" rx="8" fill="#1a1a1a" stroke="url(#ghAccent)" stroke-width="1"/>
+    <text x="80" y="32" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18" font-weight="600" fill="#f5f5f5" text-anchor="middle">
+      8+ yrs SRE
+    </text>
+
+    <!-- Box 2 -->
+    <rect x="180" y="0" width="160" height="50" rx="8" fill="#1a1a1a" stroke="url(#ghAccent)" stroke-width="1"/>
+    <text x="260" y="32" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18" font-weight="600" fill="#f5f5f5" text-anchor="middle">
+      1.5k readers
+    </text>
+  </g>
+</svg>
