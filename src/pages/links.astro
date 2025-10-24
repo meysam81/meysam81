@@ -8,23 +8,21 @@ const links = {
     { title: 'Buy Me a Coffee', url: 'https://buymeacoffee.com/meysam', description: 'One-time support' },
     { title: 'Patreon', url: 'https://patreon.com/meysam81', description: 'Monthly support' },
   ],
-  crypto: [
-    { title: 'Bitcoin', url: 'bitcoin:bc1qfn42dnpdderesp5a5fwjx9y70dut4m0p9emx27', description: 'bc1qfn42dnpdderesp5a5fwjx9y70dut4m0p9emx27' },
-  ],
   payment: [
     { title: 'PayPal', url: 'https://paypal.me/meysamazad', description: 'Direct payment' },
   ],
-  referrals: [
-    { title: 'Proton Mail', url: 'https://pr.tn/ref/NS19KFG8SQBG', description: 'Get a free month of Mail Plus' },
-    { title: 'Hetzner Cloud', url: 'https://hetzner.cloud/?ref=ai5E5vaX1J71', description: 'Get €20 credit' },
-    { title: 'DigitalOcean', url: 'https://m.do.co/c/7de094ea6f0d', description: 'Get $200 credit' },
-    { title: 'Maileroo', url: 'https://maileroo.com/?r=developerfriendly', description: 'SMTP/Marketing/Verification' },
-    { title: 'Postmark', url: 'https://www.postmarkapp.com/?via=0983a5', description: 'Transactional Email' },
+  crypto: [
+    { title: 'Bitcoin', url: 'bitcoin:bc1qfn42dnpdderesp5a5fwjx9y70dut4m0p9emx27', description: 'bc1qfn42dnpdderesp5a5fwjx9y70dut4m0p9emx27' },
+  ],
+  primary: [
+    { title: 'Website', url: 'https://meysam.io', description: 'Personal website' },
+    { title: 'Email', url: 'mailto:contact@meysam.io', description: 'contact@meysam.io' },
+    { title: 'Cal.com', url: 'https://cal.com/meysam', description: 'Schedule a meeting' },
+    { title: 'GitHub', url: 'https://github.com/meysam81', description: 'Open source projects' },
+    { title: 'LinkedIn', url: 'https://linkedin.com/in/meysamazad', description: 'Professional profile' },
+    { title: 'X / Twitter', url: 'https://x.com/meysamazing', description: '@meysamazing' },
   ],
   social: [
-    { title: 'X / Twitter', url: 'https://x.com/meysamazing', description: '@meysamazing' },
-    { title: 'LinkedIn', url: 'https://linkedin.com/in/meysamazad', description: 'Professional profile' },
-    { title: 'GitHub', url: 'https://github.com/meysam81', description: 'Open source projects' },
     { title: 'YouTube', url: 'https://youtube.com/@meysam', description: 'Video content' },
     { title: 'Instagram', url: 'https://instagram.com/meysamazing', description: '@meysamazing' },
     { title: 'Threads', url: 'http://threads.com/meysamazing', description: '@meysamazing' },
@@ -33,11 +31,13 @@ const links = {
     { title: 'Bluesky', url: 'https://bsky.app/profile/meysamazing.bsky.social', description: '@meysamazing' },
     { title: 'Telegram', url: 'http://t.me/meysamazing', description: '@meysamazing' },
     { title: 'Product Hunt', url: 'https://producthunt.com/@meysam', description: '@meysam' },
-    { title: 'Cal.com', url: 'https://cal.com/meysam', description: 'Schedule a meeting' },
   ],
-  contact: [
-    { title: 'Email', url: 'mailto:contact@meysam.io', description: 'contact@meysam.io' },
-    { title: 'Website', url: 'https://meysam.io', description: 'Personal website' },
+  referrals: [
+    { title: 'Proton Mail', url: 'https://pr.tn/ref/NS19KFG8SQBG', description: 'Get a free month of Mail Plus' },
+    { title: 'Hetzner Cloud', url: 'https://hetzner.cloud/?ref=ai5E5vaX1J71', description: 'Get €20 credit' },
+    { title: 'DigitalOcean', url: 'https://m.do.co/c/7de094ea6f0d', description: 'Get $200 credit' },
+    { title: 'Maileroo', url: 'https://maileroo.com/?r=developerfriendly', description: 'SMTP/Marketing/Verification' },
+    { title: 'Postmark', url: 'https://www.postmarkapp.com/?via=0983a5', description: 'Transactional Email' },
   ],
 };
 ---
@@ -60,7 +60,7 @@ const links = {
 
       <!-- Support My Work -->
       <div class="links-section">
-        <h2 class="section-title">Support My Work</h2>
+        <h2 class="section-title">💖 Support My Work</h2>
         <div class="links-grid">
           {links.support.map(link => (
             <a href={link.url} target="_blank" rel="noopener noreferrer" class="link-card">
@@ -77,9 +77,28 @@ const links = {
         </div>
       </div>
 
+      <!-- Payment -->
+      <div class="links-section">
+        <h2 class="section-title">💳 Direct Payment</h2>
+        <div class="links-grid">
+          {links.payment.map(link => (
+            <a href={link.url} target="_blank" rel="noopener noreferrer" class="link-card">
+              <div class="link-info">
+                <h3>{link.title}</h3>
+                <p>{link.description}</p>
+              </div>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="7" y1="17" x2="17" y2="7"></line>
+                <polyline points="7 7 17 7 17 17"></polyline>
+              </svg>
+            </a>
+          ))}
+        </div>
+      </div>
+
       <!-- Crypto -->
       <div class="links-section">
-        <h2 class="section-title">Cryptocurrency</h2>
+        <h2 class="section-title">₿ Cryptocurrency</h2>
         <div class="links-grid">
           {links.crypto.map(link => (
             <div class="link-card crypto-card">
@@ -102,11 +121,30 @@ const links = {
         </div>
       </div>
 
-      <!-- Payment -->
+      <!-- Primary Contact & Social -->
       <div class="links-section">
-        <h2 class="section-title">Direct Payment</h2>
+        <h2 class="section-title">📫 Primary Links</h2>
         <div class="links-grid">
-          {links.payment.map(link => (
+          {links.primary.map(link => (
+            <a href={link.url} target={link.url.startsWith('http') ? '_blank' : undefined} rel={link.url.startsWith('http') ? 'noopener noreferrer' : undefined} class="link-card">
+              <div class="link-info">
+                <h3>{link.title}</h3>
+                <p>{link.description}</p>
+              </div>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="7" y1="17" x2="17" y2="7"></line>
+                <polyline points="7 7 17 7 17 17"></polyline>
+              </svg>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <!-- Other Social -->
+      <div class="links-section">
+        <h2 class="section-title">🌐 More Social</h2>
+        <div class="links-grid">
+          {links.social.map(link => (
             <a href={link.url} target="_blank" rel="noopener noreferrer" class="link-card">
               <div class="link-info">
                 <h3>{link.title}</h3>
@@ -123,41 +161,10 @@ const links = {
 
       <!-- Referrals -->
       <div class="links-section">
-        <h2 class="section-title">Referral Links (You Get Benefits Too!)</h2>
+        <h2 class="section-title">🎁 Referral Links (You Get Benefits Too!)</h2>
         <div class="links-grid">
           {links.referrals.map(link => (
             <a href={link.url} target="_blank" rel="noopener noreferrer" class="link-card">
-              <div class="link-info">
-                <h3>{link.title}</h3>
-                <p>{link.description}</p>
-              </div>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="7" y1="17" x2="17" y2="7"></line>
-                <polyline points="7 7 17 7 17 17"></polyline>
-              </svg>
-            </a>
-          ))}
-        </div>
-      </div>
-
-      <!-- Social & Contact -->
-      <div class="links-section">
-        <h2 class="section-title">Connect With Me</h2>
-        <div class="links-grid">
-          {links.social.map(link => (
-            <a href={link.url} target="_blank" rel="noopener noreferrer" class="link-card">
-              <div class="link-info">
-                <h3>{link.title}</h3>
-                <p>{link.description}</p>
-              </div>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="7" y1="17" x2="17" y2="7"></line>
-                <polyline points="7 7 17 7 17 17"></polyline>
-              </svg>
-            </a>
-          ))}
-          {links.contact.map(link => (
-            <a href={link.url} class="link-card">
               <div class="link-info">
                 <h3>{link.title}</h3>
                 <p>{link.description}</p>
@@ -314,30 +321,31 @@ const links = {
 </style>
 
 <script>
-  // Copy to clipboard functionality
-  document.querySelectorAll('.copy-btn').forEach(button => {
-    button.addEventListener('click', async () => {
-      const text = button.getAttribute('data-copy');
-      if (!text) {return;}
+  function handleCopyClick() {
+    var button = this;
+    var text = button.getAttribute('data-copy');
+    if (!text) {return;}
 
-      try {
-        await navigator.clipboard.writeText(text);
-        button.classList.add('copied');
+    navigator.clipboard.writeText(text).then(function() {
+      button.classList.add('copied');
 
-        const originalHTML = button.innerHTML;
-        button.innerHTML = `
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="20 6 9 17 4 12"></polyline>
-          </svg>
-        `;
+      var originalHTML = button.innerHTML;
+      button.innerHTML = `
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      `;
 
-        setTimeout(() => {
-          button.classList.remove('copied');
-          button.innerHTML = originalHTML;
-        }, 2000);
-      } catch (err) {
+      setTimeout(function() {
+        button.classList.remove('copied');
+        button.innerHTML = originalHTML;
+      }, 2000);
+    }).catch(function(err) {
 
-      }
     });
+  }
+
+  document.querySelectorAll('.copy-btn').forEach(function(button) {
+    button.addEventListener('click', handleCopyClick);
   });
 </script>
