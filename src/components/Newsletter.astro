@@ -68,13 +68,6 @@ var { variant = 'section' } = Astro.props;
         aria-label="Email address"
         class="email-input"
       />
-      <input
-        type="text"
-        name="name"
-        placeholder="Name"
-        aria-label="Name"
-        class="name-input"
-      />
     </div>
 
     <altcha-widget
@@ -335,11 +328,7 @@ var { variant = 'section' } = Astro.props;
   .email-input {
     flex: 1;
     font-size: 1rem;
-  }
-
-  .name-input {
-    flex: 1;
-    font-size: 1rem;
+    text-align: center;
   }
 
   .submit-button {
