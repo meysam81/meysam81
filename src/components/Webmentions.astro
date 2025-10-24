@@ -1,0 +1,289 @@
+---
+interface Props {
+  url: string;
+}
+
+var { url } = Astro.props;
+
+var webmentions = [];
+var error = null;
+
+try {
+  var apiUrl = `https://webmention.io/api/mentions.jf2?target=${encodeURIComponent(url)}`;
+  var response = await fetch(apiUrl);
+  if (response.ok) {
+    var data = await response.json();
+    webmentions = data.children || [];
+  }
+} catch (e) {
+  error = e;
+  console.error('Failed to fetch webmentions:', e);
+}
+
+var likes = webmentions.filter(function filterLikes(mention) {
+  return mention['wm-property'] === 'like-of';
+});
+
+var reposts = webmentions.filter(function filterReposts(mention) {
+  return mention['wm-property'] === 'repost-of';
+});
+
+var replies = webmentions.filter(function filterReplies(mention) {
+  return mention['wm-property'] === 'in-reply-to';
+});
+
+var mentions = webmentions.filter(function filterMentions(mention) {
+  return mention['wm-property'] === 'mention-of';
+});
+
+function formatDate(dateString) {
+  var date = new Date(dateString);
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  }).format(date);
+}
+---
+
+{webmentions.length > 0 && (
+  <div class="webmentions">
+    <h3 class="webmentions-title">Webmentions</h3>
+
+    {(likes.length > 0 || reposts.length > 0) && (
+      <div class="webmentions-interactions">
+        {likes.length > 0 && (
+          <div class="interaction-group">
+            <span class="interaction-icon">❤️</span>
+            <span class="interaction-count">{likes.length} {likes.length === 1 ? 'like' : 'likes'}</span>
+            <div class="interaction-avatars">
+              {likes.slice(0, 10).map(function mapLikes(like) {
+                return like.author?.photo && (
+                  <img
+                    src={like.author.photo}
+                    alt={like.author.name || 'Anonymous'}
+                    class="avatar"
+                    title={like.author.name}
+                  />
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {reposts.length > 0 && (
+          <div class="interaction-group">
+            <span class="interaction-icon">🔄</span>
+            <span class="interaction-count">{reposts.length} {reposts.length === 1 ? 'repost' : 'reposts'}</span>
+            <div class="interaction-avatars">
+              {reposts.slice(0, 10).map(function mapReposts(repost) {
+                return repost.author?.photo && (
+                  <img
+                    src={repost.author.photo}
+                    alt={repost.author.name || 'Anonymous'}
+                    class="avatar"
+                    title={repost.author.name}
+                  />
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </div>
+    )}
+
+    {(replies.length > 0 || mentions.length > 0) && (
+      <div class="webmentions-list">
+        {[...replies, ...mentions].map(function mapMentions(mention) {
+          return (
+            <div class="webmention-item">
+              <div class="webmention-header">
+                {mention.author?.photo && (
+                  <img
+                    src={mention.author.photo}
+                    alt={mention.author.name || 'Anonymous'}
+                    class="webmention-avatar"
+                  />
+                )}
+                <div class="webmention-meta">
+                  <div class="webmention-author">
+                    {mention.author?.url ? (
+                      <a href={mention.author.url} target="_blank" rel="noopener noreferrer">
+                        {mention.author.name || 'Anonymous'}
+                      </a>
+                    ) : (
+                      <span>{mention.author?.name || 'Anonymous'}</span>
+                    )}
+                  </div>
+                  <div class="webmention-date">
+                    <a href={mention.url} target="_blank" rel="noopener noreferrer">
+                      {formatDate(mention.published || mention['wm-received'])}
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              {mention.content?.text && (
+                <div class="webmention-content">
+                  {mention.content.text}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    )}
+  </div>
+)}
+
+<style scoped>
+  .webmentions {
+    margin-top: var(--space-3xl);
+    padding-top: var(--space-2xl);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .webmentions-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: var(--space-lg);
+  }
+
+  .webmentions-interactions {
+    display: flex;
+    gap: var(--space-lg);
+    flex-wrap: wrap;
+    margin-bottom: var(--space-xl);
+    padding: var(--space-lg);
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+  }
+
+  .interaction-group {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+
+  .interaction-icon {
+    font-size: 1.25rem;
+  }
+
+  .interaction-count {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--color-text-muted);
+  }
+
+  .interaction-avatars {
+    display: flex;
+    margin-left: var(--space-xs);
+  }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid var(--color-bg);
+    margin-left: -8px;
+    transition: all var(--transition-fast);
+  }
+
+  .avatar:first-child {
+    margin-left: 0;
+  }
+
+  .avatar:hover {
+    transform: translateY(-2px) scale(1.1);
+    z-index: 10;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  .webmentions-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .webmention-item {
+    padding: var(--space-lg);
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    transition: all var(--transition-fast);
+  }
+
+  .webmention-item:hover {
+    border-color: var(--color-text-dim);
+  }
+
+  .webmention-header {
+    display: flex;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
+  }
+
+  .webmention-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid var(--color-border);
+  }
+
+  .webmention-meta {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .webmention-author {
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .webmention-author a {
+    color: var(--color-text);
+    transition: color var(--transition-fast);
+  }
+
+  .webmention-author a:hover {
+    color: var(--color-accent-light);
+  }
+
+  .webmention-date {
+    font-size: 0.875rem;
+    color: var(--color-text-dim);
+  }
+
+  .webmention-date a {
+    color: var(--color-text-dim);
+    transition: color var(--transition-fast);
+  }
+
+  .webmention-date a:hover {
+    color: var(--color-text-muted);
+  }
+
+  .webmention-content {
+    color: var(--color-text-muted);
+    line-height: 1.7;
+    font-size: 1rem;
+  }
+
+  @media (max-width: 768px) {
+    .webmentions-interactions {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .interaction-avatars {
+      margin-left: 0;
+      margin-top: var(--space-xs);
+    }
+  }
+</style>

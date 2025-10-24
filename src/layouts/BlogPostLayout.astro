@@ -2,6 +2,7 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Newsletter from '@/components/Newsletter.astro';
 import TableOfContents from '@/components/TableOfContents.astro';
+import Webmentions from '@/components/Webmentions.astro';
 
 interface Props {
   title: string;
@@ -34,6 +35,9 @@ var formattedUpdatedDate = updatedDate
       day: 'numeric'
     }).format(updatedDate)
   : null;
+
+var canonicalURL = new URL(Astro.url.pathname, Astro.site);
+var fullURL = canonicalURL.toString();
 ---
 
 <BaseLayout title={title} description={description} ogImage={ogImage}>
@@ -104,6 +108,7 @@ var formattedUpdatedDate = updatedDate
           <Newsletter variant="section" />
         </div>
         <div class="giscus comments-section"></div>
+        <Webmentions url={fullURL} />
       </footer>
     </div>
   </article>
