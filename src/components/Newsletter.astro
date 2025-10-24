@@ -5,8 +5,6 @@ interface Props {
 
 var { variant = 'section' } = Astro.props;
 ---
-<script slot="extrahead" type="module" src="https://newsletter.meysam.io/public/static/altcha.umd.js" async defer></script>
-
 <div class:list={['newsletter', `newsletter-${variant}`]}>
   {variant === 'section' && (
     <h2>Build Alongside Me</h2>
@@ -74,6 +72,7 @@ var { variant = 'section' } = Astro.props;
       challengeurl="https://newsletter.meysam.io/api/public/captcha/altcha"
       auto="onfocus"
     ></altcha-widget>
+    <script type="module" src="https://newsletter.meysam.io/public/static/altcha.umd.js" async defer></script>
 
     <button type="submit" class="btn btn-primary submit-button">
       <span class="button-text">Join 1,500+ Engineers</span>
@@ -144,12 +143,12 @@ var { variant = 'section' } = Astro.props;
       e.preventDefault();
       var formElement = document.querySelector('.newsletter-form');
       var successMessage = document.querySelector('.success-message');
-      resetFormAndScrollTo(formElement, successMessage);
+      resetForm(formElement, successMessage);
       resetAltcha();
     });
   }
 
-  function resetFormAndScrollTo(formElement, successMessage) {
+  function resetForm(formElement, successMessage) {
     successMessage.classList.add('hidden');
     successMessage.classList.remove('fade-in');
 
@@ -168,8 +167,6 @@ var { variant = 'section' } = Astro.props;
     if (existingError) {
       existingError.remove();
     }
-
-    formElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
     setTimeout(function focusEmail() {
       var emailInput = formElement.querySelector('.email-input');
