@@ -132,7 +132,7 @@ var { variant = 'section' } = Astro.props;
   }
 
   function resetAltcha() {
-    var altchaWidget = document.querySelector('altcha-widget');
+    var altchaWidget: any = document.querySelector('altcha-widget');
     if (altchaWidget && typeof altchaWidget.reset === 'function') {
       altchaWidget.reset();
     }
