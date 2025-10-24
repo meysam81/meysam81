@@ -103,15 +103,18 @@ var fullURL = canonicalURL.toString();
         <slot />
       </div>
 
-      <footer class="post-footer">
-        <div class="newsletter-cta">
-          <Newsletter variant="section" />
-        </div>
-        <div class="giscus comments-section"></div>
-        <Webmentions url={fullURL} />
-      </footer>
+      <div class="newsletter-cta">
+        <Newsletter variant="section" />
+      </div>
     </div>
   </article>
+
+  <div class="blog-post-extras">
+    <div class="container-narrow">
+      <div class="giscus comments-section"></div>
+      <Webmentions url={fullURL} />
+    </div>
+  </div>
 </BaseLayout>
 
 <style scoped>
@@ -221,7 +224,7 @@ var fullURL = canonicalURL.toString();
   }
 
   .post-content {
-    margin-bottom: var(--space-3xl);
+    margin-bottom: var(--space-2xl);
   }
 
   .post-content :global(h2) {
@@ -313,19 +316,20 @@ var fullURL = canonicalURL.toString();
     border-bottom-color: var(--color-accent);
   }
 
-  .post-footer {
-    margin-top: var(--space-3xl);
+  .newsletter-cta {
+    max-width: 800px;
+    margin: 0 auto;
     padding-top: var(--space-2xl);
     border-top: 1px solid var(--color-border);
   }
 
-  .newsletter-cta {
-    max-width: 800px;
-    margin: 0 auto;
+  .blog-post-extras {
+    padding: var(--space-3xl) 0;
+    background: var(--color-bg-elevated);
   }
 
   .comments-section {
-    margin-top: var(--space-3xl);
+    margin-bottom: var(--space-3xl);
   }
 
   @media (max-width: 768px) {
