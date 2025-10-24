@@ -5,7 +5,6 @@ interface Props {
 
 var { variant = 'section' } = Astro.props;
 ---
-
 <script slot="extrahead" type="module" src="https://newsletter.meysam.io/public/static/altcha.umd.js" async defer></script>
 
 <div class:list={['newsletter', `newsletter-${variant}`]}>
@@ -106,7 +105,7 @@ var { variant = 'section' } = Astro.props;
   </div>
 </div>
 
-<script lang="js">
+<script>
   import log from 'loglevel';
   import { getScrollPercentage, updateScrollPercentage, subscribe } from '@/stores/scrollStore';
 
