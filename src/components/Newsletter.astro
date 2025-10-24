@@ -78,7 +78,7 @@ var { variant = 'section' } = Astro.props;
     <altcha-widget
       class="altcha-widget"
       challengeurl="https://newsletter.meysam.io/api/public/captcha/altcha"
-      auto="onsubmit"
+      auto="onfocus"
     ></altcha-widget>
     <script type="module" src="https://newsletter.meysam.io/public/static/altcha.umd.js" async defer></script>
 
@@ -136,11 +136,23 @@ var { variant = 'section' } = Astro.props;
     formElement.classList.add('hidden');
     successMessage.classList.remove('hidden');
     successMessage.classList.add('fade-in');
+  }
 
-    var resendLink = successMessage.querySelector('.resend-link');
+  function resetAltcha() {
+    var altchaWidget = document.querySelector('altcha-widget');
+    if (altchaWidget && typeof altchaWidget.reset === 'function') {
+      altchaWidget.reset();
+    }
+  }
+
+  function handleReset() {
+    var resendLink = document.querySelector('.resend-link');
     resendLink.addEventListener('click', function handleResend(e) {
       e.preventDefault();
+      var formElement = document.querySelector('.newsletter-form');
+      var successMessage = document.querySelector('.success-message');
       resetFormAndScrollTo(formElement, successMessage);
+      resetAltcha();
     });
   }
 
@@ -234,6 +246,7 @@ var { variant = 'section' } = Astro.props;
   document.addEventListener('DOMContentLoaded', function initialize() {
     updateScrollPercentage();
     updateFormScroll();
+    handleReset();
 
     subscribe(function onScrollChange(percentage) {
       log.debug('Scroll percentage changed to', percentage);
