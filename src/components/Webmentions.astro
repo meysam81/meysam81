@@ -1,4 +1,6 @@
 ---
+import log from 'loglevel';
+
 interface Props {
   url: string;
 }
@@ -17,7 +19,8 @@ try {
   }
 } catch (e) {
   error = e;
-  console.error('Failed to fetch webmentions:', e);
+  log.error('Error fetching webmentions:', error);
+
 }
 
 var likes = webmentions.filter(function filterLikes(mention) {

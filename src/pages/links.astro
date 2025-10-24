@@ -1,6 +1,7 @@
 ---
 // links.astro - Links page with sponsorships and referrals
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import CopyButton from '@/components/CopyButton.astro';
 
 const links = {
   support: [
@@ -106,16 +107,7 @@ const links = {
                 <h3>{link.title}</h3>
                 <p class="crypto-address">{link.description}</p>
               </div>
-              <button
-                class="copy-btn"
-                data-copy={link.description}
-                aria-label="Copy to clipboard"
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                </svg>
-              </button>
+              <CopyButton text={link.description} label={`Copy ${link.title} address`} />
             </div>
           ))}
         </div>
@@ -319,33 +311,3 @@ const links = {
     }
   }
 </style>
-
-<script>
-  function handleCopyClick() {
-    var button = this;
-    var text = button.getAttribute('data-copy');
-    if (!text) {return;}
-
-    navigator.clipboard.writeText(text).then(function() {
-      button.classList.add('copied');
-
-      var originalHTML = button.innerHTML;
-      button.innerHTML = `
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="20 6 9 17 4 12"></polyline>
-        </svg>
-      `;
-
-      setTimeout(function() {
-        button.classList.remove('copied');
-        button.innerHTML = originalHTML;
-      }, 2000);
-    }).catch(function(err) {
-
-    });
-  }
-
-  document.querySelectorAll('.copy-btn').forEach(function(button) {
-    button.addEventListener('click', handleCopyClick);
-  });
-</script>
