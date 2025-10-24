@@ -17,7 +17,6 @@
   "scripts": {
     "build": "astro check && astro build",
     "convert:images": "bun ./scripts/convert-svgs.js",
-    "pagefind": "pagefind --site dist",
     "start": "astro dev"
   },
   "type": "module",

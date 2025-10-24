@@ -18,9 +18,12 @@ export default defineConfig({
       hooks: {
         "astro:build:done": async function buildDone({ dir }) {
           var { execSync } = await import("child_process");
-          execSync(`bunx pagefind --site ${dir.pathname}`, {
-            stdio: "inherit",
-          });
+          execSync(
+            `bunx pagefind --site ${dir.pathname} --glob '**/blog/*.html'`,
+            {
+              stdio: "inherit",
+            },
+          );
         },
       },
     },
