@@ -9,8 +9,8 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.5",
-    "@astrojs/mdx": "^4.3.7",
-    "@tailwindcss/vite": "^4.1.15",
+    "@astrojs/mdx": "^4.3.8",
+    "@tailwindcss/vite": "^4.1.16",
     "oxlint": "^1.24.0",
     "typescript": "^5.9.3",
     "vite-plugin-compression2": "^2.3.0"
