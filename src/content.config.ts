@@ -17,11 +17,11 @@ var blogCollection = defineCollection({
       .array(
         z.object({
           title: z.string(),
-          url: z.string(),
+          url: z.string().url(),
           description: z.string().optional(),
         })
       )
-      .optional(),
+      .default([]),
   }),
 });
 

@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/oxc-project/mirrors-oxlint
-    rev: v1.23.0
+    rev: v1.24.0
     hooks:
       - id: oxlint
         verbose: false
@@ -77,7 +77,7 @@ repos:
     hooks:
       - id: actionlint
   - repo: https://github.com/reteps/dockerfmt
-    rev: v0.3.8
+    rev: v0.3.9
     hooks:
       - id: dockerfmt
         args:

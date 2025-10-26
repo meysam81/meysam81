@@ -2,19 +2,18 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import BlogPostLayout from '@/layouts/BlogPostLayout.astro';
 import { calculateReadingTime } from '@/utils/reading-time';
+import { filterPublishedPosts } from '@/utils/blog';
+import log from 'loglevel';
 
 export async function getStaticPaths() {
   var posts = await getCollection('blog');
-  return posts
-    .filter(function filterDrafts(post) {
-      return import.meta.env.DEV || !post.data.draft;
-    })
-    .map(function mapPosts(post) {
-      return {
-        params: { slug: post.slug },
-        props: post,
-      };
-    });
+  var publishedPosts = filterPublishedPosts(posts);
+  return publishedPosts.map(function mapPosts(post) {
+    return {
+      params: { slug: post.slug },
+      props: post,
+    };
+  });
 }
 
 type Props = CollectionEntry<'blog'>;

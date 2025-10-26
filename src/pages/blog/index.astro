@@ -4,13 +4,11 @@ import ContentCard from '@/components/ContentCard.astro';
 import SearchBox from '@/components/SearchBox.astro';
 import { getCollection } from 'astro:content';
 import { slugify } from '@/utils/slug';
+import { filterPublishedPosts } from '@/utils/blog';
 
 var allPosts = await getCollection('blog');
 
-var publishedPosts = allPosts
-  .filter(function filterDrafts(post) {
-    return import.meta.env.DEV || !post.data.draft;
-  })
+var publishedPosts = filterPublishedPosts(allPosts)
   .sort(function sortByDate(a, b) {
     return b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
   });
