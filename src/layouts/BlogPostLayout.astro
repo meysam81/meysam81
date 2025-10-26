@@ -64,6 +64,62 @@ var fullURL = canonicalURL.toString();
     async>
   </script>
 
+  <script>
+    function initScrollSpy() {
+      var headings = document.querySelectorAll('.post-content h1[id], .post-content h2[id], .post-content h3[id], .post-content h4[id], .post-content h5[id], .post-content h6[id]');
+      var currentHash = '';
+
+      function updateHash(hash) {
+        if (hash !== currentHash) {
+          currentHash = hash;
+          history.replaceState(null, '', hash ? `#${hash}` : window.location.pathname);
+        }
+      }
+
+      function findActiveHeading() {
+        var scrollPosition = window.scrollY + 100;
+
+        for (var i = headings.length - 1; i >= 0; i--) {
+          var heading = headings[i];
+          // @ts-ignore
+          if (heading.offsetTop <= scrollPosition) {
+            return heading.id;
+          }
+        }
+        return '';
+      }
+
+      function handleScroll() {
+        var activeId = findActiveHeading();
+        updateHash(activeId);
+      }
+
+      var timeoutId;
+      window.addEventListener('scroll', function onScroll() {
+        if (timeoutId) {
+          window.cancelAnimationFrame(timeoutId);
+        }
+        timeoutId = window.requestAnimationFrame(handleScroll);
+      }, { passive: true });
+
+      if (window.location.hash) {
+        var targetId = window.location.hash.slice(1);
+        var targetElement = document.getElementById(targetId);
+        if (targetElement) {
+          setTimeout(function scrollToTarget() {
+            targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 100);
+        }
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initScrollSpy);
+    } else {
+      initScrollSpy();
+    }
+  </script>
+
   <article class="blog-post">
     <div class="container-narrow">
       <header class="post-header">
@@ -373,6 +429,38 @@ var fullURL = canonicalURL.toString();
     border-bottom-color: var(--color-accent);
   }
 
+  .post-content :global(.heading-link) {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    scroll-margin-top: 100px;
+  }
+
+  .post-content :global(.heading-link:hover) {
+    border: none;
+  }
+
+  .post-content :global(h1[id]),
+  .post-content :global(h2[id]),
+  .post-content :global(h3[id]),
+  .post-content :global(h4[id]),
+  .post-content :global(h5[id]),
+  .post-content :global(h6[id]) {
+    scroll-margin-top: 100px;
+  }
+
+  @media (max-width: 768px) {
+    .post-meta {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-xs);
+    }
+
+    .meta-divider {
+      display: none;
+    }
+  }
+
   .references-section {
     margin-top: var(--space-2xl);
     padding: var(--space-xl);
@@ -481,17 +569,5 @@ var fullURL = canonicalURL.toString();
 
   .comments-section {
     margin-bottom: var(--space-3xl);
-  }
-
-  @media (max-width: 768px) {
-    .post-meta {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: var(--space-xs);
-    }
-
-    .meta-divider {
-      display: none;
-    }
   }
 </style>

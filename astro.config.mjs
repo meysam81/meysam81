@@ -1,12 +1,13 @@
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
+import expressiveCode from "astro-expressive-code";
 import { defineConfig } from "astro/config";
 import path from "path";
+import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import rehypeSlug from "rehype-slug";
 import { fileURLToPath } from "url";
 import compression from "vite-plugin-compression2";
-
-import expressiveCode from "astro-expressive-code";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -35,6 +36,9 @@ export default defineConfig({
       },
     },
   ],
+  markdown: {
+    rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings],
+  },
   prefetch: {
     prefetchAll: true,
     defaultStrategy: "viewport",
