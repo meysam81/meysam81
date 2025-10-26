@@ -18,6 +18,9 @@ const {
 
 const fullTitle = title.includes("Meysam") ? title : `${title} | Meysam Azad`;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+// force X to re-fetch the image
+const twitterImage = ogImage + "?subatomic0963";
 ---
 
 <!DOCTYPE html>
@@ -59,7 +62,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <meta property="twitter:url" content={canonicalURL} />
     <meta property="twitter:title" content={fullTitle} />
     <meta property="twitter:description" content={description} />
-    <meta property="twitter:image" content={ogImage} />
+    <meta property="twitter:image" content={twitterImage} />
     <meta name="twitter:creator" content="@meysamazing" />
 
     <!-- Structured Data -->
