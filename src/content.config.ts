@@ -13,6 +13,15 @@ var blogCollection = defineCollection({
     featured: z.boolean().default(false),
     ogImage: z.string().optional(),
     slug: z.string().optional(),
+    references: z
+      .array(
+        z.object({
+          title: z.string(),
+          url: z.string(),
+          description: z.string().optional(),
+        })
+      )
+      .optional(),
   }),
 });
 

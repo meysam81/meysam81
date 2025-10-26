@@ -18,9 +18,14 @@ interface Props {
     text: string;
   }>;
   readingTime: number;
+  references?: Array<{
+    title: string;
+    url: string;
+    description?: string;
+  }>;
 }
 
-var { title, description, pubDate, updatedDate, author, tags, ogImage, headings, readingTime } = Astro.props;
+var { title, description, pubDate, updatedDate, author, tags, ogImage, headings, readingTime, references } = Astro.props;
 
 var formattedPubDate = new Intl.DateTimeFormat('en-US', {
   year: 'numeric',
@@ -120,6 +125,40 @@ var fullURL = canonicalURL.toString();
       <div class="post-content">
         <slot />
       </div>
+
+      {references && references.length > 0 && (
+        <aside class="references-section">
+          <h2 class="references-title">
+            <svg class="references-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+              <polyline points="13 2 13 9 20 9"></polyline>
+            </svg>
+            References & Further Reading
+          </h2>
+          <p class="references-intro">
+            Want to dive deeper? Here are the sources and additional resources that informed this article.
+          </p>
+          <ul class="references-list">
+            {references.map(function mapReferences(ref) {
+              return (
+                <li class="reference-item">
+                  <a href={ref.url} class="reference-link" target="_blank" rel="noopener noreferrer">
+                    <span class="reference-title">{ref.title}</span>
+                    <svg class="external-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                      <polyline points="15 3 21 3 21 9"></polyline>
+                      <line x1="10" y1="14" x2="21" y2="3"></line>
+                    </svg>
+                  </a>
+                  {ref.description && (
+                    <p class="reference-description">{ref.description}</p>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        </aside>
+      )}
 
       <div class="newsletter-cta">
         <Newsletter variant="section" />
@@ -332,6 +371,100 @@ var fullURL = canonicalURL.toString();
 
   .post-content :global(a:hover) {
     border-bottom-color: var(--color-accent);
+  }
+
+  .references-section {
+    margin-top: var(--space-2xl);
+    padding: var(--space-xl);
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+  }
+
+  .references-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: 1.5rem;
+    margin-bottom: var(--space-md);
+    color: var(--color-text);
+    border: none;
+    padding: 0;
+    margin-top: 0;
+  }
+
+  .references-icon {
+    color: var(--color-accent);
+    flex-shrink: 0;
+  }
+
+  .references-intro {
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-lg);
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .references-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .reference-item {
+    padding: var(--space-md);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+    transition: all var(--transition-fast);
+    margin: 0;
+  }
+
+  .reference-item:hover {
+    border-color: var(--color-accent);
+    background: rgba(59, 130, 246, 0.05);
+  }
+
+  .reference-link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    text-decoration: none;
+    color: var(--color-text);
+    font-weight: 500;
+    border: none;
+    transition: color var(--transition-fast);
+  }
+
+  .reference-link:hover {
+    color: var(--color-accent-light);
+    border: none;
+  }
+
+  .reference-title {
+    flex: 1;
+  }
+
+  .external-icon {
+    color: var(--color-text-dim);
+    flex-shrink: 0;
+    transition: transform var(--transition-fast);
+  }
+
+  .reference-link:hover .external-icon {
+    transform: translate(2px, -2px);
+    color: var(--color-accent);
+  }
+
+  .reference-description {
+    margin-top: var(--space-xs);
+    margin-bottom: 0;
+    font-size: 0.9375rem;
+    color: var(--color-text-muted);
+    line-height: 1.6;
   }
 
   .newsletter-cta {
