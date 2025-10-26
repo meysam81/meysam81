@@ -5,15 +5,18 @@ interface Props {
     slug: string;
     text: string;
   }>;
+  hasReferences?: boolean;
 }
 
-var { headings } = Astro.props;
+var { headings, hasReferences } = Astro.props;
 var tocHeadings = headings.filter(function filterHeadings(h) {
   return h.depth > 1 && h.depth <= 3;
 });
+
+var showToc = tocHeadings.length > 0 || hasReferences;
 ---
 
-{tocHeadings.length > 0 && (
+{showToc && (
   <nav class="table-of-contents">
     <h2 class="toc-title">Table of Contents</h2>
     <ul class="toc-list">
@@ -26,6 +29,17 @@ var tocHeadings = headings.filter(function filterHeadings(h) {
           </li>
         );
       })}
+      {hasReferences && (
+        <li class="toc-item toc-depth-2 toc-special">
+          <a href="#references" class="toc-link toc-link-special">
+            <svg class="toc-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+              <polyline points="13 2 13 9 20 9"></polyline>
+            </svg>
+            References & Further Reading
+          </a>
+        </li>
+      )}
     </ul>
   </nav>
 )}
@@ -77,6 +91,29 @@ var tocHeadings = headings.filter(function filterHeadings(h) {
 
   .toc-link:hover {
     color: var(--color-accent-light);
+  }
+
+  .toc-special {
+    margin-top: var(--space-sm);
+    padding-top: var(--space-sm);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .toc-link-special {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-accent-light);
+    font-weight: 500;
+  }
+
+  .toc-link-special:hover {
+    color: var(--color-accent);
+  }
+
+  .toc-icon {
+    flex-shrink: 0;
+    color: var(--color-accent);
   }
 
   @media (max-width: 768px) {
