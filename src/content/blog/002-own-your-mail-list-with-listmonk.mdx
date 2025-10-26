@@ -4,11 +4,27 @@ description: "After Medium hid my subscriber count, I moved to self-hosted newsl
 pubDate: 2025-11-03
 slug: own-your-newsletter-with-listmonk
 tags: ["build-in-public", "newsletter", "self-hosting", "listmonk"]
+references:
+  - title: Listmonk v5.1.0 Release
+    url: https://github.com/knadh/listmonk/releases/tag/v5.1.0
+    description: Latest stable Listmonk Release
+  - title: Listmonk Installation Docs
+    url: https://listmonk.app/docs/installation/
+    description: Official installation documentation for Listmonk
+  - title: CloudNativePG Installation Guide
+    url: https://cloudnative-pg.io/documentation/current/installation_upgrade/
+    description: Official documentation for installing CloudNativePG
+  - title: External Secrets Operator Documentation
+    url: https://external-secrets.io/latest/introduction/getting-started/
+    description: Guide to using External Secrets Operator for managing secrets in Kubernetes
+  - title: cert-manager Installation Guide
+    url: https://cert-manager.io/docs/installation/
+    description: Official documentation for installing cert-manager in Kubernetes
 ---
 
 # Stop Renting Your Audience: Run Your Own Newsletter with Listmonk
 
-Three weeks ago, [Medium hid everyone's subscriber counts](/blog/medium-hid-subscribers-own-your-audience).
+On April 2025, [Medium hid everyone's subscriber counts](/blog/medium-hid-subscribers-own-your-audience).
 
 I wasn't surprised. I was prepared.
 
@@ -57,7 +73,7 @@ Listmonk is an open-source newsletter and mailing list manager. Think Mailchimp 
 
 - Someone else handling the servers
 - One-click setup
-- Built-in deliverability reputation
+- Built-in deliverability reputation (use a good SMTP service!?)
 - Hand-holding support
 
 If that trade-off makes sense to you, keep reading.
@@ -77,7 +93,7 @@ This guide assumes you:
 - To be a DevOps expert
 - To understand every line of YAML
 - To have Kubernetes experience (I'll explain what matters)
-- To know Go or React (Listmonk's languages)
+- To know Go or VueJS (Listmonk's languages)
 
 If you're thinking "I barely know Docker"—that's fine. I'll walk you through it. The whole point is making this accessible.
 
@@ -127,13 +143,13 @@ Wait 60 seconds. You now have a server.
 
 SSH into your server:
 
-```bash
+```bash title="SSH into server"
 ssh root@<your-server-ip>
 ```
 
 Update packages and set up firewall:
 
-```bash
+```bash title="Initial server setup"
 # Update system
 apt update && apt upgrade -y
 
@@ -154,9 +170,12 @@ That's it for basic server setup.
 
 K3s is Kubernetes, but stripped down to essentials. Perfect for single-server setups.
 
-```bash
+```bash title="Install K3s"
 # Install K3s
-curl -sfL https://get.k3s.io | sh -
+curl -s https://get.k3s.io | \
+  INSTALL_K3S_CHANNEL=stable \
+  INSTALL_K3S_EXEC="--secrets-encryption" \
+  sh -
 
 # Verify it's running
 k3s kubectl get nodes
@@ -166,14 +185,14 @@ You should see your node in "Ready" status.
 
 **Set up kubectl access** (so you don't need to type `k3s` before every command):
 
-```bash
+```bash title="Configure kubectl"
 export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
 echo "export KUBECONFIG=/etc/rancher/k3s/k3s.yaml" >> ~/.bashrc
 ```
 
 Test it:
 
-```bash
+```bash title="Test kubectl"
 kubectl get nodes
 ```
 
@@ -183,13 +202,14 @@ If you see your node listed, K3s is running. You now have a Kubernetes cluster o
 
 We need a PostgreSQL database for Listmonk. We'll use CloudNativePG—an operator that manages PostgreSQL for us.
 
-```bash
+```bash title="Install CloudNativePG"
 # Install CloudNativePG operator
-kubectl apply -f https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/main/releases/cnpg-1.24.1.yaml
+kubectl apply --server-side -f \
+  https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/release-1.27/releases/cnpg-1.27.1.yaml
 
 # Wait for it to be ready
-kubectl wait --for=condition=Available --timeout=300s \
-  deployment/cnpg-controller-manager -n cnpg-system
+kubectl rollout status deployment \
+  -n cnpg-system cnpg-controller-manager
 ```
 
 That's it. PostgreSQL management is handled.
@@ -198,35 +218,36 @@ That's it. PostgreSQL management is handled.
 
 We need a way to store sensitive data (database passwords, etc.) securely. We'll use AWS Systems Manager Parameter Store (it's free for our usage).
 
-### Install External Secrets Operator:
+### Install External Secrets Operator
 
-```bash
+```bash title="Install External Secrets Operator"
 helm repo add external-secrets https://charts.external-secrets.io
 helm repo update
 
 helm install external-secrets \
   external-secrets/external-secrets \
-  --namespace external-secrets-system \
+  --namespace external-secrets \
+  --version 0.20.x \
   --create-namespace
 ```
 
-### Set up AWS credentials:
+### Set up AWS credentials
 
 1. Create an IAM user in AWS Console with `AmazonSSMReadOnlyAccess` permission
 2. Generate access keys
 3. Create a secret in K8s:
 
-```bash
+```bash title="Create AWS credentials secret"
 kubectl create secret generic aws-credentials \
   --from-literal=access-key-id=YOUR_ACCESS_KEY \
   --from-literal=secret-access-key=YOUR_SECRET_KEY \
-  -n external-secrets-system
+  -n external-secrets
 ```
 
 4. Create a ClusterSecretStore:
 
-```bash
-cat <<EOF | kubectl apply -f -
+```yaml title="ClusterSecretStore.yml"
+---
 apiVersion: external-secrets.io/v1beta1
 kind: ClusterSecretStore
 metadata:
@@ -235,44 +256,54 @@ spec:
   provider:
     aws:
       service: ParameterStore
-      region: us-east-1
+      region: eu-central-1 # Frankfurt - change if needed
       auth:
         secretRef:
           accessKeyIDSecretRef:
             name: aws-credentials
             key: access-key-id
-            namespace: external-secrets-system
+            namespace: external-secrets
           secretAccessKeySecretRef:
             name: aws-credentials
             key: secret-access-key
-            namespace: external-secrets-system
-EOF
+            namespace: external-secrets
 ```
 
-### Store your secrets in AWS Parameter Store:
+```bash title="Create ClusterSecretStore"
+kubectl apply -f ClusterSecretStore.yml
+```
+
+### Store your secrets in AWS Parameter Store
 
 Go to AWS Console → Systems Manager → Parameter Store and create these parameters:
 
-- `/findforce/listmonk/db/username` → `listmonk`
-- `/findforce/listmonk/db/password` → (generate strong password)
-- `/findforce/listmonk/db/superuser/username` → `postgres`
-- `/findforce/listmonk/db/superuser/password` → (generate strong password)
+- `/listmonk/db/username` → `listmonk`
+- `/listmonk/db/password` → (generate strong password)
+- `/listmonk/db/superuser/username` → `postgres`
+- `/listmonk/db/superuser/password` → (generate strong password)
 
 All as SecureString type.
+
+Alternatively, use AWS CLI:
+
+```bash title="Store Parameters"
+aws ssm put-parameter --name /listmonk/db/username --value "listmonk" --type SecureString --overwrite
+aws ssm put-parameter --name /listmonk/db/password --value "your-strong-password" --type SecureString --overwrite
+aws ssm put-parameter --name /listmonk/db/superuser/username --value "postgres" --type SecureString --overwrite
+aws ssm put-parameter --name /listmonk/db/superuser/password --value "your-superuser-password" --type SecureString --overwrite
+```
 
 ## Part 5: Deploy PostgreSQL (5 minutes)
 
 Create a namespace:
 
-```bash
+```bash title="Create namespace"
 kubectl create namespace listmonk
 ```
 
 Create the database configuration files. I'm using the exact setup I run in production—tuned for the CCX13 specs:
 
-**Create `postgres/cluster.yml`:**
-
-```yaml
+```yaml title="postgres/cluster.yml"
 ---
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
@@ -280,37 +311,34 @@ metadata:
   name: pg-listmonk
   namespace: listmonk
 spec:
-  instances: 1
-  postgresql:
-    parameters:
-      shared_buffers: 2048MB
-      effective_cache_size: 6144MB
-      maintenance_work_mem: 512MB
-      work_mem: 16MB
-      max_connections: "100"
-  resources:
-    requests:
-      cpu: "1"
-      memory: 4Gi
-    limits:
-      cpu: "2"
-      memory: 8Gi
-  storage:
-    size: 40Gi
-  superuserSecret:
-    name: postgres-listmonk-superuser
   bootstrap:
     initdb:
       database: listmonk
       owner: listmonk
       secret:
         name: postgres-listmonk
-EOF
+  instances: 1
+  postgresql:
+    parameters:
+      effective_cache_size: 6144MB
+      maintenance_work_mem: 512MB
+      max_connections: "100"
+      shared_buffers: 2048MB
+      work_mem: 16MB
+  resources:
+    limits:
+      cpu: "2"
+      memory: 8Gi
+    requests:
+      cpu: "1"
+      memory: 4Gi
+  storage:
+    size: 40Gi
+  superuserSecret:
+    name: postgres-listmonk-superuser
 ```
 
-**Create `postgres/externalsecret-superuser.yml`:**
-
-```yaml
+```yaml title="postgres/externalsecret-superuser.yml"
 ---
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
@@ -318,25 +346,23 @@ metadata:
   name: postgres-listmonk-superuser
   namespace: listmonk
 spec:
+  data:
+    - remoteRef:
+        key: /listmonk/db/superuser/username
+      secretKey: username
+    - remoteRef:
+        key: /listmonk/db/superuser/password
+      secretKey: password
   refreshInterval: 24h
   secretStoreRef:
-    name: aws-parameter-store
     kind: ClusterSecretStore
+    name: aws-parameter-store
   target:
     template:
       type: kubernetes.io/basic-auth
-  data:
-    - secretKey: username
-      remoteRef:
-        key: /findforce/listmonk/db/superuser/username
-    - secretKey: password
-      remoteRef:
-        key: /findforce/listmonk/db/superuser/password
 ```
 
-**Create `postgres/externalsecret-user.yml`:**
-
-```yaml
+```yaml title="postgres/externalsecret-user.yml"
 ---
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
@@ -344,41 +370,40 @@ metadata:
   name: postgres-listmonk
   namespace: listmonk
 spec:
+  data:
+    - remoteRef:
+        key: /listmonk/db/username
+      secretKey: username
+    - remoteRef:
+        key: /listmonk/db/password
+      secretKey: password
   refreshInterval: 24h
   secretStoreRef:
-    name: aws-parameter-store
     kind: ClusterSecretStore
+    name: aws-parameter-store
   target:
     template:
       type: kubernetes.io/basic-auth
-  data:
-    - secretKey: username
-      remoteRef:
-        key: /findforce/listmonk/db/username
-    - secretKey: password
-      remoteRef:
-        key: /findforce/listmonk/db/password
 ```
 
 Apply them:
 
-```bash
+```bash title="Apply PostgreSQL configuration"
 kubectl apply -f postgres/
 ```
 
 Wait for PostgreSQL to be ready:
 
-```bash
-kubectl wait --for=condition=Ready cluster/pg-listmonk -n listmonk --timeout=5m
+```bash title="Wait for PostgreSQL"
+kubectl wait --for=condition=Ready \
+  cluster/pg-listmonk -n listmonk --timeout=5m
 ```
 
 ## Part 6: Deploy Listmonk (10 minutes)
 
 Create the Listmonk configuration:
 
-**Create `listmonk/config.toml`:**
-
-```toml
+```toml title="listmonk/config.toml"
 [app]
 address = "0.0.0.0:9000"
 root_url = "https://newsletter.yourdomain.com"
@@ -395,18 +420,92 @@ max_lifetime = "1h"
 params = "application_name=listmonk"
 ```
 
-**Create `listmonk/configs.env`:**
-
-```bash
-LISTMONK_app__admin_username=admin
-LISTMONK_app__admin_password=changeme123  # Change this!
+```bash title="listmonk/configs.env"
+TZ=Etc/UTC
 ```
 
-**Create `listmonk/deployment.yml`:** (use the one from uploaded files, it's production-ready)
+```yaml title="listmonk/deployment.yml"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: listmonk
+spec:
+  template:
+    metadata:
+      labels:
+        app: listmonk
+    spec:
+      containers:
+        - envFrom:
+            - configMapRef:
+                name: listmonk-envs
+            - secretRef:
+                name: listmonk-secrets
+          image: listmonk/listmonk
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 3
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 5
+          name: listmonk
+          ports:
+            - containerPort: 9000
+              name: http
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 3
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 5
+          volumeMounts:
+            - mountPath: /listmonk/uploads
+              name: uploads
+            - mountPath: /listmonk/config.toml
+              name: listmonk-config
+              subPath: config.toml
+            - mountPath: /tmp
+              name: tmp
+      initContainers:
+        - command:
+            - ./listmonk
+            - "--idempotent"
+            - "--upgrade"
+            - "--yes"
+          envFrom:
+            - configMapRef:
+                name: listmonk-envs
+            - secretRef:
+                name: listmonk-secrets
+          image: listmonk/listmonk
+          name: migrations
+          volumeMounts:
+            - mountPath: /listmonk/uploads
+              name: uploads
+            - mountPath: /listmonk/config.toml
+              name: listmonk-config
+              subPath: config.toml
+      volumes:
+        - emptyDir: {}
+          name: tmp
+        - configMap:
+            defaultMode: 0400
+            name: listmonk-config
+            optional: false
+          name: listmonk-config
+        - name: uploads
+          persistentVolumeClaim:
+            claimName: listmonk-uploads
+```
 
-**Create `listmonk/service.yml`:**
-
-```yaml
+```yaml title="listmonk/service.yml"
 ---
 apiVersion: v1
 kind: Service
@@ -414,18 +513,16 @@ metadata:
   name: listmonk
   namespace: listmonk
 spec:
-  type: ClusterIP
   ports:
-    - port: 80
+    - name: http
+      port: 80
       targetPort: 9000
-      name: http
   selector:
     app: listmonk
+  type: ClusterIP
 ```
 
-**Create `listmonk/externalsecret.yml`:**
-
-```yaml
+```yaml title="listmonk/externalsecret.yml"
 ---
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
@@ -433,22 +530,20 @@ metadata:
   name: listmonk-secrets
   namespace: listmonk
 spec:
+  data:
+    - remoteRef:
+        key: /listmonk/db/username
+      secretKey: LISTMONK_db__user
+    - remoteRef:
+        key: /listmonk/db/password
+      secretKey: LISTMONK_db__password
   refreshInterval: 24h
   secretStoreRef:
-    name: aws-parameter-store
     kind: ClusterSecretStore
-  data:
-    - secretKey: LISTMONK_db__user
-      remoteRef:
-        key: /findforce/listmonk/db/username
-    - secretKey: LISTMONK_db__password
-      remoteRef:
-        key: /findforce/listmonk/db/password
+    name: aws-parameter-store
 ```
 
-**Create `listmonk/pvc.yml`:**
-
-```yaml
+```yaml title="listmonk/pvc.yml"
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -463,24 +558,68 @@ spec:
       storage: 8Gi
 ```
 
+```yaml title="listmonk/ingress.yml"
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    traefik.ingress.kubernetes.io/router.middlewares: default-redirect-https@kubernetescrd
+  name: listmonk
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: newsletter.yourdomain.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: listmonk
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix
+  tls:
+    - hosts:
+        - newsletter.yourdomain.com
+      secretName: listmonk-tls
+```
+
+```yaml title="listmonk/kustomization.yml"
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - deployment.yml
+  - externalsecret.yml
+  - ingress.yml
+  - pvc.yml
+  - service.yml
+
+configMapGenerator:
+  - name: listmonk-config
+    files:
+      - config.toml
+  - name: listmonk-envs
+    files:
+      - configs.env
+
+namespace: listmonk
+```
+
 Apply everything:
 
-```bash
-kubectl create configmap listmonk-config \
-  --from-file=config.toml=listmonk/config.toml \
-  -n listmonk
-
-kubectl create configmap listmonk-envs \
-  --from-env-file=listmonk/configs.env \
-  -n listmonk
-
-kubectl apply -f listmonk/
+```bash title="Deploy Listmonk"
+kubectl apply -k listmonk/
 ```
 
 Wait for Listmonk to be ready:
 
-```bash
-kubectl wait --for=condition=Ready pod -l app=listmonk -n listmonk --timeout=5m
+```bash title="Wait for Listmonk"
+kubectl wait --for=condition=Ready \
+  pod -l app=listmonk -n listmonk --timeout=5m
 ```
 
 ## Part 7: Expose Listmonk to the Internet (15 minutes)
@@ -489,61 +628,31 @@ We'll use Traefik as our ingress controller (it comes with K3s).
 
 **Install cert-manager for SSL:**
 
-```bash
-kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.13.3/cert-manager.yaml
+```bash title="Install cert-manager"
+kubectl apply -f \
+  https://github.com/cert-manager/cert-manager/releases/download/v1.19.1/cert-manager.yaml
 ```
 
-**Create Let's Encrypt issuer:**
-
-```yaml
-cat <<EOF | kubectl apply -f -
+```yaml title="ClusterIssuer.yml"
+---
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
   name: letsencrypt-prod
 spec:
   acme:
-    server: https://acme-v02.api.letsencrypt.org/directory
     email: your-email@example.com
     privateKeySecretRef:
       name: letsencrypt-prod
+    server: https://acme-v02.api.letsencrypt.org/directory
     solvers:
       - http01:
           ingress:
             class: traefik
-EOF
 ```
 
-**Create Ingress for Listmonk:**
-
-```yaml
-cat <<EOF | kubectl apply -f -
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: listmonk
-  namespace: listmonk
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
-    traefik.ingress.kubernetes.io/router.middlewares: default-redirect-https@kubernetescrd
-spec:
-  ingressClassName: traefik
-  tls:
-    - hosts:
-        - newsletter.yourdomain.com
-      secretName: listmonk-tls
-  rules:
-    - host: newsletter.yourdomain.com
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: listmonk
-                port:
-                  number: 80
-EOF
+```bash title="Create Let's Encrypt issuer"
+kubectl apply -f ClusterIssuer.yml
 ```
 
 **Point your domain DNS:**
@@ -556,12 +665,12 @@ Wait 5-10 minutes for DNS propagation and SSL certificate issuance.
 
 Navigate to `https://newsletter.yourdomain.com`
 
-Login with the credentials from `configs.env`:
+Login with the credentials from `LISTMONK_db__user` & `LISTMONK_db__user`:
 
-- Username: `admin`
-- Password: `changeme123` (you did change this, right?)
+- Username: `listmonk`
+- Password: `your-strong-password` (you did change this, right?)
 
-### First-time setup:
+### First-time setup
 
 1. **Settings → General:**
 
@@ -571,7 +680,7 @@ Login with the credentials from `configs.env`:
 
 2. **Settings → SMTP:**
 
-   - Use a transactional email service (I recommend [Amazon SES](https://aws.amazon.com/ses/))
+   - Use a transactional email service (I recommend [Maileroo](https://maileroo.com))
    - Or use your own mail server
    - Test the configuration
 
@@ -597,9 +706,7 @@ Your database is the most critical part. Let's back it up to Hetzner Object Stor
 
 **Configure CloudNativePG backup:**
 
-Create `postgres/objectstore.yml`:
-
-```yaml
+```yaml title="postgres/objectstore.yml"
 ---
 apiVersion: barmancloud.cnpg.io/v1
 kind: ObjectStore
@@ -608,17 +715,17 @@ metadata:
   namespace: listmonk
 spec:
   configuration:
+    data:
+      compression: bzip2
     destinationPath: s3://newsletter-backups/postgres/
     endpointURL: https://fsn1.your-objectstorage.com
     s3Credentials:
       accessKeyId:
-        name: hetzner-blob-storage
         key: ACCESS_KEY_ID
-      secretAccessKey:
         name: hetzner-blob-storage
+      secretAccessKey:
         key: ACCESS_SECRET_KEY
-    data:
-      compression: bzip2
+        name: hetzner-blob-storage
     wal:
       compression: bzip2
   retentionPolicy: 7d
@@ -626,16 +733,14 @@ spec:
 
 Create the secret:
 
-```bash
+```bash title="Create backup credentials"
 kubectl create secret generic hetzner-blob-storage \
   --from-literal=ACCESS_KEY_ID=your-access-key \
   --from-literal=ACCESS_SECRET_KEY=your-secret-key \
   -n listmonk
 ```
 
-Create `postgres/scheduledbackup.yml`:
-
-```yaml
+```yaml title="postgres/scheduledbackup.yml"
 ---
 apiVersion: postgresql.cnpg.io/v1
 kind: ScheduledBackup
@@ -643,18 +748,18 @@ metadata:
   name: pg-listmonk
   namespace: listmonk
 spec:
-  schedule: "0 0 * * *" # Daily at midnight
-  immediate: true
   cluster:
     name: pg-listmonk
+  immediate: true
   method: plugin
   pluginConfiguration:
     name: barman-cloud.cloudnative-pg.io
+  schedule: 0 0 * * * # Daily at midnight
 ```
 
 Apply:
 
-```bash
+```bash title="Apply backup configuration"
 kubectl apply -f postgres/objectstore.yml
 kubectl apply -f postgres/scheduledbackup.yml
 ```
@@ -673,9 +778,9 @@ Let's recap:
 - ✅ API for automation
 - ✅ Full control of your data
 
-**Monthly cost:** €12 for server + ~€5 for backups + transactional email costs (starts at ~$0.10 per 1,000 emails with SES)
+**Monthly cost:** €12 for server + ~€0-5 for backups + transactional email costs (starts at ~$0.04 per 1,000 emails with Maileroo)
 
-Compare that to ConvertKit at $29/month for 1,000 subscribers, scaling to $79/month for 3,000.
+Compare that to ConvertKit at $33/month for 1,000 subscribers, scaling to $50/month for 3,000.
 
 ## The Trade-Offs (Let's Be Honest)
 
@@ -695,13 +800,13 @@ Compare that to ConvertKit at $29/month for 1,000 subscribers, scaling to $79/mo
 - One-click features (you configure everything)
 - Hand-holding support (you're on your own or rely on community)
 
-For me, it's worth it. Your calculation might be different.
+For me, it's worth it. Your mileage may vary.
 
 If you send one newsletter a week and have 500 subscribers, maybe ConvertKit makes more sense. If you're serious about building a long-term relationship with your audience and want to minimize dependencies, this setup pays for itself.
 
 ## What I Learned Doing This
 
-Setting up Listmonk forced me to learn Kubernetes basics. That knowledge paid off immediately when I wanted to add other self-hosted tools.
+Setting up Listmonk forced me to stay sharp in my Kubernetes game. That knowledge paid off immediately when I wanted to add other self-hosted tools.
 
 Now my €12 server runs:
 
@@ -722,27 +827,35 @@ If you followed this guide, you now have a running newsletter platform.
 
 **Immediate tasks:**
 
-1. Configure your SMTP settings (Amazon SES recommended)
+1. Configure your SMTP settings (Maileroo recommended)
 2. Import existing subscribers (if you have them)
 3. Create your first campaign template
 4. Send a test email
 5. Set up a subscription form on your website
 
-**Within the first week:** 6. Warm up your domain (start with small sends) 7. Monitor deliverability (check spam folders) 8. Create a consistent sending schedule 9. Add analytics tracking (optional)
+**Within the first week:**
 
-**Ongoing:** 10. Regular server updates (`apt update && apt upgrade`) 11. Monitor backup status 12. Scale server as needed (upgrade CCX type if you grow)
+6. Warm up your domain (start with small sends)
+7. Monitor deliverability (check spam folders)
+8. Create a consistent sending schedule 9. Add analytics tracking (optional)
+
+**Ongoing:**
+
+10. Regular server updates (`apt update && apt upgrade`)
+11. Monitor backup status
+12. Scale server as needed (upgrade CCX type if you grow)
 
 ## The Real Reason I'm Sharing This
 
 When Medium hid subscriber counts, a bunch of indie hackers panicked in my DMs.
 
-"How do I know if anyone cares?"
-"Should I just quit?"
-"All my metrics disappeared."
+- "How do I know if anyone cares?"
+- "Should I just quit?"
+- "All my metrics disappeared."
 
 If your entire metric system lives on someone else's platform, you're vulnerable.
 
-I can't control what Medium does. Or Twitter. Or LinkedIn. Or any platform.
+I can't control what Medium does. Or X. Or LinkedIn. Or any platform.
 
 But I can control my email list. I know exactly how many people subscribed. I can email them directly, right now, without asking permission or paying per subscriber.
 
@@ -758,26 +871,8 @@ The point isn't the specific tech stack.
 
 The point is: stop renting your audience.
 
-## Resources
-
-**Listmonk:**
-
-- Docs: [listmonk.app/docs](https://listmonk.app/docs)
-- GitHub: [github.com/knadh/listmonk](https://github.com/knadh/listmonk)
-
-**Infrastructure:**
-
-- K3s: [k3s.io](https://k3s.io)
-- CloudNativePG: [cloudnative-pg.io](https://cloudnative-pg.io)
-- Hetzner Cloud: [hetzner.com/cloud](https://www.hetzner.com/cloud)
-
-**My Setup:**
-
-- Full manifests: [github.com/meysam81/newsletter-infra](https://github.com/meysam81/newsletter-infra)
-- Questions? contact@meysam.io
-
 ---
 
-_Running this setup in production? Stuck somewhere? Email me. I read every message._
+_Running this setup in production? Stuck somewhere? [Email me](mailto:meysam@meysam.io). I read every message._
 
 _Building in public? Subscribe to my newsletter where I share lessons like this every week: [meysam.io](https://meysam.io)_

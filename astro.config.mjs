@@ -6,12 +6,19 @@ import path from "path";
 import { fileURLToPath } from "url";
 import compression from "vite-plugin-compression2";
 
+import expressiveCode from "astro-expressive-code";
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   site: "https://meysam.io",
   integrations: [
     sitemap(),
+    expressiveCode({
+      frames: {
+        removeCommentsWhenCopyingTerminalFrames: false,
+      },
+    }),
     mdx(),
     {
       name: "pagefind-integration",
