@@ -39,7 +39,6 @@ repos:
       - id: destroyed-symlinks
       - id: file-contents-sorter
       - id: fix-byte-order-marker
-      - id: fix-encoding-pragma
       - id: forbid-new-submodules
       - id: forbid-submodules
       - id: mixed-line-ending
@@ -82,6 +81,18 @@ repos:
       - id: dockerfmt
         args:
           - --indent=4
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v3.21.0
+    hooks:
+      - id: pyupgrade
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.14.2
+    hooks:
+      - id: ruff-check
+        args:
+          - --fix
+          - --select=I
+      - id: ruff-format
   - repo: local
     hooks:
       - id: prettier

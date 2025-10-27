@@ -4,3 +4,4 @@ index.html.bk
 .astro
 sitemap_links-*.csv
 ignore
+.envrc*
