@@ -5,3 +5,4 @@ index.html.bk
 sitemap_links-*.csv
 ignore
 .envrc*
+.secrets
