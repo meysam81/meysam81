@@ -3,6 +3,7 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 import BlogPostLayout from '@/layouts/BlogPostLayout.astro';
 import { calculateReadingTime } from '@/utils/reading-time';
 import { filterPublishedPosts } from '@/utils/blog';
+import { getBlogPostViews } from '@/utils/pirsch';
 import log from 'loglevel';
 
 export async function getStaticPaths() {
@@ -21,6 +22,12 @@ type Props = CollectionEntry<'blog'>;
 var post = Astro.props;
 var { Content, headings } = await post.render();
 var readingTime = calculateReadingTime(post.body);
+
+var pageViews = 0;
+var hostname = import.meta.env.PIRSCH_HOSTNAME || "meysam.io";
+var postPath = `~/blog/${post.slug}`;
+pageViews = await getBlogPostViews(hostname, postPath);
+log.debug(`Page views for ${postPath}: ${pageViews}`);
 ---
 
 <BlogPostLayout
@@ -34,6 +41,7 @@ var readingTime = calculateReadingTime(post.body);
   headings={headings}
   readingTime={readingTime}
   references={post.data.references}
+  pageViews={pageViews}
 >
   <Content />
 </BlogPostLayout>
