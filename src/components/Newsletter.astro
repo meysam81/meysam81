@@ -56,6 +56,10 @@ var { variant = 'section' } = Astro.props;
     <input type="hidden" name="nonce" />
     <input id="00a2c" type="hidden" name="l" value="00a2c2b8-467a-4d74-9c76-9c6472c91d06" />
 
+    <input type="text" name="name" value="" class="honeypot-field" tabindex="-1" autocomplete="off" aria-hidden="true" />
+    <input type="text" name="company" value="" class="honeypot-field" tabindex="-1" autocomplete="off" aria-hidden="true" />
+    <input type="text" name="website" value="" class="honeypot-field" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
     <div class="form-group">
       <input
         type="email"
@@ -198,6 +202,21 @@ var { variant = 'section' } = Astro.props;
     event.preventDefault();
 
     var form = event.target;
+
+    var honeypotFields = form.querySelectorAll('.honeypot-field');
+    var isBot = false;
+    honeypotFields.forEach(function checkHoneypot(field) {
+      if (field.value !== '') {
+        isBot = true;
+      }
+    });
+
+    if (isBot) {
+      log.warn('Bot detected via honeypot');
+      showErrorMessage(form, 'Unable to subscribe. Please try again.');
+      return;
+    }
+
     var submitButton = form.querySelector('.submit-button');
     var buttonText = submitButton.querySelector('.button-text');
     var buttonLoader = submitButton.querySelector('.button-loader');
@@ -438,6 +457,16 @@ var { variant = 'section' } = Astro.props;
 
   .hidden {
     display: none;
+  }
+
+  .honeypot-field {
+    width: 100%;
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    padding: var(--space-lg);
+    opacity: 0;
   }
 
   @media (max-width: 768px) {
