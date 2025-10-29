@@ -224,6 +224,13 @@ textarea::placeholder {
 
 .grid-3 {
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--space-xl);
+}
+
+@media (min-width: 1024px) {
+  .grid-3 {
+    gap: calc(var(--space-lg) * 1.5);
+  }
 }
 
 /* Utilities */

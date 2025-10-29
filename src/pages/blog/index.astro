@@ -32,6 +32,13 @@ function formatDate(date: Date) {
     day: 'numeric'
   }).format(date);
 }
+
+function calculateReadingTime(content: string) {
+  var wordsPerMinute = 200;
+  var wordCount = content.split(/\s+/).length;
+  var minutes = Math.ceil(wordCount / wordsPerMinute);
+  return `${minutes} min read`;
+}
 ---
 
 <BaseLayout
@@ -83,6 +90,9 @@ function formatDate(date: Date) {
                   badge={formatDate(post.data.pubDate)}
                   featured={true}
                   linkText="Read Article"
+                  variant="blog"
+                  tags={post.data.tags}
+                  readingTime={calculateReadingTime(post.body)}
                 />
               );
             })}
@@ -103,6 +113,9 @@ function formatDate(date: Date) {
                   url={`/blog/${postSlug}`}
                   badge={formatDate(post.data.pubDate)}
                   linkText="Read Article"
+                  variant="blog"
+                  tags={post.data.tags}
+                  readingTime={calculateReadingTime(post.body)}
                 />
               </div>
             );
