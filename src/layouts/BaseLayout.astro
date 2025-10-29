@@ -19,8 +19,7 @@ const {
 const fullTitle = title.includes("Meysam") ? title : `${title} | Meysam Azad`;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
-// force X to re-fetch the image
-const twitterImage = ogImage + "?subatomic0963";
+const twitterImage = ogImage;
 ---
 
 <!DOCTYPE html>
