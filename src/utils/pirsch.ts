@@ -47,15 +47,11 @@ async function getDomainId(accessToken, hostname) {
 
 function getPageViewsForPath(accessToken, domainId, path) {
   var today = new Date();
-  var oneYearAgo = new Date();
-  oneYearAgo.setFullYear(today.getFullYear() - 1);
 
-  var from = oneYearAgo.toISOString().split("T")[0];
   var to = today.toISOString().split("T")[0];
 
   var url = new URL("https://api.pirsch.io/api/v1/statistics/page");
   url.searchParams.append("id", domainId);
-  url.searchParams.append("from", from);
   url.searchParams.append("to", to);
   url.searchParams.append("path", path);
 
