@@ -1,5 +1,6 @@
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
+import playformCompress from "@playform/compress";
 import tailwindcss from "@tailwindcss/vite";
 import expressiveCode from "astro-expressive-code";
 import { defineConfig } from "astro/config";
@@ -30,11 +31,12 @@ export default defineConfig({
             `bunx pagefind --site ${dir.pathname} --glob '**/blog/**/*.html'`,
             {
               stdio: "inherit",
-            }
+            },
           );
         },
       },
     },
+    playformCompress(),
   ],
   markdown: {
     rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings],
