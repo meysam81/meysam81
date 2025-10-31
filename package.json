@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@astrojs/rss": "^4.0.13",
     "@astrojs/sitemap": "^3.6.0",
     "@expressive-code/plugin-line-numbers": "^0.41.3",
     "astro": "^5.15.2",
