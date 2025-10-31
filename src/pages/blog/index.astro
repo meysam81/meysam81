@@ -8,10 +8,7 @@ import { filterPublishedPosts } from '@/utils/blog';
 
 var allPosts = await getCollection('blog');
 
-var publishedPosts = filterPublishedPosts(allPosts)
-  .sort(function sortByDate(a, b) {
-    return b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
-  });
+var publishedPosts = filterPublishedPosts(allPosts);
 
 var featuredPosts = publishedPosts.filter(function filterFeatured(post) {
   return post.data.featured;
