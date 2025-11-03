@@ -121,6 +121,44 @@ var fullURL = canonicalURL.toString();
     }
   </script>
 
+  <script>
+    function initPermalinks() {
+      var headings = document.querySelectorAll('.post-content h1[id], .post-content h2[id], .post-content h3[id], .post-content h4[id], .post-content h5[id], .post-content h6[id]');
+
+      headings.forEach(function processHeading(heading) {
+        var link = document.createElement('a');
+        link.className = 'permalink-icon';
+        link.href = '#' + heading.id;
+        link.setAttribute('aria-label', 'Copy link to ' + heading.textContent);
+        link.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>';
+
+        link.addEventListener('click', function handleClick(e) {
+          e.preventDefault();
+          var url = window.location.origin + window.location.pathname + '#' + heading.id;
+
+          navigator.clipboard.writeText(url).then(function onSuccess() {
+            link.classList.add('copied');
+            var originalHTML = link.innerHTML;
+            link.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+
+            setTimeout(function resetIcon() {
+              link.innerHTML = originalHTML;
+              link.classList.remove('copied');
+            }, 2000);
+          });
+        });
+
+        heading.appendChild(link);
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initPermalinks);
+    } else {
+      initPermalinks();
+    }
+  </script>
+
   <article class="blog-post">
     <div class="container-narrow">
       <header class="post-header">
@@ -460,6 +498,37 @@ var fullURL = canonicalURL.toString();
   .post-content :global(h5[id]),
   .post-content :global(h6[id]) {
     scroll-margin-top: 100px;
+    position: relative;
+  }
+
+  .post-content :global(.permalink-icon) {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 0.5rem;
+    color: var(--color-text-dim);
+    opacity: 0;
+    transition: opacity var(--transition-fast), color var(--transition-fast);
+    text-decoration: none;
+    border: none;
+    vertical-align: middle;
+  }
+
+  .post-content :global(h1:hover .permalink-icon),
+  .post-content :global(h2:hover .permalink-icon),
+  .post-content :global(h3:hover .permalink-icon),
+  .post-content :global(h4:hover .permalink-icon),
+  .post-content :global(h5:hover .permalink-icon),
+  .post-content :global(h6:hover .permalink-icon) {
+    opacity: 1;
+  }
+
+  .post-content :global(.permalink-icon:hover) {
+    color: var(--color-accent);
+    border: none;
+  }
+
+  .post-content :global(.permalink-icon.copied) {
+    color: #10b981;
   }
 
   @media (max-width: 768px) {
@@ -471,6 +540,10 @@ var fullURL = canonicalURL.toString();
 
     .meta-divider {
       display: none;
+    }
+
+    .post-content :global(.permalink-icon) {
+      opacity: 0.5;
     }
   }
 
