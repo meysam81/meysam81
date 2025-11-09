@@ -31,7 +31,7 @@ export default defineConfig({
             `bunx pagefind --site ${dir.pathname} --glob '**/blog/**/*.html'`,
             {
               stdio: "inherit",
-            },
+            }
           );
         },
       },

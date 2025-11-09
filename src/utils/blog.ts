@@ -1,7 +1,7 @@
 import type { CollectionEntry } from "astro:content";
 
 export function filterPublishedPosts(
-  posts: CollectionEntry<"blog">[],
+  posts: CollectionEntry<"blog">[]
 ): CollectionEntry<"blog">[] {
   var now = new Date();
 
