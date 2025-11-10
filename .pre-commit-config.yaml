@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/oxc-project/mirrors-oxlint
-    rev: v1.25.0
+    rev: v1.28.0
     hooks:
       - id: oxlint
         verbose: false
@@ -82,7 +82,7 @@ repos:
         args:
           - --indent=4
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.21.0
+    rev: v3.21.1
     hooks:
       - id: pyupgrade
   - repo: https://github.com/astral-sh/ruff-pre-commit
