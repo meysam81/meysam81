@@ -44,7 +44,7 @@
   // Close menu when clicking outside
   document.addEventListener('click', (e) => {
     const target = e.target as HTMLElement;
-    if (!target.closest('.nav') && navLinks?.classList.contains('active')) {
+    if (!target.closest('.nav') && !target.closest('.hamburger') && navLinks?.classList.contains('active')) {
       hamburger?.classList.remove('active');
       navLinks?.classList.remove('active');
       hamburger?.setAttribute('aria-expanded', 'false');
@@ -87,9 +87,11 @@
 
   /* Hamburger Menu */
   .hamburger {
+    --hamburger-gap: 5px;
+    --hamburger-line-height: 2px;
     display: none;
     flex-direction: column;
-    gap: 5px;
+    gap: var(--hamburger-gap);
     background: transparent;
     border: none;
     cursor: pointer;
@@ -100,14 +102,14 @@
 
   .hamburger-line {
     width: 24px;
-    height: 2px;
+    height: var(--hamburger-line-height);
     background: var(--color-text);
     border-radius: 2px;
     transition: all var(--transition-base);
   }
 
   .hamburger.active .hamburger-line:nth-child(1) {
-    transform: translateY(7px) rotate(45deg);
+    transform: translateY(calc(var(--hamburger-gap) + var(--hamburger-line-height))) rotate(45deg);
   }
 
   .hamburger.active .hamburger-line:nth-child(2) {
@@ -115,7 +117,7 @@
   }
 
   .hamburger.active .hamburger-line:nth-child(3) {
-    transform: translateY(-7px) rotate(-45deg);
+    transform: translateY(calc(-1 * (var(--hamburger-gap) + var(--hamburger-line-height)))) rotate(-45deg);
   }
 
   .hamburger:hover .hamburger-line {
@@ -206,13 +208,6 @@
     .btn-sm:hover {
       transform: none;
       box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
-    }
-  }
-
-  /* Desktop - hide hamburger */
-  @media (min-width: 769px) {
-    .hamburger {
-      display: none;
     }
   }
 </style>
