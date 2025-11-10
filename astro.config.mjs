@@ -14,6 +14,9 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   site: "https://meysam.io",
+  server: {
+    port: 3000,
+  },
   integrations: [
     sitemap(),
     expressiveCode({
