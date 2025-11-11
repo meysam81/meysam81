@@ -22,34 +22,44 @@
 </header>
 
 <script>
-  const hamburger = document.querySelector('.hamburger');
-  const navLinks = document.querySelector('.nav-links');
+  function initHeaderMenu() {
+    const hamburger = document.querySelector('.hamburger');
+    const navLinks = document.querySelector('.nav-links');
 
-  hamburger?.addEventListener('click', () => {
-    const isExpanded = hamburger.getAttribute('aria-expanded') === 'true';
-    hamburger.setAttribute('aria-expanded', String(!isExpanded));
-    hamburger.classList.toggle('active');
-    navLinks?.classList.toggle('active');
-  });
-
-  // Close menu when clicking on a link
-  document.querySelectorAll('.nav-link, .btn').forEach(link => {
-    link.addEventListener('click', () => {
-      hamburger?.classList.remove('active');
-      navLinks?.classList.remove('active');
-      hamburger?.setAttribute('aria-expanded', 'false');
-    });
-  });
-
-  // Close menu when clicking outside
-  document.addEventListener('click', (e) => {
-    const target = e.target as HTMLElement;
-    if (!target.closest('.nav') && !target.closest('.hamburger') && navLinks?.classList.contains('active')) {
-      hamburger?.classList.remove('active');
-      navLinks?.classList.remove('active');
-      hamburger?.setAttribute('aria-expanded', 'false');
+    if (!hamburger || !navLinks) {
+      return;
     }
-  });
+
+    hamburger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isExpanded = hamburger.getAttribute('aria-expanded') === 'true';
+      hamburger.setAttribute('aria-expanded', String(!isExpanded));
+      hamburger.classList.toggle('active');
+      navLinks.classList.toggle('active');
+    });
+
+    // Close menu when clicking on a link
+    document.querySelectorAll('.nav-link, .btn').forEach(link => {
+      link.addEventListener('click', () => {
+        hamburger.classList.remove('active');
+        navLinks.classList.remove('active');
+        hamburger.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('.nav') && navLinks.classList.contains('active')) {
+        hamburger.classList.remove('active');
+        navLinks.classList.remove('active');
+        hamburger.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', initHeaderMenu);
+  document.addEventListener('astro:page-load', initHeaderMenu);
 </script>
 
 <style scoped>
