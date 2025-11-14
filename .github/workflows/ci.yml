@@ -113,6 +113,6 @@ jobs:
         with:
           title: "# Live preview"
           content: |
-            The live preview of the changes are available at the following URL:
+            The live preview of the changes is available at the following URL:
             <${{ steps.netlify.outputs.deploy_url }}>
           token: ${{ secrets.GITHUB_TOKEN }}
