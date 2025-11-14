@@ -7,6 +7,7 @@
     "astro": "^5.15.2",
     "astro-expressive-code": "^0.41.3",
     "loglevel": "^1.9.2",
+    "medium-zoom": "^1.1.0",
     "pagefind": "^1.4.0",
     "rehype-autolink-headings": "^7.1.0",
     "rehype-slug": "^6.0.0"

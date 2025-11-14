@@ -8,6 +8,7 @@ on:
   push:
     branches:
       - main
+  pull_request:
   workflow_dispatch:
   schedule:
     - cron: "0 0 * * *"
@@ -19,6 +20,7 @@ permissions:
 
 jobs:
   deploy:
+    if: github.event_name != 'pull_request'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -31,7 +33,7 @@ jobs:
         with:
           path: |
             node_modules
-          key: node-modules-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+          key: node-modules-${{ runner.os }}-${{ hashFiles('**/bun.lock', '**/package-lock.json') }}
           restore-keys: |
             node-modules-${{ runner.os }}-
       - name: Setup bun
@@ -58,3 +60,59 @@ jobs:
         uses: actions/deploy-pages@v4
         with:
           artifact_name: github-actions-${{ github.run_id }}-${{ github.run_attempt }}
+
+  preview:
+    if: github.event_name == 'pull_request'
+    permissions:
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+          key: node-modules-${{ runner.os }}-${{ hashFiles('**/bun.lock', '**/package-lock.json') }}
+          restore-keys: |
+            node-modules-${{ runner.os }}-
+      - name: Setup bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: Install bun deps
+        run: bun install
+      - name: Build
+        run: bun run build
+        env:
+          PIRSCH_CLIENT_ID: ${{ secrets.PIRSCH_CLIENT_ID }}
+          PIRSCH_CLIENT_SECRET: ${{ secrets.PIRSCH_CLIENT_SECRET }}
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          name: build-pr${{ github.event.pull_request.number }}
+          path: dist
+      - name: Deploy to Netlify
+        id: netlify
+        run: |
+          bunx netlify-cli@v23 deploy \
+            --site "$NETLIFY_SITE_ID" \
+            --no-build \
+            --json \
+            --dir './dist' \
+            --message 'pr:${{ github.event.pull_request.number }} sha:${{ github.sha }}' \
+            > deploy_output.txt
+          deploy_url="$(tail -n 1 deploy_output.txt | jq -r .deploy_url)"
+          echo "deploy_url=$deploy_url" >> "$GITHUB_OUTPUT"
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+      - name: Comment PR
+        uses: meysam81/comment-pr@main
+        with:
+          title: "# Live preview"
+          content: |
+            The live preview of the changes is available at the following URL:
+            <${{ steps.netlify.outputs.deploy_url }}>
+          token: ${{ secrets.GITHUB_TOKEN }}
