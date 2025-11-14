@@ -102,8 +102,8 @@ jobs:
             --json \
             --dir './dist' \
             --message 'pr:${{ github.event.pull_request.number }} sha:${{ github.sha }}' \
-            | jq -r .deploy_url | tee deploy_url.txt
-          deploy_url="$(cat deploy_url.txt)"
+            > deploy_output.txt
+          deploy_url="$(tail -n 1 deploy_output.txt | jq -r .deploy_url)"
           echo "deploy_url=$deploy_url" >> "$GITHUB_OUTPUT"
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
