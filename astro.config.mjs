@@ -30,8 +30,18 @@ export default defineConfig({
       hooks: {
         "astro:build:done": async function buildDone({ dir }) {
           var { execSync } = await import("child_process");
+
+          // Check if bun is available, otherwise use npx
+          let packageRunner = "npx";
+          try {
+            execSync("which bun", { stdio: "ignore" });
+            packageRunner = "bunx";
+          } catch {
+            // bun not available, use npx
+          }
+
           execSync(
-            `bunx pagefind --site ${dir.pathname} --glob '**/blog/**/*.html'`,
+            `${packageRunner} pagefind --site ${dir.pathname} --glob '**/blog/**/*.html'`,
             {
               stdio: "inherit",
             }
