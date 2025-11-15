@@ -39,7 +39,7 @@
     });
 
     // Close menu when clicking on a link
-    document.querySelectorAll('.nav-link, .btn').forEach(link => {
+    document.querySelectorAll('.nav-link, .nav-links .btn').forEach(link => {
       link.addEventListener('click', () => {
         hamburger.classList.remove('active');
         navLinks.classList.remove('active');
@@ -182,11 +182,11 @@
       max-height: 0;
       overflow: hidden;
       opacity: 0;
-      transition: all var(--transition-base);
+      transition: max-height var(--transition-base), opacity var(--transition-base), padding var(--transition-base);
     }
 
     .nav-links.active {
-      max-height: 300px;
+      max-height: 100vh;
       opacity: 1;
       padding: var(--space-md) 0;
     }
