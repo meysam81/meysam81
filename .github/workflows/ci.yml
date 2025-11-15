@@ -19,48 +19,6 @@ permissions:
   id-token: write
 
 jobs:
-  deploy:
-    if: github.event_name != 'pull_request'
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            node_modules
-          key: node-modules-${{ runner.os }}-${{ hashFiles('**/bun.lock', '**/package-lock.json') }}
-          restore-keys: |
-            node-modules-${{ runner.os }}-
-      - name: Setup bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-      - name: Install bun deps
-        run: bun install
-      - name: Build
-        run: bun run build
-        env:
-          PIRSCH_CLIENT_ID: ${{ secrets.PIRSCH_CLIENT_ID }}
-          PIRSCH_CLIENT_SECRET: ${{ secrets.PIRSCH_CLIENT_SECRET }}
-      - id: upload-artifact
-        name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          name: github-actions-${{ github.run_id }}-${{ github.run_attempt }}
-          path: dist
-      - id: deployment
-        name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v4
-        with:
-          artifact_name: github-actions-${{ github.run_id }}-${{ github.run_attempt }}
-
   preview:
     if: github.event_name == 'pull_request'
     permissions:
@@ -102,8 +60,8 @@ jobs:
             --json \
             --dir './dist' \
             --message 'pr:${{ github.event.pull_request.number }} sha:${{ github.sha }}' \
-            > deploy_output.txt
-          deploy_url="$(tail -n 1 deploy_output.txt | jq -r .deploy_url)"
+            | jq -r .deploy_url | tee deploy_url.txt
+          deploy_url="$(cat deploy_url.txt)"
           echo "deploy_url=$deploy_url" >> "$GITHUB_OUTPUT"
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
@@ -113,6 +71,48 @@ jobs:
         with:
           title: "# Live preview"
           content: |
-            The live preview of the changes is available at the following URL:
+            The live preview of the changes are available at the following URL:
             <${{ steps.netlify.outputs.deploy_url }}>
           token: ${{ secrets.GITHUB_TOKEN }}
+
+  deploy:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+          key: node-modules-${{ runner.os }}-${{ hashFiles('**/bun.lock', '**/package-lock.json') }}
+          restore-keys: |
+            node-modules-${{ runner.os }}-
+      - name: Setup bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Install bun deps
+        run: bun install
+      - name: Build
+        run: bun run build
+        env:
+          PIRSCH_CLIENT_ID: ${{ secrets.PIRSCH_CLIENT_ID }}
+          PIRSCH_CLIENT_SECRET: ${{ secrets.PIRSCH_CLIENT_SECRET }}
+      - id: upload-artifact
+        name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          name: github-actions-${{ github.run_id }}-${{ github.run_attempt }}
+          path: dist
+      - id: deployment
+        name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+        with:
+          artifact_name: github-actions-${{ github.run_id }}-${{ github.run_attempt }}

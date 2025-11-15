@@ -217,14 +217,35 @@ Target metrics:
 
 ## Deployment
 
-The site is deployed via GitHub Actions (`.github/workflows/*.yml`):
+The site is deployed via GitHub Actions (`.github/workflows/ci.yml`):
 
-- Triggers: pushes to `main`, manual dispatch, daily schedule
-- Uses `bun` for dependency management
-- Runs `bun run build` (includes type checking)
-- Deploys to GitHub Pages
+### Production Deployment (GitHub Pages)
 
-Build output: `dist/` directory (static files)
+- **Triggers**: Pushes to `main` branch, manual dispatch, daily schedule (midnight UTC)
+- **Target**: GitHub Pages
+- **Process**:
+  - Uses `bun` for dependency management
+  - Runs `bun run build` (includes type checking via `astro check`)
+  - Uploads artifact to GitHub Pages
+  - Deploys to production environment
+- **Environment Variables**: `PIRSCH_CLIENT_ID`, `PIRSCH_CLIENT_SECRET` (analytics)
+
+### Preview Deployment (Netlify)
+
+- **Triggers**: Pull requests
+- **Target**: Netlify (temporary preview URLs)
+- **Process**:
+  - Builds the site with the same production build command
+  - Deploys to Netlify using `netlify-cli@v23`
+  - Posts preview URL as a comment on the PR
+- **Environment Variables**: `NETLIFY_AUTH_TOKEN`, `NETLIFY_SITE_ID`
+- **PR Comment**: Automated comment with live preview link using `meysam81/comment-pr@main`
+
+### Build Configuration
+
+- Build output: `dist/` directory (static files)
+- Node modules caching: Speeds up builds by caching `node_modules` based on `bun.lock`
+- Concurrency control: Cancels in-progress runs when new commits are pushed to the same ref
 
 ## Development Notes
 
