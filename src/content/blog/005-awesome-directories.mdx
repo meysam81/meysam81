@@ -1,0 +1,220 @@
+---
+title: I Built a Directory Aggregator in One Weekend (Then Made It Open Source)
+description: Spent 15 hours clicking through outdated listicles and $127 PDFs. Got frustrated. Built awesome-directories.com in 10 hours and made it free forever.
+pubDate: 2025-11-17
+author: "Meysam Azad"
+slug: awesome-directories-open-source
+tags:
+  - build-in-public
+  - indie-hackers
+  - solopreneur-journey
+  - open-source
+  - astro
+  - supabase
+featured: true
+draft: false
+references:
+  - title: "awesome-directories.com - Live Site"
+    url: https://awesome-directories.com
+    description: "Curated directory aggregator with 388+ verified directories for launching your product"
+  - title: "GitHub Repository"
+    url: https://github.com/awesome-directories/awesome-directories
+    description: "Open source under Apache-2.0 license - fork it, modify it, self-host it"
+---
+
+# I Built a Directory Aggregator in One Weekend (Then Made It Open Source)
+
+I spent 15 hours last week clicking through outdated listicles and $127 PDFs trying to find decent directories to launch a SaaS. I got frustrated. So I built [awesome-directories.com](https://awesome-directories.com) over the weekend.
+
+Total development time: ~10 hours spread across one weekend plus evening sessions this week. It's live. It's open source. It's free forever. And it's ready for beta users.
+
+Here's what I built, how I built it, and why I'm giving it away.
+
+## The Problem Nobody Solved Well
+
+Every founder I talk to has the same ritual: spending 2-3 days hunting for directories where they can launch their product. You click through blog posts from 2023 with half the links dead. You find "ultimate lists" with 300+ directories where maybe 10 actually matter. You discover paid spreadsheets charging $127-$6,999 for what amounts to a glorified CSV file.
+
+The existing solutions have three fundamental problems:
+
+**Dead links everywhere.** Most directory aggregators are one-time projects that never get maintained. Links rot. Sites shut down. Nobody updates them.
+
+**Signal-to-noise ratio is terrible.** When someone gives you 300 directories, that's not helpful—that's overwhelming. My research showed that 3-5 directories drive 90-95% of actual launch results. The other 295? Noise.
+
+**No context, no curation.** A URL and a name don't tell you what you actually need to know: Is it dofollow? Is it free? What's the Domain Rating? Is the site even active?
+
+I needed something better. So I built it.
+
+## What I Built
+
+[Awesome Directories](https://awesome-directories.com) is a curated directory aggregator that helps you find the top 20-30 directories worth your time in under 3 minutes.
+
+**Core features:**
+
+- 388+ manually curated directories (verified, not scraped)
+- Real-time filtering by Domain Rating, category, pricing, dofollow status
+- Instant search across names, descriptions, and categories
+- Multi-select checklist with PDF/CSV export
+- Weekly automated Domain Rating updates
+- Community voting and reviews (authentication required)
+- Lightning-fast performance (all Lighthouse scores above 90)
+
+**What makes it different:** Every directory is verified. I didn't scrape these from somewhere else. I went through each one, checked if it's active, verified the submission process works, and documented what actually matters: pricing, link type, Domain Rating.
+
+The filtering is instantaneous. You can search, filter by multiple criteria, and see results update in real-time without any lag. Select the directories that match your product, export to PDF or CSV, and you're done. Three minutes instead of three days.
+
+## How I Built It (The Technical Deep Dive)
+
+Here's where it gets interesting. I had one weekend and a constraint: zero ongoing costs. This forced some interesting architectural decisions that actually made the product better.
+
+### The Stack
+
+**Astro v5 as the foundation.** Not React, not Next.js, not pure Vue. Astro lets me build statically generated pages that are SEO-optimized by default, with minimal JavaScript shipped to the client. The entire site is static HTML + CSS with tiny Vue islands for interactive components.
+
+Why Astro? Three reasons:
+
+1. **pSEO capabilities.** Every directory could theoretically get its own optimized landing page. Static generation makes this trivial.
+2. **Performance.** Astro ships zero JavaScript by default. You only get JS for the components that actually need interactivity.
+3. **Developer experience.** Component-based like modern frameworks, but outputs plain HTML. Best of both worlds.
+
+**Vue islands for interactivity.** The filtering, search, and checklist features? Those are small Vue components that hydrate on the client. Everything else is just HTML. This is why the Lighthouse scores are all above 90—there's barely any JavaScript to parse and execute.
+
+**Supabase for everything backend.** PostgreSQL database, authentication (Google and GitHub OAuth), and—here's the cool part—automated weekly updates via Supabase Edge Functions + the `pg_cron` extension.
+
+Every Sunday at 2 AM UTC, a cron job triggers an Edge Function that fetches fresh Domain Rating scores from the Moz API and updates the database. No GitHub Actions. No external servers. It's all inside Supabase. Set it once, forget it forever.
+
+**Netlify for preview deployments.** GitHub Actions builds the static site (`bun run build`), uploads the `dist` folder to Netlify, and I get instant preview URLs for every commit. Zero cost. Instant feedback on every change.
+
+**Tailwind CSS for styling.** I needed to ship fast. Tailwind let me prototype rapidly without fighting CSS specificity or maintaining separate stylesheets. Is the design perfect? No. Is it functional and clean? Yes.
+
+### Architecture Decisions That Mattered
+
+**Static-first architecture.** Everything that can be pre-rendered at build time is pre-rendered. The directory data lives in Supabase, gets fetched at build time, and baked into static HTML. Users get instant page loads. I get zero server costs.
+
+The only dynamic parts are authentication (handled by Supabase), voting (requires auth, hits Supabase realtime), and comments (Supabase database + auth). Everything else is static files served from a CDN.
+
+**Authentication-gated interactions.** Initially, I considered IP-based voting. Simpler, no login friction. But it's gameable and doesn't build a real community. I pivoted: you need to authenticate (Google or GitHub OAuth via Supabase) to vote or comment.
+
+This does two things: it filters for engaged users, and it gives me a foundation for future features (saved lists, submission tracking, etc.). The friction is worth it.
+
+**Supabase for comments, not a third-party tool.** I could've integrated Giscus or Disqus. Instead, I built comments directly in Supabase. Why? Control. Data ownership. And honestly, it was faster than integrating and configuring a third-party service.
+
+Comments are stored in a PostgreSQL table with Row Level Security policies. Authentication is handled by Supabase. Realtime updates are built-in. I didn't need to build much—I just wired together Supabase primitives.
+
+**Performance obsession.** All Lighthouse scores above 90. This wasn't an accident. Astro's static generation handles most of the heavy lifting, but I also:
+
+- Lazy-load images with proper `loading="lazy"` attributes
+- Minimize JavaScript hydration (only 3 Vue islands total)
+- Use Tailwind's JIT compiler to ship minimal CSS
+- Serve everything through Netlify's CDN
+
+First contentful paint is under 1.2 seconds even on 3G.
+
+### The Time Breakdown
+
+**Saturday (5 hours):**
+
+- Set up Astro project with Tailwind
+- Design Supabase schema (directories table, votes, comments)
+- Build core directory listing page with Vue island for filters
+- Implement real-time search and filtering
+
+**Sunday (3 hours):**
+
+- Multi-select checklist component
+- PDF/CSV export (using jsPDF and Papa Parse)
+- Deploy to Netlify, set up custom domain
+- Configure Supabase authentication
+
+**Week 1 evenings (2 hours):**
+
+- Set up Supabase Edge Function for weekly DR updates
+- Configure `pg_cron` for automated scheduling
+- Fix edge cases in filtering logic
+- Polish UI, fix responsive layout issues
+
+Total: ~10 hours from zero to shipped product.
+
+## Why Open Source (The Strategic Pivot)
+
+Here's where I need to be transparent.
+
+I originally planned to charge for this. I did market research, validated the problem with 40+ founder interviews, built pricing tiers—$9/month or $49/year. The pain point was real. People said they'd pay.
+
+Then I looked at the unit economics.
+
+At my scale—no existing audience, no email list, no distribution—customer acquisition cost would be $40-60. To break even, I'd need subscribers to stay for 6+ months. But this is a tool people use once or twice a year, max. The retention math was broken before I even launched.
+
+I could force a business model that doesn't make sense, or I could pivot to something that actually works at my scale: **building credibility and audience through open source.**
+
+The real opportunity isn't $9/month from 100 people. It's recognition in the indie hacker space. This project is my credential. It's proof I can identify a problem, build a solution, and ship it fast. It's my way into conversations with other founders.
+
+Plus, I just wanted this to exist. If it helps other founders save 15+ hours of research hell, that's already worth it.
+
+**What Apache-2.0 license means for you:**
+
+- Fork it, modify it, self-host it
+- Use it commercially
+- No attribution required (though appreciated)
+- No paywalls, ever
+- No bait-and-switch to freemium
+
+This is free forever because the business model isn't "charge users"—it's "build reputation in a space I care about."
+
+## Current State & What's Next
+
+The product is stable. Most of the early bugs are fixed. Authentication works reliably. Filtering is fast. Export works. Weekly DR updates run automatically.
+
+**What I need from beta users:**
+
+- Edge cases I haven't found yet
+- Feature priority feedback (what actually matters to you?)
+- Directory suggestions (know a high-quality one I'm missing?)
+- Reviews and votes (helps surface signal for other users)
+
+**Launching on Product Hunt next Friday.** But I'm not waiting to get feedback. If you're launching a product soon, [try it now](https://awesome-directories.com). If something breaks or feels wrong, [open an issue](https://github.com/awesome-directories/awesome-directories/issues).
+
+**Immediate roadmap (shaped by community, not ego):**
+
+- Browser extension for one-click directory submissions
+- Verified badges for directory creators who engage
+- More granular filtering (submission turnaround time, geographic focus)
+- Public API for programmatic access
+- Integration with popular launch checklists
+
+But honestly? The roadmap will be shaped by what you actually need, not what I think is cool.
+
+## What I Learned Building This
+
+**Research saves time.** I spent almost as much time validating the problem and researching the market as I did coding. That research saved me from building a subscription product with broken unit economics. It informed the curation strategy (focus on the top 20-30, not 300+). It shaped the feature set (filtering and export, not social features).
+
+**Static architecture = speed + zero costs.** Astro's static generation isn't just about performance—it's about economics. No server costs. No scaling concerns. No database read costs spiraling. Just static files on a CDN. This is how you build sustainable side projects.
+
+**Supabase Edge Functions + pg_cron is criminally underutilized.** Everyone reaches for GitHub Actions or external cron services. But if you're already using Supabase, you have PostgreSQL's built-in cron scheduler. Write an Edge Function, schedule it with `pg_cron`, and you have automated workflows that never leave your database.
+
+**Authentication-gated interactions filter for quality.** The friction of requiring login kills casual spam and builds a real community. Yes, you lose some engagement. But the engagement you keep is higher signal.
+
+**Open source can be your credential, not just your code.** This project won't make me money directly. But it's already opening doors. Conversations with other founders. Visibility in communities I care about. Proof I can ship. That's worth more than $9/month from 50 people.
+
+**Ship when it works, not when it's perfect.** The UI isn't polished. Some edge cases probably exist. The roadmap is incomplete. But it solves the core problem—finding quality directories fast—and that's enough to ship. Perfection is procrastination in disguise.
+
+## Join the Journey
+
+This is my first major public project as an indie hacker. I built it to solve my own problem, made it free because the unit economics made sense that way, and I'm documenting the journey because I'm learning as I go.
+
+* **If you're launching a product and want to skip 15+ hours of directory research:**
+  [Try awesome-directories.com](https://awesome-directories.com)
+
+* **If you think something could work better:**
+  [Open an issue](https://github.com/awesome-directories/awesome-directories/issues)
+
+* **If you want to contribute:**
+  [Star the repo](https://github.com/awesome-directories/awesome-directories) (helps with Product Hunt visibility)
+
+* Submit a PR for missing directories
+* Leave a review to help other founders
+
+Built by indie hackers, for indie hackers. No VC funding. No growth hacking. Just solving real problems with good code.
+
+**Launch on Product Hunt: Next Friday.**
+
+See you there.
