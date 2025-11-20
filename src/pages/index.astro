@@ -78,12 +78,12 @@ import ContentCard from '@/components/ContentCard.astro';
       <!-- Featured Project -->
       <div class="featured-project mb-xl">
         <ContentCard
-          title="FindForce.io"
-          description="Business email finder Chrome extension with 95% accuracy. Shipped product, validated I can build. Learned customer acquisition is harder than code. Now applying those lessons to find better market fit."
-          url="https://findforce.io"
-          badge="🚀 Shipped"
+          title="Awesome Directories"
+          description="Curated directory aggregator for indie hackers and bootstrappers — 100+ verified launch directories, advanced filtering (DR, category, pricing), weekly updates, and export tools. Built with Astro, Vue islands, and Supabase."
+          url="https://awesome-directories.com"
+          badge="📚 Curated"
           featured={true}
-          linkText="Try FindForce Email Finder Extension"
+          linkText="Explore Awesome Directories"
           target="_blank"
           rel="noopener noreferrer"
         />
@@ -91,6 +91,17 @@ import ContentCard from '@/components/ContentCard.astro';
 
       <!-- Other Projects Grid -->
       <div class="grid grid-3">
+        <ContentCard
+          title="FindForce.io"
+          description="Business email finder Chrome extension with 95% accuracy. Shipped product, validated I can build. Learned customer acquisition is harder than code. Now applying those lessons to find better market fit."
+          url="https://findforce.io"
+          badge="🚀 Shipped"
+          featured={false}
+          linkText="Try FindForce Email Finder Extension"
+          target="_blank"
+          rel="noopener noreferrer"
+        />
+
         <ContentCard
           title="developer-friendly.blog"
           description="Production DevOps insights from years in the trenches. Real-world SRE lessons. 1,500+ engineers reading monthly. No theory, just battle-tested solutions."
