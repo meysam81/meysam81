@@ -131,6 +131,12 @@ const conversions = [
   { input: "favicon.svg", output: "favicon-180.png", width: 180, height: 180 },
   { input: "favicon.svg", output: "favicon-192.png", width: 192, height: 192 },
   { input: "favicon.svg", output: "favicon-512.png", width: 512, height: 512 },
+  {
+    input: "favicon.svg",
+    output: "favicon-1024.png",
+    width: 1024,
+    height: 1024,
+  },
 ];
 
 async function convertSVGtoPNG() {
