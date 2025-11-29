@@ -155,6 +155,7 @@ Blog posts use Astro Content Collections with the following schema (`src/content
   references?: Array<{    // Further reading/citations
     title: string;
     url: string;
+    description?: string;
   }>;
 }
 ```
