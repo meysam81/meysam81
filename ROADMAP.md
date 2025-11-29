@@ -141,6 +141,7 @@ The site serves as both a personal brand platform and a trust-building mechanism
 | **Reading Time** | Automatic calculation and display | Production-ready |
 | **Dark Theme** | Apple-inspired dark aesthetic | Production-ready |
 | **Performance** | Brotli compression, prefetching, Lighthouse 95+ target | Production-ready |
+| **Blog Post Series** | Multi-part content grouping with prev/next navigation | Production-ready |
 
 ### Partially Implemented
 
@@ -160,7 +161,6 @@ The site serves as both a personal brand platform and a trust-building mechanism
 | Newsletter Archive | Medium | Past issues not browsable |
 | Reading Progress Indicator | Low | Visual feedback for long posts |
 | Social Sharing Buttons | Medium | Reduces friction for sharing |
-| Blog Post Series | High | Group multi-part content together |
 | Pagination | Low | Currently shows all posts; fine for <50 posts |
 | About Page | Medium | Deeper personal/professional background |
 | Projects Page | Medium | Dedicated showcase with details |
@@ -205,7 +205,7 @@ The site serves as both a personal brand platform and a trust-building mechanism
 
 | Priority | Feature | Score | Effort | Status | Notes |
 |----------|---------|-------|--------|--------|-------|
-| P0 | Blog Post Series/Collections | 8.9 | M | Planned | Group multi-part content; high engagement lift |
+| P0 | Blog Post Series/Collections | 8.9 | M | **Complete** | Group multi-part content; high engagement lift |
 | P0 | Related Posts | 8.7 | S | Planned | Tag-based recommendations at article end |
 | P1 | Prev/Next Post Navigation | 7.5 | XS | Planned | Reduce friction in content consumption |
 | P1 | About Page | 7.2 | S | Planned | Dedicated page for deeper connection |
@@ -253,7 +253,7 @@ The site serves as both a personal brand platform and a trust-building mechanism
 
 #### Blog Post Series/Collections
 
-**Score**: 8.9/10
+**Score**: 8.9/10 | **Status**: Complete (2025-11-29)
 
 **Why it matters**: ICP 1 and ICP 3 often want to follow multi-part journeys (e.g., "My First 30 Days of Customer Discovery"). Without series support, related posts are disconnected, reducing engagement and making it harder to tell cohesive stories.
 
@@ -263,14 +263,15 @@ The site serves as both a personal brand platform and a trust-building mechanism
 | Enables long-form storytelling | Content must be organized intentionally |
 | Natural SEO improvement (interlinks) | Minor implementation complexity |
 
-**Current State**: Tags exist but don't convey sequence or relationship.
+**Implementation**:
+- Added `series` field to content schema (optional string)
+- Added `seriesOrder` field (optional number)
+- Created `SeriesBanner` component showing series context at post header
+- Created `SeriesNav` component showing prev/next in series
+- Created `/blog/series/[slug]` pages listing all posts in a series
+- Added `src/utils/series.ts` with helper functions
 
-**Implementation Approach**:
-- Add `series` field to content schema (optional string)
-- Add `seriesOrder` field (optional number)
-- Create SeriesNav component showing prev/next in series
-- Display series banner on posts that are part of a collection
-- Create `/blog/series/[slug]` pages listing all posts in a series
+**Usage**: Add `series: "Series Name"` and `seriesOrder: 1` to post frontmatter.
 
 **Success Criteria**:
 - Posts in a series show clear navigation to adjacent posts
@@ -572,6 +573,13 @@ This roadmap is for a personal project, but the approach is documented for refer
 ---
 
 ## Changelog
+
+### 2025-11-29 - v1.1.0
+- **Implemented**: Blog Post Series/Collections (P0)
+  - Added `series` and `seriesOrder` fields to content schema
+  - Created SeriesBanner and SeriesNav components
+  - Added `/blog/series/[slug]` landing pages
+  - Added series helper utilities
 
 ### 2025-11-29 - v1.0.0
 - Initial roadmap creation
