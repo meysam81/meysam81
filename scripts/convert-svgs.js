@@ -26,6 +26,12 @@ const conversions = [
     width: 1200,
     height: 630,
   },
+  {
+    input: "og/cron.svg",
+    output: "og/cron.png",
+    width: 1200,
+    height: 630,
+  },
 
   // Profile/Avatar (multiple sizes)
   {

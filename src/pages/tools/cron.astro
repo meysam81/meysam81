@@ -1,0 +1,703 @@
+---
+import ToolLayout from '@/layouts/ToolLayout.astro';
+import CronGenerator from '@/components/tools/CronGenerator.astro';
+
+const title = "Cron Expression Generator — Free Crontab Builder";
+const description = "Build cron expressions with plain English or decode existing ones. Visual preview of next 10 run times. Free, no signup. Built by a DevOps engineer with 8+ years of experience.";
+const ogImage = "https://meysam.io/og-image.png"; // TODO: Switch to /og/cron.png after PNG generation
+
+// Structured Data for WebApplication
+const webAppSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Cron Expression Generator",
+  "description": description,
+  "url": "https://meysam.io/tools/cron",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "author": {
+    "@type": "Person",
+    "name": "Meysam Azad",
+    "url": "https://meysam.io"
+  },
+  "creator": {
+    "@type": "Person",
+    "name": "Meysam Azad"
+  }
+};
+
+// FAQ Schema
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is a cron expression?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A cron expression is a string of five fields separated by spaces that represents a schedule. The fields are: minute (0-59), hour (0-23), day of month (1-31), month (1-12), and day of week (0-6, where 0 is Sunday). Special characters like * (any), / (step), - (range), and , (list) allow for flexible scheduling."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I schedule a job to run every 5 minutes?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "To run a job every 5 minutes, use the cron expression: */5 * * * *. The */5 in the minute field means 'every 5 minutes', and the asterisks (*) in other fields mean 'every hour, every day, every month, every day of week'."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does */15 mean in cron?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The */15 syntax means 'every 15 units'. In the minute field, */15 runs at minutes 0, 15, 30, and 45 of every hour. In the hour field, */15 would theoretically run every 15 hours (0, 15), though this is less common."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I run a cron job on weekdays only?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "To run a job on weekdays only, use 1-5 in the day-of-week field (the fifth field). For example, '0 9 * * 1-5' runs at 9:00 AM Monday through Friday. Days are numbered 0 (Sunday) through 6 (Saturday)."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What's the difference between * and ? in cron?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "In standard Unix/Linux cron (5-field format), only * is used to mean 'any value'. The ? character is specific to Quartz Scheduler (used in Java applications) where it means 'no specific value' and is required when you specify a value in either day-of-month or day-of-week. This tool uses standard 5-field cron format where * is the wildcard."
+      }
+    }
+  ]
+};
+
+// Combined schema array
+const structuredData = [webAppSchema, faqSchema];
+---
+
+<ToolLayout
+  title={title}
+  description={description}
+  ogImage={ogImage}
+  canonicalPath="/tools/cron"
+>
+  <Fragment slot="head">
+    <meta name="keywords" content="cron expression generator, crontab generator, cron job syntax, cron schedule builder, cron to english, crontab.guru alternative" />
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData[1])} />
+  </Fragment>
+
+  <div class="tool-container">
+    <!-- Header -->
+    <header class="tool-header">
+      <h1>Cron Expression Generator</h1>
+      <p>Build and decode cron expressions with plain English. See exactly when your scheduled jobs will run.</p>
+    </header>
+
+    <!-- Main Tool -->
+    <CronGenerator />
+
+    <!-- How to Use Section -->
+    <section class="tool-section how-to-section">
+      <h2>How to Use This Cron Generator</h2>
+      <div class="how-to-grid">
+        <div class="how-to-card">
+          <div class="how-to-number">1</div>
+          <h3>Enter Expression or Schedule</h3>
+          <p>Type a cron expression like <code>0 9 * * 1-5</code> or describe your schedule in plain English like "every Monday at 9am".</p>
+        </div>
+        <div class="how-to-card">
+          <div class="how-to-number">2</div>
+          <h3>See the Translation</h3>
+          <p>The tool instantly converts your input and shows a human-readable description of when your job will run.</p>
+        </div>
+        <div class="how-to-card">
+          <div class="how-to-number">3</div>
+          <h3>Preview Run Times</h3>
+          <p>See the next 10 scheduled executions to verify your cron expression works as expected.</p>
+        </div>
+        <div class="how-to-card">
+          <div class="how-to-number">4</div>
+          <h3>Copy and Use</h3>
+          <p>Copy the expression to your clipboard and use it in your crontab, CI/CD pipeline, or task scheduler.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cron Syntax Reference -->
+    <section class="tool-section syntax-section">
+      <h2>Understanding Cron Syntax</h2>
+      <p>A cron expression consists of five fields separated by spaces:</p>
+
+      <div class="syntax-diagram">
+        <div class="syntax-field">
+          <span class="field-value">*</span>
+          <span class="field-name">Minute</span>
+          <span class="field-range">0-59</span>
+        </div>
+        <div class="syntax-field">
+          <span class="field-value">*</span>
+          <span class="field-name">Hour</span>
+          <span class="field-range">0-23</span>
+        </div>
+        <div class="syntax-field">
+          <span class="field-value">*</span>
+          <span class="field-name">Day of Month</span>
+          <span class="field-range">1-31</span>
+        </div>
+        <div class="syntax-field">
+          <span class="field-value">*</span>
+          <span class="field-name">Month</span>
+          <span class="field-range">1-12</span>
+        </div>
+        <div class="syntax-field">
+          <span class="field-value">*</span>
+          <span class="field-name">Day of Week</span>
+          <span class="field-range">0-6 (Sun-Sat)</span>
+        </div>
+      </div>
+
+      <h3>Special Characters</h3>
+      <div class="syntax-table-wrapper">
+        <table class="syntax-table">
+          <thead>
+            <tr>
+              <th>Character</th>
+              <th>Meaning</th>
+              <th>Example</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>*</code></td>
+              <td>Any value (wildcard)</td>
+              <td><code>* * * * *</code> — every minute</td>
+            </tr>
+            <tr>
+              <td><code>,</code></td>
+              <td>Value list separator</td>
+              <td><code>0 9,17 * * *</code> — 9am and 5pm</td>
+            </tr>
+            <tr>
+              <td><code>-</code></td>
+              <td>Range of values</td>
+              <td><code>0 9 * * 1-5</code> — Mon through Fri</td>
+            </tr>
+            <tr>
+              <td><code>/</code></td>
+              <td>Step values</td>
+              <td><code>*/15 * * * *</code> — every 15 minutes</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="tool-section faq-section">
+      <h2>Frequently Asked Questions</h2>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>What is a cron expression?</summary>
+          <p>A cron expression is a string of five fields separated by spaces that represents a schedule. The fields are: minute (0-59), hour (0-23), day of month (1-31), month (1-12), and day of week (0-6, where 0 is Sunday). Special characters like * (any), / (step), - (range), and , (list) allow for flexible scheduling.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>How do I schedule a job to run every 5 minutes?</summary>
+          <p>To run a job every 5 minutes, use the cron expression: <code>*/5 * * * *</code>. The <code>*/5</code> in the minute field means "every 5 minutes", and the asterisks (*) in other fields mean "every hour, every day, every month, every day of week".</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>What does */15 mean in cron?</summary>
+          <p>The <code>*/15</code> syntax means "every 15 units". In the minute field, <code>*/15</code> runs at minutes 0, 15, 30, and 45 of every hour. In the hour field, <code>*/15</code> would theoretically run every 15 hours (0, 15), though this is less common.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>How do I run a cron job on weekdays only?</summary>
+          <p>To run a job on weekdays only, use <code>1-5</code> in the day-of-week field (the fifth field). For example, <code>0 9 * * 1-5</code> runs at 9:00 AM Monday through Friday. Days are numbered 0 (Sunday) through 6 (Saturday).</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>What's the difference between * and ? in cron?</summary>
+          <p>In standard Unix/Linux cron (5-field format), only <code>*</code> is used to mean "any value". The <code>?</code> character is specific to Quartz Scheduler (used in Java applications) where it means "no specific value" and is required when you specify a value in either day-of-month or day-of-week. This tool uses standard 5-field cron format where <code>*</code> is the wildcard.</p>
+        </details>
+      </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="tool-section newsletter-section">
+      <div class="newsletter-card">
+        <h2>Get Weekly DevOps Tips</h2>
+        <p>This cron generator was built from 8+ years of DevOps experience. Get weekly production insights, debugging tips, and automation patterns delivered to your inbox.</p>
+
+        <form
+          class="newsletter-form listmonk-form"
+          data-pirsch-event="subscribe"
+          data-pirsch-meta-page_url="/tools/cron"
+          data-pirsch-meta-variant="cron-tool"
+          data-pirsch-non-interactive
+          action="https://newsletter.meysam.io/subscription/form"
+          method="post"
+        >
+          <input type="hidden" name="nonce" />
+          <input id="00a2c" type="hidden" name="l" value="00a2c2b8-467a-4d74-9c76-9c6472c91d06" />
+
+          <input type="text" name="name" value="" class="honeypot-field" tabindex="-1" autocomplete="off" aria-hidden="true" />
+          <input type="text" name="company" value="" class="honeypot-field" tabindex="-1" autocomplete="off" aria-hidden="true" />
+          <input type="text" name="website" value="" class="honeypot-field" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+          <div class="form-row">
+            <input
+              type="email"
+              name="email"
+              placeholder="your@email.com"
+              required
+              aria-label="Email address"
+              class="email-input"
+            />
+            <button type="submit" class="btn btn-primary submit-button">
+              <span class="button-text">Get Weekly Tips</span>
+              <span class="button-loader hidden">
+                <svg class="spinner" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 12a9 9 0 1 1-6.219-8.56"></path>
+                </svg>
+              </span>
+            </button>
+          </div>
+
+          <altcha-widget
+            class="altcha-widget"
+            challengeurl="https://newsletter.meysam.io/api/public/captcha/altcha"
+            auto="onfocus"
+          ></altcha-widget>
+          <script type="module" src="https://newsletter.meysam.io/public/static/altcha.umd.js" async defer></script>
+
+          <p class="form-note">No spam. Production-tested insights only. Unsubscribe anytime.</p>
+        </form>
+
+        <div class="success-message hidden">
+          <div class="success-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+          </div>
+          <h3>Check Your Email!</h3>
+          <p>We've sent a confirmation link to your inbox. Click it to start receiving weekly DevOps insights.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Built By -->
+    <footer class="tool-footer">
+      <p>Built by <a href="/">Meysam Azad</a> — DevOps engineer with 8+ years of production experience.</p>
+    </footer>
+  </div>
+</ToolLayout>
+
+<style>
+  /* How To Section */
+  .how-to-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--space-md);
+  }
+
+  .how-to-card {
+    padding: var(--space-lg);
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    position: relative;
+  }
+
+  .how-to-number {
+    position: absolute;
+    top: -12px;
+    left: var(--space-md);
+    width: 28px;
+    height: 28px;
+    background: var(--color-accent);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.875rem;
+  }
+
+  .how-to-card h3 {
+    font-size: 1rem;
+    margin-bottom: var(--space-xs);
+    margin-top: var(--space-xs);
+  }
+
+  .how-to-card p {
+    font-size: 0.9375rem;
+    color: var(--color-text-muted);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .how-to-card code {
+    background: var(--color-bg);
+    padding: 0.125rem 0.375rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    color: var(--color-accent-light);
+  }
+
+  /* Syntax Section */
+  .syntax-diagram {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-sm);
+    padding: var(--space-lg);
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    margin-bottom: var(--space-lg);
+  }
+
+  .syntax-field {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 100px;
+    padding: var(--space-sm);
+  }
+
+  .syntax-field .field-value {
+    font-family: var(--font-mono);
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--color-accent-light);
+  }
+
+  .syntax-field .field-name {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-text);
+    margin-top: var(--space-xs);
+  }
+
+  .syntax-field .field-range {
+    font-size: 0.75rem;
+    color: var(--color-text-dim);
+  }
+
+  .syntax-section h3 {
+    font-size: 1.25rem;
+    margin-bottom: var(--space-md);
+  }
+
+  .syntax-table-wrapper {
+    overflow-x: auto;
+  }
+
+  .syntax-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+  }
+
+  .syntax-table th,
+  .syntax-table td {
+    padding: var(--space-sm) var(--space-md);
+    text-align: left;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .syntax-table th {
+    font-weight: 600;
+    color: var(--color-text);
+    background: var(--color-bg-card);
+  }
+
+  .syntax-table td {
+    color: var(--color-text-muted);
+  }
+
+  .syntax-table code {
+    background: var(--color-bg-card);
+    padding: 0.125rem 0.375rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    color: var(--color-accent-light);
+  }
+
+  /* FAQ Section */
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .faq-item {
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+    overflow: hidden;
+  }
+
+  .faq-item summary {
+    padding: var(--space-md);
+    font-weight: 500;
+    color: var(--color-text);
+    cursor: pointer;
+    transition: background var(--transition-fast);
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .faq-item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-item summary::after {
+    content: '+';
+    font-size: 1.25rem;
+    font-weight: 300;
+    color: var(--color-text-dim);
+    transition: transform var(--transition-fast);
+  }
+
+  .faq-item[open] summary::after {
+    transform: rotate(45deg);
+  }
+
+  .faq-item summary:hover {
+    background: var(--color-bg-elevated);
+  }
+
+  .faq-item p {
+    padding: 0 var(--space-md) var(--space-md);
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+  }
+
+  .faq-item code {
+    background: var(--color-bg);
+    padding: 0.125rem 0.375rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    color: var(--color-accent-light);
+  }
+
+  /* Newsletter Section */
+  .newsletter-card {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(0, 0, 0, 0) 100%);
+    border: 1px solid var(--color-accent);
+    border-radius: var(--border-radius);
+    padding: var(--space-xl);
+    text-align: center;
+  }
+
+  .newsletter-card h2 {
+    margin-bottom: var(--space-sm);
+  }
+
+  .newsletter-card > p {
+    color: var(--color-text-muted);
+    max-width: 600px;
+    margin: 0 auto var(--space-lg);
+  }
+
+  .newsletter-form {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .form-row {
+    display: flex;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
+  }
+
+  .email-input {
+    flex: 1;
+  }
+
+  .submit-button {
+    white-space: nowrap;
+    min-width: 150px;
+    position: relative;
+  }
+
+  .button-loader {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-xs);
+  }
+
+  .spinner {
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .form-note {
+    font-size: 0.8125rem;
+    color: var(--color-text-dim);
+    margin: var(--space-sm) 0 0;
+  }
+
+  .altcha-widget {
+    display: none;
+    margin: var(--space-sm) 0;
+  }
+
+  .honeypot-field {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+  }
+
+  .success-message {
+    padding: var(--space-lg);
+  }
+
+  .success-message.hidden {
+    display: none;
+  }
+
+  .success-icon {
+    color: var(--color-success);
+    margin-bottom: var(--space-sm);
+  }
+
+  .success-message h3 {
+    color: var(--color-text);
+    margin-bottom: var(--space-xs);
+  }
+
+  .success-message p {
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  /* Tool Footer */
+  .tool-footer {
+    text-align: center;
+    padding: var(--space-xl) 0;
+    border-top: 1px solid var(--color-border);
+    margin-top: var(--space-xl);
+  }
+
+  .tool-footer p {
+    color: var(--color-text-dim);
+    font-size: 0.9375rem;
+    margin: 0;
+  }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    .form-row {
+      flex-direction: column;
+    }
+
+    .submit-button {
+      width: 100%;
+    }
+
+    .syntax-diagram {
+      gap: var(--space-xs);
+      padding: var(--space-md);
+    }
+
+    .syntax-field {
+      min-width: 60px;
+      padding: var(--space-xs);
+    }
+
+    .syntax-field .field-value {
+      font-size: 1.5rem;
+    }
+
+    .syntax-field .field-name {
+      font-size: 0.75rem;
+    }
+  }
+</style>
+
+<script>
+  import log from 'loglevel';
+
+  function initNewsletterForm() {
+    var form = document.querySelector('.newsletter-section .newsletter-form');
+    var successMessage = document.querySelector('.newsletter-section .success-message');
+
+    if (!form) return;
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      var honeypotFields = form.querySelectorAll('.honeypot-field');
+      var isBot = false;
+      honeypotFields.forEach(function(field) {
+        if (field.value !== '') {
+          isBot = true;
+        }
+      });
+
+      if (isBot) {
+        log.warn('Bot detected');
+        return;
+      }
+
+      var submitButton = form.querySelector('.submit-button');
+      var buttonText = submitButton.querySelector('.button-text');
+      var buttonLoader = submitButton.querySelector('.button-loader');
+
+      submitButton.disabled = true;
+      buttonText.classList.add('hidden');
+      buttonLoader.classList.remove('hidden');
+
+      var formData = new FormData(form);
+
+      fetch(form.action, {
+        method: 'POST',
+        body: formData
+      })
+        .then(function(response) {
+          if (response.ok) {
+            form.classList.add('hidden');
+            successMessage.classList.remove('hidden');
+            log.info('Newsletter subscription successful');
+          } else {
+            throw new Error('Subscription failed');
+          }
+        })
+        .catch(function(error) {
+          log.error('Subscription error:', error);
+          submitButton.disabled = false;
+          buttonText.classList.remove('hidden');
+          buttonLoader.classList.add('hidden');
+        });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', initNewsletterForm);
+  document.addEventListener('astro:page-load', initNewsletterForm);
+</script>

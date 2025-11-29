@@ -1,0 +1,819 @@
+---
+// CronGenerator.astro - Interactive cron expression builder and decoder
+---
+
+<div class="cron-generator">
+  <!-- Input Section -->
+  <div class="cron-input-section tool-card">
+    <div class="input-mode-tabs">
+      <button class="mode-tab active" data-mode="cron" type="button">
+        Cron Expression
+      </button>
+      <button class="mode-tab" data-mode="english" type="button">
+        Plain English
+      </button>
+    </div>
+
+    <div class="input-wrapper">
+      <!-- Cron Input Mode -->
+      <div class="input-mode" id="cron-mode">
+        <label for="cron-input" class="input-label">
+          Enter cron expression
+          <span class="input-hint">Format: minute hour day-of-month month day-of-week</span>
+        </label>
+        <div class="cron-input-container">
+          <input
+            type="text"
+            id="cron-input"
+            class="cron-input"
+            placeholder="0 9 * * 1-5"
+            autocomplete="off"
+            spellcheck="false"
+            aria-describedby="cron-format-hint"
+          />
+          <button type="button" class="clear-btn" aria-label="Clear input" title="Clear">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <p id="cron-format-hint" class="format-hint">
+          <span class="field-label">minute</span>
+          <span class="field-label">hour</span>
+          <span class="field-label">day</span>
+          <span class="field-label">month</span>
+          <span class="field-label">weekday</span>
+        </p>
+      </div>
+
+      <!-- English Input Mode -->
+      <div class="input-mode hidden" id="english-mode">
+        <label for="english-input" class="input-label">
+          Describe your schedule
+          <span class="input-hint">Example: "every Monday at 9am" or "every 5 minutes"</span>
+        </label>
+        <input
+          type="text"
+          id="english-input"
+          class="cron-input"
+          placeholder="every day at 9:00"
+          autocomplete="off"
+          spellcheck="false"
+        />
+      </div>
+    </div>
+
+    <!-- Error Message -->
+    <div class="error-message hidden" id="error-message" role="alert">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="12"></line>
+        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+      </svg>
+      <span id="error-text"></span>
+    </div>
+  </div>
+
+  <!-- Output Section -->
+  <div class="cron-output-section tool-card" id="output-section">
+    <!-- Expression Result -->
+    <div class="result-block" id="expression-result">
+      <div class="result-header">
+        <h3 class="result-title">Cron Expression</h3>
+        <button type="button" class="copy-btn" data-copy="expression" aria-label="Copy expression">
+          <span class="copy-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+          </span>
+          <span class="copy-success hidden">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </span>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <code class="expression-display" id="expression-display">0 9 * * 1-5</code>
+    </div>
+
+    <!-- Human Description -->
+    <div class="result-block">
+      <div class="result-header">
+        <h3 class="result-title">Description</h3>
+        <button type="button" class="copy-btn" data-copy="description" aria-label="Copy description">
+          <span class="copy-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+          </span>
+          <span class="copy-success hidden">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </span>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <p class="description-display" id="description-display">Every day at 9:00 AM, on weekdays</p>
+    </div>
+
+    <!-- Next Runs -->
+    <div class="result-block">
+      <div class="result-header">
+        <h3 class="result-title">Next 10 Runs</h3>
+      </div>
+      <ul class="next-runs-list" id="next-runs-list">
+        <li class="next-run-item">Calculating...</li>
+      </ul>
+    </div>
+
+    <!-- Share Link -->
+    <div class="share-section">
+      <button type="button" class="share-btn" id="share-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="18" cy="5" r="3"></circle>
+          <circle cx="6" cy="12" r="3"></circle>
+          <circle cx="18" cy="19" r="3"></circle>
+          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+          <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+        </svg>
+        <span>Share Link</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Common Examples -->
+<div class="examples-section tool-section">
+  <h2>Common Cron Expressions</h2>
+  <div class="examples-grid">
+    <button type="button" class="example-btn" data-cron="* * * * *">
+      <code>* * * * *</code>
+      <span>Every minute</span>
+    </button>
+    <button type="button" class="example-btn" data-cron="*/5 * * * *">
+      <code>*/5 * * * *</code>
+      <span>Every 5 minutes</span>
+    </button>
+    <button type="button" class="example-btn" data-cron="0 * * * *">
+      <code>0 * * * *</code>
+      <span>Every hour</span>
+    </button>
+    <button type="button" class="example-btn" data-cron="0 0 * * *">
+      <code>0 0 * * *</code>
+      <span>Daily at midnight</span>
+    </button>
+    <button type="button" class="example-btn" data-cron="0 9 * * *">
+      <code>0 9 * * *</code>
+      <span>Daily at 9 AM</span>
+    </button>
+    <button type="button" class="example-btn" data-cron="0 9 * * 1-5">
+      <code>0 9 * * 1-5</code>
+      <span>Weekdays at 9 AM</span>
+    </button>
+    <button type="button" class="example-btn" data-cron="0 9 * * 1">
+      <code>0 9 * * 1</code>
+      <span>Every Monday at 9 AM</span>
+    </button>
+    <button type="button" class="example-btn" data-cron="0 0 1 * *">
+      <code>0 0 1 * *</code>
+      <span>Monthly on the 1st</span>
+    </button>
+    <button type="button" class="example-btn" data-cron="0 0 * * 0">
+      <code>0 0 * * 0</code>
+      <span>Every Sunday</span>
+    </button>
+    <button type="button" class="example-btn" data-cron="*/15 9-17 * * 1-5">
+      <code>*/15 9-17 * * 1-5</code>
+      <span>Every 15 min, business hours</span>
+    </button>
+    <button type="button" class="example-btn" data-cron="0 0 1 1 *">
+      <code>0 0 1 1 *</code>
+      <span>Yearly on Jan 1st</span>
+    </button>
+    <button type="button" class="example-btn" data-cron="30 4 1,15 * *">
+      <code>30 4 1,15 * *</code>
+      <span>4:30 AM on 1st & 15th</span>
+    </button>
+  </div>
+</div>
+
+<script>
+  import { validateCronExpression, cronToHuman, englishToCron, getNextRuns, formatRunDate } from '@/utils/cron.js';
+  import log from 'loglevel';
+
+  function initCronGenerator() {
+    // DOM Elements
+    var cronInput = document.getElementById('cron-input');
+    var englishInput = document.getElementById('english-input');
+    var modeTabs = document.querySelectorAll('.mode-tab');
+    var cronMode = document.getElementById('cron-mode');
+    var englishMode = document.getElementById('english-mode');
+    var errorMessage = document.getElementById('error-message');
+    var errorText = document.getElementById('error-text');
+    var expressionDisplay = document.getElementById('expression-display');
+    var descriptionDisplay = document.getElementById('description-display');
+    var nextRunsList = document.getElementById('next-runs-list');
+    var outputSection = document.getElementById('output-section');
+    var clearBtn = document.querySelector('.clear-btn');
+    var copyBtns = document.querySelectorAll('.copy-btn');
+    var shareBtn = document.getElementById('share-btn');
+    var exampleBtns = document.querySelectorAll('.example-btn');
+
+    var currentExpression = '0 9 * * 1-5';
+    var currentDescription = '';
+    var debounceTimer = null;
+
+    // Initialize from URL params
+    function initFromUrl() {
+      var params = new URLSearchParams(window.location.search);
+      var expr = params.get('expr');
+      if (expr) {
+        cronInput.value = expr;
+        processInput(expr, 'cron');
+      } else {
+        processInput(cronInput.value || '0 9 * * 1-5', 'cron');
+      }
+    }
+
+    // Mode switching
+    function switchMode(mode) {
+      modeTabs.forEach(function(tab) {
+        tab.classList.toggle('active', tab.dataset.mode === mode);
+      });
+      cronMode.classList.toggle('hidden', mode !== 'cron');
+      englishMode.classList.toggle('hidden', mode !== 'english');
+
+      if (mode === 'cron') {
+        cronInput.focus();
+      } else {
+        englishInput.focus();
+      }
+    }
+
+    // Process input and update output
+    function processInput(value, mode) {
+      hideError();
+
+      if (!value.trim()) {
+        outputSection.classList.add('empty');
+        return;
+      }
+
+      outputSection.classList.remove('empty');
+
+      if (mode === 'cron') {
+        var validation = validateCronExpression(value);
+        if (!validation.valid) {
+          showError(validation.error);
+          return;
+        }
+
+        currentExpression = value.trim();
+        var humanResult = cronToHuman(currentExpression);
+        currentDescription = humanResult.success ? humanResult.description : 'Unable to describe';
+      } else {
+        var result = englishToCron(value);
+        if (!result.success) {
+          showError(result.error);
+          return;
+        }
+
+        currentExpression = result.expression;
+        cronInput.value = currentExpression;
+        var humanResult2 = cronToHuman(currentExpression);
+        currentDescription = humanResult2.success ? humanResult2.description : 'Unable to describe';
+      }
+
+      updateDisplay();
+    }
+
+    // Update the display
+    function updateDisplay() {
+      expressionDisplay.textContent = currentExpression;
+      descriptionDisplay.textContent = currentDescription;
+
+      // Calculate next runs
+      var runs = getNextRuns(currentExpression, 10);
+      nextRunsList.innerHTML = '';
+
+      if (runs.length === 0) {
+        var li = document.createElement('li');
+        li.className = 'next-run-item';
+        li.textContent = 'No upcoming runs found';
+        nextRunsList.appendChild(li);
+      } else {
+        runs.forEach(function(run, index) {
+          var li = document.createElement('li');
+          li.className = 'next-run-item';
+          li.innerHTML = '<span class="run-number">' + (index + 1) + '</span><span class="run-date">' + formatRunDate(run) + '</span>';
+          nextRunsList.appendChild(li);
+        });
+      }
+
+      // Update URL without reloading
+      var newUrl = window.location.pathname + '?expr=' + encodeURIComponent(currentExpression);
+      history.replaceState(null, '', newUrl);
+    }
+
+    // Show error message
+    function showError(message) {
+      errorText.textContent = message;
+      errorMessage.classList.remove('hidden');
+      outputSection.classList.add('has-error');
+    }
+
+    // Hide error message
+    function hideError() {
+      errorMessage.classList.add('hidden');
+      outputSection.classList.remove('has-error');
+    }
+
+    // Copy functionality
+    function handleCopy(btn) {
+      var copyType = btn.dataset.copy;
+      var textToCopy = copyType === 'expression' ? currentExpression : currentDescription;
+
+      navigator.clipboard.writeText(textToCopy).then(function() {
+        var icon = btn.querySelector('.copy-icon');
+        var success = btn.querySelector('.copy-success');
+        var text = btn.querySelector('.copy-text');
+
+        icon.classList.add('hidden');
+        success.classList.remove('hidden');
+        text.textContent = 'Copied!';
+        btn.classList.add('copied');
+
+        setTimeout(function() {
+          icon.classList.remove('hidden');
+          success.classList.add('hidden');
+          text.textContent = 'Copy';
+          btn.classList.remove('copied');
+        }, 2000);
+
+        log.info('Copied ' + copyType + ':', textToCopy);
+      }).catch(function(err) {
+        log.error('Copy failed:', err);
+      });
+    }
+
+    // Share functionality
+    function handleShare() {
+      var shareUrl = window.location.origin + window.location.pathname + '?expr=' + encodeURIComponent(currentExpression);
+
+      if (navigator.share) {
+        navigator.share({
+          title: 'Cron Expression: ' + currentExpression,
+          text: currentDescription,
+          url: shareUrl
+        }).catch(function(err) {
+          if (err.name !== 'AbortError') {
+            log.error('Share failed:', err);
+          }
+        });
+      } else {
+        navigator.clipboard.writeText(shareUrl).then(function() {
+          shareBtn.querySelector('span').textContent = 'Link Copied!';
+          setTimeout(function() {
+            shareBtn.querySelector('span').textContent = 'Share Link';
+          }, 2000);
+        });
+      }
+    }
+
+    // Event listeners
+    modeTabs.forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        switchMode(tab.dataset.mode);
+      });
+    });
+
+    cronInput.addEventListener('input', function() {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(function() {
+        processInput(cronInput.value, 'cron');
+      }, 150);
+    });
+
+    englishInput.addEventListener('input', function() {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(function() {
+        processInput(englishInput.value, 'english');
+      }, 300);
+    });
+
+    clearBtn.addEventListener('click', function() {
+      cronInput.value = '';
+      englishInput.value = '';
+      hideError();
+      cronInput.focus();
+    });
+
+    copyBtns.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        handleCopy(btn);
+      });
+    });
+
+    shareBtn.addEventListener('click', handleShare);
+
+    exampleBtns.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var cron = btn.dataset.cron;
+        cronInput.value = cron;
+        switchMode('cron');
+        processInput(cron, 'cron');
+      });
+    });
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+      // Ctrl/Cmd + K to focus input
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        cronInput.focus();
+        cronInput.select();
+      }
+    });
+
+    // Initialize
+    initFromUrl();
+  }
+
+  // Initialize on page load
+  document.addEventListener('DOMContentLoaded', initCronGenerator);
+  document.addEventListener('astro:page-load', initCronGenerator);
+</script>
+
+<style scoped>
+  .cron-generator {
+    display: grid;
+    gap: var(--space-lg);
+  }
+
+  @media (min-width: 768px) {
+    .cron-generator {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  /* Input Section */
+  .cron-input-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .input-mode-tabs {
+    display: flex;
+    background: var(--color-bg);
+    border-radius: var(--border-radius-sm);
+    padding: 4px;
+    gap: 4px;
+  }
+
+  .mode-tab {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    background: transparent;
+    border: none;
+    border-radius: calc(var(--border-radius-sm) - 2px);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    font-family: inherit;
+  }
+
+  .mode-tab:hover {
+    color: var(--color-text);
+  }
+
+  .mode-tab.active {
+    background: var(--color-bg-elevated);
+    color: var(--color-text);
+  }
+
+  .input-mode.hidden {
+    display: none;
+  }
+
+  .input-label {
+    display: block;
+    font-weight: 500;
+    color: var(--color-text);
+    margin-bottom: var(--space-xs);
+  }
+
+  .input-hint {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: var(--color-text-dim);
+    margin-top: 2px;
+  }
+
+  .cron-input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .cron-input {
+    width: 100%;
+    padding: 1rem 3rem 1rem 1rem;
+    font-size: 1.125rem;
+    font-family: var(--font-mono);
+    background: var(--color-bg);
+    border: 2px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+    color: var(--color-text);
+    transition: all var(--transition-fast);
+  }
+
+  .cron-input:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+  }
+
+  .cron-input::placeholder {
+    color: var(--color-text-dim);
+  }
+
+  .clear-btn {
+    position: absolute;
+    right: 0.75rem;
+    padding: 0.5rem;
+    background: transparent;
+    border: none;
+    color: var(--color-text-dim);
+    cursor: pointer;
+    border-radius: var(--border-radius-sm);
+    transition: all var(--transition-fast);
+  }
+
+  .clear-btn:hover {
+    color: var(--color-text);
+    background: var(--color-bg-elevated);
+  }
+
+  .format-hint {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 0.5rem;
+    margin: 0;
+  }
+
+  .field-label {
+    font-size: 0.75rem;
+    color: var(--color-text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* Error Message */
+  .error-message {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    padding: var(--space-sm);
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: var(--border-radius-sm);
+    color: #fca5a5;
+    font-size: 0.9375rem;
+  }
+
+  .error-message.hidden {
+    display: none;
+  }
+
+  .error-message svg {
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* Output Section */
+  .cron-output-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+  }
+
+  .cron-output-section.empty {
+    opacity: 0.5;
+  }
+
+  .cron-output-section.has-error {
+    opacity: 0.6;
+  }
+
+  .result-block {
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: var(--space-md);
+  }
+
+  .result-block:last-of-type {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-sm);
+  }
+
+  .result-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0;
+  }
+
+  .expression-display {
+    display: block;
+    font-size: 1.5rem;
+    font-family: var(--font-mono);
+    color: var(--color-accent-light);
+    background: var(--color-bg);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--border-radius-sm);
+    word-break: break-all;
+  }
+
+  .description-display {
+    font-size: 1.125rem;
+    color: var(--color-text);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* Copy Button */
+  .copy-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.375rem 0.75rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    font-family: inherit;
+  }
+
+  .copy-btn:hover {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+    background: rgba(59, 130, 246, 0.1);
+  }
+
+  .copy-btn.copied {
+    color: var(--color-success);
+    border-color: var(--color-success);
+    background: rgba(16, 185, 129, 0.1);
+  }
+
+  .copy-btn .hidden {
+    display: none;
+  }
+
+  /* Next Runs List */
+  .next-runs-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  .next-run-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: 0.5rem 0.75rem;
+    background: var(--color-bg);
+    border-radius: var(--border-radius-sm);
+    font-size: 0.9375rem;
+  }
+
+  .run-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-text-dim);
+    background: var(--color-bg-elevated);
+    border-radius: 50%;
+  }
+
+  .run-date {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+  }
+
+  /* Share Section */
+  .share-section {
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .share-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1rem;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    font-family: inherit;
+  }
+
+  .share-btn:hover {
+    color: var(--color-text);
+    border-color: var(--color-text-dim);
+    background: var(--color-bg-elevated);
+  }
+
+  /* Examples Section */
+  .examples-section {
+    margin-top: var(--space-xl);
+  }
+
+  .examples-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: var(--space-sm);
+  }
+
+  .example-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+    padding: var(--space-sm) var(--space-md);
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    text-align: left;
+    font-family: inherit;
+  }
+
+  .example-btn:hover {
+    border-color: var(--color-accent);
+    background: var(--color-bg-elevated);
+  }
+
+  .example-btn code {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    color: var(--color-accent-light);
+  }
+
+  .example-btn span {
+    font-size: 0.8125rem;
+    color: var(--color-text-muted);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .format-hint {
+      font-size: 0.625rem;
+    }
+
+    .expression-display {
+      font-size: 1.125rem;
+    }
+
+    .examples-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
