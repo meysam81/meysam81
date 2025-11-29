@@ -645,15 +645,15 @@ const structuredData = [webAppSchema, faqSchema];
   import log from 'loglevel';
 
   function initNewsletterForm() {
-    var form = document.querySelector('.newsletter-section .newsletter-form');
+    var form = document.querySelector('.newsletter-section .newsletter-form') as HTMLFormElement | null;
     var successMessage = document.querySelector('.newsletter-section .success-message');
 
     if (!form) return;
 
-    form.addEventListener('submit', function(e) {
+    form.addEventListener('submit', function(e: Event) {
       e.preventDefault();
 
-      var honeypotFields = form.querySelectorAll('.honeypot-field');
+      var honeypotFields = form.querySelectorAll('.honeypot-field') as NodeListOf<HTMLInputElement>;
       var isBot = false;
       honeypotFields.forEach(function(field) {
         if (field.value !== '') {
@@ -666,13 +666,15 @@ const structuredData = [webAppSchema, faqSchema];
         return;
       }
 
-      var submitButton = form.querySelector('.submit-button');
-      var buttonText = submitButton.querySelector('.button-text');
-      var buttonLoader = submitButton.querySelector('.button-loader');
+      var submitButton = form.querySelector('.submit-button') as HTMLButtonElement | null;
+      var buttonText = submitButton?.querySelector('.button-text');
+      var buttonLoader = submitButton?.querySelector('.button-loader');
 
-      submitButton.disabled = true;
-      buttonText.classList.add('hidden');
-      buttonLoader.classList.remove('hidden');
+      if (submitButton) {
+        submitButton.disabled = true;
+      }
+      buttonText?.classList.add('hidden');
+      buttonLoader?.classList.remove('hidden');
 
       var formData = new FormData(form);
 
@@ -683,17 +685,19 @@ const structuredData = [webAppSchema, faqSchema];
         .then(function(response) {
           if (response.ok) {
             form.classList.add('hidden');
-            successMessage.classList.remove('hidden');
+            successMessage?.classList.remove('hidden');
             log.info('Newsletter subscription successful');
           } else {
             throw new Error('Subscription failed');
           }
         })
-        .catch(function(error) {
+        .catch(function(error: Error) {
           log.error('Subscription error:', error);
-          submitButton.disabled = false;
-          buttonText.classList.remove('hidden');
-          buttonLoader.classList.add('hidden');
+          if (submitButton) {
+            submitButton.disabled = false;
+          }
+          buttonText?.classList.remove('hidden');
+          buttonLoader?.classList.add('hidden');
         });
     });
   }

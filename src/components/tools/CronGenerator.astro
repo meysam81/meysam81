@@ -207,10 +207,10 @@
   import log from 'loglevel';
 
   function initCronGenerator() {
-    // DOM Elements
-    var cronInput = document.getElementById('cron-input');
-    var englishInput = document.getElementById('english-input');
-    var modeTabs = document.querySelectorAll('.mode-tab');
+    // DOM Elements with type assertions
+    var cronInput = document.getElementById('cron-input') as HTMLInputElement | null;
+    var englishInput = document.getElementById('english-input') as HTMLInputElement | null;
+    var modeTabs = document.querySelectorAll('.mode-tab') as NodeListOf<HTMLElement>;
     var cronMode = document.getElementById('cron-mode');
     var englishMode = document.getElementById('english-mode');
     var errorMessage = document.getElementById('error-message');
@@ -220,51 +220,58 @@
     var nextRunsList = document.getElementById('next-runs-list');
     var outputSection = document.getElementById('output-section');
     var clearBtn = document.querySelector('.clear-btn');
-    var copyBtns = document.querySelectorAll('.copy-btn');
+    var copyBtns = document.querySelectorAll('.copy-btn') as NodeListOf<HTMLElement>;
     var shareBtn = document.getElementById('share-btn');
-    var exampleBtns = document.querySelectorAll('.example-btn');
+    var exampleBtns = document.querySelectorAll('.example-btn') as NodeListOf<HTMLElement>;
 
     var currentExpression = '0 9 * * 1-5';
     var currentDescription = '';
-    var debounceTimer = null;
+    var debounceTimer: ReturnType<typeof setTimeout> | null = null;
+
+    // Guard clause for required elements
+    if (!cronInput || !englishInput || !cronMode || !englishMode || !outputSection) {
+      return;
+    }
 
     // Initialize from URL params
     function initFromUrl() {
       var params = new URLSearchParams(window.location.search);
       var expr = params.get('expr');
-      if (expr) {
+      if (expr && cronInput) {
         cronInput.value = expr;
         processInput(expr, 'cron');
-      } else {
+      } else if (cronInput) {
         processInput(cronInput.value || '0 9 * * 1-5', 'cron');
       }
     }
 
     // Mode switching
-    function switchMode(mode) {
+    function switchMode(mode: string | undefined) {
       modeTabs.forEach(function(tab) {
         tab.classList.toggle('active', tab.dataset.mode === mode);
       });
-      cronMode.classList.toggle('hidden', mode !== 'cron');
-      englishMode.classList.toggle('hidden', mode !== 'english');
+      if (cronMode && englishMode) {
+        cronMode.classList.toggle('hidden', mode !== 'cron');
+        englishMode.classList.toggle('hidden', mode !== 'english');
+      }
 
-      if (mode === 'cron') {
+      if (mode === 'cron' && cronInput) {
         cronInput.focus();
-      } else {
+      } else if (englishInput) {
         englishInput.focus();
       }
     }
 
     // Process input and update output
-    function processInput(value, mode) {
+    function processInput(value: string, mode: string) {
       hideError();
 
       if (!value.trim()) {
-        outputSection.classList.add('empty');
+        outputSection?.classList.add('empty');
         return;
       }
 
-      outputSection.classList.remove('empty');
+      outputSection?.classList.remove('empty');
 
       if (mode === 'cron') {
         var validation = validateCronExpression(value);
@@ -284,7 +291,9 @@
         }
 
         currentExpression = result.expression;
-        cronInput.value = currentExpression;
+        if (cronInput) {
+          cronInput.value = currentExpression;
+        }
         var humanResult2 = cronToHuman(currentExpression);
         currentDescription = humanResult2.success ? humanResult2.description : 'Unable to describe';
       }
@@ -294,25 +303,31 @@
 
     // Update the display
     function updateDisplay() {
-      expressionDisplay.textContent = currentExpression;
-      descriptionDisplay.textContent = currentDescription;
+      if (expressionDisplay) {
+        expressionDisplay.textContent = currentExpression;
+      }
+      if (descriptionDisplay) {
+        descriptionDisplay.textContent = currentDescription;
+      }
 
       // Calculate next runs
       var runs = getNextRuns(currentExpression, 10);
-      nextRunsList.innerHTML = '';
+      if (nextRunsList) {
+        nextRunsList.innerHTML = '';
 
-      if (runs.length === 0) {
-        var li = document.createElement('li');
-        li.className = 'next-run-item';
-        li.textContent = 'No upcoming runs found';
-        nextRunsList.appendChild(li);
-      } else {
-        runs.forEach(function(run, index) {
+        if (runs.length === 0) {
           var li = document.createElement('li');
           li.className = 'next-run-item';
-          li.innerHTML = '<span class="run-number">' + (index + 1) + '</span><span class="run-date">' + formatRunDate(run) + '</span>';
+          li.textContent = 'No upcoming runs found';
           nextRunsList.appendChild(li);
-        });
+        } else {
+          runs.forEach(function(run: Date, index: number) {
+            var li = document.createElement('li');
+            li.className = 'next-run-item';
+            li.innerHTML = '<span class="run-number">' + (index + 1) + '</span><span class="run-date">' + formatRunDate(run) + '</span>';
+            nextRunsList.appendChild(li);
+          });
+        }
       }
 
       // Update URL without reloading
@@ -321,20 +336,22 @@
     }
 
     // Show error message
-    function showError(message) {
-      errorText.textContent = message;
-      errorMessage.classList.remove('hidden');
-      outputSection.classList.add('has-error');
+    function showError(message: string) {
+      if (errorText) {
+        errorText.textContent = message;
+      }
+      errorMessage?.classList.remove('hidden');
+      outputSection?.classList.add('has-error');
     }
 
     // Hide error message
     function hideError() {
-      errorMessage.classList.add('hidden');
-      outputSection.classList.remove('has-error');
+      errorMessage?.classList.add('hidden');
+      outputSection?.classList.remove('has-error');
     }
 
     // Copy functionality
-    function handleCopy(btn) {
+    function handleCopy(btn: HTMLElement) {
       var copyType = btn.dataset.copy;
       var textToCopy = copyType === 'expression' ? currentExpression : currentDescription;
 
@@ -343,20 +360,24 @@
         var success = btn.querySelector('.copy-success');
         var text = btn.querySelector('.copy-text');
 
-        icon.classList.add('hidden');
-        success.classList.remove('hidden');
-        text.textContent = 'Copied!';
+        icon?.classList.add('hidden');
+        success?.classList.remove('hidden');
+        if (text) {
+          text.textContent = 'Copied!';
+        }
         btn.classList.add('copied');
 
         setTimeout(function() {
-          icon.classList.remove('hidden');
-          success.classList.add('hidden');
-          text.textContent = 'Copy';
+          icon?.classList.remove('hidden');
+          success?.classList.add('hidden');
+          if (text) {
+            text.textContent = 'Copy';
+          }
           btn.classList.remove('copied');
         }, 2000);
 
         log.info('Copied ' + copyType + ':', textToCopy);
-      }).catch(function(err) {
+      }).catch(function(err: Error) {
         log.error('Copy failed:', err);
       });
     }
@@ -370,17 +391,20 @@
           title: 'Cron Expression: ' + currentExpression,
           text: currentDescription,
           url: shareUrl
-        }).catch(function(err) {
+        }).catch(function(err: Error) {
           if (err.name !== 'AbortError') {
             log.error('Share failed:', err);
           }
         });
       } else {
         navigator.clipboard.writeText(shareUrl).then(function() {
-          shareBtn.querySelector('span').textContent = 'Link Copied!';
-          setTimeout(function() {
-            shareBtn.querySelector('span').textContent = 'Share Link';
-          }, 2000);
+          var spanEl = shareBtn?.querySelector('span');
+          if (spanEl) {
+            spanEl.textContent = 'Link Copied!';
+            setTimeout(function() {
+              spanEl.textContent = 'Share Link';
+            }, 2000);
+          }
         });
       }
     }
@@ -393,24 +417,36 @@
     });
 
     cronInput.addEventListener('input', function() {
-      clearTimeout(debounceTimer);
+      if (debounceTimer) {
+        clearTimeout(debounceTimer);
+      }
       debounceTimer = setTimeout(function() {
-        processInput(cronInput.value, 'cron');
+        if (cronInput) {
+          processInput(cronInput.value, 'cron');
+        }
       }, 150);
     });
 
     englishInput.addEventListener('input', function() {
-      clearTimeout(debounceTimer);
+      if (debounceTimer) {
+        clearTimeout(debounceTimer);
+      }
       debounceTimer = setTimeout(function() {
-        processInput(englishInput.value, 'english');
+        if (englishInput) {
+          processInput(englishInput.value, 'english');
+        }
       }, 300);
     });
 
-    clearBtn.addEventListener('click', function() {
-      cronInput.value = '';
-      englishInput.value = '';
+    clearBtn?.addEventListener('click', function() {
+      if (cronInput) {
+        cronInput.value = '';
+      }
+      if (englishInput) {
+        englishInput.value = '';
+      }
       hideError();
-      cronInput.focus();
+      cronInput?.focus();
     });
 
     copyBtns.forEach(function(btn) {
@@ -419,24 +455,26 @@
       });
     });
 
-    shareBtn.addEventListener('click', handleShare);
+    shareBtn?.addEventListener('click', handleShare);
 
     exampleBtns.forEach(function(btn) {
       btn.addEventListener('click', function() {
         var cron = btn.dataset.cron;
-        cronInput.value = cron;
-        switchMode('cron');
-        processInput(cron, 'cron');
+        if (cronInput && cron) {
+          cronInput.value = cron;
+          switchMode('cron');
+          processInput(cron, 'cron');
+        }
       });
     });
 
     // Keyboard shortcuts
-    document.addEventListener('keydown', function(e) {
+    document.addEventListener('keydown', function(e: KeyboardEvent) {
       // Ctrl/Cmd + K to focus input
       if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
         e.preventDefault();
-        cronInput.focus();
-        cronInput.select();
+        cronInput?.focus();
+        cronInput?.select();
       }
     });
 
