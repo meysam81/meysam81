@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a personal landing page built with Astro v5, featuring a modern design focused on newsletter conversions and project showcasing. The site is optimized for performance (Lighthouse 95+), SEO, accessibility (WCAG 2.1 AA), and LLM discoverability.
+This is a personal landing page and blog built with Astro v5, featuring a modern design focused on newsletter conversions, project showcasing, and content publishing. The site includes a full-featured blogging system with MDX support, search functionality, comments, and analytics. It is optimized for performance (Lighthouse 95+), SEO, accessibility (WCAG 2.1 AA), and LLM discoverability.
 
 ## Development Commands
 
@@ -15,7 +15,7 @@ This project uses **bun** as the package manager. All commands should use `bun` 
 ### Common Commands
 
 ```bash
-# Development server (runs on http://localhost:4321)
+# Development server (runs on http://localhost:3000)
 bun start
 
 # Type checking and production build
@@ -44,9 +44,13 @@ The repository uses pre-commit hooks configured in `.pre-commit-config.yaml`:
 ### Technology Stack
 
 - **Framework**: Astro v5 (static site generator)
-- **Styling**: Vanilla CSS with CSS variables (no frameworks)
-- **TypeScript**: Strict mode enabled
-- **Build Tool**: Astro's built-in Vite-based bundler
+- **Content**: MDX for blog posts with Content Collections
+- **Styling**: Vanilla CSS with CSS variables, Lightning CSS transformer
+- **TypeScript**: Base configuration (strict mode disabled for flexibility)
+- **Build Tool**: Astro's built-in Vite-based bundler with Brotli compression
+- **Search**: Pagefind (client-side full-text search)
+- **Comments**: Giscus (GitHub-based discussions)
+- **Analytics**: Pirsch (privacy-focused analytics)
 - **Linting**: oxlint (fast Rust-based linter)
 
 ### Key Configuration
@@ -57,17 +61,29 @@ The repository uses pre-commit hooks configured in `.pre-commit-config.yaml`:
 - Path alias: `@` maps to `/src`
 - Inlined stylesheets for performance
 - HTML compression enabled
+- Prefetch strategy: viewport-based prefetching enabled
+- Image service: Sharp with remote pattern support
+- CSS: Lightning CSS transformer with code splitting
+- Build optimizations: Brotli compression, manual chunk separation
+
+**Integrations:**
+
+- `@astrojs/mdx` - MDX support for blog posts
+- `@astrojs/sitemap` - Auto-generated sitemap
+- `astro-expressive-code` - Syntax highlighting with line numbers
+- `@playform/compress` - Asset compression
 
 #### TypeScript Config
 
-- Extends `astro/tsconfigs/strict`
+- Extends `astro/tsconfigs/base`
+- Strict mode disabled for flexibility
 - JSX configured for React (though not actively used in components)
 
 #### Oxlint Config (`.oxlintrc.json`)
 
 - Extremely comprehensive linting rules (330+ rules configured)
 - Import cycle detection enabled
-- Console statements denied (use logging utilities)
+- Console statements denied (use `loglevel` for logging)
 - Most correctness rules disabled (category: "off")
 
 ### Project Structure
@@ -75,29 +91,72 @@ The repository uses pre-commit hooks configured in `.pre-commit-config.yaml`:
 ```
 src/
 ├── components/
-│   ├── Header.astro       # Sticky navigation bar
-│   ├── Footer.astro       # Site footer with links
-│   ├── Newsletter.astro   # Email capture form component
-│   └── ContentCard.astro  # Reusable card for projects and blog posts
+│   ├── Header.astro         # Sticky navigation bar
+│   ├── Footer.astro         # Site footer with links
+│   ├── Newsletter.astro     # Email capture form component
+│   ├── ContentCard.astro    # Reusable card for projects and blog posts
+│   ├── SearchBox.astro      # Full-text search using Pagefind
+│   ├── TableOfContents.astro # Auto-generated TOC for blog posts
+│   ├── Webmentions.astro    # Webmentions integration (likes, reposts, replies)
+│   └── CopyButton.astro     # Copy-to-clipboard functionality
+├── content/
+│   └── blog/                # MDX blog posts
+│       └── *.mdx            # Individual blog post files
 ├── layouts/
-│   └── BaseLayout.astro   # Base layout with SEO, meta tags, structured data
+│   ├── BaseLayout.astro     # Base layout with SEO, meta tags, structured data
+│   └── BlogPostLayout.astro # Specialized layout for blog posts
 ├── pages/
-│   ├── index.astro        # Homepage (hero, about, projects, newsletter)
-│   ├── links.astro        # Links page (sponsorships, referrals, social)
-│   └── 404.astro          # Custom 404 page
-└── styles/
-    └── global.css         # Global styles and CSS variables
+│   ├── index.astro          # Homepage (hero, about, projects, newsletter)
+│   ├── links.astro          # Links page (sponsorships, referrals, social)
+│   ├── 404.astro            # Custom 404 page
+│   └── blog/
+│       ├── index.astro      # Blog listing with featured posts and search
+│       ├── [...slug].astro  # Dynamic blog post pages
+│       └── tags/
+│           └── [tag].astro  # Tag-based post filtering
+├── utils/
+│   ├── blog.ts              # filterPublishedPosts() function
+│   ├── pirsch.ts            # Pirsch analytics integration
+│   ├── reading-time.ts      # calculateReadingTime() function
+│   └── slug.ts              # slugify() function
+├── styles/
+│   └── global.css           # Global styles and CSS variables
+├── content.config.ts        # Content Collections schema
+└── main.js                  # Loglevel initialization
 
 public/
-├── favicon.svg            # Source SVG for favicons
-├── og-image*.svg          # Source SVGs for Open Graph images
-├── profile-image.svg      # Source SVG for profile/avatar
-├── logo-*.svg             # Brand assets
-├── *.png                  # Generated PNGs from SVGs (via convert:images)
-└── robots.txt             # Search engine directives
+├── favicon.svg              # Source SVG for favicons
+├── og-image*.svg            # Source SVGs for Open Graph images
+├── profile-image.svg        # Source SVG for profile/avatar
+├── logo-*.svg               # Brand assets
+├── *.png                    # Generated PNGs from SVGs (via convert:images)
+└── robots.txt               # Search engine directives
 
 scripts/
-└── convert-svgs.js        # Utility to generate PNG assets from SVGs
+└── convert-svgs.js          # Utility to generate PNG assets from SVGs
+```
+
+### Content Collections
+
+Blog posts use Astro Content Collections with the following schema (`src/content.config.ts`):
+
+```typescript
+{
+  title: string;          // Post title (required)
+  description: string;    // Post description (required)
+  pubDate: Date;          // Publication date (required)
+  updatedDate?: Date;     // Last update date
+  author?: string;        // Author name (default: "Meysam")
+  tags?: string[];        // Post tags for categorization
+  draft?: boolean;        // Draft posts are excluded from production
+  featured?: boolean;     // Featured posts appear in special section
+  ogImage?: string;       // Custom Open Graph image
+  slug?: string;          // Custom URL slug
+  references?: Array<{    // Further reading/citations
+    title: string;
+    url: string;
+  }>;
+}
 ```
 
 ### Component Architecture
@@ -123,7 +182,19 @@ interface Props {
 }
 ```
 
-Default values are defined in the layout - override them per-page as needed.
+#### BlogPostLayout.astro
+
+Specialized layout for blog posts. Features:
+
+- Reading time calculation
+- Post metadata display (dates, author, tags)
+- Table of contents with scroll-spy
+- Clickable heading permalinks
+- Image zoom on click (medium-zoom)
+- Giscus comments integration
+- Webmentions display (likes, reposts, replies)
+- References/Further Reading section
+- Pirsch page view counts
 
 #### Header.astro
 
@@ -137,15 +208,28 @@ Reusable email signup component. Form action points to newsletter signup endpoin
 
 Reusable component for displaying content items (projects, blog posts, etc). Used on homepage and blog listing page.
 
+#### SearchBox.astro
+
+Client-side full-text search powered by Pagefind. Features debounced input and result excerpts.
+
+#### TableOfContents.astro
+
+Auto-generated table of contents for blog posts with scroll-spy functionality to highlight current section.
+
+#### Webmentions.astro
+
+Displays webmentions from webmention.io including likes, reposts, and replies.
+
 ### Styling Approach
 
 Global styles are defined in `src/styles/global.css` using CSS variables:
 
 - Dark theme focused (Apple-inspired aesthetic)
-- CSS variables for colors: `--color-bg`, `--color-accent`, etc.
+- CSS variables for colors: `--color-bg`, `--color-accent`, `--color-success`, etc.
 - System font stack: `-apple-system, BlinkMacSystemFont, 'Segoe UI'...`
 - No CSS frameworks or preprocessors
 - Responsive, mobile-first design
+- Lightning CSS for modern CSS transforms
 
 Component-scoped styles use Astro's scoped `<style>` tags.
 
@@ -162,6 +246,33 @@ SVG source files in `public/` are converted to PNG using `bun run convert:images
 The conversion script (`scripts/convert-svgs.js`) uses Sharp library for image processing.
 
 ## Content Updates
+
+### Adding Blog Posts
+
+Create a new MDX file in `src/content/blog/` with frontmatter:
+
+```mdx
+---
+title: "Post Title"
+description: "Post description for SEO and previews"
+pubDate: 2024-01-15
+tags: ["tag1", "tag2"]
+featured: false
+draft: false
+references:
+  - title: "Reference Title"
+    url: "https://example.com"
+---
+
+Your content here...
+```
+
+Blog posts support:
+
+- MDX components and expressions
+- Code blocks with syntax highlighting and line numbers (via Expressive Code)
+- Auto-generated heading anchors
+- Image optimization
 
 ### Adding/Updating Projects
 
@@ -195,6 +306,28 @@ Default values are in `src/layouts/BaseLayout.astro`. Override per-page by passi
 
 Update form action in `src/components/Newsletter.astro` to point to your newsletter signup endpoint.
 
+## Third-Party Integrations
+
+### Giscus (Comments)
+
+GitHub-based comment system integrated in BlogPostLayout. Configured to use GitHub Discussions for storing comments.
+
+### Webmention.io
+
+Webmentions integration for receiving likes, reposts, and replies from the IndieWeb. Displayed via the Webmentions component.
+
+### Pirsch Analytics
+
+Privacy-focused analytics for tracking page views. Environment variables:
+
+- `PIRSCH_CLIENT_ID`
+- `PIRSCH_CLIENT_SECRET`
+- `PIRSCH_HOSTNAME`
+
+### Pagefind
+
+Client-side full-text search engine. Index is built automatically during the Astro build process and served as static files.
+
 ## SEO & Performance Features
 
 The site includes comprehensive SEO optimizations:
@@ -204,6 +337,7 @@ The site includes comprehensive SEO optimizations:
 - Open Graph and Twitter Card tags
 - JSON-LD structured data (Person schema)
 - Auto-generated sitemap.xml
+- RSS feed for blog posts
 - robots.txt configuration
 - Canonical URLs
 - Performance optimizations for Core Web Vitals
@@ -256,11 +390,9 @@ The site is deployed via GitHub Actions (`.github/workflows/ci.yml`):
 - Import cycles are denied
 - Most TypeScript type checking happens at build time via `astro check`
 
-### Type Safety
+### Logging
 
-- TypeScript strict mode enabled
-- Type checking runs before every build (`astro check && astro build`)
-- Props interfaces defined for all components accepting props
+Use `loglevel` instead of `console` for logging. Initialize via `src/main.js`.
 
 ### Path Aliases
 
