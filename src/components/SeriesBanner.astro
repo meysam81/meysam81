@@ -1,0 +1,98 @@
+---
+import type { SeriesInfo } from "@/utils/series";
+
+interface Props {
+  seriesInfo: SeriesInfo;
+}
+
+var { seriesInfo } = Astro.props;
+---
+
+<aside class="series-banner">
+  <div class="series-icon">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+    </svg>
+  </div>
+  <div class="series-content">
+    <span class="series-label">Part of a series</span>
+    <a href={`/blog/series/${seriesInfo.slug}`} class="series-link">
+      {seriesInfo.name}
+    </a>
+    <span class="series-position">
+      Part {seriesInfo.currentOrder} of {seriesInfo.totalPosts}
+    </span>
+  </div>
+</aside>
+
+<style scoped>
+  .series-banner {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-md);
+    padding: var(--space-md);
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: var(--border-radius-sm);
+    margin-bottom: var(--space-lg);
+  }
+
+  .series-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: rgba(59, 130, 246, 0.15);
+    border-radius: var(--border-radius-sm);
+    color: var(--color-accent-light);
+    flex-shrink: 0;
+  }
+
+  .series-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .series-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-dim);
+  }
+
+  .series-link {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-accent-light);
+    transition: color var(--transition-fast);
+  }
+
+  .series-link:hover {
+    color: var(--color-accent);
+  }
+
+  .series-position {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+  }
+
+  @media (max-width: 768px) {
+    .series-banner {
+      padding: var(--space-sm);
+    }
+
+    .series-icon {
+      width: 36px;
+      height: 36px;
+    }
+
+    .series-icon svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
+</style>

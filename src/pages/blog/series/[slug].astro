@@ -1,0 +1,259 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import ContentCard from "@/components/ContentCard.astro";
+import { getCollection } from "astro:content";
+import { filterPublishedPosts } from "@/utils/blog";
+import { getAllSeries, getPostsBySeries } from "@/utils/series";
+import { slugify } from "@/utils/slug";
+
+export async function getStaticPaths() {
+  var posts = await getCollection("blog");
+  var publishedPosts = filterPublishedPosts(posts);
+  var allSeries = getAllSeries(publishedPosts);
+
+  return allSeries.map(function mapSeries(series) {
+    return {
+      params: { slug: series.slug },
+      props: { series },
+    };
+  });
+}
+
+var { series } = Astro.props;
+
+function formatDate(date: Date) {
+  return new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  }).format(date);
+}
+
+function calculateReadingTime(content: string) {
+  var wordsPerMinute = 200;
+  var wordCount = content.split(/\s+/).length;
+  var minutes = Math.ceil(wordCount / wordsPerMinute);
+  return `${minutes} min read`;
+}
+
+function calculateTotalReadingTime(posts: typeof series.posts) {
+  var totalWords = posts.reduce(function sumWords(acc, post) {
+    return acc + post.body.split(/\s+/).length;
+  }, 0);
+  var minutes = Math.ceil(totalWords / 200);
+  return minutes;
+}
+
+var totalReadingTime = calculateTotalReadingTime(series.posts);
+---
+
+<BaseLayout
+  title={`${series.name} - Series`}
+  description={`A ${series.postCount}-part series: ${series.name}. Total reading time: ${totalReadingTime} minutes.`}
+>
+  <section class="series-hero">
+    <div class="container">
+      <a href="/blog" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        Back to Blog
+      </a>
+
+      <div class="series-badge">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+        </svg>
+        Series
+      </div>
+
+      <h1 class="series-title">{series.name}</h1>
+
+      <div class="series-meta">
+        <span class="meta-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+          </svg>
+          {series.postCount} {series.postCount === 1 ? "article" : "articles"}
+        </span>
+        <span class="meta-divider">•</span>
+        <span class="meta-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          {totalReadingTime} min total
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <section class="series-content">
+    <div class="container">
+      <div class="series-posts">
+        {series.posts.map(function mapPost(post, index) {
+          var postSlug = post.slug || slugify(post.data.title);
+          return (
+            <div class="series-post-item">
+              <div class="post-number">{index + 1}</div>
+              <div class="post-card-wrapper">
+                <ContentCard
+                  title={post.data.title}
+                  description={post.data.description}
+                  url={`/blog/${postSlug}`}
+                  badge={formatDate(post.data.pubDate)}
+                  linkText="Read Article"
+                  variant="blog"
+                  tags={post.data.tags}
+                  readingTime={calculateReadingTime(post.body)}
+                />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style scoped>
+  .series-hero {
+    padding: var(--space-3xl) 0 var(--space-2xl);
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-text-muted);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    margin-bottom: var(--space-lg);
+    transition: all var(--transition-fast);
+  }
+
+  .back-link:hover {
+    color: var(--color-text);
+    gap: 0.75rem;
+  }
+
+  .back-link svg {
+    transition: transform var(--transition-fast);
+  }
+
+  .back-link:hover svg {
+    transform: translateX(-4px);
+  }
+
+  .series-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: rgba(59, 130, 246, 0.1);
+    color: var(--color-accent-light);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: var(--border-radius-sm);
+    margin-bottom: var(--space-md);
+  }
+
+  .series-title {
+    background: linear-gradient(135deg, var(--color-text) 0%, var(--color-accent-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: var(--space-md);
+    max-width: 800px;
+  }
+
+  .series-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+  }
+
+  .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: 0.9375rem;
+    color: var(--color-text-muted);
+  }
+
+  .meta-item svg {
+    color: var(--color-text-dim);
+  }
+
+  .meta-divider {
+    color: var(--color-text-dim);
+  }
+
+  .series-content {
+    padding-bottom: var(--space-3xl);
+  }
+
+  .series-posts {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+  }
+
+  .series-post-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-lg);
+  }
+
+  .post-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background: var(--color-bg-card);
+    border: 2px solid var(--color-accent);
+    border-radius: 50%;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-accent-light);
+    flex-shrink: 0;
+  }
+
+  .post-card-wrapper {
+    flex: 1;
+  }
+
+  @media (max-width: 768px) {
+    .series-hero {
+      padding: var(--space-2xl) 0 var(--space-xl);
+    }
+
+    .series-meta {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-xs);
+    }
+
+    .meta-divider {
+      display: none;
+    }
+
+    .series-post-item {
+      gap: var(--space-md);
+    }
+
+    .post-number {
+      width: 40px;
+      height: 40px;
+      font-size: 1rem;
+    }
+  }
+</style>
