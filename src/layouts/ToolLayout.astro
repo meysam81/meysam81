@@ -1,0 +1,163 @@
+---
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import '@/styles/global.css';
+import "@/main.js";
+
+interface Props {
+  title: string;
+  description: string;
+  ogImage?: string;
+  canonicalPath?: string;
+  structuredData?: object;
+}
+
+const {
+  title,
+  description,
+  ogImage = "https://meysam.io/og-image.png",
+  canonicalPath,
+  structuredData
+} = Astro.props;
+
+const fullTitle = `${title} | Meysam Azad`;
+const canonicalURL = new URL(canonicalPath || Astro.url.pathname, Astro.site);
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Primary Meta Tags -->
+    <title>{fullTitle}</title>
+    <meta name="title" content={fullTitle} />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Keywords -->
+    <meta name="keywords" content="devops tools, developer tools, free tools, cron generator, yaml validator, productivity" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonicalURL} />
+    <meta property="twitter:title" content={fullTitle} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={ogImage} />
+    <meta name="twitter:creator" content="@meysamazing" />
+
+    <!-- Structured Data -->
+    {structuredData && (
+      <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+    )}
+
+    <!-- Breadcrumb Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://meysam.io"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Tools",
+            "item": "https://meysam.io/tools"
+          }
+        ]
+      }
+    </script>
+
+    <!-- Performance -->
+    <link rel="preconnect" href="https://newsletter.meysam.io" />
+    <link rel="dns-prefetch" href="https://newsletter.meysam.io" />
+
+    <slot name="head" />
+  </head>
+  <body>
+    <Header />
+    <main class="tool-main">
+      <slot />
+    </main>
+    <Footer />
+
+    <!-- Analytics -->
+    <script is:inline defer src="https://analytics.meysam.io/pa.js"
+        id="pianjs"
+        data-code="m9Chz179Udt3YeVXRHXyxWthr2A3vbLb"
+        data-hit-endpoint="https://analytics.meysam.io/hit"
+        data-event-endpoint="https://analytics.meysam.io/event"
+        data-session-endpoint="https://analytics.meysam.io/session"></script>
+  </body>
+</html>
+
+<style is:global>
+  .tool-main {
+    padding-top: 80px;
+    min-height: calc(100vh - 80px);
+  }
+
+  .tool-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: var(--space-xl) var(--space-lg);
+  }
+
+  .tool-header {
+    text-align: center;
+    margin-bottom: var(--space-2xl);
+  }
+
+  .tool-header h1 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    margin-bottom: var(--space-sm);
+  }
+
+  .tool-header p {
+    font-size: 1.125rem;
+    color: var(--color-text-muted);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .tool-section {
+    margin-bottom: var(--space-2xl);
+  }
+
+  .tool-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: var(--space-md);
+  }
+
+  .tool-card {
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: var(--space-lg);
+  }
+
+  @media (max-width: 768px) {
+    .tool-container {
+      padding: var(--space-lg) var(--space-md);
+    }
+
+    .tool-card {
+      padding: var(--space-md);
+    }
+  }
+</style>
