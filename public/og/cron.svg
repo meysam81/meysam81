@@ -1,0 +1,75 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#0a0a0a"/>
+
+  <!-- Gradient overlay -->
+  <defs>
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.15" />
+      <stop offset="100%" style="stop-color:#0a0a0a;stop-opacity:0" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#gradient)"/>
+
+  <!-- Border -->
+  <rect x="1" y="1" width="1198" height="628" rx="0" stroke="#2a2a2a" stroke-width="2" fill="none"/>
+
+  <!-- Tool icon (clock/schedule) -->
+  <g transform="translate(100, 180)">
+    <circle cx="60" cy="60" r="55" stroke="#3b82f6" stroke-width="4" fill="none"/>
+    <line x1="60" y1="60" x2="60" y2="30" stroke="#3b82f6" stroke-width="4" stroke-linecap="round"/>
+    <line x1="60" y1="60" x2="85" y2="75" stroke="#3b82f6" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="60" cy="60" r="5" fill="#3b82f6"/>
+  </g>
+
+  <!-- Title -->
+  <text x="240" y="230" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="56" font-weight="700" fill="#f5f5f5">
+    Cron Expression
+  </text>
+  <text x="240" y="295" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="56" font-weight="700" fill="#f5f5f5">
+    Generator
+  </text>
+
+  <!-- Subtitle -->
+  <text x="240" y="360" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="24" fill="#a0a0a0">
+    Build and decode cron schedules with plain English
+  </text>
+
+  <!-- Example cron expression -->
+  <rect x="100" y="420" width="400" height="70" rx="12" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="2"/>
+  <text x="130" y="465" font-family="SF Mono, Monaco, Consolas, monospace" font-size="28" fill="#60a5fa">
+    0 9 * * 1-5
+  </text>
+
+  <!-- Arrow -->
+  <text x="530" y="465" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="28" fill="#6a6a6a">
+    →
+  </text>
+
+  <!-- Human readable -->
+  <rect x="580" width="520" y="420" height="70" rx="12" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="2"/>
+  <text x="610" y="465" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="22" fill="#f5f5f5">
+    At 9:00 AM, Monday - Friday
+  </text>
+
+  <!-- Footer - branding -->
+  <text x="100" y="580" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="20" fill="#6a6a6a">
+    meysam.io/tools/cron
+  </text>
+
+  <!-- Features -->
+  <g transform="translate(700, 560)">
+    <circle cx="0" cy="0" r="6" fill="#10b981"/>
+    <text x="15" y="6" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="16" fill="#a0a0a0">
+      Free
+    </text>
+    <circle cx="80" cy="0" r="6" fill="#10b981"/>
+    <text x="95" y="6" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="16" fill="#a0a0a0">
+      No Signup
+    </text>
+    <circle cx="200" cy="0" r="6" fill="#10b981"/>
+    <text x="215" y="6" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="16" fill="#a0a0a0">
+      No Ads
+    </text>
+  </g>
+</svg>
