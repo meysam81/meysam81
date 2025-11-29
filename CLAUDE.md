@@ -146,7 +146,7 @@ Blog posts use Astro Content Collections with the following schema (`src/content
   description: string;    // Post description (required)
   pubDate: Date;          // Publication date (required)
   updatedDate?: Date;     // Last update date
-  author?: string;        // Author name (default: "Meysam")
+  author?: string;        // Author name (default: "Meysam Azad")
   tags?: string[];        // Post tags for categorization
   draft?: boolean;        // Draft posts are excluded from production
   featured?: boolean;     // Featured posts appear in special section
