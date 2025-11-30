@@ -98,7 +98,9 @@ src/
 │   ├── SearchBox.astro      # Full-text search using Pagefind
 │   ├── TableOfContents.astro # Auto-generated TOC for blog posts
 │   ├── Webmentions.astro    # Webmentions integration (likes, reposts, replies)
-│   └── CopyButton.astro     # Copy-to-clipboard functionality
+│   ├── CopyButton.astro     # Copy-to-clipboard functionality
+│   ├── SeriesBanner.astro   # Banner showing series context on posts
+│   └── SeriesNav.astro      # Prev/next navigation within a series
 ├── content/
 │   └── blog/                # MDX blog posts
 │       └── *.mdx            # Individual blog post files
@@ -112,12 +114,15 @@ src/
 │   └── blog/
 │       ├── index.astro      # Blog listing with featured posts and search
 │       ├── [...slug].astro  # Dynamic blog post pages
-│       └── tags/
-│           └── [tag].astro  # Tag-based post filtering
+│       ├── tags/
+│       │   └── [tag].astro  # Tag-based post filtering
+│       └── series/
+│           └── [slug].astro # Series landing pages
 ├── utils/
 │   ├── blog.ts              # filterPublishedPosts() function
 │   ├── pirsch.ts            # Pirsch analytics integration
 │   ├── reading-time.ts      # calculateReadingTime() function
+│   ├── series.ts            # Series helper functions (getSeriesInfo, getAllSeries)
 │   └── slug.ts              # slugify() function
 ├── styles/
 │   └── global.css           # Global styles and CSS variables
@@ -152,6 +157,8 @@ Blog posts use Astro Content Collections with the following schema (`src/content
   featured?: boolean;     // Featured posts appear in special section
   ogImage?: string;       // Custom Open Graph image
   slug?: string;          // Custom URL slug
+  series?: string;        // Series name (e.g., "Customer Discovery Journey")
+  seriesOrder?: number;   // Order within series (1, 2, 3...)
   references?: Array<{    // Further reading/citations
     title: string;
     url: string;
@@ -196,6 +203,21 @@ Specialized layout for blog posts. Features:
 - Webmentions display (likes, reposts, replies)
 - References/Further Reading section
 - Pirsch page view counts
+- Series banner and navigation (when post is part of a series)
+
+#### SeriesBanner.astro
+
+Displays at the top of posts that are part of a series. Shows:
+- Series name with link to series landing page
+- Position indicator (e.g., "Part 2 of 4")
+
+#### SeriesNav.astro
+
+Navigation component for series posts. Displays:
+- Series name with link to landing page
+- Previous post link (if exists)
+- Next post link (if exists)
+- Position indicator (1 / 4)
 
 #### Header.astro
 
@@ -274,6 +296,26 @@ Blog posts support:
 - Code blocks with syntax highlighting and line numbers (via Expressive Code)
 - Auto-generated heading anchors
 - Image optimization
+- Series grouping (see below)
+
+### Adding Posts to a Series
+
+To group posts into a series, add the `series` and `seriesOrder` fields to the frontmatter:
+
+```mdx
+---
+title: "Part 1: Getting Started"
+description: "First post in the series"
+pubDate: 2024-01-15
+series: "Customer Discovery Journey"
+seriesOrder: 1
+---
+```
+
+When a post is part of a series:
+- A banner appears at the top showing series context
+- Navigation appears after the content with prev/next links
+- A dedicated landing page is auto-generated at `/blog/series/[slug]`
 
 ### Adding/Updating Projects
 
