@@ -67,7 +67,7 @@ export function getSeriesInfo(
   return {
     name: currentPost.data.series,
     slug: seriesSlug,
-    currentOrder: currentIndex + 1,
+    currentOrder: currentPost.data.seriesOrder ?? (currentIndex + 1),
     totalPosts: seriesPosts.length,
     prevPost: currentIndex > 0 ? seriesPosts[currentIndex - 1] : null,
     nextPost:
