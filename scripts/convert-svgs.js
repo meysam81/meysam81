@@ -26,6 +26,13 @@ const conversions = [
     width: 1200,
     height: 630,
   },
+  // Tool OG Images
+  {
+    input: "og/cron.svg",
+    output: "og/cron.png",
+    width: 1200,
+    height: 630,
+  },
 
   // Profile/Avatar (multiple sizes)
   {
@@ -142,13 +149,16 @@ const conversions = [
 async function convertSVGtoPNG() {
   const publicDir = "./public";
   const coversDir = join(publicDir, "covers");
+  const ogDir = join(publicDir, "og");
 
-  // Ensure covers directory exists
-  try {
-    await mkdir(coversDir, { recursive: true });
-  } catch (error) {
-    // Directory might already exist, that's fine
-    log.warn(`⚠️ Could not create directory ${coversDir}:`, error.message);
+  // Ensure directories exist
+  for (const dir of [coversDir, ogDir]) {
+    try {
+      await mkdir(dir, { recursive: true });
+    } catch (error) {
+      // Directory might already exist, that's fine
+      log.warn(`⚠️ Could not create directory ${dir}:`, error.message);
+    }
   }
 
   log.info("🎨 Converting SVGs to PNGs...\n");
