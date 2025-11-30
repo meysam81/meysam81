@@ -1,6 +1,6 @@
 # meysam.io - Free Tools Strategy
 
-> **Last Updated**: 2025-11-29
+> **Last Updated**: 2025-11-30
 > **Status**: In Progress (Wave 1)
 > **Newsletter CTA**: newsletter.meysam.io
 
@@ -15,7 +15,7 @@ Build a suite of free, standalone micro-tools that solve specific problems for D
 | Tool                          | Status       | URL                     | Notes                                                                                          |
 | ----------------------------- | ------------ | ----------------------- | ---------------------------------------------------------------------------------------------- |
 | **Cron Expression Generator** | ✅ Completed | `/tools/cron`           | Bidirectional English↔cron conversion, 70+ natural language patterns, next 10 runs calculation |
-| **YAML/JSON Validator**       | 🔲 Planned   | `/tools/yaml-json`      | Wave 1                                                                                         |
+| **YAML/JSON Validator**       | ✅ Completed | `/tools/yaml-json`      | YAML 1.2 & JSON RFC 8259 compliant, bidirectional conversion, line-number errors, syntax reference |
 | **SaaS Idea Validator**       | 🔲 Planned   | `/tools/idea-validator` | Wave 1                                                                                         |
 
 ---
