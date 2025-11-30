@@ -22,7 +22,7 @@
     "@vitejs/plugin-vue": "^6.0.2",
     "oxlint": "^1.30.0",
     "typescript": "^5.9.3",
-    "vite": "^7.2.4",
+    "vite": "v6",
     "vite-plugin-compression2": "^2.3.1"
   },
   "name": "meysam-io",

@@ -133,24 +133,24 @@ The site serves as both a personal brand platform and a trust-building mechanism
 | -------------------------- | ------------------------------------------------------------------- | ---------------- |
 | **MDX Blogging**           | Full-featured content system with frontmatter schema                | Production-ready |
 | **Newsletter Integration** | Listmonk-powered with CAPTCHA (Altcha) and honeypot spam protection | Production-ready |
-| **Search** | Pagefind full-text search across blog content | Production-ready |
-| **Comments** | Giscus GitHub-based discussions | Production-ready |
-| **Webmentions** | IndieWeb integration for likes, reposts, replies | Production-ready |
-| **Analytics** | Pirsch privacy-focused analytics with page view counts | Production-ready |
-| **SEO** | Full meta tags, Open Graph, Twitter Cards, JSON-LD structured data | Production-ready |
-| **RSS Feed** | Auto-generated feed for blog posts | Production-ready |
-| **Sitemap** | Auto-generated sitemap.xml | Production-ready |
-| **Links Page** | Sponsorships, referrals, social links, crypto addresses | Production-ready |
-| **Table of Contents** | Auto-generated with scroll-spy for blog posts | Production-ready |
-| **Heading Permalinks** | Clickable anchors with copy-to-clipboard | Production-ready |
-| **Image Zoom** | Medium-zoom integration for post images | Production-ready |
-| **References Section** | Further reading/citations support in posts | Production-ready |
-| **Featured Posts** | Highlight mechanism for key content | Production-ready |
-| **Tag System** | Post categorization with tag-based filtering | Production-ready |
-| **Reading Time** | Automatic calculation and display | Production-ready |
-| **Dark Theme** | Apple-inspired dark aesthetic | Production-ready |
-| **Performance** | Brotli compression, prefetching, Lighthouse 95+ target | Production-ready |
-| **Blog Post Series** | Multi-part content grouping with prev/next navigation | Production-ready |
+| **Search**                 | Pagefind full-text search across blog content                       | Production-ready |
+| **Comments**               | Giscus GitHub-based discussions                                     | Production-ready |
+| **Webmentions**            | IndieWeb integration for likes, reposts, replies                    | Production-ready |
+| **Analytics**              | Pirsch privacy-focused analytics with page view counts              | Production-ready |
+| **SEO**                    | Full meta tags, Open Graph, Twitter Cards, JSON-LD structured data  | Production-ready |
+| **RSS Feed**               | Auto-generated feed for blog posts                                  | Production-ready |
+| **Sitemap**                | Auto-generated sitemap.xml                                          | Production-ready |
+| **Links Page**             | Sponsorships, referrals, social links, crypto addresses             | Production-ready |
+| **Table of Contents**      | Auto-generated with scroll-spy for blog posts                       | Production-ready |
+| **Heading Permalinks**     | Clickable anchors with copy-to-clipboard                            | Production-ready |
+| **Image Zoom**             | Medium-zoom integration for post images                             | Production-ready |
+| **References Section**     | Further reading/citations support in posts                          | Production-ready |
+| **Featured Posts**         | Highlight mechanism for key content                                 | Production-ready |
+| **Tag System**             | Post categorization with tag-based filtering                        | Production-ready |
+| **Reading Time**           | Automatic calculation and display                                   | Production-ready |
+| **Dark Theme**             | Apple-inspired dark aesthetic                                       | Production-ready |
+| **Performance**            | Brotli compression, prefetching, Lighthouse 95+ target              | Production-ready |
+| **Blog Post Series**       | Multi-part content grouping with prev/next navigation               | Production-ready |
 
 ### Partially Implemented
 
@@ -163,17 +163,17 @@ The site serves as both a personal brand platform and a trust-building mechanism
 
 ### Not Yet Implemented
 
-| Feature | Priority | Notes |
-|---------|----------|-------|
-| Light/Dark Mode Toggle | Medium | Currently dark-only; some users prefer light mode |
-| Related Posts | High | Increases engagement and session duration |
-| Newsletter Archive | Medium | Past issues not browsable |
-| Reading Progress Indicator | Low | Visual feedback for long posts |
-| Social Sharing Buttons | Medium | Reduces friction for sharing |
-| Pagination | Low | Currently shows all posts; fine for <50 posts |
-| About Page | Medium | Deeper personal/professional background |
-| Projects Page | Medium | Dedicated showcase with details |
-| Testimonials/Social Proof | Medium | Newsletter subscriber quotes, etc. |
+| Feature                    | Priority | Notes                                             |
+| -------------------------- | -------- | ------------------------------------------------- |
+| Light/Dark Mode Toggle     | Medium   | Currently dark-only; some users prefer light mode |
+| Related Posts              | High     | Increases engagement and session duration         |
+| Newsletter Archive         | Medium   | Past issues not browsable                         |
+| Reading Progress Indicator | Low      | Visual feedback for long posts                    |
+| Social Sharing Buttons     | Medium   | Reduces friction for sharing                      |
+| Pagination                 | Low      | Currently shows all posts; fine for <50 posts     |
+| About Page                 | Medium   | Deeper personal/professional background           |
+| Projects Page              | Medium   | Dedicated showcase with details                   |
+| Testimonials/Social Proof  | Medium   | Newsletter subscriber quotes, etc.                |
 
 ---
 
@@ -212,14 +212,14 @@ The site serves as both a personal brand platform and a trust-building mechanism
 
 **Target ICPs**: All ICPs benefit; ICP 3 (Build-in-Public Followers) most impacted.
 
-| Priority | Feature | Score | Effort | Status | Notes |
-|----------|---------|-------|--------|--------|-------|
-| P0 | Blog Post Series/Collections | 8.9 | M | **Complete** | Group multi-part content; high engagement lift |
-| P0 | Related Posts | 8.7 | S | Planned | Tag-based recommendations at article end |
-| P1 | Prev/Next Post Navigation | 7.5 | XS | Planned | Reduce friction in content consumption |
-| P1 | About Page | 7.2 | S | Planned | Dedicated page for deeper connection |
-| P2 | Reading Progress Indicator | 5.8 | XS | Planned | Visual feedback for long-form content |
-| P2 | Projects Page | 6.5 | S | Planned | Dedicated showcase; currently homepage-only |
+| Priority | Feature                      | Score | Effort | Status       | Notes                                          |
+| -------- | ---------------------------- | ----- | ------ | ------------ | ---------------------------------------------- |
+| P0       | Blog Post Series/Collections | 8.9   | M      | **Complete** | Group multi-part content; high engagement lift |
+| P0       | Related Posts                | 8.7   | S      | Planned      | Tag-based recommendations at article end       |
+| P1       | Prev/Next Post Navigation    | 7.5   | XS     | Planned      | Reduce friction in content consumption         |
+| P1       | About Page                   | 7.2   | S      | Planned      | Dedicated page for deeper connection           |
+| P2       | Reading Progress Indicator   | 5.8   | XS     | Planned      | Visual feedback for long-form content          |
+| P2       | Projects Page                | 6.5   | S      | Planned      | Dedicated showcase; currently homepage-only    |
 
 ---
 
@@ -273,6 +273,7 @@ The site serves as both a personal brand platform and a trust-building mechanism
 | Natural SEO improvement (interlinks) | Minor implementation complexity         |
 
 **Implementation**:
+
 - Added `series` field to content schema (optional string)
 - Added `seriesOrder` field (optional number)
 - Created `SeriesBanner` component showing series context at post header
@@ -611,6 +612,7 @@ This roadmap is for a personal project, but the approach is documented for refer
 ## Changelog
 
 ### 2025-11-29 - v1.1.0
+
 - **Implemented**: Blog Post Series/Collections (P0)
   - Added `series` and `seriesOrder` fields to content schema
   - Created SeriesBanner and SeriesNav components

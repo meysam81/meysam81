@@ -208,12 +208,14 @@ Specialized layout for blog posts. Features:
 #### SeriesBanner.astro
 
 Displays at the top of posts that are part of a series. Shows:
+
 - Series name with link to series landing page
 - Position indicator (e.g., "Part 2 of 4")
 
 #### SeriesNav.astro
 
 Navigation component for series posts. Displays:
+
 - Series name with link to landing page
 - Previous post link (if exists)
 - Next post link (if exists)
@@ -313,6 +315,7 @@ seriesOrder: 1
 ```
 
 When a post is part of a series:
+
 - A banner appears at the top showing series context
 - Navigation appears after the content with prev/next links
 - A dedicated landing page is auto-generated at `/blog/series/[slug]`
