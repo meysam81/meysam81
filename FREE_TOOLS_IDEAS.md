@@ -12,11 +12,11 @@ Build a suite of free, standalone micro-tools that solve specific problems for D
 
 ## Implementation Status
 
-| Tool | Status | URL | Notes |
-|------|--------|-----|-------|
-| **Cron Expression Generator** | ✅ Completed | `/tools/cron` | Bidirectional English↔cron conversion, 70+ natural language patterns, next 10 runs calculation |
-| **YAML/JSON Validator** | 🔲 Planned | `/tools/yaml-json` | Wave 1 |
-| **SaaS Idea Validator** | 🔲 Planned | `/tools/idea-validator` | Wave 1 |
+| Tool                          | Status       | URL                     | Notes                                                                                          |
+| ----------------------------- | ------------ | ----------------------- | ---------------------------------------------------------------------------------------------- |
+| **Cron Expression Generator** | ✅ Completed | `/tools/cron`           | Bidirectional English↔cron conversion, 70+ natural language patterns, next 10 runs calculation |
+| **YAML/JSON Validator**       | 🔲 Planned   | `/tools/yaml-json`      | Wave 1                                                                                         |
+| **SaaS Idea Validator**       | 🔲 Planned   | `/tools/idea-validator` | Wave 1                                                                                         |
 
 ---
 
@@ -636,7 +636,7 @@ Build a suite of free, standalone micro-tools that solve specific problems for D
 
 **Score = (Utility×3 + Fit×2 + Discovery×2 + (10-Effort)×1) / 8**
 
-| Rank | Tool | Utility | Fit | Discovery | Effort | Score |
+| Rank | Tool                               | Utility | Fit | Discovery | Effort | Score |
 | ---- | ---------------------------------- | ------- | --- | --------- | ------ | ----- |
 | 1    | Cron Expression Generator          | 9       | 7   | 9         | 3      | 7.9   |
 | 2    | YAML/JSON Validator                | 9       | 6   | 10        | 2      | 7.8   |
@@ -657,11 +657,11 @@ Build a suite of free, standalone micro-tools that solve specific problems for D
 
 High-impact AND low-effort tools. Get these live fast to start capturing traffic.
 
-| Tool                    | Why Wave 1                                          | Est. Build |
-| ----------------------- | --------------------------------------------------- | ---------- |
+| Tool                          | Why Wave 1                                                 | Est. Build |
+| ----------------------------- | ---------------------------------------------------------- | ---------- |
 | **Cron Expression Generator** | Highest combined score, massive search volume, XS-S effort | 2-3 days   |
-| **YAML/JSON Validator** | Extremely high search volume, XS effort, daily use tool | 1-2 days   |
-| **SaaS Idea Validator** | Direct ICP 1 target, high strategic fit, low effort | 2 days     |
+| **YAML/JSON Validator**       | Extremely high search volume, XS effort, daily use tool    | 1-2 days   |
+| **SaaS Idea Validator**       | Direct ICP 1 target, high strategic fit, low effort        | 2 days     |
 
 **Wave 1 Total**: ~5-7 days of build time
 
@@ -669,11 +669,11 @@ High-impact AND low-effort tools. Get these live fast to start capturing traffic
 
 Higher effort but strong strategic alignment with ICPs.
 
-| Tool                         | Why Wave 2                                              | Est. Build |
-| ---------------------------- | ------------------------------------------------------- | ---------- |
-| **MRR & Runway Calculator**  | Core ICP tool, builds credibility as business-savvy engineer | 2-3 days   |
-| **Customer Interview Questions** | Direct ICP 1 pain point, unique positioning           | 2-4 days   |
-| **.env Validator**           | Security angle differentiates, practical utility        | 2 days     |
+| Tool                             | Why Wave 2                                                   | Est. Build |
+| -------------------------------- | ------------------------------------------------------------ | ---------- |
+| **MRR & Runway Calculator**      | Core ICP tool, builds credibility as business-savvy engineer | 2-3 days   |
+| **Customer Interview Questions** | Direct ICP 1 pain point, unique positioning                  | 2-4 days   |
+| **.env Validator**               | Security angle differentiates, practical utility             | 2 days     |
 
 **Wave 2 Total**: ~6-9 days of build time
 
@@ -681,11 +681,11 @@ Higher effort but strong strategic alignment with ICPs.
 
 Adjacent market plays to broaden top-of-funnel.
 
-| Tool                        | Which Adjacent Market             | Est. Build |
-| --------------------------- | --------------------------------- | ---------- |
-| **README Generator**        | Developer content creators        | 2-3 days   |
-| **Kubernetes Manifest Generator** | DevOps engineers (advanced)     | 4-5 days   |
-| **Pricing Page Calculator** | Early-stage SaaS founders         | 2-3 days   |
+| Tool                              | Which Adjacent Market       | Est. Build |
+| --------------------------------- | --------------------------- | ---------- |
+| **README Generator**              | Developer content creators  | 2-3 days   |
+| **Kubernetes Manifest Generator** | DevOps engineers (advanced) | 4-5 days   |
+| **Pricing Page Calculator**       | Early-stage SaaS founders   | 2-3 days   |
 
 **Wave 3 Total**: ~8-11 days of build time
 
@@ -693,11 +693,11 @@ Adjacent market plays to broaden top-of-funnel.
 
 Ideas that didn't make the initial cut:
 
-| Tool                       | Why Not Now                                            |
-| -------------------------- | ------------------------------------------------------ |
-| **Standup Template**       | Lower search volume, niche use case. Revisit if build-in-public content grows. |
-| **Docker Compose Validator** | Similar to YAML validator, may cannibalize. Evaluate after Wave 1 data. |
-| **OG Image Generator**     | Crowded space, lower strategic fit. Only if clear differentiation emerges. |
+| Tool                         | Why Not Now                                                                    |
+| ---------------------------- | ------------------------------------------------------------------------------ |
+| **Standup Template**         | Lower search volume, niche use case. Revisit if build-in-public content grows. |
+| **Docker Compose Validator** | Similar to YAML validator, may cannibalize. Evaluate after Wave 1 data.        |
+| **OG Image Generator**       | Crowded space, lower strategic fit. Only if clear differentiation emerges.     |
 
 ---
 
@@ -705,17 +705,17 @@ Ideas that didn't make the initial cut:
 
 ### Value Proposition by Tool
 
-| Tool                         | Newsletter Hook                                    | Expected Conversion |
-| ---------------------------- | -------------------------------------------------- | ------------------- |
-| Cron Expression Generator    | "Weekly DevOps tips from 8+ years in production"   | Medium              |
-| YAML/JSON Validator          | "Production debugging lessons and DevOps patterns" | Low-Medium          |
-| SaaS Idea Validator          | "Follow my validation journey—weekly lessons"      | High                |
-| MRR & Runway Calculator      | "Transparent SaaS metrics from my own journey"     | High                |
-| Customer Interview Questions | "100 customer interviews documented—weekly insights" | High              |
-| .env Validator               | "Security and DevOps best practices weekly"        | Medium              |
-| README Generator             | "Technical writing and shipping tips"              | Low                 |
-| K8s Manifest Generator       | "Production Kubernetes patterns"                   | Medium              |
-| Pricing Page Calculator      | "SaaS pricing experiments and lessons"             | Medium-High         |
+| Tool                         | Newsletter Hook                                      | Expected Conversion |
+| ---------------------------- | ---------------------------------------------------- | ------------------- |
+| Cron Expression Generator    | "Weekly DevOps tips from 8+ years in production"     | Medium              |
+| YAML/JSON Validator          | "Production debugging lessons and DevOps patterns"   | Low-Medium          |
+| SaaS Idea Validator          | "Follow my validation journey—weekly lessons"        | High                |
+| MRR & Runway Calculator      | "Transparent SaaS metrics from my own journey"       | High                |
+| Customer Interview Questions | "100 customer interviews documented—weekly insights" | High                |
+| .env Validator               | "Security and DevOps best practices weekly"          | Medium              |
+| README Generator             | "Technical writing and shipping tips"                | Low                 |
+| K8s Manifest Generator       | "Production Kubernetes patterns"                     | Medium              |
+| Pricing Page Calculator      | "SaaS pricing experiments and lessons"               | Medium-High         |
 
 ### CTA Placement
 
@@ -739,14 +739,14 @@ Ideas that didn't make the initial cut:
 
 ## Success Metrics
 
-| Metric                           | Target        | Measurement          |
-| -------------------------------- | ------------- | -------------------- |
-| Tool visits (per tool, monthly)  | 1,000+        | Pirsch analytics     |
-| Newsletter conversion rate       | 2-5%          | Listmonk             |
-| Referral traffic to main site    | 10% of tool visitors | Pirsch referrer data |
-| Tool shares/backlinks            | 5+ per tool   | Manual tracking, GSC |
-| Time on tool page                | >60 seconds   | Pirsch               |
-| Return visitors                  | 20%+          | Pirsch               |
+| Metric                          | Target               | Measurement          |
+| ------------------------------- | -------------------- | -------------------- |
+| Tool visits (per tool, monthly) | 1,000+               | Pirsch analytics     |
+| Newsletter conversion rate      | 2-5%                 | Listmonk             |
+| Referral traffic to main site   | 10% of tool visitors | Pirsch referrer data |
+| Tool shares/backlinks           | 5+ per tool          | Manual tracking, GSC |
+| Time on tool page               | >60 seconds          | Pirsch               |
+| Return visitors                 | 20%+                 | Pirsch               |
 
 ### Tracking Implementation
 

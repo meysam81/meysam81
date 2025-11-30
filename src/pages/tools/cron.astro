@@ -509,7 +509,7 @@ const faqData = {
         runs.push(next.toDate());
       }
 
-      var html = runs.map(function(date) {
+      var html = runs.map(function html(date) {
         var formatted = formatDate(date);
         var relative = getRelativeTime(date);
         return '<div class="next-run-item">' +
@@ -666,7 +666,7 @@ const faqData = {
   // Show more examples
   function showMoreExamples() {
     var allExamples = getExamplePhrases();
-    var html = allExamples.map(function(example) {
+    var html = allExamples.map(function html(example) {
       return '<button type="button" class="example-btn" data-phrase="' +
         example.phrase + '" data-expression="' + example.expression + '">' +
         example.phrase + '</button>';
@@ -720,7 +720,7 @@ const faqData = {
       var context = this;
       var args = arguments;
       clearTimeout(timeout);
-      timeout = setTimeout(function() {
+      timeout = setTimeout(function timeout() {
         func.apply(context, args);
       }, wait);
     };
