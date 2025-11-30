@@ -3,6 +3,9 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import Newsletter from '@/components/Newsletter.astro';
 import TableOfContents from '@/components/TableOfContents.astro';
 import Webmentions from '@/components/Webmentions.astro';
+import SeriesBanner from '@/components/SeriesBanner.astro';
+import SeriesNav from '@/components/SeriesNav.astro';
+import type { SeriesInfo } from '@/utils/series';
 
 interface Props {
   title: string;
@@ -24,9 +27,10 @@ interface Props {
     url?: string;
     description?: string;
   }>;
+  seriesInfo?: SeriesInfo | null;
 }
 
-var { title, description, pubDate, updatedDate, author, tags, ogImage, headings, readingTime, pageViews, references } = Astro.props;
+var { title, description, pubDate, updatedDate, author, tags, ogImage, headings, readingTime, pageViews, references, seriesInfo } = Astro.props;
 
 var formattedPubDate = new Intl.DateTimeFormat('en-US', {
   year: 'numeric',
@@ -179,6 +183,8 @@ var fullURL = canonicalURL.toString();
           Back to Blog
         </a>
 
+        {seriesInfo && <SeriesBanner seriesInfo={seriesInfo} />}
+
         <h1 class="post-title">{title}</h1>
         <p class="post-description">{description}</p>
 
@@ -241,6 +247,8 @@ var fullURL = canonicalURL.toString();
       <div class="post-content">
         <slot />
       </div>
+
+      {seriesInfo && <SeriesNav seriesInfo={seriesInfo} />}
 
       {references && references.length > 0 && (
         <aside class="references-section" id="references">

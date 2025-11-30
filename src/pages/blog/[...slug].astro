@@ -4,7 +4,11 @@ import BlogPostLayout from '@/layouts/BlogPostLayout.astro';
 import { calculateReadingTime } from '@/utils/reading-time';
 import { filterPublishedPosts } from '@/utils/blog';
 import { getBlogPostViews } from '@/utils/pirsch';
+import { getSeriesInfo } from '@/utils/series';
 import log from 'loglevel';
+
+var allPosts = await getCollection('blog');
+var publishedPosts = filterPublishedPosts(allPosts);
 
 export async function getStaticPaths() {
   var posts = await getCollection('blog');
@@ -28,6 +32,8 @@ var hostname = import.meta.env.PIRSCH_HOSTNAME || "meysam.io";
 var postPath = `~/blog/${post.slug}`;
 pageViews = await getBlogPostViews(hostname, postPath);
 log.debug(`Page views for ${postPath}: ${pageViews}`);
+
+var seriesInfo = getSeriesInfo(publishedPosts, post);
 ---
 
 <BlogPostLayout
@@ -42,6 +48,7 @@ log.debug(`Page views for ${postPath}: ${pageViews}`);
   readingTime={readingTime}
   references={post.data.references}
   pageViews={pageViews}
+  seriesInfo={seriesInfo}
 >
   <Content />
 </BlogPostLayout>
