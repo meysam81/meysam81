@@ -2,7 +2,9 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import ContentCard from '@/components/ContentCard.astro';
 
-const tools = [
+var toolsKeywords = "free developer tools, online devops tools, web developer utilities, cron generator, yaml validator, json converter, free online tools, no signup tools, developer productivity, devops utilities, sre tools, technical tools, software engineering tools";
+
+var tools = [
   {
     title: "Cron Expression Generator",
     description: "Build and decode cron expressions with plain English. Instant validation, next run times, and copy-ready output.",
@@ -17,7 +19,7 @@ const tools = [
   }
 ];
 
-const structuredData = {
+var structuredData = {
   "@context": "https://schema.org",
   "@type": "CollectionPage",
   "name": "Free Developer Tools",
@@ -25,24 +27,25 @@ const structuredData = {
   "url": "https://meysam.io/tools",
   "mainEntity": {
     "@type": "ItemList",
-    "itemListElement": tools.map((tool, index) => ({
-      "@type": "ListItem",
-      "position": index + 1,
-      "name": tool.title,
-      "url": `https://meysam.io${tool.url}`
-    }))
+    "itemListElement": tools.map(function(tool, index) {
+      return {
+        "@type": "ListItem",
+        "position": index + 1,
+        "name": tool.title,
+        "url": "https://meysam.io" + tool.url
+      };
+    })
   }
 };
 ---
 
 <BaseLayout
-  title="Free Developer Tools | Meysam"
+  title="Free Developer Tools"
   description="Free tools for developers, DevOps engineers, and technical founders. Cron generator, YAML validator, and more. No signup required."
+  canonicalPath="/tools"
+  structuredData={structuredData}
+  keywords={toolsKeywords}
 >
-  <Fragment slot="extrahead">
-    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
-  </Fragment>
-
   <section class="tools-hero">
     <div class="container">
       <h1>Free Developer Tools</h1>
@@ -55,17 +58,18 @@ const structuredData = {
   <section class="tools-grid">
     <div class="container">
       <div class="grid grid-3">
-        {tools.map(tool => (
-          <ContentCard
-            title={tool.title}
-            description={tool.description}
-            url={tool.url}
-            badge={tool.badge}
-            linkText={`Use ${tool.title}`}
-          />
-        ))}
+        {tools.map(function(tool) {
+          return (
+            <ContentCard
+              title={tool.title}
+              description={tool.description}
+              url={tool.url}
+              badge={tool.badge}
+              linkText={"Use " + tool.title}
+            />
+          );
+        })}
 
-        <!-- Coming Soon Cards -->
         <div class="card coming-soon">
           <span class="badge">Coming Soon</span>
           <h3>SaaS Idea Validator</h3>
@@ -81,7 +85,6 @@ const structuredData = {
     </div>
   </section>
 
-  <!-- Newsletter CTA -->
   <section class="tools-newsletter">
     <div class="container-narrow">
       <div class="newsletter-card">

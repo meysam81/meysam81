@@ -1,8 +1,9 @@
 ---
 import ToolLayout from '@/layouts/ToolLayout.astro';
 
-// Structured Data - WebApplication Schema (Schema.org)
-const structuredData = {
+var yamlJsonKeywords = "yaml validator, json validator, yaml to json converter, json to yaml converter, yaml formatter, json formatter, yaml syntax checker, json syntax checker, yaml online, json online, kubernetes yaml validator, docker compose validator, github actions yaml, yaml lint, json lint, yaml beautifier, json beautifier, yaml parser, json parser, yaml 1.2, RFC 8259, free yaml tool, online json tool, yaml error checker, json error checker";
+
+var structuredData = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
   "name": "YAML/JSON Validator & Converter",
@@ -34,8 +35,7 @@ const structuredData = {
   }
 };
 
-// FAQ Structured Data
-const faqData = {
+var faqData = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
@@ -106,8 +106,7 @@ const faqData = {
   ]
 };
 
-// Common YAML errors with suggestions
-const commonErrors = [
+var commonErrors = [
   { pattern: "tabs", title: "Tab Characters", description: "YAML requires spaces for indentation, not tabs", suggestion: "Replace all tabs with spaces (typically 2 spaces per level)" },
   { pattern: "colon", title: "Missing Colon", description: "Keys must be followed by a colon and space", suggestion: "Add a colon after the key name: key: value" },
   { pattern: "indent", title: "Inconsistent Indentation", description: "All items at the same level must have identical indentation", suggestion: "Use consistent 2-space indentation throughout" },
@@ -116,8 +115,7 @@ const commonErrors = [
   { pattern: "anchor", title: "Invalid Anchor/Alias", description: "Anchors (&) and aliases (*) must reference valid nodes", suggestion: "Ensure anchor is defined before alias reference" }
 ];
 
-// YAML syntax reference
-const yamlSyntax = [
+var yamlSyntax = [
   { syntax: "key: value", description: "Key-value pair (mapping)", example: "name: John" },
   { syntax: "- item", description: "List item (sequence)", example: "- apple\\n- banana" },
   { syntax: "|", description: "Literal block scalar (preserves newlines)", example: "text: |\\n  line1\\n  line2" },
@@ -140,6 +138,7 @@ const yamlSyntax = [
   ogImage="https://meysam.io/og/yaml-json.png"
   canonicalPath="/tools/yaml-json"
   structuredData={structuredData}
+  keywords={yamlJsonKeywords}
 >
   <Fragment slot="head">
     <script type="application/ld+json" set:html={JSON.stringify(faqData)} />
@@ -1945,6 +1944,8 @@ spec:
     font-size: 0.875rem;
   }
 
+
+
   .error-message {
     background: rgba(239, 68, 68, 0.1);
     border: 1px solid rgba(239, 68, 68, 0.3);
@@ -1955,7 +1956,7 @@ spec:
     background: rgba(34, 197, 94, 0.1);
     border: 1px solid rgba(34, 197, 94, 0.3);
     color: #86efac;
-  }
+   }
 
   .message-icon {
     flex-shrink: 0;

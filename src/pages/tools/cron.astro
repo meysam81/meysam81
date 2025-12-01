@@ -2,10 +2,12 @@
 import ToolLayout from '@/layouts/ToolLayout.astro';
 import { getPresets, getExamplePhrases } from '@/utils/cron.js';
 
-const presets = getPresets();
-const examplePhrases = getExamplePhrases();
+var presets = getPresets();
+var examplePhrases = getExamplePhrases();
 
-const structuredData = {
+var cronKeywords = "cron expression generator, cron job scheduler, crontab generator, cron syntax, cron expression validator, cron to english, english to cron, cron calculator, next cron run time, cron expression examples, kubernetes cronjob, linux cron, unix cron, schedule task, recurring job scheduler, cron expression builder, crontab syntax, cron job examples, free cron generator, online cron tool";
+
+var structuredData = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
   "name": "Cron Expression Generator",
@@ -33,7 +35,7 @@ const structuredData = {
   }
 };
 
-const faqData = {
+var faqData = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
@@ -87,6 +89,7 @@ const faqData = {
   ogImage="https://meysam.io/og/cron.png"
   canonicalPath="/tools/cron"
   structuredData={structuredData}
+  keywords={cronKeywords}
 >
   <Fragment slot="head">
     <script type="application/ld+json" set:html={JSON.stringify(faqData)} />
@@ -437,7 +440,7 @@ const faqData = {
   // Set active mode
   function setMode(mode: string) {
     currentMode = mode;
-    modeButtons.forEach(function(btn) {
+    modeButtons.forEach(function toggleButtonActive(btn) {
       btn.classList.toggle('active', btn.dataset.mode === mode);
     });
     englishMode.classList.toggle('hidden', mode !== 'english');
@@ -601,18 +604,18 @@ const faqData = {
 
   // Copy expression to clipboard
   function copyExpression() {
-    navigator.clipboard.writeText(currentExpression).then(function() {
+    navigator.clipboard.writeText(currentExpression).then(function handleSuccess() {
       var copyIcon = copyBtn.querySelector('.copy-icon');
       var checkIcon = copyBtn.querySelector('.check-icon');
 
       copyIcon.classList.add('hidden');
       checkIcon.classList.remove('hidden');
 
-      setTimeout(function() {
+      setTimeout(function toggleIcons() {
         copyIcon.classList.remove('hidden');
         checkIcon.classList.add('hidden');
       }, 2000);
-    }).catch(function(err) {
+    }).catch(function handleError(err) {
       log.error('Failed to copy:', err);
     });
   }
@@ -623,12 +626,12 @@ const faqData = {
     url.search = '';
     url.searchParams.set('expr', btoa(currentExpression));
 
-    navigator.clipboard.writeText(url.toString()).then(function() {
+    navigator.clipboard.writeText(url.toString()).then(function handleSuccess() {
       shareToast.classList.remove('hidden');
-      setTimeout(function() {
+      setTimeout(function toggleToast() {
         shareToast.classList.add('hidden');
       }, 2000);
-    }).catch(function(err) {
+    }).catch(function handleError(err) {
       log.error('Failed to share:', err);
     });
   }
@@ -676,7 +679,7 @@ const faqData = {
     showMoreBtn.classList.add('hidden');
 
     // Reattach event listeners
-    document.querySelectorAll('.example-btn').forEach(function(btn) {
+    document.querySelectorAll('.example-btn').forEach(function handleExampleButton(btn) {
       btn.addEventListener('click', handleExampleClick);
     });
   }
@@ -690,7 +693,7 @@ const faqData = {
     // Check honeypot
     var honeypotFields = form.querySelectorAll('.honeypot-field');
     var isBot = false;
-    honeypotFields.forEach(function(field) {
+    honeypotFields.forEach(function checkHoneypot(field) {
       if (field.value !== '') {
         isBot = true;
       }
@@ -703,12 +706,12 @@ const faqData = {
     fetch(form.action, {
       method: 'POST',
       body: formData
-    }).then(function(response) {
+    }).then(function handleResponse(response) {
       if (response.ok) {
         form.classList.add('hidden');
         newsletterSuccess.classList.remove('hidden');
       }
-    }).catch(function(err) {
+    }).catch(function handleError(err) {
       log.error('Newsletter error:', err);
     });
   }
@@ -716,7 +719,7 @@ const faqData = {
   // Debounce function
   function debounce(func, wait) {
     var timeout;
-    return function() {
+    return function handleDebounce() {
       var context = this;
       var args = arguments;
       clearTimeout(timeout);
@@ -729,8 +732,8 @@ const faqData = {
   // Initialize
   function init() {
     // Mode toggle
-    modeButtons.forEach(function(btn) {
-      btn.addEventListener('click', function() {
+    modeButtons.forEach(function toggleButtonActive(btn) {
+      btn.addEventListener('click', function handleClick() {
         setMode(btn.dataset.mode);
       });
     });

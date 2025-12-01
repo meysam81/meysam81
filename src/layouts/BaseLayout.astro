@@ -8,91 +8,131 @@ interface Props {
   title?: string;
   description?: string;
   ogImage?: string;
+  canonicalPath?: string;
+  structuredData?: object | object[];
+  noDefaultStructuredData?: boolean;
+  keywords?: string;
 }
 
-const {
+var {
   title = "Meysam Azad - Indie Hacker Building Bootstrapped SaaS",
   description = "Technical engineer with 8 years of DevOps/SRE experience, now finding problems worth solving. Join me as I document customer discovery, product validation, and building with production-grade discipline.",
-  ogImage = "https://meysam.io/og-image.png"
+  ogImage = "https://meysam.io/og-image.png",
+  canonicalPath,
+  structuredData,
+  noDefaultStructuredData = false,
+  keywords = "indie hacker, solopreneur, SaaS, bootstrapped startup, DevOps, SRE, technical founder, customer discovery, product validation, building in public"
 } = Astro.props;
 
-const fullTitle = title.includes("Meysam") ? title : `${title} | Meysam Azad`;
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+var fullTitle = title.includes("Meysam") ? title : title + " | Meysam";
+var canonicalURL = new URL(canonicalPath || Astro.url.pathname, Astro.site);
+var twitterImage = ogImage;
 
-const twitterImage = ogImage;
+var defaultPersonStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Meysam Azad",
+  "url": "https://meysam.io",
+  "image": "https://meysam.io/og-image.png",
+  "jobTitle": "Technical Founder & DevOps Engineer",
+  "description": "Technical engineer building bootstrapped SaaS products",
+  "sameAs": [
+    "https://x.com/meysamazing",
+    "https://github.com/meysam81",
+    "https://linkedin.com/in/meysamazad",
+    "https://youtube.com/@meysam"
+  ]
+};
 ---
 
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <!-- 1. Character Encoding (must be within first 1024 bytes) -->
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="generator" content={Astro.generator} />
 
-    <!-- Primary Meta Tags -->
+    <!-- 2. Viewport (critical for responsive rendering) -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- 3. Title (critical for SEO, should be early) -->
     <title>{fullTitle}</title>
-    <meta name="title" content={fullTitle} />
-    <meta name="description" content={description} />
+
+    <!-- 4. Preconnect & DNS Prefetch (early resource hints for performance) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://newsletter.meysam.io" />
+    <link rel="preconnect" href="https://analytics.meysam.io" />
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://newsletter.meysam.io" />
+    <link rel="dns-prefetch" href="https://analytics.meysam.io" />
+
+    <!-- 5. Canonical URL (critical for SEO, prevents duplicate content) -->
     <link rel="canonical" href={canonicalURL} />
 
-    <!-- RSS Auto-discovery -->
-    <link rel="alternate" type="application/rss+xml" title="Meysam Azad - Shipping SaaS with DevOps Discipline" href="/rss.xml" />
+    <!-- 6. Primary Meta Tags (SEO essentials) -->
+    <meta name="title" content={fullTitle} />
+    <meta name="description" content={description} />
+    <meta name="keywords" content={keywords} />
+    <meta name="author" content="Meysam Azad" />
+    <meta name="generator" content={Astro.generator} />
 
-    <!-- Keywords -->
-    <meta name="keywords" content="indie hacker, solopreneur, SaaS, bootstrapped startup, DevOps, SRE, technical founder, customer discovery, product validation, building in public" />
+    <!-- 7. Robots & Crawling -->
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
 
-    <!-- webmention.io -->
-    <link rel="webmention" href="https://webmention.io/meysam.io/webmention" />
-
-    <!-- mastodon -->
-    <meta name="fediverse:creator" content="@meysam81@mastodon.social">
-    <link rel="me" href="https://mastodon.social/@meysam81">
-
-    <!-- IndieAuth -->
-    <link rel="me" href="https://github.com/meysam81">
-
-    <!-- Open Graph / Facebook -->
+    <!-- 8. Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="Meysam Azad" />
+    <meta property="og:locale" content="en_US" />
 
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content={canonicalURL} />
-    <meta property="twitter:title" content={fullTitle} />
-    <meta property="twitter:description" content={description} />
-    <meta property="twitter:image" content={twitterImage} />
+    <!-- 9. Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@meysamazing" />
     <meta name="twitter:creator" content="@meysamazing" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={twitterImage} />
 
-    <!-- Structured Data -->
-    <script is:inline type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Person",
-        "name": "Meysam Azad",
-        "url": "https://meysam.io",
-        "image": "https://meysam.io/og-image.png",
-        "jobTitle": "Technical Founder & DevOps Engineer",
-        "description": "Technical engineer building bootstrapped SaaS products",
-        "sameAs": [
-          "https://x.com/meysamazing",
-          "https://github.com/meysam81",
-          "https://linkedin.com/in/meysamazad",
-          "https://youtube.com/@meysam"
-        ]
-      }
-    </script>
+    <!-- 10. Fediverse / Mastodon -->
+    <meta name="fediverse:creator" content="@meysam81@mastodon.social" />
 
-    <!-- Performance -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://newsletter.meysam.io" />
-    <link rel="dns-prefetch" href="https://newsletter.meysam.io" />
+    <!-- 11. IndieWeb & Webmention -->
+    <link rel="webmention" href="https://webmention.io/meysam.io/webmention" />
+    <link rel="me" href="https://mastodon.social/@meysam81" />
+    <link rel="me" href="https://github.com/meysam81" />
 
-    <slot name="extrahead" />
+    <!-- 12. Structured Data (JSON-LD) -->
+    {!noDefaultStructuredData && (
+      <script type="application/ld+json" set:html={JSON.stringify(defaultPersonStructuredData)} />
+    )}
+    {structuredData && Array.isArray(structuredData) ? (
+      structuredData.map(function(data) {
+        return <script type="application/ld+json" set:html={JSON.stringify(data)} />;
+      })
+    ) : structuredData && (
+      <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+    )}
+
+    <!-- 13. RSS & Alternate Links -->
+    <link rel="alternate" type="application/rss+xml" title="Meysam Azad - Shipping SaaS with DevOps Discipline" href="/rss.xml" />
+
+    <!-- 14. Favicon & Icons -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+    <!-- 15. Theme Color (for browser UI) -->
+    <meta name="theme-color" content="#0a0a0a" />
+    <meta name="msapplication-TileColor" content="#0a0a0a" />
+
+    <!-- 16. Additional Head Content (from pages) -->
+    <slot name="head" />
   </head>
   <body>
     <Header />
@@ -101,32 +141,34 @@ const twitterImage = ogImage;
     </main>
     <Footer />
 
-    <!-- Smooth scroll for anchor links -->
     <script>
-      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function clickHandler(e) {
-          // @ts-ignore
-          const href = this.getAttribute('href');
-          if (href === '#') {return;}
+      function initSmoothScroll() {
+        document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+          anchor.addEventListener('click', function handleAnchorClick(e) {
+            var href = this.getAttribute('href');
+            if (href === '#') {return;}
 
-          e.preventDefault();
-          const target = document.querySelector(href);
-          if (target) {
-            const headerOffset = 80;
-            const elementPosition = target.getBoundingClientRect().top;
-            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+            e.preventDefault();
+            var target = document.querySelector(href);
+            if (target) {
+              var headerOffset = 80;
+              var elementPosition = target.getBoundingClientRect().top;
+              var offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
-            window.scrollTo({
-              top: offsetPosition,
-              behavior: 'smooth'
-            });
-          }
+              window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
+              });
+            }
+          });
         });
-      });
+      }
+
+      document.addEventListener('DOMContentLoaded', initSmoothScroll);
+      document.addEventListener('astro:page-load', initSmoothScroll);
     </script>
 
-    <!-- Analytics -->
-    <script is:inline defer src="https://analytics.meysam.io/pa.js"
+    <script defer src="https://analytics.meysam.io/pa.js"
         id="pianjs"
         data-code="m9Chz179Udt3YeVXRHXyxWthr2A3vbLb"
         data-hit-endpoint="https://analytics.meysam.io/hit"
@@ -136,7 +178,6 @@ const twitterImage = ogImage;
 </html>
 
 <style is:global>
-  /* Page spacing to account for fixed header */
   main {
     padding-top: 80px;
     min-height: calc(100vh - 80px);

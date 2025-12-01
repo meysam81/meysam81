@@ -1,8 +1,5 @@
 ---
-import Header from '@/components/Header.astro';
-import Footer from '@/components/Footer.astro';
-import '@/styles/global.css';
-import "@/main.js";
+import BaseLayout from '@/layouts/BaseLayout.astro';
 
 interface Props {
   title: string;
@@ -10,120 +7,84 @@ interface Props {
   ogImage?: string;
   canonicalPath?: string;
   structuredData?: object;
+  keywords?: string;
 }
 
-const {
+var {
   title,
   description,
   ogImage = "https://meysam.io/og-image.png",
   canonicalPath,
-  structuredData
+  structuredData,
+  keywords
 } = Astro.props;
 
-const fullTitle = `${title} | Meysam`;
-const canonicalURL = new URL(canonicalPath || Astro.url.pathname, Astro.site);
+var fullTitle = title.includes("Meysam") ? title : title + " | Meysam";
+var canonicalURL = new URL(canonicalPath || Astro.url.pathname, Astro.site);
+
+var defaultToolKeywords = "developer tools, free online tools, DevOps tools, web tools, no signup required";
+var finalKeywords = keywords || defaultToolKeywords;
+
+var breadcrumbStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://meysam.io"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Tools",
+      "item": "https://meysam.io/tools"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": title,
+      "item": canonicalURL.toString()
+    }
+  ]
+};
+
+var allStructuredData = structuredData
+  ? [structuredData, breadcrumbStructuredData]
+  : [breadcrumbStructuredData];
 ---
 
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="generator" content={Astro.generator} />
-
-    <!-- Primary Meta Tags -->
-    <title>{fullTitle}</title>
-    <meta name="title" content={fullTitle} />
-    <meta name="description" content={description} />
-    <link rel="canonical" href={canonicalURL} />
-
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content={canonicalURL} />
-    <meta property="og:title" content={fullTitle} />
-    <meta property="og:description" content={description} />
-    <meta property="og:image" content={ogImage} />
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content={canonicalURL} />
-    <meta property="twitter:title" content={fullTitle} />
-    <meta property="twitter:description" content={description} />
-    <meta property="twitter:image" content={ogImage} />
-    <meta name="twitter:creator" content="@meysamazing" />
-
-    <!-- Structured Data -->
-    {structuredData && (
-      <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />
-    )}
-
-    <!-- Breadcrumb Structured Data -->
-    <script is:inline type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-          {
-            "@type": "ListItem",
-            "position": 1,
-            "name": "Home",
-            "item": "https://meysam.io"
-          },
-          {
-            "@type": "ListItem",
-            "position": 2,
-            "name": "Tools",
-            "item": "https://meysam.io/tools"
-          },
-          {
-            "@type": "ListItem",
-            "position": 3,
-            "name": "${title}",
-            "item": "${canonicalURL}"
-          }
-        ]
-      }
-    </script>
-
-    <!-- Performance -->
-    <link rel="preconnect" href="https://newsletter.meysam.io" />
-    <link rel="dns-prefetch" href="https://newsletter.meysam.io" />
-
+<BaseLayout
+  title={fullTitle}
+  description={description}
+  ogImage={ogImage}
+  canonicalPath={canonicalPath}
+  structuredData={allStructuredData}
+  noDefaultStructuredData={true}
+  keywords={finalKeywords}
+>
+  <Fragment slot="head">
     <slot name="head" />
-  </head>
-  <body>
-    <Header />
-    <main class="tool-main">
-      <div class="container">
-        <!-- Breadcrumb -->
-        <nav class="breadcrumb" aria-label="Breadcrumb">
-          <ol>
-            <li><a href="/">Home</a></li>
-            <li><a href="/tools">Tools</a></li>
-            <li aria-current="page">{title}</li>
-          </ol>
-        </nav>
+  </Fragment>
 
-        <slot />
-      </div>
-    </main>
-    <Footer />
+  <div class="tool-main">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="/">Home</a></li>
+          <li><a href="/tools">Tools</a></li>
+          <li aria-current="page">{title}</li>
+        </ol>
+      </nav>
 
-    <!-- Analytics -->
-    <script is:inline defer src="https://analytics.meysam.io/pa.js"
-        id="pianjs"
-        data-code="m9Chz179Udt3YeVXRHXyxWthr2A3vbLb"
-        data-hit-endpoint="https://analytics.meysam.io/hit"
-        data-event-endpoint="https://analytics.meysam.io/event"
-        data-session-endpoint="https://analytics.meysam.io/session"></script>
-  </body>
-</html>
+      <slot />
+    </div>
+  </div>
+</BaseLayout>
 
 <style is:global>
   .tool-main {
-    padding-top: 80px;
-    min-height: calc(100vh - 80px);
     padding-bottom: var(--space-3xl);
   }
 
@@ -169,7 +130,6 @@ const canonicalURL = new URL(canonicalPath || Astro.url.pathname, Astro.site);
     color: var(--color-text);
   }
 
-  /* Tool-specific styles */
   .tool-header {
     text-align: center;
     margin-bottom: var(--space-xl);
