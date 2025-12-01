@@ -1,0 +1,2561 @@
+---
+import ToolLayout from '@/layouts/ToolLayout.astro';
+import {
+  questions,
+  categories,
+  type CategoryId
+} from '@/utils/idea-validator';
+
+// SEO Keywords
+var keywords = "validate startup idea, saas idea checklist, startup validation tool, idea scoring, product validation checklist, is my saas idea good, startup idea validator, founder validation framework, business idea assessment, market validation, problem validation, should I build this, startup feasibility, idea viability test, pre-launch validation, technical founder tools";
+
+// Structured Data - WebApplication
+var structuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "SaaS Idea Validator",
+  "description": "Score your startup idea against 20 battle-tested validation criteria. Free checklist for technical founders to objectively assess ideas before building.",
+  "url": "https://meysam.io/tools/saas-idea-validator",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Any",
+  "browserRequirements": "Requires JavaScript",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "featureList": [
+    "20 battle-tested validation criteria",
+    "5 category scoring (Market, Problem, Solution, Distribution, Founder Fit)",
+    "Real-time progress tracking",
+    "Personalized recommendations",
+    "Shareable results",
+    "Save progress locally",
+    "Keyboard navigation support",
+    "100% client-side (data never leaves your browser)"
+  ],
+  "author": {
+    "@type": "Person",
+    "name": "Meysam Azad",
+    "url": "https://meysam.io"
+  }
+};
+
+// FAQ Structured Data
+var faqData = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do I validate my SaaS idea?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Validate your SaaS idea by answering 20 questions across 5 key areas: Market (who you're selling to), Problem (what pain you're solving), Solution (how you're solving it), Distribution (how you'll reach customers), and Founder Fit (your unique advantages). This tool scores each area and provides specific recommendations."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What score means my startup idea is viable?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A score of 70% or higher suggests a strong foundation worth pursuing. Scores between 55-70% indicate promising concepts that need work in specific areas. Below 55% means significant validation is needed before building. The most important factor isn't the total score, but addressing any critical gaps in Problem or Distribution categories."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What are the most important startup validation criteria?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The most critical validation criteria are: 1) Have you talked to potential customers about the problem? 2) Is there evidence people will pay? 3) Do you have a clear path to reach customers? 4) Is your solution meaningfully better than alternatives? These four questions predict startup success more than any others."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is my data secure when using this validator?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, completely. This tool runs 100% in your browser. Your idea name, answers, and results are never sent to any server. All data stays on your device. You can optionally save progress to your browser's local storage for future sessions."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Who created this startup validation framework?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "This framework was created by Meysam Azad, a technical founder with 8+ years of DevOps/SRE experience who is documenting his journey from engineer to indie hacker. The criteria are based on lessons from successful founders, common failure patterns, and frameworks like The Mom Test."
+      }
+    }
+  ]
+};
+
+// Prepare questions and categories for client-side
+var questionsJson = JSON.stringify(questions);
+var categoriesJson = JSON.stringify(categories);
+---
+
+<ToolLayout
+  title="SaaS Idea Validator"
+  description="Score your startup idea against 20 battle-tested validation criteria. Free checklist for technical founders to objectively assess ideas before building."
+  ogImage="https://meysam.io/og/saas-idea-validator.png"
+  canonicalPath="/tools/saas-idea-validator"
+  structuredData={structuredData}
+  keywords={keywords}
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(faqData)} />
+  </Fragment>
+
+  <!-- Tool Header -->
+  <div class="tool-header">
+    <h1>SaaS Idea Validator</h1>
+    <p class="subtitle">Score your startup idea against 20 battle-tested criteria. Objective feedback before you invest months building.</p>
+  </div>
+
+  <div class="tool-content validator-tool">
+    <!-- Start Screen -->
+    <div class="tool-card start-screen" id="start-screen">
+      <div class="start-content">
+        <div class="start-icon">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/>
+          </svg>
+        </div>
+        <h2>Ready to Validate Your Idea?</h2>
+        <p>Answer 20 questions across 5 categories. Takes about 5 minutes. Your answers are never sent anywhere — everything stays in your browser.</p>
+
+        <div class="idea-name-input">
+          <label for="idea-name">What's your idea called? <span class="optional">(optional)</span></label>
+          <input
+            type="text"
+            id="idea-name"
+            placeholder="e.g., Analytics Dashboard for SaaS"
+            maxlength="100"
+            autocomplete="off"
+          />
+        </div>
+
+        <button type="button" class="btn btn-primary btn-large" id="start-btn">
+          <span>Start Validation</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </button>
+
+        <div class="saved-progress hidden" id="saved-progress">
+          <div class="saved-progress-content">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <span>You have saved progress. <button type="button" class="link-btn" id="resume-btn">Resume</button> or <button type="button" class="link-btn" id="start-fresh-btn">start fresh</button></span>
+          </div>
+        </div>
+
+        <div class="categories-preview">
+          <h3>What you'll be evaluated on:</h3>
+          <div class="category-pills">
+            {categories.map(cat => (
+              <span class="category-pill" style={`--cat-color: ${cat.color}`}>
+                {cat.name}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Question Screen -->
+    <div class="tool-card question-screen hidden" id="question-screen">
+      <!-- Progress Header -->
+      <div class="progress-header">
+        <div class="progress-info">
+          <span class="progress-text">Question <span id="current-q-num">1</span> of <span id="total-q-num">20</span></span>
+          <span class="progress-percentage" id="progress-percentage">0%</span>
+        </div>
+        <div class="progress-bar-container">
+          <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <div class="category-indicators" id="category-indicators">
+          {categories.map(cat => (
+            <button
+              type="button"
+              class="category-indicator"
+              data-category={cat.id}
+              style={`--cat-color: ${cat.color}`}
+              title={cat.name}
+            >
+              <span class="cat-progress">0/4</span>
+              <span class="cat-name">{cat.name}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <!-- Question Card -->
+      <div class="question-container">
+        <div class="question-card" id="question-card">
+          <div class="question-category" id="question-category">
+            <span class="category-dot"></span>
+            <span class="category-label">Market</span>
+          </div>
+
+          <h2 class="question-text" id="question-text">Loading question...</h2>
+
+          <button type="button" class="tooltip-trigger" id="tooltip-trigger">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+            <span>Why this matters</span>
+          </button>
+
+          <div class="tooltip-content hidden" id="tooltip-content">
+            <p id="tooltip-text">Tooltip text here...</p>
+          </div>
+
+          <div class="answer-buttons">
+            <button type="button" class="answer-btn answer-yes" id="answer-yes" data-answer="yes">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              <span>Yes</span>
+              <kbd>Y</kbd>
+            </button>
+            <button type="button" class="answer-btn answer-no" id="answer-no" data-answer="no">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="18" y1="6" x2="6" y2="18"/>
+                <line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+              <span>No</span>
+              <kbd>N</kbd>
+            </button>
+          </div>
+
+          <button type="button" class="skip-btn" id="skip-btn">
+            Skip this question
+            <kbd>S</kbd>
+          </button>
+
+          <div class="answer-feedback hidden" id="answer-feedback">
+            <p id="feedback-text"></p>
+          </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="question-nav">
+          <button type="button" class="nav-btn" id="prev-btn" disabled>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            <span>Previous</span>
+          </button>
+          <button type="button" class="nav-btn nav-next" id="next-btn">
+            <span>Next</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Keyboard Hint -->
+      <div class="keyboard-hint">
+        <span><kbd>Y</kbd> Yes</span>
+        <span><kbd>N</kbd> No</span>
+        <span><kbd>S</kbd> Skip</span>
+        <span><kbd>←</kbd><kbd>→</kbd> Navigate</span>
+      </div>
+    </div>
+
+    <!-- Results Screen -->
+    <div class="tool-card results-screen hidden" id="results-screen">
+      <!-- Confetti Canvas -->
+      <canvas id="confetti-canvas"></canvas>
+
+      <!-- Score Header -->
+      <div class="results-header">
+        <div class="idea-name-display" id="idea-name-display"></div>
+        <div class="score-display">
+          <div class="score-circle" id="score-circle">
+            <svg class="score-ring" viewBox="0 0 120 120">
+              <circle class="score-ring-bg" cx="60" cy="60" r="54"/>
+              <circle class="score-ring-progress" cx="60" cy="60" r="54" id="score-ring-progress"/>
+            </svg>
+            <div class="score-content">
+              <span class="score-number" id="score-number">0</span>
+              <span class="score-label">/ 100</span>
+            </div>
+          </div>
+          <div class="grade-badge" id="grade-badge">A</div>
+        </div>
+        <h2 class="results-headline" id="results-headline">Your idea has potential!</h2>
+      </div>
+
+      <!-- Category Breakdown -->
+      <div class="category-breakdown">
+        <h3>Category Breakdown</h3>
+        <div class="category-cards" id="category-cards">
+          {categories.map(cat => (
+            <div class="category-card" data-category={cat.id} style={`--cat-color: ${cat.color}`}>
+              <div class="category-card-header">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d={cat.icon}/>
+                </svg>
+                <span class="category-card-name">{cat.name}</span>
+              </div>
+              <div class="category-card-score">
+                <span class="category-percentage">0%</span>
+              </div>
+              <div class="category-bar">
+                <div class="category-bar-fill"></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Strengths & Weaknesses -->
+      <div class="strengths-weaknesses" id="strengths-weaknesses">
+        <div class="sw-column strengths">
+          <h4>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+              <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+            Strengths
+          </h4>
+          <ul id="strengths-list"></ul>
+        </div>
+        <div class="sw-column weaknesses">
+          <h4>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="8" x2="12" y2="12"/>
+              <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            Areas to Improve
+          </h4>
+          <ul id="weaknesses-list"></ul>
+        </div>
+      </div>
+
+      <!-- Recommendations -->
+      <div class="recommendations">
+        <h3>Your Action Plan</h3>
+        <div class="recommendations-list" id="recommendations-list"></div>
+      </div>
+
+      <!-- Actions -->
+      <div class="results-actions">
+        <button type="button" class="btn btn-primary" id="share-results-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="18" cy="5" r="3"/>
+            <circle cx="6" cy="12" r="3"/>
+            <circle cx="18" cy="19" r="3"/>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+          </svg>
+          Share Results
+        </button>
+        <button type="button" class="btn btn-secondary" id="copy-link-btn">
+          <svg class="copy-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+          </svg>
+          <svg class="check-icon hidden" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          <span class="btn-text">Copy Link</span>
+        </button>
+        <button type="button" class="btn btn-secondary" id="restart-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+            <path d="M3 3v5h5"/>
+          </svg>
+          Start Over
+        </button>
+      </div>
+
+      <!-- Share Toast -->
+      <div class="share-toast hidden" id="share-toast">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        <span>Link copied to clipboard!</span>
+      </div>
+    </div>
+
+    <!-- Newsletter Section (shown after results) -->
+    <div class="tool-card newsletter-section hidden" id="newsletter-section">
+      <div class="newsletter-content">
+        <h2 id="newsletter-headline">Want to improve your score?</h2>
+        <p id="newsletter-subtext">Get weekly validation insights from my journey building products.</p>
+
+        <form
+          class="newsletter-form listmonk-form"
+          data-pirsch-event="subscribe"
+          data-pirsch-meta-page_url="/tools/saas-idea-validator"
+          data-pirsch-meta-variant="idea-validator-tool"
+          data-pirsch-non-interactive
+          action="https://newsletter.meysam.io/subscription/form"
+          method="post"
+        >
+          <input type="hidden" name="nonce" />
+          <input id="00a2c" type="hidden" name="l" value="00a2c2b8-467a-4d74-9c76-9c6472c91d06" />
+          <input type="text" name="name" value="" class="honeypot-field" tabindex="-1" autocomplete="off" aria-hidden="true" />
+          <input type="text" name="company" value="" class="honeypot-field" tabindex="-1" autocomplete="off" aria-hidden="true" />
+          <input type="text" name="website" value="" class="honeypot-field" tabindex="-1" autocomplete="off" aria-hidden="true" />
+          <div class="form-row">
+            <input
+              type="email"
+              name="email"
+              placeholder="your@email.com"
+              required
+              aria-label="Email address"
+              class="email-input"
+            />
+            <altcha-widget
+              class="altcha-widget"
+              challengeurl="https://newsletter.meysam.io/api/public/captcha/altcha"
+              auto="onfocus"
+            ></altcha-widget>
+            <script type="module" src="https://newsletter.meysam.io/public/static/altcha.umd.js" async defer></script>
+            <button type="submit" class="btn btn-primary">Get Validation Tips</button>
+          </div>
+          <p class="form-note">Join 1,500+ technical founders. No spam, unsubscribe anytime.</p>
+        </form>
+
+        <div class="success-message hidden" id="newsletter-success">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+            <polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
+          <h3>Check Your Email!</h3>
+          <p>Click the confirmation link to complete your subscription.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="tool-card faq-section">
+      <h2>Frequently Asked Questions</h2>
+
+      <details class="faq-item">
+        <summary>How do I validate my SaaS idea?</summary>
+        <p>Validate your SaaS idea by answering 20 questions across 5 key areas: <strong>Market</strong> (who you're selling to), <strong>Problem</strong> (what pain you're solving), <strong>Solution</strong> (how you're solving it), <strong>Distribution</strong> (how you'll reach customers), and <strong>Founder Fit</strong> (your unique advantages). This tool scores each area and provides specific recommendations based on your answers.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>What score means my startup idea is viable?</summary>
+        <p>A score of <strong>70% or higher (Grade A-B)</strong> suggests a strong foundation worth pursuing. Scores between 55-70% indicate promising concepts that need work in specific areas. Below 55% means significant validation is needed before building. The most important factor isn't the total score, but addressing any critical gaps — especially in Problem and Distribution categories.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>What are the most important validation criteria?</summary>
+        <p>The most critical validation criteria are:</p>
+        <ol>
+          <li><strong>Have you talked to potential customers?</strong> — Real conversations beat assumptions</li>
+          <li><strong>Is there evidence people will pay?</strong> — Willingness to pay, not just interest</li>
+          <li><strong>Do you have a path to reach customers?</strong> — Distribution is often harder than building</li>
+          <li><strong>Is your solution meaningfully better?</strong> — 10x better on something that matters</li>
+        </ol>
+        <p>These four questions predict startup success more than any others.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>Is my data secure when using this validator?</summary>
+        <p>Yes, <strong>100% secure</strong>. This tool runs entirely in your browser using JavaScript. Your idea name, answers, and results are <strong>never sent to any server</strong>. All data stays on your device. You can optionally save progress to your browser's local storage. Check your network tab — zero data transmitted.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>Can I save my progress and come back later?</summary>
+        <p>Yes! Your progress is automatically saved to your browser's local storage. When you return, you'll see an option to resume where you left off. You can also start fresh if you want to validate a new idea.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>What's the methodology behind this framework?</summary>
+        <p>This framework synthesizes lessons from successful founders, common failure patterns documented in post-mortems, and established methodologies like <em>The Mom Test</em> by Rob Fitzpatrick. The questions are weighted based on their predictive value for startup success — problem validation and distribution questions carry more weight than nice-to-haves.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>Should I take the results as final judgment?</summary>
+        <p><strong>No.</strong> This is a thinking tool, not an oracle. A low score doesn't mean your idea is doomed — it means you have specific areas to strengthen. A high score doesn't guarantee success — execution matters. Use the results to identify blind spots and prioritize where to focus your validation efforts.</p>
+      </details>
+    </div>
+
+    <!-- How It Works Section -->
+    <div class="tool-card how-it-works-section">
+      <h2>How This Validator Works</h2>
+      <div class="how-it-works-grid">
+        <div class="how-step">
+          <div class="step-number">1</div>
+          <h4>Answer 20 Questions</h4>
+          <p>Honest yes/no answers across 5 validation categories. Each question is designed to surface real risks.</p>
+        </div>
+        <div class="how-step">
+          <div class="step-number">2</div>
+          <h4>Get Weighted Scoring</h4>
+          <p>Critical questions (like customer conversations) are weighted higher than nice-to-haves. Your score reflects real risk.</p>
+        </div>
+        <div class="how-step">
+          <div class="step-number">3</div>
+          <h4>Receive Recommendations</h4>
+          <p>Based on your answers, get prioritized action items — from critical blockers to optimizations.</p>
+        </div>
+        <div class="how-step">
+          <div class="step-number">4</div>
+          <h4>Take Action</h4>
+          <p>Don't just read your score. Use the specific recommendations to de-risk your idea before building.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</ToolLayout>
+
+<script define:vars={{ questionsJson, categoriesJson }}>
+  // Parse server-side data
+  window.__QUESTIONS__ = JSON.parse(questionsJson);
+  window.__CATEGORIES__ = JSON.parse(categoriesJson);
+</script>
+
+<script>
+  import {
+    calculateResults,
+    saveProgress,
+    loadProgress,
+    clearProgress,
+    getProgressPercentage,
+    isValidationComplete,
+    getGradeColor,
+    getScoreEmoji,
+    generateShareText,
+    generateShareUrl,
+    parseShareUrl,
+    type Answer,
+    type CategoryId,
+    type ValidationResult
+  } from '@/utils/idea-validator';
+  import log from 'loglevel';
+
+  // ============================================================================
+  // TYPE DECLARATIONS
+  // ============================================================================
+
+  interface Question {
+    id: string;
+    text: string;
+    category: CategoryId;
+    tooltip: string;
+    weight: number;
+    yesFollowUp?: string;
+    noFollowUp?: string;
+  }
+
+  interface Category {
+    id: CategoryId;
+    name: string;
+    icon: string;
+    color: string;
+    description: string;
+    maxScore: number;
+  }
+
+  // ============================================================================
+  // STATE
+  // ============================================================================
+
+  var questions: Question[] = (window as any).__QUESTIONS__;
+  var categories: Category[] = (window as any).__CATEGORIES__;
+
+  var ideaName = '';
+  var answers: Record<string, Answer> = {};
+  var currentQuestionIndex = 0;
+  var isAnimating = false;
+
+  // Initialize answers
+  questions.forEach(q => { answers[q.id] = null; });
+
+  // ============================================================================
+  // DOM ELEMENTS
+  // ============================================================================
+
+  var startScreen: HTMLElement;
+  var questionScreen: HTMLElement;
+  var resultsScreen: HTMLElement;
+  var newsletterSection: HTMLElement;
+
+  var ideaNameInput: HTMLInputElement;
+  var startBtn: HTMLButtonElement;
+  var savedProgressDiv: HTMLElement;
+  var resumeBtn: HTMLButtonElement;
+  var startFreshBtn: HTMLButtonElement;
+
+  var currentQNum: HTMLElement;
+  var totalQNum: HTMLElement;
+  var progressPercentage: HTMLElement;
+  var progressBar: HTMLElement;
+  var categoryIndicators: HTMLElement;
+  var questionCard: HTMLElement;
+  var questionCategory: HTMLElement;
+  var questionText: HTMLElement;
+  var tooltipTrigger: HTMLButtonElement;
+  var tooltipContent: HTMLElement;
+  var tooltipText: HTMLElement;
+  var answerYes: HTMLButtonElement;
+  var answerNo: HTMLButtonElement;
+  var skipBtn: HTMLButtonElement;
+  var answerFeedback: HTMLElement;
+  var feedbackText: HTMLElement;
+  var prevBtn: HTMLButtonElement;
+  var nextBtn: HTMLButtonElement;
+
+  var confettiCanvas: HTMLCanvasElement;
+  var scoreCircle: HTMLElement;
+  var scoreRingProgress: SVGCircleElement;
+  var scoreNumber: HTMLElement;
+  var gradeBadge: HTMLElement;
+  var resultsHeadline: HTMLElement;
+  var ideaNameDisplay: HTMLElement;
+  var categoryCards: HTMLElement;
+  var strengthsWeaknesses: HTMLElement;
+  var strengthsList: HTMLElement;
+  var weaknessesList: HTMLElement;
+  var recommendationsList: HTMLElement;
+  var shareResultsBtn: HTMLButtonElement;
+  var copyLinkBtn: HTMLButtonElement;
+  var restartBtn: HTMLButtonElement;
+  var shareToast: HTMLElement;
+
+  var newsletterHeadline: HTMLElement;
+  var newsletterSubtext: HTMLElement;
+  var newsletterForm: HTMLFormElement;
+  var newsletterSuccess: HTMLElement;
+
+  // ============================================================================
+  // CONFETTI
+  // ============================================================================
+
+  interface Confetto {
+    x: number;
+    y: number;
+    r: number;
+    d: number;
+    color: string;
+    tilt: number;
+    tiltAngleIncrement: number;
+    tiltAngle: number;
+  }
+
+  var confettiPieces: Confetto[] = [];
+  var confettiAnimationId: number | null = null;
+  var confettiCtx: CanvasRenderingContext2D | null = null;
+
+  function initConfetti() {
+    if (!confettiCanvas) return;
+    confettiCtx = confettiCanvas.getContext('2d');
+    resizeConfettiCanvas();
+    window.addEventListener('resize', resizeConfettiCanvas);
+  }
+
+  function resizeConfettiCanvas() {
+    if (!confettiCanvas) return;
+    confettiCanvas.width = window.innerWidth;
+    confettiCanvas.height = window.innerHeight;
+  }
+
+  function createConfetti(count: number) {
+    var colors = ['#8b5cf6', '#f59e0b', '#10b981', '#3b82f6', '#ec4899', '#f43f5e', '#06b6d4'];
+    confettiPieces = [];
+
+    for (var i = 0; i < count; i++) {
+      confettiPieces.push({
+        x: Math.random() * confettiCanvas.width,
+        y: Math.random() * confettiCanvas.height - confettiCanvas.height,
+        r: Math.random() * 6 + 4,
+        d: Math.random() * count,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        tilt: Math.floor(Math.random() * 10) - 10,
+        tiltAngleIncrement: Math.random() * 0.07 + 0.05,
+        tiltAngle: 0
+      });
+    }
+  }
+
+  function drawConfetti() {
+    if (!confettiCtx || !confettiCanvas) return;
+
+    confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+
+    for (var confetto of confettiPieces) {
+      confettiCtx.beginPath();
+      confettiCtx.lineWidth = confetto.r / 2;
+      confettiCtx.strokeStyle = confetto.color;
+      confettiCtx.moveTo(confetto.x + confetto.tilt + confetto.r / 4, confetto.y);
+      confettiCtx.lineTo(confetto.x + confetto.tilt, confetto.y + confetto.tilt + confetto.r / 4);
+      confettiCtx.stroke();
+    }
+
+    updateConfetti();
+
+    if (confettiPieces.some(c => c.y < confettiCanvas.height)) {
+      confettiAnimationId = requestAnimationFrame(drawConfetti);
+    } else {
+      stopConfetti();
+    }
+  }
+
+  function updateConfetti() {
+    for (var confetto of confettiPieces) {
+      confetto.tiltAngle += confetto.tiltAngleIncrement;
+      confetto.y += (Math.cos(confetto.d) + 3 + confetto.r / 2) / 2;
+      confetto.x += Math.sin(confetto.d);
+      confetto.tilt = Math.sin(confetto.tiltAngle) * 15;
+    }
+  }
+
+  function launchConfetti() {
+    createConfetti(150);
+    drawConfetti();
+  }
+
+  function stopConfetti() {
+    if (confettiAnimationId) {
+      cancelAnimationFrame(confettiAnimationId);
+      confettiAnimationId = null;
+    }
+    if (confettiCtx && confettiCanvas) {
+      confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+    }
+  }
+
+  // ============================================================================
+  // UI UPDATES
+  // ============================================================================
+
+  function showScreen(screen: 'start' | 'questions' | 'results') {
+    startScreen.classList.toggle('hidden', screen !== 'start');
+    questionScreen.classList.toggle('hidden', screen !== 'questions');
+    resultsScreen.classList.toggle('hidden', screen !== 'results');
+    newsletterSection.classList.toggle('hidden', screen !== 'results');
+
+    if (screen === 'questions') {
+      updateQuestionDisplay();
+    } else if (screen === 'results') {
+      displayResults();
+    }
+  }
+
+  function updateQuestionDisplay() {
+    var question = questions[currentQuestionIndex];
+    var category = categories.find(c => c.id === question.category)!;
+
+    // Update progress
+    currentQNum.textContent = String(currentQuestionIndex + 1);
+    totalQNum.textContent = String(questions.length);
+
+    var progress = getProgressPercentage(answers);
+    progressPercentage.textContent = progress + '%';
+    progressBar.style.width = progress + '%';
+
+    // Update category indicators
+    updateCategoryIndicators();
+
+    // Animate question change
+    if (!isAnimating) {
+      questionCard.classList.add('question-exit');
+      isAnimating = true;
+
+      setTimeout(() => {
+        // Update question content
+        var categoryDot = questionCategory.querySelector('.category-dot') as HTMLElement;
+        var categoryLabel = questionCategory.querySelector('.category-label') as HTMLElement;
+        categoryDot.style.backgroundColor = category.color;
+        categoryLabel.textContent = category.name;
+        questionCategory.style.setProperty('--cat-color', category.color);
+
+        questionText.textContent = question.text;
+        tooltipText.textContent = question.tooltip;
+        tooltipContent.classList.add('hidden');
+
+        // Update answer buttons state
+        var currentAnswer = answers[question.id];
+        answerYes.classList.toggle('selected', currentAnswer === 'yes');
+        answerNo.classList.toggle('selected', currentAnswer === 'no');
+        skipBtn.classList.toggle('selected', currentAnswer === 'skip');
+
+        // Hide feedback initially
+        answerFeedback.classList.add('hidden');
+
+        // Show feedback if already answered
+        if (currentAnswer === 'yes' && question.yesFollowUp) {
+          feedbackText.textContent = question.yesFollowUp;
+          answerFeedback.classList.remove('hidden');
+          answerFeedback.classList.remove('feedback-no');
+          answerFeedback.classList.add('feedback-yes');
+        } else if (currentAnswer === 'no' && question.noFollowUp) {
+          feedbackText.textContent = question.noFollowUp;
+          answerFeedback.classList.remove('hidden');
+          answerFeedback.classList.remove('feedback-yes');
+          answerFeedback.classList.add('feedback-no');
+        }
+
+        // Update navigation
+        prevBtn.disabled = currentQuestionIndex === 0;
+
+        var isLastQuestion = currentQuestionIndex === questions.length - 1;
+        var allAnswered = isValidationComplete(answers);
+
+        if (isLastQuestion || allAnswered) {
+          nextBtn.innerHTML = '<span>See Results</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
+          nextBtn.classList.add('btn-primary');
+        } else {
+          nextBtn.innerHTML = '<span>Next</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
+          nextBtn.classList.remove('btn-primary');
+        }
+
+        // Animate in
+        questionCard.classList.remove('question-exit');
+        questionCard.classList.add('question-enter');
+
+        setTimeout(() => {
+          questionCard.classList.remove('question-enter');
+          isAnimating = false;
+        }, 300);
+      }, 150);
+    }
+  }
+
+  function updateCategoryIndicators() {
+    var indicatorBtns = categoryIndicators.querySelectorAll('.category-indicator');
+
+    indicatorBtns.forEach(btn => {
+      var catId = btn.getAttribute('data-category') as CategoryId;
+      var catQuestions = questions.filter(q => q.category === catId);
+      var answeredCount = catQuestions.filter(q => answers[q.id] !== null).length;
+
+      var progressSpan = btn.querySelector('.cat-progress') as HTMLElement;
+      progressSpan.textContent = answeredCount + '/' + catQuestions.length;
+
+      // Add completion class
+      btn.classList.toggle('complete', answeredCount === catQuestions.length);
+      btn.classList.toggle('active', questions[currentQuestionIndex].category === catId);
+    });
+  }
+
+  function handleAnswer(answer: Answer) {
+    var question = questions[currentQuestionIndex];
+    answers[question.id] = answer;
+
+    // Update button states
+    answerYes.classList.toggle('selected', answer === 'yes');
+    answerNo.classList.toggle('selected', answer === 'no');
+    skipBtn.classList.toggle('selected', answer === 'skip');
+
+    // Show feedback
+    if (answer === 'yes' && question.yesFollowUp) {
+      feedbackText.textContent = question.yesFollowUp;
+      answerFeedback.classList.remove('hidden', 'feedback-no');
+      answerFeedback.classList.add('feedback-yes');
+    } else if (answer === 'no' && question.noFollowUp) {
+      feedbackText.textContent = question.noFollowUp;
+      answerFeedback.classList.remove('hidden', 'feedback-yes');
+      answerFeedback.classList.add('feedback-no');
+    } else {
+      answerFeedback.classList.add('hidden');
+    }
+
+    // Save progress
+    saveProgress(ideaName, answers);
+
+    // Update indicators
+    updateCategoryIndicators();
+    progressBar.style.width = getProgressPercentage(answers) + '%';
+    progressPercentage.textContent = getProgressPercentage(answers) + '%';
+
+    // Auto-advance after delay (if not last question)
+    if (currentQuestionIndex < questions.length - 1) {
+      setTimeout(() => {
+        goToNextQuestion();
+      }, 600);
+    } else {
+      // Update button to show results
+      nextBtn.innerHTML = '<span>See Results</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
+      nextBtn.classList.add('btn-primary');
+    }
+  }
+
+  function goToPreviousQuestion() {
+    if (currentQuestionIndex > 0) {
+      currentQuestionIndex--;
+      updateQuestionDisplay();
+    }
+  }
+
+  function goToNextQuestion() {
+    if (currentQuestionIndex < questions.length - 1) {
+      currentQuestionIndex++;
+      updateQuestionDisplay();
+    } else if (isValidationComplete(answers)) {
+      showScreen('results');
+    }
+  }
+
+  function goToCategory(categoryId: CategoryId) {
+    var firstQuestionIndex = questions.findIndex(q => q.category === categoryId);
+    if (firstQuestionIndex !== -1) {
+      currentQuestionIndex = firstQuestionIndex;
+      updateQuestionDisplay();
+    }
+  }
+
+  // ============================================================================
+  // RESULTS DISPLAY
+  // ============================================================================
+
+  function displayResults() {
+    var result = calculateResults(answers);
+
+    // Display idea name
+    if (ideaName) {
+      ideaNameDisplay.textContent = '"' + ideaName + '"';
+      ideaNameDisplay.classList.remove('hidden');
+    } else {
+      ideaNameDisplay.classList.add('hidden');
+    }
+
+    // Animate score
+    animateScore(result.percentage);
+
+    // Set grade
+    gradeBadge.textContent = result.grade;
+    gradeBadge.style.backgroundColor = getGradeColor(result.grade);
+
+    // Set headline
+    resultsHeadline.textContent = result.headline;
+
+    // Update category cards
+    updateCategoryCards(result);
+
+    // Update strengths & weaknesses
+    updateStrengthsWeaknesses(result);
+
+    // Update recommendations
+    updateRecommendations(result);
+
+    // Update newsletter messaging based on score
+    updateNewsletterMessaging(result.percentage);
+
+    // Launch confetti for good scores
+    if (result.percentage >= 70) {
+      setTimeout(() => launchConfetti(), 800);
+    }
+
+    // Scroll to top of results
+    resultsScreen.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function animateScore(targetScore: number) {
+    var duration = 2000;
+    var startTime: number | null = null;
+
+    // Calculate the circumference of the circle
+    var radius = 54;
+    var circumference = 2 * Math.PI * radius;
+    scoreRingProgress.style.strokeDasharray = String(circumference);
+    scoreRingProgress.style.strokeDashoffset = String(circumference);
+
+    function animate(currentTime: number) {
+      if (!startTime) startTime = currentTime;
+      var elapsed = currentTime - startTime;
+      var progress = Math.min(elapsed / duration, 1);
+
+      // Easing function (ease-out-expo)
+      var easeProgress = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+
+      var currentScore = Math.round(targetScore * easeProgress);
+      scoreNumber.textContent = String(currentScore);
+
+      // Update ring
+      var offset = circumference - (circumference * (targetScore / 100) * easeProgress);
+      scoreRingProgress.style.strokeDashoffset = String(offset);
+
+      // Set color based on score
+      var color = getGradeColor(targetScore >= 85 ? 'A' : targetScore >= 70 ? 'B' : targetScore >= 55 ? 'C' : targetScore >= 40 ? 'D' : 'F');
+      scoreRingProgress.style.stroke = color;
+      scoreNumber.style.color = color;
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      }
+    }
+
+    requestAnimationFrame(animate);
+  }
+
+  function updateCategoryCards(result: ValidationResult) {
+    var cards = categoryCards.querySelectorAll('.category-card');
+
+    cards.forEach((card, index) => {
+      var catId = card.getAttribute('data-category') as CategoryId;
+      var catScore = result.categoryScores[catId];
+
+      var percentageEl = card.querySelector('.category-percentage') as HTMLElement;
+      var barFill = card.querySelector('.category-bar-fill') as HTMLElement;
+
+      // Animate with delay
+      setTimeout(() => {
+        percentageEl.textContent = catScore.percentage + '%';
+        barFill.style.width = catScore.percentage + '%';
+
+        // Color the bar based on score
+        if (catScore.percentage >= 70) {
+          barFill.style.backgroundColor = '#10b981';
+        } else if (catScore.percentage >= 50) {
+          barFill.style.backgroundColor = '#f59e0b';
+        } else {
+          barFill.style.backgroundColor = '#ef4444';
+        }
+      }, index * 150);
+    });
+  }
+
+  function updateStrengthsWeaknesses(result: ValidationResult) {
+    strengthsList.innerHTML = '';
+    weaknessesList.innerHTML = '';
+
+    if (result.strengths.length === 0) {
+      strengthsList.innerHTML = '<li class="empty">Keep working on validation</li>';
+    } else {
+      result.strengths.forEach(strength => {
+        var li = document.createElement('li');
+        li.textContent = strength;
+        strengthsList.appendChild(li);
+      });
+    }
+
+    if (result.weaknesses.length === 0) {
+      weaknessesList.innerHTML = '<li class="empty">No critical weaknesses</li>';
+    } else {
+      result.weaknesses.forEach(weakness => {
+        var li = document.createElement('li');
+        li.textContent = weakness;
+        weaknessesList.appendChild(li);
+      });
+    }
+  }
+
+  function updateRecommendations(result: ValidationResult) {
+    recommendationsList.innerHTML = '';
+
+    if (result.recommendations.length === 0) {
+      recommendationsList.innerHTML = '<div class="no-recommendations">Your idea is well-validated! Focus on execution.</div>';
+      return;
+    }
+
+    result.recommendations.forEach((rec, index) => {
+      var category = categories.find(c => c.id === rec.category)!;
+
+      var recEl = document.createElement('div');
+      recEl.className = 'recommendation-item priority-' + rec.priority;
+      recEl.style.animationDelay = (index * 100) + 'ms';
+
+      recEl.innerHTML = `
+        <div class="rec-header">
+          <span class="rec-priority">${rec.priority}</span>
+          <span class="rec-category" style="--cat-color: ${category.color}">${category.name}</span>
+        </div>
+        <p class="rec-text">${rec.text}</p>
+        <p class="rec-action"><strong>Action:</strong> ${rec.action}</p>
+      `;
+
+      recommendationsList.appendChild(recEl);
+    });
+  }
+
+  function updateNewsletterMessaging(percentage: number) {
+    if (percentage < 40) {
+      newsletterHeadline.textContent = 'Learn How to Strengthen Your Idea';
+      newsletterSubtext.textContent = 'Get weekly lessons on validation, customer discovery, and finding ideas worth building.';
+    } else if (percentage < 70) {
+      newsletterHeadline.textContent = 'Get Tips to Level Up Your Validation';
+      newsletterSubtext.textContent = 'Weekly insights from my journey building validated products. Real lessons, no fluff.';
+    } else {
+      newsletterHeadline.textContent = 'Ready to Build? Get Execution Tips';
+      newsletterSubtext.textContent = 'Your idea looks solid. Join 1,500+ founders getting weekly building insights.';
+    }
+  }
+
+  // ============================================================================
+  // SHARING
+  // ============================================================================
+
+  async function handleShare() {
+    var result = calculateResults(answers);
+    var shareText = generateShareText(ideaName, result);
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'SaaS Idea Validator Results',
+          text: shareText,
+          url: generateShareUrl(answers, ideaName)
+        });
+      } catch (err) {
+        // User cancelled or error
+        log.info('Share cancelled');
+      }
+    } else {
+      handleCopyLink();
+    }
+  }
+
+  async function handleCopyLink() {
+    var url = generateShareUrl(answers, ideaName);
+
+    try {
+      await navigator.clipboard.writeText(url);
+      showShareToast();
+
+      var copyIcon = copyLinkBtn.querySelector('.copy-icon') as SVGElement;
+      var checkIcon = copyLinkBtn.querySelector('.check-icon') as SVGElement;
+      var btnText = copyLinkBtn.querySelector('.btn-text') as HTMLElement;
+
+      copyIcon.classList.add('hidden');
+      checkIcon.classList.remove('hidden');
+      btnText.textContent = 'Copied!';
+
+      setTimeout(() => {
+        copyIcon.classList.remove('hidden');
+        checkIcon.classList.add('hidden');
+        btnText.textContent = 'Copy Link';
+      }, 2000);
+    } catch (err) {
+      log.error('Failed to copy:', err);
+    }
+  }
+
+  function showShareToast() {
+    shareToast.classList.remove('hidden');
+    setTimeout(() => {
+      shareToast.classList.add('hidden');
+    }, 3000);
+  }
+
+  // ============================================================================
+  // KEYBOARD NAVIGATION
+  // ============================================================================
+
+  function handleKeydown(e: KeyboardEvent) {
+    // Only handle keys when on question screen
+    if (questionScreen.classList.contains('hidden')) return;
+
+    switch (e.key.toLowerCase()) {
+      case 'y':
+        e.preventDefault();
+        handleAnswer('yes');
+        break;
+      case 'n':
+        e.preventDefault();
+        handleAnswer('no');
+        break;
+      case 's':
+        e.preventDefault();
+        handleAnswer('skip');
+        break;
+      case 'arrowleft':
+        e.preventDefault();
+        goToPreviousQuestion();
+        break;
+      case 'arrowright':
+      case 'enter':
+        e.preventDefault();
+        if (currentQuestionIndex === questions.length - 1 && isValidationComplete(answers)) {
+          showScreen('results');
+        } else {
+          goToNextQuestion();
+        }
+        break;
+    }
+  }
+
+  // ============================================================================
+  // INITIALIZATION
+  // ============================================================================
+
+  function init() {
+    // Get DOM elements
+    startScreen = document.getElementById('start-screen') as HTMLElement;
+    questionScreen = document.getElementById('question-screen') as HTMLElement;
+    resultsScreen = document.getElementById('results-screen') as HTMLElement;
+    newsletterSection = document.getElementById('newsletter-section') as HTMLElement;
+
+    ideaNameInput = document.getElementById('idea-name') as HTMLInputElement;
+    startBtn = document.getElementById('start-btn') as HTMLButtonElement;
+    savedProgressDiv = document.getElementById('saved-progress') as HTMLElement;
+    resumeBtn = document.getElementById('resume-btn') as HTMLButtonElement;
+    startFreshBtn = document.getElementById('start-fresh-btn') as HTMLButtonElement;
+
+    currentQNum = document.getElementById('current-q-num') as HTMLElement;
+    totalQNum = document.getElementById('total-q-num') as HTMLElement;
+    progressPercentage = document.getElementById('progress-percentage') as HTMLElement;
+    progressBar = document.getElementById('progress-bar') as HTMLElement;
+    categoryIndicators = document.getElementById('category-indicators') as HTMLElement;
+    questionCard = document.getElementById('question-card') as HTMLElement;
+    questionCategory = document.getElementById('question-category') as HTMLElement;
+    questionText = document.getElementById('question-text') as HTMLElement;
+    tooltipTrigger = document.getElementById('tooltip-trigger') as HTMLButtonElement;
+    tooltipContent = document.getElementById('tooltip-content') as HTMLElement;
+    tooltipText = document.getElementById('tooltip-text') as HTMLElement;
+    answerYes = document.getElementById('answer-yes') as HTMLButtonElement;
+    answerNo = document.getElementById('answer-no') as HTMLButtonElement;
+    skipBtn = document.getElementById('skip-btn') as HTMLButtonElement;
+    answerFeedback = document.getElementById('answer-feedback') as HTMLElement;
+    feedbackText = document.getElementById('feedback-text') as HTMLElement;
+    prevBtn = document.getElementById('prev-btn') as HTMLButtonElement;
+    nextBtn = document.getElementById('next-btn') as HTMLButtonElement;
+
+    confettiCanvas = document.getElementById('confetti-canvas') as HTMLCanvasElement;
+    scoreCircle = document.getElementById('score-circle') as HTMLElement;
+    scoreRingProgress = document.getElementById('score-ring-progress') as unknown as SVGCircleElement;
+    scoreNumber = document.getElementById('score-number') as HTMLElement;
+    gradeBadge = document.getElementById('grade-badge') as HTMLElement;
+    resultsHeadline = document.getElementById('results-headline') as HTMLElement;
+    ideaNameDisplay = document.getElementById('idea-name-display') as HTMLElement;
+    categoryCards = document.getElementById('category-cards') as HTMLElement;
+    strengthsWeaknesses = document.getElementById('strengths-weaknesses') as HTMLElement;
+    strengthsList = document.getElementById('strengths-list') as HTMLElement;
+    weaknessesList = document.getElementById('weaknesses-list') as HTMLElement;
+    recommendationsList = document.getElementById('recommendations-list') as HTMLElement;
+    shareResultsBtn = document.getElementById('share-results-btn') as HTMLButtonElement;
+    copyLinkBtn = document.getElementById('copy-link-btn') as HTMLButtonElement;
+    restartBtn = document.getElementById('restart-btn') as HTMLButtonElement;
+    shareToast = document.getElementById('share-toast') as HTMLElement;
+
+    newsletterHeadline = document.getElementById('newsletter-headline') as HTMLElement;
+    newsletterSubtext = document.getElementById('newsletter-subtext') as HTMLElement;
+    newsletterForm = document.querySelector('.newsletter-form') as HTMLFormElement;
+    newsletterSuccess = document.getElementById('newsletter-success') as HTMLElement;
+
+    // Initialize confetti
+    initConfetti();
+
+    // Check for URL params (shared results)
+    var params = new URLSearchParams(window.location.search);
+    var resultParam = params.get('r');
+    if (resultParam) {
+      var parsed = parseShareUrl(resultParam);
+      if (parsed) {
+        ideaName = parsed.ideaName;
+        answers = parsed.answers;
+        ideaNameInput.value = ideaName;
+        showScreen('results');
+        return;
+      }
+    }
+
+    // Check for saved progress
+    var saved = loadProgress();
+    if (saved && Object.values(saved.answers).some(a => a !== null)) {
+      savedProgressDiv.classList.remove('hidden');
+      ideaNameInput.value = saved.ideaName;
+    }
+
+    // Event listeners - Start screen
+    startBtn.addEventListener('click', () => {
+      ideaName = ideaNameInput.value.trim();
+      showScreen('questions');
+    });
+
+    resumeBtn.addEventListener('click', () => {
+      var saved = loadProgress();
+      if (saved) {
+        ideaName = saved.ideaName;
+        answers = saved.answers;
+        // Find first unanswered question
+        var firstUnanswered = questions.findIndex(q => answers[q.id] === null);
+        currentQuestionIndex = firstUnanswered !== -1 ? firstUnanswered : 0;
+        showScreen('questions');
+      }
+    });
+
+    startFreshBtn.addEventListener('click', () => {
+      clearProgress();
+      ideaName = ideaNameInput.value.trim();
+      answers = {};
+      questions.forEach(q => { answers[q.id] = null; });
+      currentQuestionIndex = 0;
+      savedProgressDiv.classList.add('hidden');
+      showScreen('questions');
+    });
+
+    // Event listeners - Question screen
+    answerYes.addEventListener('click', () => handleAnswer('yes'));
+    answerNo.addEventListener('click', () => handleAnswer('no'));
+    skipBtn.addEventListener('click', () => handleAnswer('skip'));
+
+    prevBtn.addEventListener('click', goToPreviousQuestion);
+    nextBtn.addEventListener('click', () => {
+      if (currentQuestionIndex === questions.length - 1 && isValidationComplete(answers)) {
+        showScreen('results');
+      } else {
+        goToNextQuestion();
+      }
+    });
+
+    tooltipTrigger.addEventListener('click', () => {
+      tooltipContent.classList.toggle('hidden');
+    });
+
+    // Category indicator clicks
+    categoryIndicators.querySelectorAll('.category-indicator').forEach(btn => {
+      btn.addEventListener('click', () => {
+        var catId = btn.getAttribute('data-category') as CategoryId;
+        goToCategory(catId);
+      });
+    });
+
+    // Event listeners - Results screen
+    shareResultsBtn.addEventListener('click', handleShare);
+    copyLinkBtn.addEventListener('click', handleCopyLink);
+    restartBtn.addEventListener('click', () => {
+      clearProgress();
+      stopConfetti();
+      answers = {};
+      questions.forEach(q => { answers[q.id] = null; });
+      currentQuestionIndex = 0;
+      ideaName = '';
+      ideaNameInput.value = '';
+      showScreen('start');
+    });
+
+    // Newsletter form
+    if (newsletterForm) {
+      newsletterForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        var formData = new FormData(newsletterForm);
+
+        // Check honeypot
+        var honeypotFields = newsletterForm.querySelectorAll('.honeypot-field') as NodeListOf<HTMLInputElement>;
+        var isBot = false;
+        honeypotFields.forEach(field => {
+          if (field.value !== '') isBot = true;
+        });
+
+        if (isBot) return;
+
+        fetch(newsletterForm.action, {
+          method: 'POST',
+          body: formData
+        }).then(response => {
+          if (response.ok) {
+            newsletterForm.classList.add('hidden');
+            newsletterSuccess.classList.remove('hidden');
+          }
+        }).catch(err => {
+          log.error('Newsletter error:', err);
+        });
+      });
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', handleKeydown);
+
+    // Handle Enter on idea name input
+    ideaNameInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        startBtn.click();
+      }
+    });
+  }
+
+  // Run initialization
+  document.addEventListener('DOMContentLoaded', init);
+  document.addEventListener('astro:page-load', init);
+</script>
+
+<style scoped>
+  /* ============================================================================
+     LAYOUT & GENERAL
+     ============================================================================ */
+
+  .validator-tool {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .tool-card {
+    position: relative;
+  }
+
+  /* ============================================================================
+     START SCREEN
+     ============================================================================ */
+
+  .start-screen {
+    text-align: center;
+    padding: var(--space-2xl);
+  }
+
+  .start-content {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .start-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(59, 130, 246, 0.2));
+    border-radius: 24px;
+    margin-bottom: var(--space-lg);
+    color: var(--color-accent-light);
+  }
+
+  .start-screen h2 {
+    font-size: 1.75rem;
+    margin-bottom: var(--space-sm);
+  }
+
+  .start-screen > .start-content > p {
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-xl);
+  }
+
+  .idea-name-input {
+    margin-bottom: var(--space-lg);
+    text-align: left;
+  }
+
+  .idea-name-input label {
+    display: block;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    margin-bottom: var(--space-xs);
+    color: var(--color-text);
+  }
+
+  .idea-name-input .optional {
+    color: var(--color-text-dim);
+    font-weight: 400;
+  }
+
+  .idea-name-input input {
+    width: 100%;
+    padding: 1rem 1.25rem;
+    font-size: 1.125rem;
+    background: var(--color-bg);
+    border: 2px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+    color: var(--color-text);
+    transition: all var(--transition-fast);
+  }
+
+  .idea-name-input input:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+  }
+
+  .btn-large {
+    padding: 1rem 2.5rem;
+    font-size: 1.125rem;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+
+  .btn-large svg {
+    transition: transform var(--transition-fast);
+  }
+
+  .btn-large:hover svg {
+    transform: translateX(4px);
+  }
+
+  .saved-progress {
+    margin-top: var(--space-lg);
+    padding: var(--space-md);
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    border-radius: var(--border-radius-sm);
+  }
+
+  .saved-progress-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-xs);
+    font-size: 0.9375rem;
+    color: var(--color-text-muted);
+  }
+
+  .saved-progress-content svg {
+    color: var(--color-accent-light);
+  }
+
+  .link-btn {
+    background: none;
+    border: none;
+    color: var(--color-accent-light);
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: inherit;
+    padding: 0;
+  }
+
+  .link-btn:hover {
+    color: var(--color-accent);
+  }
+
+  .categories-preview {
+    margin-top: var(--space-2xl);
+    padding-top: var(--space-xl);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .categories-preview h3 {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-md);
+  }
+
+  .category-pills {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-sm);
+  }
+
+  .category-pill {
+    padding: 0.5rem 1rem;
+    background: color-mix(in srgb, var(--cat-color) 15%, transparent);
+    border: 1px solid color-mix(in srgb, var(--cat-color) 40%, transparent);
+    border-radius: 999px;
+    color: var(--cat-color);
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  /* ============================================================================
+     QUESTION SCREEN
+     ============================================================================ */
+
+  .question-screen {
+    padding: var(--space-lg);
+  }
+
+  /* Progress Header */
+  .progress-header {
+    margin-bottom: var(--space-xl);
+  }
+
+  .progress-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-sm);
+  }
+
+  .progress-text {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+  }
+
+  .progress-percentage {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-accent-light);
+  }
+
+  .progress-bar-container {
+    height: 6px;
+    background: var(--color-bg);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: var(--space-md);
+  }
+
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #8b5cf6, #3b82f6);
+    border-radius: 3px;
+    transition: width 0.5s ease;
+    width: 0%;
+  }
+
+  .category-indicators {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+  }
+
+  .category-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: var(--space-sm) var(--space-md);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    font-family: inherit;
+  }
+
+  .category-indicator:hover {
+    border-color: var(--cat-color);
+    background: color-mix(in srgb, var(--cat-color) 10%, transparent);
+  }
+
+  .category-indicator.active {
+    border-color: var(--cat-color);
+    background: color-mix(in srgb, var(--cat-color) 15%, transparent);
+  }
+
+  .category-indicator.complete {
+    border-color: var(--color-success);
+  }
+
+  .category-indicator.complete .cat-progress {
+    color: var(--color-success);
+  }
+
+  .cat-progress {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--cat-color);
+    font-family: var(--font-mono);
+  }
+
+  .cat-name {
+    font-size: 0.75rem;
+    color: var(--color-text-dim);
+  }
+
+  /* Question Container */
+  .question-container {
+    margin-bottom: var(--space-lg);
+  }
+
+  .question-card {
+    padding: var(--space-xl);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+
+  .question-card.question-exit {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+
+  .question-card.question-enter {
+    animation: slideIn 0.3s ease forwards;
+  }
+
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateX(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .question-category {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: 0.375rem 0.875rem;
+    background: color-mix(in srgb, var(--cat-color, #8b5cf6) 15%, transparent);
+    border-radius: 999px;
+    margin-bottom: var(--space-lg);
+  }
+
+  .category-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--cat-color, #8b5cf6);
+  }
+
+  .category-label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--cat-color, #8b5cf6);
+  }
+
+  .question-text {
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.4;
+    margin-bottom: var(--space-md);
+    color: var(--color-text);
+  }
+
+  .tooltip-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: 0.5rem 1rem;
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    margin-bottom: var(--space-lg);
+    font-family: inherit;
+  }
+
+  .tooltip-trigger:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent-light);
+  }
+
+  .tooltip-content {
+    padding: var(--space-md);
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+    margin-bottom: var(--space-lg);
+    text-align: left;
+    animation: fadeIn 0.2s ease;
+  }
+
+  .tooltip-content p {
+    margin: 0;
+    font-size: 0.9375rem;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+  }
+
+  /* Answer Buttons */
+  .answer-buttons {
+    display: flex;
+    gap: var(--space-md);
+    justify-content: center;
+    margin-bottom: var(--space-md);
+  }
+
+  .answer-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: var(--space-lg) var(--space-2xl);
+    background: var(--color-bg-elevated);
+    border: 2px solid var(--color-border);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    font-family: inherit;
+    min-width: 140px;
+  }
+
+  .answer-btn:hover {
+    transform: scale(1.02);
+  }
+
+  .answer-btn:active {
+    transform: scale(0.98);
+  }
+
+  .answer-btn span {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .answer-btn kbd {
+    font-size: 0.75rem;
+    padding: 0.125rem 0.5rem;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    color: var(--color-text-dim);
+    font-family: var(--font-mono);
+  }
+
+  .answer-yes {
+    color: var(--color-success);
+  }
+
+  .answer-yes:hover {
+    border-color: var(--color-success);
+    background: rgba(16, 185, 129, 0.1);
+  }
+
+  .answer-yes.selected {
+    border-color: var(--color-success);
+    background: rgba(16, 185, 129, 0.2);
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
+  }
+
+  .answer-no {
+    color: #ef4444;
+  }
+
+  .answer-no:hover {
+    border-color: #ef4444;
+    background: rgba(239, 68, 68, 0.1);
+  }
+
+  .answer-no.selected {
+    border-color: #ef4444;
+    background: rgba(239, 68, 68, 0.2);
+    box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.15);
+  }
+
+  .skip-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: 0.5rem 1rem;
+    background: transparent;
+    border: none;
+    color: var(--color-text-dim);
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    font-family: inherit;
+  }
+
+  .skip-btn:hover {
+    color: var(--color-text-muted);
+  }
+
+  .skip-btn.selected {
+    color: var(--color-accent-light);
+  }
+
+  .skip-btn kbd {
+    font-size: 0.6875rem;
+    padding: 0.125rem 0.375rem;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 3px;
+    font-family: var(--font-mono);
+  }
+
+  /* Answer Feedback */
+  .answer-feedback {
+    margin-top: var(--space-md);
+    padding: var(--space-md);
+    border-radius: var(--border-radius-sm);
+    animation: fadeIn 0.3s ease;
+  }
+
+  .answer-feedback.feedback-yes {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+  }
+
+  .answer-feedback.feedback-yes p {
+    color: #86efac;
+  }
+
+  .answer-feedback.feedback-no {
+    background: rgba(251, 191, 36, 0.1);
+    border: 1px solid rgba(251, 191, 36, 0.3);
+  }
+
+  .answer-feedback.feedback-no p {
+    color: #fcd34d;
+  }
+
+  .answer-feedback p {
+    margin: 0;
+    font-size: 0.9375rem;
+  }
+
+  /* Question Navigation */
+  .question-nav {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-md);
+    margin-top: var(--space-lg);
+  }
+
+  .nav-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: 0.75rem 1.25rem;
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+    color: var(--color-text-muted);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    font-family: inherit;
+  }
+
+  .nav-btn:hover:not(:disabled) {
+    border-color: var(--color-accent);
+    color: var(--color-text);
+  }
+
+  .nav-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .nav-btn.btn-primary {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: white;
+  }
+
+  .nav-btn.btn-primary:hover {
+    background: var(--color-accent-hover);
+  }
+
+  /* Keyboard Hint */
+  .keyboard-hint {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-lg);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--color-border);
+    margin-top: var(--space-lg);
+  }
+
+  .keyboard-hint span {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-size: 0.8125rem;
+    color: var(--color-text-dim);
+  }
+
+  .keyboard-hint kbd {
+    font-size: 0.75rem;
+    padding: 0.125rem 0.5rem;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    font-family: var(--font-mono);
+  }
+
+  @media (max-width: 640px) {
+    .keyboard-hint {
+      display: none;
+    }
+
+    .answer-btn kbd,
+    .skip-btn kbd {
+      display: none;
+    }
+
+    .answer-buttons {
+      flex-direction: column;
+    }
+
+    .answer-btn {
+      flex-direction: row;
+      justify-content: center;
+      padding: var(--space-md);
+      min-width: auto;
+    }
+
+    .question-text {
+      font-size: 1.25rem;
+    }
+
+    .category-indicators {
+      gap: var(--space-xs);
+    }
+
+    .category-indicator {
+      padding: var(--space-xs) var(--space-sm);
+    }
+
+    .cat-name {
+      display: none;
+    }
+  }
+
+  /* ============================================================================
+     RESULTS SCREEN
+     ============================================================================ */
+
+  .results-screen {
+    padding: var(--space-xl);
+    position: relative;
+    overflow: hidden;
+  }
+
+  #confetti-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1000;
+  }
+
+  /* Results Header */
+  .results-header {
+    text-align: center;
+    margin-bottom: var(--space-2xl);
+  }
+
+  .idea-name-display {
+    font-size: 1.125rem;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-md);
+    font-style: italic;
+  }
+
+  .score-display {
+    position: relative;
+    display: inline-block;
+    margin-bottom: var(--space-lg);
+  }
+
+  .score-circle {
+    position: relative;
+    width: 180px;
+    height: 180px;
+    margin: 0 auto;
+  }
+
+  .score-ring {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+  }
+
+  .score-ring-bg {
+    fill: none;
+    stroke: var(--color-bg);
+    stroke-width: 8;
+  }
+
+  .score-ring-progress {
+    fill: none;
+    stroke: var(--color-accent);
+    stroke-width: 8;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 2s ease;
+  }
+
+  .score-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+  .score-number {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: var(--color-accent-light);
+    line-height: 1;
+    font-family: var(--font-mono);
+  }
+
+  .score-label {
+    display: block;
+    font-size: 1rem;
+    color: var(--color-text-dim);
+    margin-top: 4px;
+  }
+
+  .grade-badge {
+    position: absolute;
+    top: 0;
+    right: -10px;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-success);
+    border-radius: 50%;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  .results-headline {
+    font-size: 1.5rem;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  /* Category Breakdown */
+  .category-breakdown {
+    margin-bottom: var(--space-2xl);
+  }
+
+  .category-breakdown h3 {
+    font-size: 1.125rem;
+    margin-bottom: var(--space-lg);
+    text-align: center;
+    color: var(--color-text-muted);
+  }
+
+  .category-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: var(--space-md);
+  }
+
+  .category-card {
+    padding: var(--space-md);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+    text-align: center;
+  }
+
+  .category-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-sm);
+    color: var(--cat-color);
+  }
+
+  .category-card-header svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .category-card-name {
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .category-card-score {
+    margin-bottom: var(--space-sm);
+  }
+
+  .category-percentage {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-text);
+    font-family: var(--font-mono);
+  }
+
+  .category-bar {
+    height: 6px;
+    background: var(--color-bg-elevated);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .category-bar-fill {
+    height: 100%;
+    background: var(--cat-color);
+    border-radius: 3px;
+    transition: width 1s ease;
+    width: 0%;
+  }
+
+  /* Strengths & Weaknesses */
+  .strengths-weaknesses {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-lg);
+    margin-bottom: var(--space-2xl);
+  }
+
+  @media (max-width: 600px) {
+    .strengths-weaknesses {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .sw-column {
+    padding: var(--space-md);
+    background: var(--color-bg);
+    border-radius: var(--border-radius-sm);
+  }
+
+  .sw-column h4 {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-size: 0.9375rem;
+    margin-bottom: var(--space-md);
+  }
+
+  .strengths h4 {
+    color: var(--color-success);
+  }
+
+  .weaknesses h4 {
+    color: #f59e0b;
+  }
+
+  .sw-column ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .sw-column li {
+    padding: var(--space-xs) 0;
+    font-size: 0.9375rem;
+    color: var(--color-text-muted);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .sw-column li:last-child {
+    border-bottom: none;
+  }
+
+  .sw-column li.empty {
+    color: var(--color-text-dim);
+    font-style: italic;
+  }
+
+  /* Recommendations */
+  .recommendations {
+    margin-bottom: var(--space-2xl);
+  }
+
+  .recommendations h3 {
+    font-size: 1.125rem;
+    margin-bottom: var(--space-lg);
+    text-align: center;
+    color: var(--color-text-muted);
+  }
+
+  .recommendations-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .recommendation-item {
+    padding: var(--space-md);
+    background: var(--color-bg);
+    border-radius: var(--border-radius-sm);
+    border-left: 4px solid var(--color-border);
+    animation: slideIn 0.3s ease forwards;
+    opacity: 0;
+  }
+
+  .recommendation-item.priority-critical {
+    border-left-color: #ef4444;
+    background: rgba(239, 68, 68, 0.05);
+  }
+
+  .recommendation-item.priority-high {
+    border-left-color: #f59e0b;
+    background: rgba(245, 158, 11, 0.05);
+  }
+
+  .recommendation-item.priority-medium {
+    border-left-color: #3b82f6;
+  }
+
+  .recommendation-item.priority-low {
+    border-left-color: var(--color-text-dim);
+  }
+
+  .rec-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
+  }
+
+  .rec-priority {
+    padding: 0.125rem 0.5rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-radius: 4px;
+    background: var(--color-bg-elevated);
+    color: var(--color-text-dim);
+  }
+
+  .priority-critical .rec-priority {
+    background: rgba(239, 68, 68, 0.2);
+    color: #fca5a5;
+  }
+
+  .priority-high .rec-priority {
+    background: rgba(245, 158, 11, 0.2);
+    color: #fcd34d;
+  }
+
+  .rec-category {
+    font-size: 0.75rem;
+    color: var(--cat-color);
+    font-weight: 500;
+  }
+
+  .rec-text {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--color-text);
+    margin-bottom: var(--space-xs);
+  }
+
+  .rec-action {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  .no-recommendations {
+    text-align: center;
+    padding: var(--space-xl);
+    color: var(--color-success);
+    font-size: 1.125rem;
+  }
+
+  /* Results Actions */
+  .results-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-md);
+  }
+
+  .results-actions .btn {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+  }
+
+  /* Share Toast */
+  .share-toast {
+    position: fixed;
+    bottom: var(--space-xl);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-md) var(--space-lg);
+    background: var(--color-success);
+    color: white;
+    border-radius: var(--border-radius-sm);
+    font-weight: 500;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    z-index: 1001;
+    animation: slideUp 0.3s ease;
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translate(-50%, 20px);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+  }
+
+  /* ============================================================================
+     NEWSLETTER SECTION
+     ============================================================================ */
+
+  .newsletter-section {
+    text-align: center;
+  }
+
+  .newsletter-content h2 {
+    font-size: 1.5rem;
+    margin-bottom: var(--space-sm);
+  }
+
+  .newsletter-content > p {
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-lg);
+  }
+
+  .form-row {
+    display: flex;
+    gap: var(--space-sm);
+    max-width: 500px;
+    margin: 0 auto var(--space-sm);
+  }
+
+  .email-input {
+    flex: 1;
+  }
+
+  .altcha-widget {
+    display: none;
+  }
+
+  .form-note {
+    font-size: 0.875rem;
+    color: var(--color-text-dim);
+    margin: 0;
+  }
+
+  .honeypot-field {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+  }
+
+  .newsletter-section .success-message {
+    padding: var(--space-xl);
+    color: var(--color-success);
+  }
+
+  .newsletter-section .success-message h3 {
+    margin: var(--space-md) 0 var(--space-sm);
+    font-size: 1.25rem;
+  }
+
+  .newsletter-section .success-message p {
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  @media (max-width: 640px) {
+    .form-row {
+      flex-direction: column;
+    }
+  }
+
+  /* ============================================================================
+     FAQ SECTION
+     ============================================================================ */
+
+  .faq-section h2 {
+    font-size: 1.25rem;
+    margin-bottom: var(--space-lg);
+  }
+
+  .faq-item {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .faq-item summary {
+    padding: var(--space-md) 0;
+    font-weight: 500;
+    color: var(--color-text);
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .faq-item summary::after {
+    content: '+';
+    font-size: 1.25rem;
+    color: var(--color-text-muted);
+    transition: transform var(--transition-fast);
+  }
+
+  .faq-item[open] summary::after {
+    content: '-';
+  }
+
+  .faq-item p,
+  .faq-item ol,
+  .faq-item ul {
+    padding-bottom: var(--space-md);
+    color: var(--color-text-muted);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+  }
+
+  .faq-item ol,
+  .faq-item ul {
+    padding-left: var(--space-lg);
+    margin: 0;
+  }
+
+  .faq-item li {
+    margin-bottom: var(--space-sm);
+  }
+
+  /* ============================================================================
+     HOW IT WORKS SECTION
+     ============================================================================ */
+
+  .how-it-works-section h2 {
+    font-size: 1.25rem;
+    margin-bottom: var(--space-xl);
+    text-align: center;
+  }
+
+  .how-it-works-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-lg);
+  }
+
+  .how-step {
+    text-align: center;
+    padding: var(--space-md);
+  }
+
+  .step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+    border-radius: 50%;
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: var(--space-md);
+  }
+
+  .how-step h4 {
+    font-size: 1rem;
+    margin-bottom: var(--space-sm);
+    color: var(--color-text);
+  }
+
+  .how-step p {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* ============================================================================
+     UTILITIES
+     ============================================================================ */
+
+  .hidden {
+    display: none !important;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+</style>
