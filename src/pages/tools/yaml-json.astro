@@ -1293,7 +1293,7 @@ spec:
    * Handle convert button click
    */
   function handleConvert(): void {
-    if (currentData === undefined || currentData === null) {
+    if (currentData === undefined || currentData === null || currentFormat === null) {
       return;
     }
 
