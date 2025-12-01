@@ -58,7 +58,7 @@
   </text>
 
   <!-- Features -->
-  <g transform="translate(700, 560)">
+  <g transform="translate(700, 580)">
     <circle cx="0" cy="0" r="6" fill="#10b981"/>
     <text x="15" y="6" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="16" fill="#a0a0a0">
       Free

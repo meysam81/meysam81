@@ -12,11 +12,11 @@ Build a suite of free, standalone micro-tools that solve specific problems for D
 
 ## Implementation Status
 
-| Tool                          | Status       | URL                     | Notes                                                                                          |
-| ----------------------------- | ------------ | ----------------------- | ---------------------------------------------------------------------------------------------- |
-| **Cron Expression Generator** | ✅ Completed | `/tools/cron`           | Bidirectional English↔cron conversion, 70+ natural language patterns, next 10 runs calculation |
+| Tool                          | Status       | URL                     | Notes                                                                                              |
+| ----------------------------- | ------------ | ----------------------- | -------------------------------------------------------------------------------------------------- |
+| **Cron Expression Generator** | ✅ Completed | `/tools/cron`           | Bidirectional English↔cron conversion, 70+ natural language patterns, next 10 runs calculation     |
 | **YAML/JSON Validator**       | ✅ Completed | `/tools/yaml-json`      | YAML 1.2 & JSON RFC 8259 compliant, bidirectional conversion, line-number errors, syntax reference |
-| **SaaS Idea Validator**       | 🔲 Planned   | `/tools/idea-validator` | Wave 1                                                                                         |
+| **SaaS Idea Validator**       | 🔲 Planned   | `/tools/idea-validator` | Wave 1                                                                                             |
 
 ---
 
