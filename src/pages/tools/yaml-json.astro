@@ -933,7 +933,7 @@ spec:
    * Convert data to YAML format
    */
   function toYaml(data: unknown, options: { indent?: number; sortKeys?: boolean; minify?: boolean } = {}): string {
-    var indent = options.indent ?? parseInt(optionIndent.value, 10) || 2;
+    var indent = (options.indent ?? parseInt(optionIndent.value, 10)) || 2;
     var sortKeys = options.sortKeys ?? optionSortKeys.checked;
 
     if (options.minify) {
@@ -958,7 +958,7 @@ spec:
    * Convert data to JSON format
    */
   function toJson(data: unknown, options: { indent?: number; sortKeys?: boolean; minify?: boolean } = {}): string {
-    var indent = options.minify ? 0 : (options.indent ?? parseInt(optionIndent.value, 10) || 2);
+    var indent = options.minify ? 0 : ((options.indent ?? parseInt(optionIndent.value, 10)) || 2);
     var sortKeys = options.sortKeys ?? optionSortKeys.checked;
 
     if (sortKeys && data && typeof data === 'object') {
