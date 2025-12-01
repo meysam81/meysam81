@@ -1529,8 +1529,8 @@ spec:
   }
 
   // Run on DOM ready and Astro page loads
-  document.addEventListener('DOMContentLoaded', init);
-  document.addEventListener('astro:page-load', init);
+  document.addEventListener('DOMContentLoaded', init, { once: true });
+  document.addEventListener('astro:page-load', init, { once: true });
 </script>
 
 <style scoped>
