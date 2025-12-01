@@ -1,0 +1,86 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#0a0a0a"/>
+
+  <!-- Gradient overlay -->
+  <defs>
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.15" />
+      <stop offset="100%" style="stop-color:#0a0a0a;stop-opacity:0" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#gradient)"/>
+
+  <!-- Border -->
+  <rect x="1" y="1" width="1198" height="628" rx="0" stroke="#2a2a2a" stroke-width="2" fill="none"/>
+
+  <!-- Tool icon (document with checkmark) -->
+  <g transform="translate(100, 170)">
+    <!-- Document outline -->
+    <rect x="10" y="0" width="80" height="100" rx="8" stroke="#3b82f6" stroke-width="4" fill="none"/>
+    <!-- Document fold -->
+    <path d="M70 0 L90 20 L70 20 Z" stroke="#3b82f6" stroke-width="3" fill="#0a0a0a"/>
+    <!-- Lines representing code -->
+    <line x1="25" y1="35" x2="75" y2="35" stroke="#3b82f6" stroke-width="3" stroke-linecap="round"/>
+    <line x1="25" y1="50" x2="60" y2="50" stroke="#3b82f6" stroke-width="3" stroke-linecap="round"/>
+    <line x1="25" y1="65" x2="70" y2="65" stroke="#3b82f6" stroke-width="3" stroke-linecap="round"/>
+    <!-- Checkmark circle -->
+    <circle cx="75" cy="85" r="20" fill="#10b981"/>
+    <path d="M65 85 L72 92 L87 77" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </g>
+
+  <!-- Title -->
+  <text x="240" y="220" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="56" font-weight="700" fill="#f5f5f5">
+    YAML/JSON Validator
+  </text>
+  <text x="240" y="285" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="56" font-weight="700" fill="#f5f5f5">
+    &amp; Converter
+  </text>
+
+  <!-- Subtitle -->
+  <text x="240" y="350" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="24" fill="#a0a0a0">
+    Validate, format, and convert between YAML and JSON instantly
+  </text>
+
+  <!-- YAML example box -->
+  <rect x="100" y="410" width="420" height="110" rx="12" fill="#1a1a1a" stroke="#22c55e" stroke-width="2"/>
+  <text x="120" y="438" font-family="SF Mono, Monaco, Consolas, monospace" font-size="14" fill="#22c55e">YAML</text>
+  <text x="120" y="465" font-family="SF Mono, Monaco, Consolas, monospace" font-size="18" fill="#f5f5f5">name: my-app</text>
+  <text x="120" y="490" font-family="SF Mono, Monaco, Consolas, monospace" font-size="18" fill="#f5f5f5">replicas: 3</text>
+  <text x="120" y="515" font-family="SF Mono, Monaco, Consolas, monospace" font-size="18" fill="#a0a0a0">enabled: true</text>
+
+  <!-- Bidirectional arrow -->
+  <g transform="translate(545, 465)">
+    <path d="M0 0 L50 0" stroke="#6a6a6a" stroke-width="3"/>
+    <path d="M45 -8 L55 0 L45 8" stroke="#6a6a6a" stroke-width="3" fill="none"/>
+    <path d="M5 -8 L-5 0 L5 8" stroke="#6a6a6a" stroke-width="3" fill="none"/>
+  </g>
+
+  <!-- JSON example box -->
+  <rect x="620" y="410" width="480" height="110" rx="12" fill="#1a1a1a" stroke="#3b82f6" stroke-width="2"/>
+  <text x="640" y="438" font-family="SF Mono, Monaco, Consolas, monospace" font-size="14" fill="#3b82f6">JSON</text>
+  <text x="640" y="465" font-family="SF Mono, Monaco, Consolas, monospace" font-size="18" fill="#f5f5f5">{"name": "my-app",</text>
+  <text x="640" y="490" font-family="SF Mono, Monaco, Consolas, monospace" font-size="18" fill="#f5f5f5"> "replicas": 3,</text>
+  <text x="640" y="515" font-family="SF Mono, Monaco, Consolas, monospace" font-size="18" fill="#a0a0a0"> "enabled": true}</text>
+
+  <!-- Footer - branding -->
+  <text x="100" y="580" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="20" fill="#6a6a6a">
+    meysam.io/tools/yaml-json
+  </text>
+
+  <!-- Features -->
+  <g transform="translate(650, 560)">
+    <circle cx="0" cy="0" r="6" fill="#10b981"/>
+    <text x="15" y="6" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="16" fill="#a0a0a0">
+      Free
+    </text>
+    <circle cx="80" cy="0" r="6" fill="#10b981"/>
+    <text x="95" y="6" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="16" fill="#a0a0a0">
+      No Signup
+    </text>
+    <circle cx="200" cy="0" r="6" fill="#10b981"/>
+    <text x="215" y="6" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="16" fill="#a0a0a0">
+      Client-Side
+    </text>
+  </g>
+</svg>
