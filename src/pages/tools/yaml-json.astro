@@ -669,11 +669,19 @@ spec:
   function updateLineNumbers(textarea: HTMLTextAreaElement, lineNumbersDiv: HTMLDivElement): void {
     var lines = textarea.value.split('\n');
     var lineCount = lines.length || 1;
-    var html = '';
-    for (var i = 1; i <= lineCount; i++) {
-      html += '<span>' + i + '</span>';
+    var currentCount = lineNumbersDiv.childElementCount;
+
+    // Add missing line numbers
+    for (var i = currentCount + 1; i <= lineCount; i++) {
+      var span = document.createElement('span');
+      span.textContent = String(i);
+      lineNumbersDiv.appendChild(span);
     }
-    lineNumbersDiv.innerHTML = html;
+
+    // Remove extra line numbers
+    while (lineNumbersDiv.childElementCount > lineCount) {
+      lineNumbersDiv.removeChild(lineNumbersDiv.lastChild!);
+    }
   }
 
   /**
@@ -738,7 +746,7 @@ spec:
     // YAML comments
     if (text.includes('#')) return true;
     // YAML multi-line indicators
-    if (/[|>][-+]?\s*$/.test(text)) return true;
+    if (/[|>][-+]?\s*$/m.test(text)) return true;
     // YAML anchors/aliases
     if (/[&*][a-zA-Z]/.test(text)) return true;
     // YAML document markers
@@ -865,8 +873,8 @@ spec:
   function getSuggestionForError(message: string): string {
     var lowerMessage = message.toLowerCase();
 
-    for (var [key, suggestion] of Object.entries(ERROR_SUGGESTIONS)) {
-      if (lowerMessage.includes(key)) {
+    for (var [errorPattern, suggestion] of Object.entries(ERROR_SUGGESTIONS)) {
+      if (lowerMessage.includes(errorPattern)) {
         return suggestion;
       }
     }
@@ -1083,22 +1091,40 @@ spec:
   function updateFormatIndicator(format: 'yaml' | 'json' | null): void {
     currentFormat = format;
 
+    // Clear previous content
+    while (formatIndicator.firstChild) {
+      formatIndicator.removeChild(formatIndicator.firstChild);
+    }
+
+    let iconSpan = document.createElement('span');
+    iconSpan.classList.add('format-icon');
+    let textSpan = document.createElement('span');
+    textSpan.classList.add('format-text');
+
     if (format === 'yaml') {
-      formatIndicator.innerHTML = '<span class="format-icon yaml">Y</span><span class="format-text">Detected: YAML</span>';
+      iconSpan.classList.add('yaml');
+      iconSpan.textContent = 'Y';
+      textSpan.textContent = 'Detected: YAML';
       formatIndicator.className = 'format-indicator yaml';
       formatYamlBtn.textContent = 'Format YAML';
       formatJsonBtn.textContent = 'Convert to JSON';
       convertBtnText.textContent = 'Convert to JSON';
     } else if (format === 'json') {
-      formatIndicator.innerHTML = '<span class="format-icon json">J</span><span class="format-text">Detected: JSON</span>';
+      iconSpan.classList.add('json');
+      iconSpan.textContent = 'J';
+      textSpan.textContent = 'Detected: JSON';
       formatIndicator.className = 'format-indicator json';
       formatYamlBtn.textContent = 'Convert to YAML';
       formatJsonBtn.textContent = 'Format JSON';
       convertBtnText.textContent = 'Convert to YAML';
     } else {
-      formatIndicator.innerHTML = '<span class="format-icon">?</span><span class="format-text">Paste content to detect format</span>';
+      iconSpan.textContent = '?';
+      textSpan.textContent = 'Paste content to detect format';
       formatIndicator.className = 'format-indicator';
     }
+
+    formatIndicator.appendChild(iconSpan);
+    formatIndicator.appendChild(textSpan);
   }
 
   /**
