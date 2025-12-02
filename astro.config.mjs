@@ -1,5 +1,6 @@
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
+import vue from "@astrojs/vue";
 import playformCompress from "@playform/compress";
 import tailwindcss from "@tailwindcss/vite";
 import expressiveCode from "astro-expressive-code";
@@ -19,6 +20,7 @@ export default defineConfig({
   },
   integrations: [
     sitemap(),
+    vue(),
     expressiveCode({
       frames: {
         removeCommentsWhenCopyingTerminalFrames: false,

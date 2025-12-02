@@ -1,5 +1,6 @@
 ---
 import ToolLayout from '@/layouts/ToolLayout.astro';
+import IdeaValidatorShareImage from '@/components/IdeaValidatorShareImage.vue';
 import {
   questions,
   categories,
@@ -376,6 +377,9 @@ var categoriesJson = JSON.stringify(categories);
           Start Over
         </button>
       </div>
+
+      <!-- Social Share Image Export -->
+      <IdeaValidatorShareImage client:only="vue" />
 
       <!-- Share Toast -->
       <div class="share-toast hidden" id="share-toast">
@@ -951,6 +955,17 @@ var categoriesJson = JSON.stringify(categories);
     if (result.percentage >= 70) {
       setTimeout(() => launchConfetti(), 800);
     }
+
+    // Dispatch event for Vue share image component
+    var shareData = {
+      ideaName: ideaName,
+      percentage: result.percentage,
+      grade: result.grade,
+      headline: result.headline,
+      categoryScores: result.categoryScores
+    };
+    (window as any).__VALIDATOR_SHARE_DATA__ = shareData;
+    window.dispatchEvent(new CustomEvent('validator-results-ready', { detail: shareData }));
 
     // Scroll to top of results
     resultsScreen.scrollIntoView({ behavior: 'smooth', block: 'start' });
