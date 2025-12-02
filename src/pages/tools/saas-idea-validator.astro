@@ -1,5 +1,6 @@
 ---
 import ToolLayout from '@/layouts/ToolLayout.astro';
+import ImageExportModalWrapper from '@/components/ImageExportModalWrapper.vue';
 import {
   questions,
   categories,
@@ -358,6 +359,14 @@ var categoriesJson = JSON.stringify(categories);
           </svg>
           Share Results
         </button>
+        <button type="button" class="btn btn-secondary" id="download-image-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+            <polyline points="21 15 16 10 5 21"/>
+          </svg>
+          Download Image
+        </button>
         <button type="button" class="btn btn-secondary" id="copy-link-btn">
           <svg class="copy-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
@@ -384,6 +393,9 @@ var categoriesJson = JSON.stringify(categories);
         </svg>
         <span>Link copied to clipboard!</span>
       </div>
+
+      <!-- Image Export Modal (Vue Component) -->
+      <ImageExportModalWrapper client:load />
     </div>
 
     <!-- Newsletter Section (shown after results) -->
@@ -632,6 +644,9 @@ var categoriesJson = JSON.stringify(categories);
   var newsletterSubtext: HTMLElement;
   var newsletterForm: HTMLFormElement;
   var newsletterSuccess: HTMLElement;
+
+  // Image Export Modal (Vue component communication)
+  var downloadImageBtn: HTMLButtonElement;
 
   // ============================================================================
   // CONFETTI
@@ -1161,6 +1176,18 @@ var categoriesJson = JSON.stringify(categories);
   }
 
   // ============================================================================
+  // IMAGE EXPORT (Vue Component Integration)
+  // ============================================================================
+
+  function openImageModal() {
+    var result = calculateResults(answers);
+    // Dispatch custom event to open the Vue modal
+    window.dispatchEvent(new CustomEvent('open-image-export-modal', {
+      detail: { result, ideaName }
+    }));
+  }
+
+  // ============================================================================
   // KEYBOARD NAVIGATION
   // ============================================================================
 
@@ -1257,6 +1284,9 @@ var categoriesJson = JSON.stringify(categories);
     newsletterForm = document.querySelector('.newsletter-form') as HTMLFormElement;
     newsletterSuccess = document.getElementById('newsletter-success') as HTMLElement;
 
+    // Image Export Modal (Vue component)
+    downloadImageBtn = document.getElementById('download-image-btn') as HTMLButtonElement;
+
     // Initialize confetti
     initConfetti();
 
@@ -1348,6 +1378,9 @@ var categoriesJson = JSON.stringify(categories);
       ideaNameInput.value = '';
       showScreen('start');
     });
+
+    // Event listener - Image Export Modal (Vue component handles all modal logic)
+    downloadImageBtn.addEventListener('click', openImageModal);
 
     // Newsletter form
     if (newsletterForm) {
@@ -2577,5 +2610,21 @@ var categoriesJson = JSON.stringify(categories);
   @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
   }
 </style>
