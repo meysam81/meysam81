@@ -336,7 +336,7 @@ var structuredData = {
         data.features.map(function(f, i) {
           return '<span style="display:flex;align-items:center;gap:8px;color:#a0a0a0;font-size:18px;">' +
             '<span style="width:8px;height:8px;background:#10b981;border-radius:50%;"></span>' +
-            f +
+            escapeHtml(f) +
             (i < data.features.length - 1 ? '<span style="width:4px;height:4px;background:#6a6a6a;border-radius:50%;margin-left:16px;"></span>' : '') +
             '</span>';
         }).join('') +
@@ -528,7 +528,22 @@ var structuredData = {
       link.click();
     } catch (error) {
       log.error('Failed to generate image:', error);
-      alert('Failed to generate image. Please try again.');
+      let userMessage = 'Failed to generate image. ';
+      if (error && typeof error === 'object' && 'message' in error && typeof error.message === 'string') {
+        // Map known error messages to user-friendly explanations
+        if (error.message.includes('tainted canvas')) {
+          userMessage += 'This may be due to a cross-origin image or resource. Please ensure all images are from the same origin or CORS-enabled.';
+        } else if (error.message.includes('Failed to fetch')) {
+          userMessage += 'A network error occurred. Please check your internet connection.';
+        } else if (error.message.includes('The provided value is not of type')) {
+          userMessage += 'Your browser may not support this feature. Please try updating your browser or using a different one.';
+        } else {
+          userMessage += 'Error: ' + error.message;
+        }
+      } else {
+        userMessage += 'Please try again.';
+      }
+      alert(userMessage);
     } finally {
       button.innerHTML = originalText;
       button.disabled = false;

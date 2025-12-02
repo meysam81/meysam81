@@ -61,7 +61,8 @@ export async function generatePreview(
     });
     return dataUrl;
   } catch (error) {
-    throw new Error(`Failed to generate preview: ${error}`);
+    const message = error instanceof Error ? error.message : String(error);
+    throw new Error(`Failed to generate preview: ${message}`);
   }
 }
 
