@@ -117,7 +117,7 @@ var categoriesJson = JSON.stringify(categories);
     <div class="tool-card start-screen" id="start-screen">
       <div class="start-content">
         <div class="start-icon">
-          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
             <path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/>
           </svg>
         </div>
@@ -532,6 +532,7 @@ var categoriesJson = JSON.stringify(categories);
     generateShareText,
     generateShareUrl,
     parseShareUrl,
+    type Grade,
     type Answer,
     type CategoryId,
     type ValidationResult
@@ -652,14 +653,14 @@ var categoriesJson = JSON.stringify(categories);
   var confettiCtx: CanvasRenderingContext2D | null = null;
 
   function initConfetti() {
-    if (!confettiCanvas) return;
+    if (!confettiCanvas) {return;}
     confettiCtx = confettiCanvas.getContext('2d');
     resizeConfettiCanvas();
     window.addEventListener('resize', resizeConfettiCanvas);
   }
 
   function resizeConfettiCanvas() {
-    if (!confettiCanvas) return;
+    if (!confettiCanvas) {return;}
     confettiCanvas.width = window.innerWidth;
     confettiCanvas.height = window.innerHeight;
   }
@@ -683,7 +684,7 @@ var categoriesJson = JSON.stringify(categories);
   }
 
   function drawConfetti() {
-    if (!confettiCtx || !confettiCanvas) return;
+    if (!confettiCtx || !confettiCanvas) {return;}
 
     confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
 
@@ -955,6 +956,22 @@ var categoriesJson = JSON.stringify(categories);
     resultsScreen.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
+  function getGradeFromScore(score: number): Grade {
+    if (score >= 85) {
+      return 'A';
+    }
+    if (score >= 70) {
+      return 'B';
+    }
+    if (score >= 55) {
+      return 'C';
+    }
+    if (score >= 40) {
+      return 'D';
+    }
+    return 'F';
+  }
+
   function animateScore(targetScore: number) {
     var duration = 2000;
     var startTime: number | null = null;
@@ -966,12 +983,12 @@ var categoriesJson = JSON.stringify(categories);
     scoreRingProgress.style.strokeDashoffset = String(circumference);
 
     function animate(currentTime: number) {
-      if (!startTime) startTime = currentTime;
+      if (!startTime) {startTime = currentTime;}
       var elapsed = currentTime - startTime;
       var progress = Math.min(elapsed / duration, 1);
 
       // Easing function (ease-out-expo)
-      var easeProgress = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+      var easeProgress = progress === 1 ? 1 : 1 - 2 ** (-10 * progress);
 
       var currentScore = Math.round(targetScore * easeProgress);
       scoreNumber.textContent = String(currentScore);
@@ -981,7 +998,8 @@ var categoriesJson = JSON.stringify(categories);
       scoreRingProgress.style.strokeDashoffset = String(offset);
 
       // Set color based on score
-      var color = getGradeColor(targetScore >= 85 ? 'A' : targetScore >= 70 ? 'B' : targetScore >= 55 ? 'C' : targetScore >= 40 ? 'D' : 'F');
+      var grade = getGradeFromScore(targetScore);
+      var color = getGradeColor(grade);
       scoreRingProgress.style.stroke = color;
       scoreNumber.style.color = color;
 
@@ -1148,7 +1166,7 @@ var categoriesJson = JSON.stringify(categories);
 
   function handleKeydown(e: KeyboardEvent) {
     // Only handle keys when on question screen
-    if (questionScreen.classList.contains('hidden')) return;
+    if (questionScreen.classList.contains('hidden')) {return;}
 
     switch (e.key.toLowerCase()) {
       case 'y':
@@ -1175,6 +1193,8 @@ var categoriesJson = JSON.stringify(categories);
         } else {
           goToNextQuestion();
         }
+        break;
+      default:
         break;
     }
   }
@@ -1339,10 +1359,10 @@ var categoriesJson = JSON.stringify(categories);
         var honeypotFields = newsletterForm.querySelectorAll('.honeypot-field') as NodeListOf<HTMLInputElement>;
         var isBot = false;
         honeypotFields.forEach(field => {
-          if (field.value !== '') isBot = true;
+          if (field.value !== '') {isBot = true;}
         });
 
-        if (isBot) return;
+        if (isBot) {return;}
 
         fetch(newsletterForm.action, {
           method: 'POST',
