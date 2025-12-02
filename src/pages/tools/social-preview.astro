@@ -1,0 +1,885 @@
+---
+import ToolLayout from '@/layouts/ToolLayout.astro';
+
+var toolKeywords = "social preview generator, og image generator, open graph image maker, twitter card generator, social media image creator, free og image tool, meta image generator, link preview image, social share image, facebook og image";
+
+var structuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Social Preview Generator",
+  "description": "Generate beautiful Open Graph images for your tools, blog posts, and pages. Three professional variants to choose from. Free, no signup required.",
+  "url": "https://meysam.io/tools/social-preview",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "featureList": [
+    "Three professional design variants",
+    "Real-time preview",
+    "1200x630 PNG export",
+    "No signup required",
+    "Free to use"
+  ],
+  "author": {
+    "@type": "Person",
+    "name": "Meysam Azad",
+    "url": "https://meysam.io"
+  }
+};
+---
+
+<ToolLayout
+  title="Social Preview Generator"
+  description="Generate beautiful Open Graph images for your tools, blog posts, and pages. Three professional design variants. 1200x630 PNG export. Free, no signup."
+  ogImage="https://meysam.io/og/social-preview.png"
+  canonicalPath="/tools/social-preview"
+  structuredData={structuredData}
+  keywords={toolKeywords}
+>
+  <!-- Tool Header -->
+  <div class="tool-header">
+    <h1>Social Preview Generator</h1>
+    <p class="subtitle">Create beautiful Open Graph images for your pages. Three variants, instant download.</p>
+  </div>
+
+  <div class="tool-content">
+    <!-- Input Form -->
+    <div class="tool-card input-section">
+      <h2>Content</h2>
+
+      <div class="form-grid">
+        <div class="form-group full-width">
+          <label for="title-input">Title <span class="required">*</span></label>
+          <input
+            type="text"
+            id="title-input"
+            placeholder="e.g., Cron Expression Generator"
+            maxlength="60"
+          />
+          <span class="char-count"><span id="title-count">0</span>/60</span>
+        </div>
+
+        <div class="form-group full-width">
+          <label for="subtitle-input">Subtitle / Description</label>
+          <input
+            type="text"
+            id="subtitle-input"
+            placeholder="e.g., Build and decode cron schedules with plain English"
+            maxlength="120"
+          />
+          <span class="char-count"><span id="subtitle-count">0</span>/120</span>
+        </div>
+
+        <div class="form-group">
+          <label for="category-input">Category / Badge</label>
+          <input
+            type="text"
+            id="category-input"
+            placeholder="e.g., DevOps, Free Tools"
+            maxlength="20"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="url-input">URL</label>
+          <input
+            type="text"
+            id="url-input"
+            placeholder="meysam.io/tools/cron"
+            value="meysam.io"
+            maxlength="40"
+          />
+        </div>
+
+        <div class="form-group full-width">
+          <label for="features-input">Features (comma-separated)</label>
+          <input
+            type="text"
+            id="features-input"
+            placeholder="e.g., Free, No Signup, No Ads"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="icon-select">Icon (Gradient variant)</label>
+          <select id="icon-select">
+            <option value="none">No Icon</option>
+            <option value="clock">Clock / Schedule</option>
+            <option value="code">Code / Developer</option>
+            <option value="chart">Chart / Analytics</option>
+            <option value="lightbulb">Lightbulb / Ideas</option>
+            <option value="rocket">Rocket / Launch</option>
+            <option value="tool">Tool / Utility</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Demo (Split variant)</label>
+          <div class="demo-inputs">
+            <input
+              type="text"
+              id="demo-input"
+              placeholder="Input: * * * * *"
+              maxlength="30"
+            />
+            <input
+              type="text"
+              id="demo-output"
+              placeholder="Output: Every minute"
+              maxlength="40"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Previews Section -->
+    <div class="tool-card previews-section">
+      <h2>Preview & Download</h2>
+      <p class="section-note">Click any variant to download as PNG (1200x630)</p>
+
+      <div class="variants-grid">
+        <!-- Minimal Variant -->
+        <div class="variant-wrapper">
+          <div class="variant-header">
+            <h3>Minimal Pro</h3>
+            <button type="button" class="download-btn" data-variant="minimal">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              Download
+            </button>
+          </div>
+          <div class="variant-preview" id="minimal-preview-container">
+            <div class="preview-scale-wrapper">
+              <div id="minimal-canvas" class="preview-canvas"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gradient Variant -->
+        <div class="variant-wrapper">
+          <div class="variant-header">
+            <h3>Gradient Glow</h3>
+            <button type="button" class="download-btn" data-variant="gradient">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              Download
+            </button>
+          </div>
+          <div class="variant-preview" id="gradient-preview-container">
+            <div class="preview-scale-wrapper">
+              <div id="gradient-canvas" class="preview-canvas"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Split Variant -->
+        <div class="variant-wrapper">
+          <div class="variant-header">
+            <h3>Split Card</h3>
+            <button type="button" class="download-btn" data-variant="split">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              Download
+            </button>
+          </div>
+          <div class="variant-preview" id="split-preview-container">
+            <div class="preview-scale-wrapper">
+              <div id="split-canvas" class="preview-canvas"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tips Section -->
+    <div class="tool-card tips-section">
+      <h2>Tips for Great Social Previews</h2>
+      <div class="tips-grid">
+        <div class="tip">
+          <span class="tip-icon">1</span>
+          <div>
+            <strong>Keep titles short</strong>
+            <p>Under 50 characters works best for readability at thumbnail sizes.</p>
+          </div>
+        </div>
+        <div class="tip">
+          <span class="tip-icon">2</span>
+          <div>
+            <strong>Use action words</strong>
+            <p>Start with verbs like "Generate", "Build", "Create" to convey value.</p>
+          </div>
+        </div>
+        <div class="tip">
+          <span class="tip-icon">3</span>
+          <div>
+            <strong>Test at small sizes</strong>
+            <p>Your image should be readable when scaled down to 200x105 pixels.</p>
+          </div>
+        </div>
+        <div class="tip">
+          <span class="tip-icon">4</span>
+          <div>
+            <strong>Include key benefits</strong>
+            <p>Badges like "Free" or "No Signup" increase click-through rates.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Newsletter CTA -->
+    <div class="tool-card newsletter-section">
+      <h2>Like This Tool?</h2>
+      <p>Get weekly DevOps tips and early access to new tools.</p>
+
+      <form
+        class="newsletter-form listmonk-form"
+        data-pirsch-event="subscribe"
+        data-pirsch-meta-page_url="/tools/social-preview"
+        data-pirsch-meta-variant="social-preview-tool"
+        data-pirsch-non-interactive
+        action="https://newsletter.meysam.io/subscription/form"
+        method="post"
+      >
+        <input type="hidden" name="nonce" />
+        <input id="00a2c" type="hidden" name="l" value="00a2c2b8-467a-4d74-9c76-9c6472c91d06" />
+        <input type="text" name="name" value="" class="honeypot-field" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        <input type="text" name="company" value="" class="honeypot-field" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        <input type="text" name="website" value="" class="honeypot-field" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        <div class="form-row">
+          <input
+            type="email"
+            name="email"
+            placeholder="your@email.com"
+            required
+            aria-label="Email address"
+            class="email-input"
+          />
+          <altcha-widget
+            class="altcha-widget"
+            challengeurl="https://newsletter.meysam.io/api/public/captcha/altcha"
+            auto="onfocus"
+          ></altcha-widget>
+          <script type="module" src="https://newsletter.meysam.io/public/static/altcha.umd.js" async defer></script>
+          <button type="submit" class="btn btn-primary">Get Early Access</button>
+        </div>
+        <p class="form-note">Join 1,500+ engineers. No spam.</p>
+      </form>
+    </div>
+  </div>
+
+  <!-- Hidden render containers (off-screen for image generation) -->
+  <div id="render-container" aria-hidden="true"></div>
+</ToolLayout>
+
+<script>
+  import { toPng } from 'html-to-image';
+  import log from 'loglevel';
+
+  // Icon SVG paths
+  var ICONS = {
+    clock: '<circle cx="60" cy="60" r="50" stroke="currentColor" stroke-width="4" fill="none"/><line x1="60" y1="60" x2="60" y2="32" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><line x1="60" y1="60" x2="82" y2="72" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><circle cx="60" cy="60" r="5" fill="currentColor"/>',
+    code: '<polyline points="35 40 15 60 35 80" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/><polyline points="85 40 105 60 85 80" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/><line x1="68" y1="28" x2="52" y2="92" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>',
+    chart: '<rect x="15" y="55" width="22" height="45" rx="4" fill="currentColor" opacity="0.5"/><rect x="49" y="35" width="22" height="65" rx="4" fill="currentColor" opacity="0.7"/><rect x="83" y="15" width="22" height="85" rx="4" fill="currentColor"/>',
+    lightbulb: '<path d="M60 10 L60 0" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><path d="M28 28 L20 20" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><path d="M92 28 L100 20" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><circle cx="60" cy="50" r="28" stroke="currentColor" stroke-width="4" fill="none"/><path d="M46 78 L46 88 C46 94 52 100 60 100 C68 100 74 94 74 88 L74 78" stroke="currentColor" stroke-width="4" fill="none"/>',
+    rocket: '<path d="M60 95 L60 70" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><path d="M42 95 L60 70 L78 95" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/><ellipse cx="60" cy="42" rx="18" ry="32" stroke="currentColor" stroke-width="4" fill="none"/><circle cx="60" cy="38" r="7" fill="currentColor"/>',
+    tool: '<circle cx="60" cy="60" r="48" stroke="currentColor" stroke-width="4" fill="none"/><path d="M45 45 L55 55 M75 75 L55 55 M55 55 L55 75 L75 75" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>',
+    none: ''
+  };
+
+  // DOM Elements
+  var titleInput = document.getElementById('title-input') as HTMLInputElement;
+  var subtitleInput = document.getElementById('subtitle-input') as HTMLInputElement;
+  var categoryInput = document.getElementById('category-input') as HTMLInputElement;
+  var urlInput = document.getElementById('url-input') as HTMLInputElement;
+  var featuresInput = document.getElementById('features-input') as HTMLInputElement;
+  var iconSelect = document.getElementById('icon-select') as HTMLSelectElement;
+  var demoInputEl = document.getElementById('demo-input') as HTMLInputElement;
+  var demoOutputEl = document.getElementById('demo-output') as HTMLInputElement;
+  var titleCount = document.getElementById('title-count');
+  var subtitleCount = document.getElementById('subtitle-count');
+
+  var minimalCanvas = document.getElementById('minimal-canvas');
+  var gradientCanvas = document.getElementById('gradient-canvas');
+  var splitCanvas = document.getElementById('split-canvas');
+
+  var downloadButtons = document.querySelectorAll('.download-btn');
+
+  // Current state
+  var currentData = {
+    title: 'Your Title Here',
+    subtitle: 'Add a compelling description',
+    category: '',
+    url: 'meysam.io',
+    features: [] as string[],
+    icon: 'none',
+    demoInput: '',
+    demoOutput: ''
+  };
+
+  // Generate Minimal variant HTML
+  function generateMinimalHTML(data: typeof currentData) {
+    var featuresHTML = data.features.length > 0
+      ? '<div style="display:flex;flex-wrap:wrap;gap:24px;margin-top:48px;">' +
+        data.features.map(function(f, i) {
+          return '<span style="display:flex;align-items:center;gap:8px;color:#a0a0a0;font-size:18px;">' +
+            '<span style="width:8px;height:8px;background:#10b981;border-radius:50%;"></span>' +
+            escapeHtml(f) +
+            (i < data.features.length - 1 ? '<span style="width:4px;height:4px;background:#6a6a6a;border-radius:50%;margin-left:16px;"></span>' : '') +
+            '</span>';
+        }).join('') +
+        '</div>'
+      : '';
+
+    var categoryHTML = data.category
+      ? '<div style="display:inline-block;padding:8px 20px;background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.3);border-radius:6px;color:#60a5fa;font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:24px;">' + escapeHtml(data.category) + '</div>'
+      : '';
+
+    return '<div style="width:1200px;height:630px;background:#0a0a0a;position:relative;font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Roboto,sans-serif;overflow:hidden;">' +
+      '<div style="position:absolute;top:0;left:0;right:0;bottom:0;background-image:linear-gradient(rgba(59,130,246,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(59,130,246,0.03) 1px,transparent 1px);background-size:60px 60px;"></div>' +
+      '<div style="position:absolute;left:0;top:0;width:8px;height:100%;background:linear-gradient(180deg,#3b82f6 0%,#60a5fa 100%);"></div>' +
+      '<div style="position:absolute;left:100px;top:140px;right:100px;">' +
+        categoryHTML +
+        '<h1 style="font-size:64px;font-weight:700;color:#f5f5f5;margin:0 0 16px 0;letter-spacing:-0.02em;line-height:1.1;max-width:900px;">' + escapeHtml(data.title) + '</h1>' +
+        '<div style="width:120px;height:4px;background:linear-gradient(90deg,#3b82f6 0%,#60a5fa 100%);border-radius:2px;margin-bottom:24px;"></div>' +
+        (data.subtitle ? '<p style="font-size:26px;color:#a0a0a0;margin:0;max-width:700px;line-height:1.4;">' + escapeHtml(data.subtitle) + '</p>' : '') +
+        featuresHTML +
+      '</div>' +
+      '<div style="position:absolute;left:100px;right:100px;bottom:60px;display:flex;justify-content:space-between;align-items:center;">' +
+        '<svg width="40" height="40" viewBox="0 0 200 200"><circle cx="100" cy="100" r="70" fill="none" stroke="url(#mg1)" stroke-width="3"/><text x="100" y="135" font-family="-apple-system,BlinkMacSystemFont,\'Segoe UI\',sans-serif" font-size="110" font-weight="700" fill="url(#mg1)" text-anchor="middle">M</text><defs><linearGradient id="mg1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#3b82f6"/><stop offset="100%" style="stop-color:#60a5fa"/></linearGradient></defs></svg>' +
+        '<span style="font-size:20px;color:#6a6a6a;letter-spacing:0.02em;">' + escapeHtml(data.url) + '</span>' +
+      '</div>' +
+    '</div>';
+  }
+
+  // Generate Gradient variant HTML
+  function generateGradientHTML(data: typeof currentData) {
+    var iconHTML = data.icon !== 'none' && ICONS[data.icon]
+      ? '<div style="position:absolute;left:80px;top:120px;"><svg width="120" height="120" viewBox="0 0 120 120" style="color:#3b82f6;">' + ICONS[data.icon] + '</svg></div>'
+      : '';
+
+    var contentLeft = data.icon !== 'none' ? '240px' : '80px';
+
+    var featuresHTML = data.features.length > 0
+      ? '<div style="display:flex;gap:16px;flex-wrap:wrap;">' +
+        data.features.slice(0, 3).map(function(f) {
+          return '<div style="display:flex;align-items:center;gap:10px;padding:12px 20px;background:rgba(26,26,26,0.8);border:1px solid #2a2a2a;border-radius:8px;color:#f5f5f5;font-size:16px;font-weight:500;">' +
+            '<span style="color:#10b981;font-weight:bold;">&#10003;</span>' + escapeHtml(f) +
+            '</div>';
+        }).join('') +
+        '</div>'
+      : '';
+
+    var categoryHTML = data.category
+      ? '<div style="display:inline-block;padding:6px 16px;background:linear-gradient(135deg,rgba(59,130,246,0.2) 0%,rgba(59,130,246,0.1) 100%);border:1px solid rgba(59,130,246,0.4);border-radius:20px;color:#60a5fa;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:20px;">' + escapeHtml(data.category) + '</div>'
+      : '';
+
+    return '<div style="width:1200px;height:630px;background:#0a0a0a;position:relative;font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Roboto,sans-serif;overflow:hidden;">' +
+      '<div style="position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,#0a0a0a 0%,#151515 50%,#0a0a0a 100%);"></div>' +
+      '<div style="position:absolute;top:-150px;right:-150px;width:500px;height:500px;background:radial-gradient(circle,rgba(59,130,246,0.15) 0%,transparent 70%);border-radius:50%;"></div>' +
+      '<div style="position:absolute;top:1px;left:1px;right:1px;bottom:1px;border:2px solid #2a2a2a;"></div>' +
+      iconHTML +
+      '<div style="position:absolute;left:' + contentLeft + ';top:120px;right:80px;max-width:900px;">' +
+        categoryHTML +
+        '<h1 style="font-size:56px;font-weight:700;color:#f5f5f5;margin:0 0 20px 0;letter-spacing:-0.02em;line-height:1.15;text-shadow:0 2px 20px rgba(0,0,0,0.5);">' + escapeHtml(data.title) + '</h1>' +
+        (data.subtitle ? '<p style="font-size:24px;color:#a0a0a0;margin:0 0 36px 0;line-height:1.5;max-width:650px;">' + escapeHtml(data.subtitle) + '</p>' : '') +
+        featuresHTML +
+      '</div>' +
+      '<div style="position:absolute;left:80px;right:80px;bottom:50px;display:flex;justify-content:space-between;align-items:center;">' +
+        '<div style="display:flex;align-items:center;gap:12px;">' +
+          '<svg width="32" height="32" viewBox="0 0 200 200"><circle cx="100" cy="100" r="70" fill="none" stroke="#3b82f6" stroke-width="3"/><text x="100" y="135" font-family="-apple-system,BlinkMacSystemFont,\'Segoe UI\',sans-serif" font-size="110" font-weight="700" fill="#3b82f6" text-anchor="middle">M</text></svg>' +
+          '<span style="font-size:18px;font-weight:600;color:#f5f5f5;">Meysam Azad</span>' +
+          '<span style="color:#6a6a6a;">|</span>' +
+          '<span style="font-size:18px;color:#6a6a6a;">' + escapeHtml(data.url) + '</span>' +
+        '</div>' +
+        '<div style="display:flex;gap:12px;">' +
+          '<span style="padding:8px 16px;border-radius:6px;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);color:#10b981;">Free</span>' +
+          '<span style="padding:8px 16px;border-radius:6px;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.3);color:#60a5fa;">No Signup</span>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }
+
+  // Generate Split variant HTML
+  function generateSplitHTML(data: typeof currentData) {
+    var featuresHTML = data.features.length > 0
+      ? '<div style="display:flex;flex-direction:column;gap:14px;">' +
+        data.features.slice(0, 3).map(function(f) {
+          return '<div style="display:flex;align-items:center;gap:12px;color:#d0d0d0;font-size:17px;">' +
+            '<span style="display:flex;align-items:center;justify-content:center;width:22px;height:22px;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);border-radius:50%;color:#10b981;font-size:12px;font-weight:bold;">&#10003;</span>' +
+            '<span>' + escapeHtml(f) + '</span>' +
+            '</div>';
+        }).join('') +
+        '</div>'
+      : '';
+
+    var categoryHTML = data.category
+      ? '<div style="display:inline-block;padding:8px 18px;background:rgba(59,130,246,0.12);border:1px solid rgba(59,130,246,0.25);border-radius:6px;color:#60a5fa;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:28px;">' + escapeHtml(data.category) + '</div>'
+      : '';
+
+    var demoCardHTML = (data.demoInput || data.demoOutput)
+      ? '<div style="position:absolute;right:80px;top:100px;width:420px;height:380px;background:#1a1a1a;border:2px solid #2a2a2a;border-radius:16px;padding:32px;display:flex;flex-direction:column;">' +
+          '<div style="display:flex;flex-direction:column;gap:24px;height:100%;justify-content:center;">' +
+            (data.demoInput ? '<div style="display:flex;flex-direction:column;gap:10px;"><span style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:#6a6a6a;">Input</span><div style="padding:16px 20px;background:#0a0a0a;border:1px solid #2a2a2a;border-radius:10px;font-family:\'SF Mono\',Monaco,Consolas,monospace;font-size:20px;color:#60a5fa;letter-spacing:0.05em;">' + escapeHtml(data.demoInput) + '</div></div>' : '') +
+            (data.demoInput && data.demoOutput ? '<div style="display:flex;justify-content:center;color:#6a6a6a;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg></div>' : '') +
+            (data.demoOutput ? '<div style="display:flex;flex-direction:column;gap:10px;"><span style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:#6a6a6a;">Output</span><div style="padding:16px 20px;background:#0a0a0a;border:1px solid #2a2a2a;border-radius:10px;font-family:\'SF Mono\',Monaco,Consolas,monospace;font-size:20px;color:#f5f5f5;">' + escapeHtml(data.demoOutput) + '</div></div>' : '') +
+          '</div>' +
+        '</div>'
+      : '';
+
+    return '<div style="width:1200px;height:630px;background:#0a0a0a;position:relative;font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Roboto,sans-serif;overflow:hidden;">' +
+      '<div style="position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,rgba(59,130,246,0.08) 0%,transparent 50%);"></div>' +
+      '<div style="position:absolute;left:80px;top:100px;width:520px;">' +
+        categoryHTML +
+        '<h1 style="font-size:52px;font-weight:700;color:#f5f5f5;margin:0 0 20px 0;letter-spacing:-0.025em;line-height:1.1;">' + escapeHtml(data.title) + '</h1>' +
+        (data.subtitle ? '<p style="font-size:22px;color:#a0a0a0;margin:0 0 32px 0;line-height:1.5;">' + escapeHtml(data.subtitle) + '</p>' : '') +
+        featuresHTML +
+      '</div>' +
+      demoCardHTML +
+      '<div style="position:absolute;left:80px;right:80px;bottom:50px;display:flex;align-items:center;gap:32px;">' +
+        '<div style="display:flex;align-items:center;gap:10px;">' +
+          '<svg width="36" height="36" viewBox="0 0 200 200"><circle cx="100" cy="100" r="70" fill="none" stroke="url(#sg1)" stroke-width="3"/><text x="100" y="135" font-family="-apple-system,BlinkMacSystemFont,\'Segoe UI\',sans-serif" font-size="110" font-weight="700" fill="url(#sg1)" text-anchor="middle">M</text><defs><linearGradient id="sg1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#3b82f6"/><stop offset="100%" style="stop-color:#60a5fa"/></linearGradient></defs></svg>' +
+          '<span style="font-size:18px;font-weight:600;color:#f5f5f5;">Meysam</span>' +
+        '</div>' +
+        '<div style="display:flex;gap:20px;">' +
+          '<span style="display:flex;align-items:center;gap:8px;color:#a0a0a0;font-size:15px;"><span style="width:8px;height:8px;background:#10b981;border-radius:50%;"></span>Free</span>' +
+          '<span style="display:flex;align-items:center;gap:8px;color:#a0a0a0;font-size:15px;"><span style="width:8px;height:8px;background:#10b981;border-radius:50%;"></span>No Signup</span>' +
+        '</div>' +
+        '<span style="margin-left:auto;font-size:18px;color:#6a6a6a;letter-spacing:0.01em;">' + escapeHtml(data.url) + '</span>' +
+      '</div>' +
+    '</div>';
+  }
+
+  // Escape HTML to prevent XSS
+  function escapeHtml(text: string) {
+    var div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  // Update all previews
+  function updatePreviews() {
+    if (minimalCanvas) minimalCanvas.innerHTML = generateMinimalHTML(currentData);
+    if (gradientCanvas) gradientCanvas.innerHTML = generateGradientHTML(currentData);
+    if (splitCanvas) splitCanvas.innerHTML = generateSplitHTML(currentData);
+  }
+
+  // Download a variant as PNG
+  async function downloadVariant(variant: string) {
+    var canvas: HTMLElement | null = null;
+
+    if (variant === 'minimal') canvas = minimalCanvas;
+    else if (variant === 'gradient') canvas = gradientCanvas;
+    else if (variant === 'split') canvas = splitCanvas;
+
+    if (!canvas || !canvas.firstElementChild) {
+      log.error('Canvas not found for variant:', variant);
+      return;
+    }
+
+    // Find the download button and show loading state
+    var button = document.querySelector('[data-variant="' + variant + '"]') as HTMLButtonElement;
+    var originalText = button.innerHTML;
+    button.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="spin"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Generating...';
+    button.disabled = true;
+
+    try {
+      // Create a temporary container for full-size render
+      var tempContainer = document.createElement('div');
+      tempContainer.style.cssText = 'position:fixed;left:-9999px;top:-9999px;';
+
+      if (variant === 'minimal') tempContainer.innerHTML = generateMinimalHTML(currentData);
+      else if (variant === 'gradient') tempContainer.innerHTML = generateGradientHTML(currentData);
+      else if (variant === 'split') tempContainer.innerHTML = generateSplitHTML(currentData);
+
+      document.body.appendChild(tempContainer);
+      var renderTarget = tempContainer.firstElementChild as HTMLElement;
+
+      // Wait a frame for styles to apply
+      await new Promise(function(resolve) { requestAnimationFrame(resolve); });
+
+      var dataUrl = await toPng(renderTarget, {
+        width: 1200,
+        height: 630,
+        pixelRatio: 2,
+        cacheBust: true,
+        backgroundColor: '#0a0a0a',
+      });
+
+      document.body.removeChild(tempContainer);
+
+      // Create download link
+      var link = document.createElement('a');
+      var filename = 'og-' + variant + '-' + (currentData.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 30) || 'preview') + '.png';
+      link.download = filename;
+      link.href = dataUrl;
+      link.click();
+    } catch (error) {
+      log.error('Failed to generate image:', error);
+      let userMessage = 'Failed to generate image. ';
+      if (error && typeof error === 'object' && 'message' in error && typeof error.message === 'string') {
+        // Map known error messages to user-friendly explanations
+        if (error.message.includes('tainted canvas')) {
+          userMessage += 'This may be due to a cross-origin image or resource. Please ensure all images are from the same origin or CORS-enabled.';
+        } else if (error.message.includes('Failed to fetch')) {
+          userMessage += 'A network error occurred. Please check your internet connection.';
+        } else if (error.message.includes('The provided value is not of type')) {
+          userMessage += 'Your browser may not support this feature. Please try updating your browser or using a different one.';
+        } else {
+          userMessage += 'Error: ' + error.message;
+        }
+      } else {
+        userMessage += 'Please try again.';
+      }
+      alert(userMessage);
+    } finally {
+      button.innerHTML = originalText;
+      button.disabled = false;
+    }
+  }
+
+  // Debounce function
+  function debounce(func: Function, wait: number) {
+    var timeout: ReturnType<typeof setTimeout>;
+    return function(...args: any[]) {
+      clearTimeout(timeout);
+      timeout = setTimeout(function() {
+        func.apply(null, args);
+      }, wait);
+    };
+  }
+
+  // Handle input changes
+  var debouncedUpdate = debounce(updatePreviews, 150);
+
+  function handleInputChange() {
+    currentData.title = titleInput.value || 'Your Title Here';
+    currentData.subtitle = subtitleInput.value;
+    currentData.category = categoryInput.value;
+    currentData.url = urlInput.value || 'meysam.io';
+    currentData.features = featuresInput.value.split(',').map(function(f) { return f.trim(); }).filter(Boolean);
+    currentData.icon = iconSelect.value;
+    currentData.demoInput = demoInputEl.value;
+    currentData.demoOutput = demoOutputEl.value;
+
+    // Update character counts
+    if (titleCount) titleCount.textContent = String(titleInput.value.length);
+    if (subtitleCount) subtitleCount.textContent = String(subtitleInput.value.length);
+
+    debouncedUpdate();
+  }
+
+  // Initialize
+  function init() {
+    // Set up input listeners
+    [titleInput, subtitleInput, categoryInput, urlInput, featuresInput, iconSelect, demoInputEl, demoOutputEl].forEach(function(el) {
+      if (el) {
+        el.addEventListener('input', handleInputChange);
+        el.addEventListener('change', handleInputChange);
+      }
+    });
+
+    // Set up download buttons
+    downloadButtons.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var variant = (btn as HTMLElement).dataset.variant;
+        if (variant) downloadVariant(variant);
+      });
+    });
+
+    // Initial render
+    updatePreviews();
+  }
+
+  document.addEventListener('DOMContentLoaded', init);
+  document.addEventListener('astro:page-load', init);
+</script>
+
+<style scoped>
+  .input-section h2 {
+    font-size: 1.25rem;
+    margin-bottom: var(--space-lg);
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-md);
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    position: relative;
+  }
+
+  .form-group.full-width {
+    grid-column: 1 / -1;
+  }
+
+  .form-group label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-text-muted);
+  }
+
+  .form-group .required {
+    color: #ef4444;
+  }
+
+  .form-group input,
+  .form-group select {
+    padding: 0.75rem 1rem;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+    color: var(--color-text);
+    font-size: 0.9375rem;
+    transition: all var(--transition-fast);
+  }
+
+  .form-group input:focus,
+  .form-group select:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+
+  .char-count {
+    position: absolute;
+    right: 12px;
+    top: 36px;
+    font-size: 0.75rem;
+    color: var(--color-text-dim);
+  }
+
+  .demo-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .demo-inputs input {
+    width: 100%;
+  }
+
+  .previews-section h2 {
+    font-size: 1.25rem;
+    margin-bottom: var(--space-xs);
+  }
+
+  .section-note {
+    font-size: 0.875rem;
+    color: var(--color-text-dim);
+    margin-bottom: var(--space-lg);
+  }
+
+  .variants-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+  }
+
+  .variant-wrapper {
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: var(--space-md);
+  }
+
+  .variant-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-md);
+  }
+
+  .variant-header h3 {
+    font-size: 1rem;
+    margin: 0;
+    color: var(--color-text-muted);
+  }
+
+  .download-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: 0.5rem 1rem;
+    background: var(--color-accent);
+    border: none;
+    border-radius: var(--border-radius-sm);
+    color: white;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    font-family: inherit;
+  }
+
+  .download-btn:hover {
+    background: var(--color-accent-hover);
+    transform: translateY(-1px);
+  }
+
+  .download-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .download-btn .spin {
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .variant-preview {
+    background: #0a0a0a;
+    border-radius: var(--border-radius-sm);
+    overflow: hidden;
+  }
+
+  .preview-scale-wrapper {
+    transform-origin: top left;
+    transform: scale(0.5);
+    width: 200%;
+    height: 0;
+    padding-bottom: 26.25%; /* (630/1200) * 50% */
+  }
+
+  .preview-canvas {
+    width: 1200px;
+    height: 630px;
+  }
+
+  .tips-section h2 {
+    font-size: 1.25rem;
+    margin-bottom: var(--space-lg);
+  }
+
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-lg);
+  }
+
+  .tip {
+    display: flex;
+    gap: var(--space-md);
+  }
+
+  .tip-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: 50%;
+    color: var(--color-accent-light);
+    font-size: 0.875rem;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  .tip strong {
+    display: block;
+    color: var(--color-text);
+    margin-bottom: 4px;
+  }
+
+  .tip p {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .newsletter-section {
+    text-align: center;
+  }
+
+  .newsletter-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: var(--space-sm);
+  }
+
+  .newsletter-section > p {
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-lg);
+  }
+
+  .form-row {
+    display: flex;
+    gap: var(--space-sm);
+    max-width: 500px;
+    margin: 0 auto var(--space-sm);
+  }
+
+  .email-input {
+    flex: 1;
+  }
+
+  .altcha-widget {
+    display: none;
+  }
+
+  .form-note {
+    font-size: 0.875rem;
+    color: var(--color-text-dim);
+    margin: 0;
+  }
+
+  .honeypot-field {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+  }
+
+  #render-container {
+    position: fixed;
+    left: -9999px;
+    top: -9999px;
+    width: 1200px;
+    height: 630px;
+    overflow: hidden;
+  }
+
+  @media (max-width: 768px) {
+    .form-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .form-group.full-width {
+      grid-column: 1;
+    }
+
+    .preview-scale-wrapper {
+      transform: scale(0.3);
+      padding-bottom: 15.75%; /* (630/1200) * 30% */
+    }
+
+    .form-row {
+      flex-direction: column;
+    }
+  }
+</style>
