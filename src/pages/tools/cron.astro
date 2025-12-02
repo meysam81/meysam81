@@ -719,9 +719,8 @@ var faqData = {
   // Debounce function
   function debounce(func, wait) {
     var timeout;
-    return function handleDebounce() {
+    return function handleDebounce(...args) {
       var context = this;
-      var args = arguments;
       clearTimeout(timeout);
       timeout = setTimeout(function timeout() {
         func.apply(context, args);
@@ -750,12 +749,12 @@ var faqData = {
     toggleRunsBtn.addEventListener('click', toggleNextRuns);
 
     // Presets
-    presetButtons.forEach(function(btn) {
+    presetButtons.forEach(function addPresetClickListener(btn) {
       btn.addEventListener('click', handlePresetClick);
     });
 
     // Examples
-    exampleButtons.forEach(function(btn) {
+    exampleButtons.forEach(function addExampleClickListener(btn) {
       btn.addEventListener('click', handleExampleClick);
     });
 

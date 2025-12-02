@@ -1,6 +1,6 @@
 # meysam.io - Free Tools Strategy
 
-> **Last Updated**: 2025-11-30
+> **Last Updated**: 2025-12-01
 > **Status**: In Progress (Wave 1)
 > **Newsletter CTA**: newsletter.meysam.io
 
@@ -12,11 +12,11 @@ Build a suite of free, standalone micro-tools that solve specific problems for D
 
 ## Implementation Status
 
-| Tool                          | Status       | URL                     | Notes                                                                                              |
-| ----------------------------- | ------------ | ----------------------- | -------------------------------------------------------------------------------------------------- |
-| **Cron Expression Generator** | ✅ Completed | `/tools/cron`           | Bidirectional English↔cron conversion, 70+ natural language patterns, next 10 runs calculation     |
-| **YAML/JSON Validator**       | ✅ Completed | `/tools/yaml-json`      | YAML 1.2 & JSON RFC 8259 compliant, bidirectional conversion, line-number errors, syntax reference |
-| **SaaS Idea Validator**       | 🔲 Planned   | `/tools/idea-validator` | Wave 1                                                                                             |
+| Tool                          | Status       | URL                          | Notes                                                                                              |
+| ----------------------------- | ------------ | ---------------------------- | -------------------------------------------------------------------------------------------------- |
+| **Cron Expression Generator** | ✅ Completed | `/tools/cron`                | Bidirectional English↔cron conversion, 70+ natural language patterns, next 10 runs calculation     |
+| **YAML/JSON Validator**       | ✅ Completed | `/tools/yaml-json`           | YAML 1.2 & JSON RFC 8259 compliant, bidirectional conversion, line-number errors, syntax reference |
+| **SaaS Idea Validator**       | ✅ Completed | `/tools/saas-idea-validator` | 20 battle-tested criteria, 5 categories, confetti celebration, shareable results, keyboard nav     |
 
 ---
 
@@ -161,7 +161,7 @@ Build a suite of free, standalone micro-tools that solve specific problems for D
 
 **One-liner**: Score your startup idea against 20 validation criteria
 
-**URL slug**: `meysam.io/tools/idea-validator`
+**URL slug**: `meysam.io/tools/saas-idea-validator`
 
 **Target market**: Core (Aspiring Technical Founders)
 

@@ -2,7 +2,7 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import ContentCard from '@/components/ContentCard.astro';
 
-var toolsKeywords = "free developer tools, online devops tools, web developer utilities, cron generator, yaml validator, json converter, free online tools, no signup tools, developer productivity, devops utilities, sre tools, technical tools, software engineering tools";
+var toolsKeywords = "free developer tools, online devops tools, web developer utilities, cron generator, yaml validator, json converter, free online tools, no signup tools, developer productivity, devops utilities, sre tools, technical tools, software engineering tools, startup idea validator, saas validation checklist, founder tools";
 
 var tools = [
   {
@@ -16,6 +16,12 @@ var tools = [
     description: "Validate, format, and convert between YAML and JSON instantly. Detailed error messages with line numbers.",
     url: "/tools/yaml-json",
     badge: "DevOps"
+  },
+  {
+    title: "SaaS Idea Validator",
+    description: "Score your startup idea against 20 battle-tested criteria. Get objective feedback before you invest months building.",
+    url: "/tools/saas-idea-validator",
+    badge: "Founders"
   }
 ];
 
@@ -27,7 +33,7 @@ var structuredData = {
   "url": "https://meysam.io/tools",
   "mainEntity": {
     "@type": "ItemList",
-    "itemListElement": tools.map(function(tool, index) {
+    "itemListElement": tools.map(function itemListElement(tool, index) {
       return {
         "@type": "ListItem",
         "position": index + 1,
@@ -72,14 +78,14 @@ var structuredData = {
 
         <div class="card coming-soon">
           <span class="badge">Coming Soon</span>
-          <h3>SaaS Idea Validator</h3>
-          <p>Score your startup idea against 20 validation criteria.</p>
+          <h3>MRR Calculator</h3>
+          <p>Calculate SaaS metrics, runway, and growth projections.</p>
         </div>
 
         <div class="card coming-soon">
           <span class="badge">Coming Soon</span>
-          <h3>MRR Calculator</h3>
-          <p>Calculate SaaS metrics, runway, and growth projections.</p>
+          <h3>Startup Cost Estimator</h3>
+          <p>Estimate your monthly burn rate and runway for your SaaS.</p>
         </div>
       </div>
     </div>

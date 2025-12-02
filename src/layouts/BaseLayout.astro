@@ -143,7 +143,7 @@ var defaultPersonStructuredData = {
 
     <script>
       function initSmoothScroll() {
-        document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+        document.querySelectorAll('a[href^="#"]').forEach(function addSmoothScroll(anchor) {
           anchor.addEventListener('click', function handleAnchorClick(e) {
             var href = this.getAttribute('href');
             if (href === '#') {return;}
