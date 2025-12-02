@@ -9,6 +9,7 @@ import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeSlug from "rehype-slug";
 import { fileURLToPath } from "url";
 import compression from "vite-plugin-compression2";
+import vue from "@astrojs/vue";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -18,6 +19,7 @@ export default defineConfig({
     port: 3000,
   },
   integrations: [
+    vue(),
     sitemap(),
     expressiveCode({
       frames: {
@@ -44,7 +46,7 @@ export default defineConfig({
             `${packageRunner} pagefind --site ${dir.pathname} --glob '**/blog/**/*.html'`,
             {
               stdio: "inherit",
-            }
+            },
           );
         },
       },
