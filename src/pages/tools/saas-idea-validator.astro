@@ -964,8 +964,7 @@ var categoriesJson = JSON.stringify(categories);
       headline: result.headline,
       categoryScores: result.categoryScores
     };
-    (window as any).__VALIDATOR_SHARE_DATA__ = shareData;
-    window.dispatchEvent(new CustomEvent('validator-results-ready', { detail: shareData }));
+    window.dispatchEvent(new CustomEvent('idea-validator:results-ready', { detail: shareData }));
 
     // Scroll to top of results
     resultsScreen.scrollIntoView({ behavior: 'smooth', block: 'start' });

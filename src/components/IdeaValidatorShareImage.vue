@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, reactive } from 'vue';
-import { toPng, toBlob } from 'html-to-image';
+import { ref, computed, onMounted, onUnmounted, reactive } from "vue";
+import { toPng, toBlob } from "html-to-image";
 
 // Result data structure
 interface CategoryScore {
@@ -14,42 +14,46 @@ interface CategoryScore {
 interface ResultData {
   ideaName: string;
   percentage: number;
-  grade: 'A' | 'B' | 'C' | 'D' | 'F';
+  grade: "A" | "B" | "C" | "D" | "F";
   headline: string;
   categoryScores: Record<string, CategoryScore>;
 }
 
 // Reactive state for results
-const resultData = reactive<ResultData>({
-  ideaName: '',
+var resultData = reactive<ResultData>({
+  ideaName: "",
   percentage: 0,
-  grade: 'C',
-  headline: 'Complete the validation to see your results',
+  grade: "C",
+  headline: "Complete the validation to see your results",
   categoryScores: {},
 });
 
-const hasResults = ref(false);
+var hasResults = ref(false);
 
 // Refs
-const previewRef = ref<HTMLElement | null>(null);
-const isGenerating = ref(false);
-const copySuccess = ref(false);
+var previewRef = ref<HTMLElement | null>(null);
+var isGenerating = ref(false);
+var copySuccess = ref(false);
 
 // Listen for results from the validator
-onMounted(() => {
-  // Check if results already exist
-  if ((window as any).__VALIDATOR_SHARE_DATA__) {
-    updateResults((window as any).__VALIDATOR_SHARE_DATA__);
-  }
+function handleResultsReady(event: Event) {
+  var customEvent = event as CustomEvent<ResultData>;
+  updateResults(customEvent.detail);
+}
 
-  // Listen for updates
-  window.addEventListener('validator-results-ready', ((event: CustomEvent) => {
-    updateResults(event.detail);
-  }) as EventListener);
+onMounted(function onComponentMounted() {
+  window.addEventListener("idea-validator:results-ready", handleResultsReady);
+});
+
+onUnmounted(function onComponentUnmounted() {
+  window.removeEventListener(
+    "idea-validator:results-ready",
+    handleResultsReady
+  );
 });
 
 function updateResults(data: ResultData) {
-  resultData.ideaName = data.ideaName || '';
+  resultData.ideaName = data.ideaName || "";
   resultData.percentage = data.percentage;
   resultData.grade = data.grade;
   resultData.headline = data.headline;
@@ -59,32 +63,38 @@ function updateResults(data: ResultData) {
 
 // Category colors and names
 const categoryMeta: Record<string, { name: string; color: string }> = {
-  market: { name: 'Market', color: '#8b5cf6' },
-  problem: { name: 'Problem', color: '#f59e0b' },
-  solution: { name: 'Solution', color: '#10b981' },
-  distribution: { name: 'Distribution', color: '#3b82f6' },
-  founder: { name: 'Founder Fit', color: '#ec4899' },
+  market: { name: "Market", color: "#8b5cf6" },
+  problem: { name: "Problem", color: "#f59e0b" },
+  solution: { name: "Solution", color: "#10b981" },
+  distribution: { name: "Distribution", color: "#3b82f6" },
+  founder: { name: "Founder Fit", color: "#ec4899" },
 };
 
 // Computed grade color
 const gradeColor = computed(() => {
   switch (resultData.grade) {
-    case 'A': return '#10b981';
-    case 'B': return '#3b82f6';
-    case 'C': return '#f59e0b';
-    case 'D': return '#f97316';
-    case 'F': return '#ef4444';
-    default: return '#6b7280';
+    case "A":
+      return "#10b981";
+    case "B":
+      return "#3b82f6";
+    case "C":
+      return "#f59e0b";
+    case "D":
+      return "#f97316";
+    case "F":
+      return "#ef4444";
+    default:
+      return "#6b7280";
   }
 });
 
 // Score emoji
 const scoreEmoji = computed(() => {
-  if (resultData.percentage >= 85) return '🚀';
-  if (resultData.percentage >= 70) return '💪';
-  if (resultData.percentage >= 55) return '🎯';
-  if (resultData.percentage >= 40) return '🔍';
-  return '⚠️';
+  if (resultData.percentage >= 85) return "🚀";
+  if (resultData.percentage >= 70) return "💪";
+  if (resultData.percentage >= 55) return "🎯";
+  if (resultData.percentage >= 40) return "🔍";
+  return "⚠️";
 });
 
 /**
@@ -96,26 +106,59 @@ const scoreEmoji = computed(() => {
  * @returns {Promise<string>} A promise that resolves to a PNG image data URL.
  * @throws {Error} If the preview element is not found, or if image generation fails.
  */
+function waitForRender(element: HTMLElement, maxAttempts = 10): Promise<void> {
+  return new Promise(function resolveRender(resolve, reject) {
+    var attempts = 0;
+
+    function checkReady() {
+      attempts++;
+
+      var rect = element.getBoundingClientRect();
+      var hasValidDimensions = rect.width > 0 && rect.height > 0;
+
+      if (hasValidDimensions) {
+        requestAnimationFrame(function doubleRaf() {
+          requestAnimationFrame(function afterDoubleRaf() {
+            resolve();
+          });
+        });
+      } else if (attempts < maxAttempts) {
+        setTimeout(checkReady, 50 * attempts);
+      } else {
+        reject(new Error("Element failed to render with valid dimensions"));
+      }
+    }
+
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(checkReady).catch(function onFontError() {
+        checkReady();
+      });
+    } else {
+      checkReady();
+    }
+  });
+}
+
 async function generateImage(): Promise<string> {
-  if (!previewRef.value) throw new Error('Preview element not found');
+  if (!previewRef.value) throw new Error("Preview element not found");
 
   // Create a clone for rendering at full size
   const clone = previewRef.value.cloneNode(true) as HTMLElement;
-  clone.style.transform = 'none';
-  clone.style.position = 'fixed';
-  clone.style.left = '-9999px';
-  clone.style.top = '-9999px';
+  clone.style.transform = "none";
+  clone.style.position = "fixed";
+  clone.style.left = "-9999px";
+  clone.style.top = "-9999px";
   document.body.appendChild(clone);
 
   try {
-    await new Promise(resolve => requestAnimationFrame(resolve));
+    await waitForRender(clone);
 
     const dataUrl = await toPng(clone, {
       width: 1200,
       height: 630,
       pixelRatio: 2,
       cacheBust: true,
-      backgroundColor: '#0a0a0a',
+      backgroundColor: "#0a0a0a",
     });
 
     return dataUrl;
@@ -131,16 +174,24 @@ async function downloadImage() {
 
   try {
     const dataUrl = await generateImage();
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     const filename = resultData.ideaName
-      ? `idea-validator-${resultData.ideaName.toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 30)}.png`
-      : 'idea-validator-results.png';
+      ? `idea-validator-${resultData.ideaName
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .slice(0, 30)}.png`
+      : "idea-validator-results.png";
     link.download = filename;
     link.href = dataUrl;
     link.click();
   } catch (error) {
-    console.error('Failed to generate image:', error);
-    alert('Failed to generate image. ' + (error && (error as Error).message ? (error as Error).message : 'Please try again.'));
+    console.error("Failed to generate image:", error);
+    alert(
+      "Failed to generate image. " +
+        (error && (error as Error).message
+          ? (error as Error).message
+          : "Please try again.")
+    );
   } finally {
     isGenerating.value = false;
   }
@@ -152,41 +203,45 @@ async function copyToClipboard() {
   isGenerating.value = true;
 
   try {
-    if (!previewRef.value) throw new Error('Preview element not found');
+    if (!previewRef.value) throw new Error("Preview element not found");
 
     // Create a clone for rendering at full size
-    const clone = previewRef.value.cloneNode(true) as HTMLElement;
-    clone.style.transform = 'none';
-    clone.style.position = 'fixed';
-    clone.style.left = '-9999px';
-    clone.style.top = '-9999px';
+    var clone = previewRef.value.cloneNode(true) as HTMLElement;
+    clone.style.transform = "none";
+    clone.style.position = "fixed";
+    clone.style.left = "-9999px";
+    clone.style.top = "-9999px";
     document.body.appendChild(clone);
 
     try {
-      await new Promise(resolve => requestAnimationFrame(resolve));
+      await waitForRender(clone);
 
-      const blob = await toBlob(clone, {
+      var blob = await toBlob(clone, {
         width: 1200,
         height: 630,
         pixelRatio: 2,
         cacheBust: true,
-        backgroundColor: '#0a0a0a',
+        backgroundColor: "#0a0a0a",
       });
 
-      if (!blob) throw new Error('Failed to generate blob');
+      if (!blob) throw new Error("Failed to generate blob");
 
       await navigator.clipboard.write([
-        new ClipboardItem({ 'image/png': blob }),
+        new ClipboardItem({ "image/png": blob }),
       ]);
 
       copySuccess.value = true;
-      setTimeout(() => { copySuccess.value = false; }, 2000);
+      setTimeout(function clearSuccess() {
+        copySuccess.value = false;
+      }, 2000);
     } finally {
       document.body.removeChild(clone);
     }
   } catch (error) {
-    console.error('Failed to copy image:', error);
-    alert("Failed to copy image to clipboard. Your browser doesn't support copying images to clipboard. Please use the Download PNG button instead.");
+    console.error("Failed to copy image:", error);
+    alert(
+      "Failed to copy image to clipboard. Your browser doesn't support copying images to clipboard. Please use the Download PNG button instead."
+    );
   } finally {
     isGenerating.value = false;
   }
@@ -196,10 +251,17 @@ async function copyToClipboard() {
 <template>
   <div class="share-image-container">
     <h3 class="share-title">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-        <circle cx="8.5" cy="8.5" r="1.5"/>
-        <polyline points="21 15 16 10 5 21"/>
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+        <circle cx="8.5" cy="8.5" r="1.5" />
+        <polyline points="21 15 16 10 5 21" />
       </svg>
       Share Your Results
     </h3>
@@ -222,17 +284,31 @@ async function copyToClipboard() {
             <!-- Header with emoji and idea name -->
             <div class="preview-header">
               <span class="preview-emoji">{{ scoreEmoji }}</span>
-              <span v-if="resultData.ideaName" class="preview-idea-name">"{{ resultData.ideaName }}"</span>
+              <span v-if="resultData.ideaName" class="preview-idea-name"
+                >"{{ resultData.ideaName }}"</span
+              >
               <span v-else class="preview-idea-name">SaaS Idea Validation</span>
             </div>
 
             <!-- Score section -->
             <div class="preview-score-section">
-              <div class="preview-score-circle" :style="{ borderColor: gradeColor }">
-                <span class="preview-score-number" :style="{ color: gradeColor }">{{ resultData.percentage }}</span>
+              <div
+                class="preview-score-circle"
+                :style="{ borderColor: gradeColor }"
+              >
+                <span
+                  class="preview-score-number"
+                  :style="{ color: gradeColor }"
+                  >{{ resultData.percentage }}</span
+                >
                 <span class="preview-score-label">/100</span>
               </div>
-              <div class="preview-grade" :style="{ backgroundColor: gradeColor }">{{ resultData.grade }}</div>
+              <div
+                class="preview-grade"
+                :style="{ backgroundColor: gradeColor }"
+              >
+                {{ resultData.grade }}
+              </div>
             </div>
 
             <!-- Headline -->
@@ -248,9 +324,13 @@ async function copyToClipboard() {
                 <div class="preview-cat-header">
                   <span
                     class="preview-cat-dot"
-                    :style="{ backgroundColor: categoryMeta[catId]?.color || '#6b7280' }"
+                    :style="{
+                      backgroundColor: categoryMeta[catId]?.color || '#6b7280',
+                    }"
                   ></span>
-                  <span class="preview-cat-name">{{ categoryMeta[catId]?.name || catId }}</span>
+                  <span class="preview-cat-name">{{
+                    categoryMeta[catId]?.name || catId
+                  }}</span>
                   <span class="preview-cat-score">{{ score.percentage }}%</span>
                 </div>
                 <div class="preview-cat-bar">
@@ -258,7 +338,7 @@ async function copyToClipboard() {
                     class="preview-cat-fill"
                     :style="{
                       width: score.percentage + '%',
-                      backgroundColor: categoryMeta[catId]?.color || '#6b7280'
+                      backgroundColor: categoryMeta[catId]?.color || '#6b7280',
                     }"
                   ></div>
                 </div>
@@ -269,13 +349,41 @@ async function copyToClipboard() {
           <!-- Footer -->
           <div class="preview-footer">
             <div class="preview-brand">
-              <svg class="preview-logo" width="32" height="32" viewBox="0 0 200 200">
-                <circle cx="100" cy="100" r="70" fill="none" stroke="url(#logoGrad)" stroke-width="3"/>
-                <text x="100" y="135" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="110" font-weight="700" fill="url(#logoGrad)" text-anchor="middle">M</text>
+              <svg
+                class="preview-logo"
+                width="32"
+                height="32"
+                viewBox="0 0 200 200"
+              >
+                <circle
+                  cx="100"
+                  cy="100"
+                  r="70"
+                  fill="none"
+                  stroke="url(#logoGrad)"
+                  stroke-width="3"
+                />
+                <text
+                  x="100"
+                  y="135"
+                  font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif"
+                  font-size="110"
+                  font-weight="700"
+                  fill="url(#logoGrad)"
+                  text-anchor="middle"
+                >
+                  M
+                </text>
                 <defs>
-                  <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" style="stop-color:#3b82f6"/>
-                    <stop offset="100%" style="stop-color:#60a5fa"/>
+                  <linearGradient
+                    id="logoGrad"
+                    x1="0%"
+                    y1="0%"
+                    x2="100%"
+                    y2="100%"
+                  >
+                    <stop offset="0%" style="stop-color: #3b82f6" />
+                    <stop offset="100%" style="stop-color: #60a5fa" />
                   </linearGradient>
                 </defs>
               </svg>
@@ -295,14 +403,31 @@ async function copyToClipboard() {
         :disabled="isGenerating"
         @click="downloadImage"
       >
-        <svg v-if="!isGenerating" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-          <polyline points="7 10 12 15 17 10"/>
-          <line x1="12" y1="15" x2="12" y2="3"/>
+        <svg
+          v-if="!isGenerating"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+          <polyline points="7 10 12 15 17 10" />
+          <line x1="12" y1="15" x2="12" y2="3" />
         </svg>
-        <svg v-else class="spin" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="10"/>
-          <path d="M12 6v6l4 2"/>
+        <svg
+          v-else
+          class="spin"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <path d="M12 6v6l4 2" />
         </svg>
         <span>Download PNG</span>
       </button>
@@ -313,14 +438,30 @@ async function copyToClipboard() {
         :disabled="isGenerating"
         @click="copyToClipboard"
       >
-        <svg v-if="!copySuccess" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+        <svg
+          v-if="!copySuccess"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
         </svg>
-        <svg v-else width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="20 6 9 17 4 12"/>
+        <svg
+          v-else
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <polyline points="20 6 9 17 4 12" />
         </svg>
-        <span>{{ copySuccess ? 'Copied!' : 'Copy to Clipboard' }}</span>
+        <span>{{ copySuccess ? "Copied!" : "Copy to Clipboard" }}</span>
       </button>
     </div>
   </div>
@@ -370,7 +511,7 @@ async function copyToClipboard() {
   width: 1200px;
   height: 630px;
   position: relative;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   overflow: hidden;
   background: #0a0a0a;
 }
@@ -383,8 +524,10 @@ async function copyToClipboard() {
 .preview-grid {
   position: absolute;
   inset: 0;
-  background-image:
-    linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px),
+  background-image: linear-gradient(
+      rgba(59, 130, 246, 0.03) 1px,
+      transparent 1px
+    ),
     linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
   background-size: 60px 60px;
 }
@@ -395,7 +538,11 @@ async function copyToClipboard() {
   right: -100px;
   width: 400px;
   height: 400px;
-  background: radial-gradient(circle, rgba(59, 130, 246, 0.12) 0%, transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(59, 130, 246, 0.12) 0%,
+    transparent 70%
+  );
   border-radius: 50%;
 }
 
@@ -459,7 +606,7 @@ async function copyToClipboard() {
   font-weight: 700;
   color: #3b82f6;
   line-height: 1;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, monospace;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
 }
 
 .preview-score-label {
@@ -523,7 +670,7 @@ async function copyToClipboard() {
   font-size: 16px;
   font-weight: 600;
   color: #f5f5f5;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, monospace;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
 }
 
 .preview-cat-bar {
@@ -624,8 +771,12 @@ async function copyToClipboard() {
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Responsive */
