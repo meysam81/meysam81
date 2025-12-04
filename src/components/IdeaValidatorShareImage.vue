@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, watch, reactive } from 'vue';
+import { ref, computed, onMounted, reactive } from 'vue';
 import { toPng, toBlob } from 'html-to-image';
 
 // Result data structure
@@ -87,7 +87,15 @@ const scoreEmoji = computed(() => {
   return '⚠️';
 });
 
-// Generate the image data URL
+/**
+ * Generates a PNG image data URL of the preview element for sharing.
+ *
+ * Clones the preview DOM element, renders it at a fixed size using html-to-image,
+ * and returns a data URL of the generated PNG image.
+ *
+ * @returns {Promise<string>} A promise that resolves to a PNG image data URL.
+ * @throws {Error} If the preview element is not found, or if image generation fails.
+ */
 async function generateImage(): Promise<string> {
   if (!previewRef.value) throw new Error('Preview element not found');
 
@@ -132,7 +140,7 @@ async function downloadImage() {
     link.click();
   } catch (error) {
     console.error('Failed to generate image:', error);
-    alert('Failed to generate image. Please try again.');
+    alert('Failed to generate image. ' + (error && (error as Error).message ? (error as Error).message : 'Please try again.'));
   } finally {
     isGenerating.value = false;
   }
@@ -154,29 +162,31 @@ async function copyToClipboard() {
     clone.style.top = '-9999px';
     document.body.appendChild(clone);
 
-    await new Promise(resolve => requestAnimationFrame(resolve));
+    try {
+      await new Promise(resolve => requestAnimationFrame(resolve));
 
-    const blob = await toBlob(clone, {
-      width: 1200,
-      height: 630,
-      pixelRatio: 2,
-      cacheBust: true,
-      backgroundColor: '#0a0a0a',
-    });
+      const blob = await toBlob(clone, {
+        width: 1200,
+        height: 630,
+        pixelRatio: 2,
+        cacheBust: true,
+        backgroundColor: '#0a0a0a',
+      });
 
-    document.body.removeChild(clone);
+      if (!blob) throw new Error('Failed to generate blob');
 
-    if (!blob) throw new Error('Failed to generate blob');
+      await navigator.clipboard.write([
+        new ClipboardItem({ 'image/png': blob }),
+      ]);
 
-    await navigator.clipboard.write([
-      new ClipboardItem({ 'image/png': blob }),
-    ]);
-
-    copySuccess.value = true;
-    setTimeout(() => { copySuccess.value = false; }, 2000);
+      copySuccess.value = true;
+      setTimeout(() => { copySuccess.value = false; }, 2000);
+    } finally {
+      document.body.removeChild(clone);
+    }
   } catch (error) {
     console.error('Failed to copy image:', error);
-    alert('Failed to copy image to clipboard. Your browser may not support this feature.');
+    alert("Failed to copy image to clipboard. Your browser doesn't support copying images to clipboard. Please use the Download PNG button instead.");
   } finally {
     isGenerating.value = false;
   }
