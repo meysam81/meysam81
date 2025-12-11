@@ -21,6 +21,7 @@
     "@astrojs/mdx": "^4.3.12",
     "@tailwindcss/vite": "^4.1.17",
     "@vitejs/plugin-vue": "^6.0.2",
+    "ky": "^1.14.1",
     "oxlint": "^1.30.0",
     "typescript": "^5.9.3",
     "vite": "v6",
