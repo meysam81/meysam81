@@ -46,7 +46,7 @@ export default defineConfig({
             `${packageRunner} pagefind --site ${dir.pathname} --glob '**/blog/**/*.html'`,
             {
               stdio: "inherit",
-            }
+            },
           );
         },
       },

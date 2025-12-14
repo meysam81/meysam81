@@ -19,6 +19,32 @@ permissions:
   id-token: write
 
 jobs:
+  prettier:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Setup bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: Run prettier
+        run: bunx prettier@v3 -w .
+      - name: Commit if changed
+        if: github.event_name == 'pull_request'
+        run: |
+          if [[ -n "$(git status --porcelain)" ]]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
+            git add .
+            git commit -m "chore: format code with prettier" -m 'skip ci'
+            git push origin "$(git branch --show-current)"
+          else
+            echo "No changes to commit"
+          fi
+
   preview:
     if: github.event_name == 'pull_request'
     permissions:
@@ -28,7 +54,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
       - name: Cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             node_modules
@@ -85,7 +111,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
       - name: Cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             node_modules

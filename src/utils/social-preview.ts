@@ -43,7 +43,7 @@ const DEFAULT_OPTIONS: GeneratorOptions = {
  */
 export async function generatePreview(
   element: HTMLElement,
-  options: GeneratorOptions = {}
+  options: GeneratorOptions = {},
 ): Promise<string> {
   const mergedOptions = { ...DEFAULT_OPTIONS, ...options };
 
@@ -71,7 +71,7 @@ export async function generatePreview(
  */
 export async function generatePreviewBlob(
   element: HTMLElement,
-  options: GeneratorOptions = {}
+  options: GeneratorOptions = {},
 ): Promise<Blob> {
   const mergedOptions = { ...DEFAULT_OPTIONS, ...options };
 
@@ -96,7 +96,7 @@ export async function generatePreviewBlob(
 export async function downloadPreview(
   element: HTMLElement,
   filename: string = "social-preview.png",
-  options: GeneratorOptions = {}
+  options: GeneratorOptions = {},
 ): Promise<void> {
   const dataUrl = await generatePreview(element, options);
 
@@ -111,7 +111,7 @@ export async function downloadPreview(
  */
 export async function copyPreviewToClipboard(
   element: HTMLElement,
-  options: GeneratorOptions = {}
+  options: GeneratorOptions = {},
 ): Promise<void> {
   const blob = await generatePreviewBlob(element, options);
 

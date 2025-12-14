@@ -48,7 +48,7 @@ onMounted(function onComponentMounted() {
 onUnmounted(function onComponentUnmounted() {
   window.removeEventListener(
     "idea-validator:results-ready",
-    handleResultsReady
+    handleResultsReady,
   );
 });
 
@@ -190,7 +190,7 @@ async function downloadImage() {
       "Failed to generate image. " +
         (error && (error as Error).message
           ? (error as Error).message
-          : "Please try again.")
+          : "Please try again."),
     );
   } finally {
     isGenerating.value = false;
@@ -240,7 +240,7 @@ async function copyToClipboard() {
   } catch (error) {
     console.error("Failed to copy image:", error);
     alert(
-      "Failed to copy image to clipboard. Your browser doesn't support copying images to clipboard. Please use the Download PNG button instead."
+      "Failed to copy image to clipboard. Your browser doesn't support copying images to clipboard. Please use the Download PNG button instead.",
     );
   } finally {
     isGenerating.value = false;
@@ -511,7 +511,8 @@ async function copyToClipboard() {
   width: 1200px;
   height: 630px;
   position: relative;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   overflow: hidden;
   background: #0a0a0a;
 }
@@ -524,10 +525,8 @@ async function copyToClipboard() {
 .preview-grid {
   position: absolute;
   inset: 0;
-  background-image: linear-gradient(
-      rgba(59, 130, 246, 0.03) 1px,
-      transparent 1px
-    ),
+  background-image:
+    linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
   background-size: 60px 60px;
 }

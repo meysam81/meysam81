@@ -1,4 +1,5 @@
-import log from "loglevel";
+import log from "./logging";
+import httpClient from "./httpclient";
 
 function getAccessToken() {
   var clientId = import.meta.env.PIRSCH_CLIENT_ID;
@@ -8,20 +9,16 @@ function getAccessToken() {
     throw new Error("Pirsch credentials not found");
   }
 
-  return fetch("https://api.pirsch.io/api/v1/token", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
+  return httpClient.post("https://api.pirsch.io/api/v1/token", {
+    json: {
       client_id: clientId,
       client_secret: clientSecret,
-    }),
+    },
   });
 }
 
 async function getDomainId(accessToken, hostname) {
-  var response = await fetch("https://api.pirsch.io/api/v1/domain", {
+  var response = await httpClient.get("https://api.pirsch.io/api/v1/domain", {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
@@ -33,7 +30,7 @@ async function getDomainId(accessToken, hostname) {
     return null;
   }
 
-  var domains = await response.json();
+  var domains: Array<{ id: string; hostname: string }> = await response.json();
 
   for (var i = 0; i < domains.length; i++) {
     if (domains[i].hostname === hostname) {
@@ -45,17 +42,30 @@ async function getDomainId(accessToken, hostname) {
   return null;
 }
 
-function getPageViewsForPath(accessToken, domainId, path) {
-  var today = new Date();
+function escapeRegexSpecialChars(str) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
 
-  var to = today.toISOString().split("T")[0];
+function getPageViewsForPath(accessToken, domainId, path) {
+  var tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  var startDate = new Date();
+  startDate.setFullYear(2000, 0, 1);
+
+  var to = tomorrow.toISOString().split("T")[0];
+  var from = startDate.toISOString().split("T")[0];
 
   var url = new URL("https://api.pirsch.io/api/v1/statistics/page");
   url.searchParams.append("id", domainId);
   url.searchParams.append("to", to);
-  url.searchParams.append("path", path);
+  url.searchParams.append("from", from);
 
-  return fetch(url.toString(), {
+  var escapedPath = escapeRegexSpecialChars(path);
+  var pattern = "(?i)^" + escapedPath + "(?:\\?.*)?$";
+
+  url.searchParams.append("pattern", pattern);
+
+  return httpClient.get(url.toString(), {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
@@ -73,7 +83,7 @@ export async function getBlogPostViews(hostname, path) {
       return 0;
     }
 
-    var tokenData = await tokenResponse.json();
+    var tokenData: { access_token: string } = await tokenResponse.json();
     var accessToken = tokenData.access_token;
 
     var domainId = await getDomainId(accessToken, hostname);
@@ -90,10 +100,19 @@ export async function getBlogPostViews(hostname, path) {
       return 0;
     }
 
-    var stats = await statsResponse.json();
+    var stats: Array<{ path: string; views: number }> =
+      await statsResponse.json();
 
     if (stats && stats.length > 0) {
-      return stats[0].views || 0;
+      var pathViewsMap: { [key: string]: number } = {};
+      var totalViews = 0;
+      for (var i = 0; i < stats.length; i++) {
+        var views = stats[i].views || 0;
+        pathViewsMap[stats[i].path] = views;
+        totalViews += views;
+      }
+      log.debug("Pirsch statistics for " + path + ":", pathViewsMap);
+      return totalViews;
     }
 
     return 0;
