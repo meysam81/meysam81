@@ -34,6 +34,8 @@ Here's what I built, how I built it, and why I'm giving it away.
 
 Every founder I talk to has the same ritual: spending 2-3 days hunting for directories where they can launch their product. You click through blog posts from 2023 with half the links dead. You find "ultimate lists" with 300+ directories where maybe 10 actually matter. You discover paid spreadsheets charging $127-$6,999 for what amounts to a glorified CSV file.
 
+### The Real Issues
+
 The existing solutions have three fundamental problems:
 
 **Dead links everywhere.** Most directory aggregators are one-time projects that never get maintained. Links rot. Sites shut down. Nobody updates them.
@@ -98,6 +100,8 @@ This does two things: it filters for engaged users, and it gives me a foundation
 
 **Supabase for comments, not a third-party tool.** I could've integrated Giscus or Disqus. Instead, I built comments directly in Supabase. Why? Control. Data ownership. And honestly, it was faster than integrating and configuring a third-party service.
 
+Similar to how I [built my own newsletter infrastructure](/blog/own-your-newsletter-with-listmonk) instead of using ConvertKit—ownership matters.
+
 Comments are stored in a PostgreSQL table with Row Level Security policies. Authentication is handled by Supabase. Realtime updates are built-in. I didn't need to build much—I just wired together Supabase primitives.
 
 **Performance obsession.** All Lighthouse scores above 90. This wasn't an accident. Astro's static generation handles most of the heavy lifting, but I also:
@@ -138,13 +142,19 @@ Total: ~10 hours from zero to shipped product.
 
 Here's where I need to be transparent.
 
+### The Unit Economics Didn't Work
+
 I originally planned to charge for this. I did market research, validated the problem with 40+ founder interviews, built pricing tiers—$9/month or $49/year. The pain point was real. People said they'd pay.
 
 Then I looked at the unit economics.
 
 At my scale—no existing audience, no email list, no distribution—customer acquisition cost would be $40-60. To break even, I'd need subscribers to stay for 6+ months. But this is a tool people use once or twice a year, max. The retention math was broken before I even launched.
 
+This is the same lesson I learned from my [first SaaS failure](/blog/no-competition-red-flag-solopreneur-validated-market): distribution beats product every time.
+
 I could force a business model that doesn't make sense, or I could pivot to something that actually works at my scale: **building credibility and audience through open source.**
+
+### Building in Public
 
 The real opportunity isn't $9/month from 100 people. It's recognition in the indie hacker space. This project is my credential. It's proof I can identify a problem, build a solution, and ship it fast. It's my way into conversations with other founders.
 
@@ -185,17 +195,23 @@ But honestly? The roadmap will be shaped by what you actually need, not what I t
 
 ## What I Learned Building This
 
+### Technical Lessons
+
 **Research saves time.** I spent almost as much time validating the problem and researching the market as I did coding. That research saved me from building a subscription product with broken unit economics. It informed the curation strategy (focus on the top 20-30, not 300+). It shaped the feature set (filtering and export, not social features).
 
 **Static architecture = speed + zero costs.** Astro's static generation isn't just about performance—it's about economics. No server costs. No scaling concerns. No database read costs spiraling. Just static files on a CDN. This is how you build sustainable side projects.
 
 **Supabase Edge Functions + pg_cron is criminally underutilized.** Everyone reaches for GitHub Actions or external cron services. But if you're already using Supabase, you have PostgreSQL's built-in cron scheduler. Write an Edge Function, schedule it with `pg_cron`, and you have automated workflows that never leave your database.
 
+### Business Lessons
+
 **Authentication-gated interactions filter for quality.** The friction of requiring login kills casual spam and builds a real community. Yes, you lose some engagement. But the engagement you keep is higher signal.
 
 **Open source can be your credential, not just your code.** This project won't make me money directly. But it's already opening doors. Conversations with other founders. Visibility in communities I care about. Proof I can ship. That's worth more than $9/month from 50 people.
 
 **Ship when it works, not when it's perfect.** The UI isn't polished. Some edge cases probably exist. The roadmap is incomplete. But it solves the core problem—finding quality directories fast—and that's enough to ship. Perfection is procrastination in disguise.
+
+Similar to what I learned from [my ProductHunt launch](/blog/first-producthunt-launch-flopped): small creators need to focus on execution, not perfection.
 
 ## Join the Journey
 

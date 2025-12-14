@@ -48,7 +48,11 @@ Until they add features you don't want but have to pay for.
 Until they get acquired and shut down.
 Until they decide your content violates their new policies.
 
+### Platform Risk is Real
+
 I'm not against using SaaS tools. I use plenty. But for your audience—the people who chose to hear from you—I believe you should own that relationship.
+
+After [Medium hid my subscriber emails](/blog/medium-hid-subscribers-own-your-audience) in April 2025, I learned this lesson viscerally. Platform control isn't paranoia—it's reality.
 
 **The calculation is simple:**
 
@@ -61,6 +65,8 @@ That's not the only reason though. It's about control. It's about data. It's abo
 
 Listmonk is an open-source newsletter and mailing list manager. Think Mailchimp or ConvertKit, but you run it on your own server.
 
+### What You Get
+
 **What you get:**
 
 - Full control of your subscriber data
@@ -71,6 +77,8 @@ Listmonk is an open-source newsletter and mailing list manager. Think Mailchimp 
 - Campaign analytics
 - Subscriber segmentation
 - Template customization
+
+### What You're Giving Up
 
 **What you're giving up:**
 
@@ -104,15 +112,21 @@ If you're thinking "I barely know Docker"—that's fine. I'll walk you through i
 
 Here's what we're building:
 
+### The Stack Overview
+
 1. **A small server** (Hetzner CCX13: 2 vCPUs, 8GB RAM, €12/month)
 2. **K3s** (lightweight Kubernetes—it's easier than you think)
 3. **Listmonk** (your newsletter app)
 4. **PostgreSQL** (database for subscribers/campaigns)
 5. **Automated backups** (to Hetzner Object Storage)
 
+### Why Kubernetes?
+
 Why Kubernetes for a newsletter app? Valid question.
 
 Because once you have K3s running, adding other self-hosted tools is trivial. Want analytics? Add Plausible. Want a CRM? Add Twenty. Want uptime monitoring? Add Uptime Kuma.
+
+Similar to how I built [Awesome Directories](/blog/awesome-directories-open-source) using modern infrastructure that scales—you build once, benefit forever.
 
 It's infrastructure that scales with you, not just for this one app.
 
@@ -809,6 +823,8 @@ If you send one newsletter a week and have 500 subscribers, maybe ConvertKit mak
 
 ## What I Learned Doing This
 
+### Technical Insights
+
 Setting up Listmonk forced me to stay sharp in my Kubernetes game. That knowledge paid off immediately when I wanted to add other self-hosted tools.
 
 Now my €12 server runs:
@@ -820,9 +836,13 @@ Now my €12 server runs:
 
 That same infrastructure would cost $100+/month across different SaaS providers.
 
+### The Bigger Picture
+
 **The biggest lesson:** Self-hosting isn't as scary as it seems. The initial setup is the hardest part. Maintenance is mostly hands-off.
 
 I spend ~30 minutes per month on server updates. That's it.
+
+And when platforms change their rules—like [Medium hiding subscribers](/blog/medium-hid-subscribers-own-your-audience) or ProductHunt changing algorithms—I'm insulated. My audience is mine.
 
 ## Next Steps
 
@@ -852,6 +872,8 @@ If you followed this guide, you now have a running newsletter platform.
 
 When Medium hid subscriber counts, a bunch of indie hackers panicked in my DMs.
 
+### The Wake-Up Call
+
 - "How do I know if anyone cares?"
 - "Should I just quit?"
 - "All my metrics disappeared."
@@ -861,6 +883,8 @@ If your entire metric system lives on someone else's platform, you're vulnerable
 I can't control what Medium does. Or X. Or LinkedIn. Or any platform.
 
 But I can control my email list. I know exactly how many people subscribed. I can email them directly, right now, without asking permission or paying per subscriber.
+
+### Sustainability Over Growth Hacks
 
 That's not about paranoia. It's about sustainability.
 
