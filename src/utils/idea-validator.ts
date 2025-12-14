@@ -368,7 +368,7 @@ categories.forEach((cat) => {
 // ============================================================================
 
 export function calculateResults(
-  answers: Record<string, Answer>
+  answers: Record<string, Answer>,
 ): ValidationResult {
   const categoryScores: Record<CategoryId, CategoryScore> = {} as Record<
     CategoryId,
@@ -378,7 +378,7 @@ export function calculateResults(
   // Calculate scores per category
   for (const category of categories) {
     const categoryQuestions = questions.filter(
-      (q) => q.category === category.id
+      (q) => q.category === category.id,
     );
     let score = 0;
     let maxScore = 0;
@@ -415,11 +415,11 @@ export function calculateResults(
   // Calculate total score
   const totalScore = Object.values(categoryScores).reduce(
     (sum, cs) => sum + cs.score,
-    0
+    0,
   );
   const maxPossibleScore = Object.values(categoryScores).reduce(
     (sum, cs) => sum + cs.maxScore,
-    0
+    0,
   );
   const percentage =
     maxPossibleScore > 0
@@ -450,11 +450,11 @@ export function calculateResults(
 
 function getGradeAndHeadline(
   percentage: number,
-  categoryScores: Record<CategoryId, CategoryScore>
+  categoryScores: Record<CategoryId, CategoryScore>,
 ): { grade: Grade; headline: string } {
   // Find weakest category
   const weakestCategory = Object.entries(categoryScores).sort(
-    (a, b) => a[1].percentage - b[1].percentage
+    (a, b) => a[1].percentage - b[1].percentage,
   )[0];
   const weakestCatName =
     categories.find((c) => c.id === weakestCategory[0])?.name || "";
@@ -489,7 +489,7 @@ function getGradeAndHeadline(
 
 function generateRecommendations(
   answers: Record<string, Answer>,
-  categoryScores: Record<CategoryId, CategoryScore>
+  categoryScores: Record<CategoryId, CategoryScore>,
 ): Recommendation[] {
   const recommendations: Recommendation[] = [];
 
@@ -614,7 +614,7 @@ function generateRecommendations(
     if (
       score.percentage < 40 &&
       !recommendations.some(
-        (r) => r.category === catId && r.priority === "critical"
+        (r) => r.category === catId && r.priority === "critical",
       )
     ) {
       const category = categories.find((c) => c.id === catId)!;
@@ -635,14 +635,14 @@ function generateRecommendations(
     low: 3,
   };
   recommendations.sort(
-    (a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]
+    (a, b) => priorityOrder[a.priority] - priorityOrder[b.priority],
   );
 
   return recommendations.slice(0, 5); // Return top 5 recommendations
 }
 
 function identifyStrengthsWeaknesses(
-  categoryScores: Record<CategoryId, CategoryScore>
+  categoryScores: Record<CategoryId, CategoryScore>,
 ): { strengths: string[]; weaknesses: string[] } {
   const strengths: string[] = [];
   const weaknesses: string[] = [];
@@ -773,7 +773,7 @@ interface SavedState {
 
 export function saveProgress(
   ideaName: string,
-  answers: Record<string, Answer>
+  answers: Record<string, Answer>,
 ): void {
   try {
     const state: SavedState = {
@@ -816,7 +816,7 @@ export function clearProgress(): void {
 
 export function generateShareText(
   ideaName: string,
-  result: ValidationResult
+  result: ValidationResult,
 ): string {
   const emoji = getScoreEmoji(result.percentage);
   const name = ideaName ? `"${ideaName}"` : "My SaaS idea";
@@ -830,7 +830,7 @@ Validate your idea: https://meysam.io/tools/saas-idea-validator`;
 
 export function generateShareUrl(
   answers: Record<string, Answer>,
-  ideaName: string
+  ideaName: string,
 ): string {
   try {
     const data = { a: answers, n: ideaName };
@@ -842,7 +842,7 @@ export function generateShareUrl(
 }
 
 export function parseShareUrl(
-  encoded: string
+  encoded: string,
 ): { answers: Record<string, Answer>; ideaName: string } | null {
   try {
     const decoded = atob(encoded);

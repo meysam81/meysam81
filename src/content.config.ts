@@ -21,7 +21,7 @@ var blogCollection = defineCollection({
           title: z.string(),
           url: z.string().url(),
           description: z.string().optional(),
-        })
+        }),
       )
       .default([]),
   }),

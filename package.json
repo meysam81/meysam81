@@ -1,11 +1,11 @@
 {
   "dependencies": {
-    "@astrojs/rss": "^4.0.13",
+    "@astrojs/rss": "^4.0.14",
     "@astrojs/sitemap": "^3.6.0",
-    "@expressive-code/plugin-line-numbers": "^0.41.3",
+    "@expressive-code/plugin-line-numbers": "^0.41.4",
     "@playform/compress": "^0.2.0",
-    "astro": "^5.16.1",
-    "astro-expressive-code": "^0.41.3",
+    "astro": "^5.16.5",
+    "astro-expressive-code": "^0.41.4",
     "cron-parser": "^5.4.0",
     "cronstrue": "^3.9.0",
     "html-to-image": "^1.11.13",
@@ -17,15 +17,15 @@
     "sharp": "^0.34.5"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.9.5",
-    "@astrojs/mdx": "^4.3.12",
-    "@tailwindcss/vite": "^4.1.17",
-    "@vitejs/plugin-vue": "^6.0.2",
+    "@astrojs/check": "^0.9.6",
+    "@astrojs/mdx": "^4.3.13",
+    "@tailwindcss/vite": "^4.1.18",
+    "@vitejs/plugin-vue": "^6.0.3",
     "ky": "^1.14.1",
-    "oxlint": "^1.30.0",
+    "oxlint": "^1.32.0",
     "typescript": "^5.9.3",
-    "vite": "v6",
-    "vite-plugin-compression2": "^2.3.1"
+    "vite": "^6.4.1",
+    "vite-plugin-compression2": "^2.4.0"
   },
   "name": "meysam-io",
   "scripts": {

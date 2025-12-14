@@ -22,7 +22,7 @@ export interface SeriesSummary {
  */
 export function getPostsBySeries(
   posts: CollectionEntry<"blog">[],
-  seriesSlug: string
+  seriesSlug: string,
 ): CollectionEntry<"blog">[] {
   return posts
     .filter(function filterBySeries(post) {
@@ -43,7 +43,7 @@ export function getPostsBySeries(
  */
 export function getSeriesInfo(
   posts: CollectionEntry<"blog">[],
-  currentPost: CollectionEntry<"blog">
+  currentPost: CollectionEntry<"blog">,
 ): SeriesInfo | null {
   if (!currentPost.data.series) {
     return null;
@@ -81,7 +81,7 @@ export function getSeriesInfo(
  * Get all unique series from posts with their metadata
  */
 export function getAllSeries(
-  posts: CollectionEntry<"blog">[]
+  posts: CollectionEntry<"blog">[],
 ): SeriesSummary[] {
   var seriesMap = new Map<string, SeriesSummary>();
 
