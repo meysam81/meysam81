@@ -1,11 +1,11 @@
 ---
-import BaseLayout from '@/layouts/BaseLayout.astro';
-import Newsletter from '@/components/Newsletter.astro';
-import TableOfContents from '@/components/TableOfContents.astro';
-import Webmentions from '@/components/Webmentions.astro';
-import SeriesBanner from '@/components/SeriesBanner.astro';
-import SeriesNav from '@/components/SeriesNav.astro';
-import type { SeriesInfo } from '@/utils/series';
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Newsletter from "@/components/Newsletter.astro";
+import TableOfContents from "@/components/TableOfContents.astro";
+import Webmentions from "@/components/Webmentions.astro";
+import SeriesBanner from "@/components/SeriesBanner.astro";
+import SeriesNav from "@/components/SeriesNav.astro";
+import type { SeriesInfo } from "@/utils/series";
 
 interface Props {
   title: string;
@@ -30,19 +30,32 @@ interface Props {
   seriesInfo?: SeriesInfo | null;
 }
 
-var { title, description, pubDate, updatedDate, author, tags, ogImage, headings, readingTime, pageViews, references, seriesInfo } = Astro.props;
+var {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  author,
+  tags,
+  ogImage,
+  headings,
+  readingTime,
+  pageViews,
+  references,
+  seriesInfo,
+} = Astro.props;
 
-var formattedPubDate = new Intl.DateTimeFormat('en-US', {
-  year: 'numeric',
-  month: 'long',
-  day: 'numeric'
+var formattedPubDate = new Intl.DateTimeFormat("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
 }).format(pubDate);
 
 var formattedUpdatedDate = updatedDate
-  ? new Intl.DateTimeFormat('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+  ? new Intl.DateTimeFormat("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
     }).format(updatedDate)
   : null;
 
@@ -51,7 +64,9 @@ var fullURL = canonicalURL.toString();
 ---
 
 <BaseLayout title={title} description={description} ogImage={ogImage}>
-  <script slot="head" src="https://giscus.app/client.js"
+  <script
+    slot="head"
+    src="https://giscus.app/client.js"
     data-repo="meysam81/meysam81"
     data-repo-id="R_kgDOG8F82Q"
     data-category="General"
@@ -66,18 +81,23 @@ var fullURL = canonicalURL.toString();
     data-loading="lazy"
     crossorigin="anonymous"
     defer
-    async>
-  </script>
+    async></script>
 
   <script>
     function initScrollSpy() {
-      var headings = document.querySelectorAll('.post-content h1[id], .post-content h2[id], .post-content h3[id], .post-content h4[id], .post-content h5[id], .post-content h6[id]');
-      var currentHash = '';
+      var headings = document.querySelectorAll(
+        ".post-content h1[id], .post-content h2[id], .post-content h3[id], .post-content h4[id], .post-content h5[id], .post-content h6[id]",
+      );
+      var currentHash = "";
 
       function updateHash(hash) {
         if (hash !== currentHash) {
           currentHash = hash;
-          history.replaceState(null, '', hash ? `#${hash}` : window.location.pathname);
+          history.replaceState(
+            null,
+            "",
+            hash ? `#${hash}` : window.location.pathname,
+          );
         }
       }
 
@@ -91,7 +111,7 @@ var fullURL = canonicalURL.toString();
             return heading.id;
           }
         }
-        return '';
+        return "";
       }
 
       function handleScroll() {
@@ -100,26 +120,33 @@ var fullURL = canonicalURL.toString();
       }
 
       var timeoutId;
-      window.addEventListener('scroll', function onScroll() {
-        if (timeoutId) {
-          window.cancelAnimationFrame(timeoutId);
-        }
-        timeoutId = window.requestAnimationFrame(handleScroll);
-      }, { passive: true });
+      window.addEventListener(
+        "scroll",
+        function onScroll() {
+          if (timeoutId) {
+            window.cancelAnimationFrame(timeoutId);
+          }
+          timeoutId = window.requestAnimationFrame(handleScroll);
+        },
+        { passive: true },
+      );
 
       if (window.location.hash) {
         var targetId = window.location.hash.slice(1);
         var targetElement = document.getElementById(targetId);
         if (targetElement) {
           setTimeout(function scrollToTarget() {
-            targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            targetElement.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
           }, 100);
         }
       }
     }
 
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initScrollSpy);
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initScrollSpy);
     } else {
       initScrollSpy();
     }
@@ -127,27 +154,35 @@ var fullURL = canonicalURL.toString();
 
   <script>
     function initPermalinks() {
-      var headings = document.querySelectorAll('.post-content h1[id], .post-content h2[id], .post-content h3[id], .post-content h4[id], .post-content h5[id], .post-content h6[id]');
+      var headings = document.querySelectorAll(
+        ".post-content h1[id], .post-content h2[id], .post-content h3[id], .post-content h4[id], .post-content h5[id], .post-content h6[id]",
+      );
 
       headings.forEach(function processHeading(heading) {
-        var link = document.createElement('a');
-        link.className = 'permalink-icon';
-        link.href = '#' + heading.id;
-        link.setAttribute('aria-label', 'Copy link to ' + heading.textContent);
-        link.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>';
+        var link = document.createElement("a");
+        link.className = "permalink-icon";
+        link.href = "#" + heading.id;
+        link.setAttribute("aria-label", "Copy link to " + heading.textContent);
+        link.innerHTML =
+          '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>';
 
-        link.addEventListener('click', function handleClick(e) {
+        link.addEventListener("click", function handleClick(e) {
           e.preventDefault();
-          var url = window.location.origin + window.location.pathname + '#' + heading.id;
+          var url =
+            window.location.origin +
+            window.location.pathname +
+            "#" +
+            heading.id;
 
           navigator.clipboard.writeText(url).then(function onSuccess() {
-            link.classList.add('copied');
+            link.classList.add("copied");
             var originalHTML = link.innerHTML;
-            link.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+            link.innerHTML =
+              '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>';
 
             setTimeout(function resetIcon() {
               link.innerHTML = originalHTML;
-              link.classList.remove('copied');
+              link.classList.remove("copied");
             }, 2000);
           });
         });
@@ -156,19 +191,19 @@ var fullURL = canonicalURL.toString();
       });
     }
 
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initPermalinks);
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initPermalinks);
     } else {
       initPermalinks();
     }
   </script>
 
   <script>
-    import mediumZoom from 'medium-zoom';
+    import mediumZoom from "medium-zoom";
 
-    mediumZoom('img', {
+    mediumZoom("img", {
       margin: 24,
-      background: '#000000dd',
+      background: "#000000dd",
     });
   </script>
 
@@ -176,7 +211,14 @@ var fullURL = canonicalURL.toString();
     <div class="container-narrow">
       <header class="post-header">
         <a href="/blog" class="back-link">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
             <line x1="19" y1="12" x2="5" y2="12"></line>
             <polyline points="12 19 5 12 12 5"></polyline>
           </svg>
@@ -196,53 +238,87 @@ var fullURL = canonicalURL.toString();
           <div class="meta-divider">•</div>
           <div class="meta-item">
             <span class="meta-label">Published</span>
-            <time datetime={pubDate.toISOString()} class="meta-value">{formattedPubDate}</time>
+            <time datetime={pubDate.toISOString()} class="meta-value"
+              >{formattedPubDate}</time
+            >
           </div>
-          {formattedUpdatedDate && (
-            <>
-              <div class="meta-divider">•</div>
-              <div class="meta-item">
-                <span class="meta-label">Updated</span>
-                <time datetime={updatedDate!.toISOString()} class="meta-value">{formattedUpdatedDate}</time>
-              </div>
-            </>
-          )}
+          {
+            formattedUpdatedDate && (
+              <>
+                <div class="meta-divider">•</div>
+                <div class="meta-item">
+                  <span class="meta-label">Updated</span>
+                  <time
+                    datetime={updatedDate!.toISOString()}
+                    class="meta-value"
+                  >
+                    {formattedUpdatedDate}
+                  </time>
+                </div>
+              </>
+            )
+          }
           <div class="meta-divider">•</div>
           <div class="meta-item">
-            <svg class="meta-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg
+              class="meta-icon"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
               <circle cx="12" cy="12" r="10"></circle>
               <polyline points="12 6 12 12 16 14"></polyline>
             </svg>
             <span class="meta-value">{readingTime} min read</span>
           </div>
-          {pageViews !== undefined && pageViews > 0 && (
-            <>
-              <div class="meta-divider">•</div>
-              <div class="meta-item">
-                <svg class="meta-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                  <circle cx="12" cy="12" r="3"></circle>
-                </svg>
-                <span class="meta-value">{pageViews.toLocaleString()} views</span>
-              </div>
-            </>
-          )}
+          {
+            pageViews !== undefined && pageViews > 0 && (
+              <>
+                <div class="meta-divider">•</div>
+                <div class="meta-item">
+                  <svg
+                    class="meta-icon"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                    <circle cx="12" cy="12" r="3" />
+                  </svg>
+                  <span class="meta-value">
+                    {pageViews.toLocaleString()} views
+                  </span>
+                </div>
+              </>
+            )
+          }
         </div>
 
-        {tags.length > 0 && (
-          <div class="post-tags">
-            {tags.map(function mapTags(tag) {
-              return (
-                <a href={`/blog/tags/${tag}`} class="tag">
-                  {tag}
-                </a>
-              );
-            })}
-          </div>
-        )}
+        {
+          tags.length > 0 && (
+            <div class="post-tags">
+              {tags.map(function mapTags(tag) {
+                return (
+                  <a href={`/blog/tags/${tag}`} class="tag">
+                    {tag}
+                  </a>
+                );
+              })}
+            </div>
+          )
+        }
       </header>
 
-      <TableOfContents headings={headings} hasReferences={references && references.length > 0} />
+      <TableOfContents
+        headings={headings}
+        hasReferences={references && references.length > 0}
+      />
 
       <div class="post-content">
         <slot />
@@ -250,39 +326,63 @@ var fullURL = canonicalURL.toString();
 
       {seriesInfo && <SeriesNav seriesInfo={seriesInfo} />}
 
-      {references && references.length > 0 && (
-        <aside class="references-section" id="references">
-          <h2 class="references-title">
-            <svg class="references-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
-              <polyline points="13 2 13 9 20 9"></polyline>
-            </svg>
-            References & Further Reading
-          </h2>
-          <p class="references-intro">
-            Want to dive deeper? Here are the sources and additional resources that informed this article.
-          </p>
-          <ul class="references-list">
-            {references.map(function mapReferences(ref) {
-              return (
-                <li class="reference-item">
-                  <a href={ref.url} class="reference-link" target="_blank" rel="noopener noreferrer">
-                    <span class="reference-title">{ref.title}</span>
-                    <svg class="external-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                      <polyline points="15 3 21 3 21 9"></polyline>
-                      <line x1="10" y1="14" x2="21" y2="3"></line>
-                    </svg>
-                  </a>
-                  {ref.description && (
-                    <p class="reference-description">{ref.description}</p>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
-        </aside>
-      )}
+      {
+        references && references.length > 0 && (
+          <aside class="references-section" id="references">
+            <h2 class="references-title">
+              <svg
+                class="references-icon"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" />
+                <polyline points="13 2 13 9 20 9" />
+              </svg>
+              References & Further Reading
+            </h2>
+            <p class="references-intro">
+              Want to dive deeper? Here are the sources and additional resources
+              that informed this article.
+            </p>
+            <ul class="references-list">
+              {references.map(function mapReferences(ref) {
+                return (
+                  <li class="reference-item">
+                    <a
+                      href={ref.url}
+                      class="reference-link"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <span class="reference-title">{ref.title}</span>
+                      <svg
+                        class="external-icon"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                        <polyline points="15 3 21 3 21 9" />
+                        <line x1="10" y1="14" x2="21" y2="3" />
+                      </svg>
+                    </a>
+                    {ref.description && (
+                      <p class="reference-description">{ref.description}</p>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          </aside>
+        )
+      }
 
       <div class="newsletter-cta">
         <Newsletter variant="section" />
@@ -335,7 +435,11 @@ var fullURL = canonicalURL.toString();
 
   .post-title {
     margin-bottom: var(--space-md);
-    background: linear-gradient(135deg, var(--color-text) 0%, var(--color-accent-light) 100%);
+    background: linear-gradient(
+      135deg,
+      var(--color-text) 0%,
+      var(--color-accent-light) 100%
+    );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -561,7 +665,9 @@ var fullURL = canonicalURL.toString();
     margin-left: 0.5rem;
     color: var(--color-text-dim);
     opacity: 0;
-    transition: opacity var(--transition-fast), color var(--transition-fast);
+    transition:
+      opacity var(--transition-fast),
+      color var(--transition-fast);
     text-decoration: none;
     border: none;
     vertical-align: middle;

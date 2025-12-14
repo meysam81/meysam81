@@ -1,31 +1,29 @@
 ---
-import ToolLayout from '@/layouts/ToolLayout.astro';
-import IdeaValidatorShareImage from '@/components/IdeaValidatorShareImage.vue';
-import {
-  questions,
-  categories,
-  type CategoryId
-} from '@/utils/idea-validator';
+import ToolLayout from "@/layouts/ToolLayout.astro";
+import IdeaValidatorShareImage from "@/components/IdeaValidatorShareImage.vue";
+import { questions, categories, type CategoryId } from "@/utils/idea-validator";
 
 // SEO Keywords
-var keywords = "validate startup idea, saas idea checklist, startup validation tool, idea scoring, product validation checklist, is my saas idea good, startup idea validator, founder validation framework, business idea assessment, market validation, problem validation, should I build this, startup feasibility, idea viability test, pre-launch validation, technical founder tools";
+var keywords =
+  "validate startup idea, saas idea checklist, startup validation tool, idea scoring, product validation checklist, is my saas idea good, startup idea validator, founder validation framework, business idea assessment, market validation, problem validation, should I build this, startup feasibility, idea viability test, pre-launch validation, technical founder tools";
 
 // Structured Data - WebApplication
 var structuredData = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
-  "name": "SaaS Idea Validator",
-  "description": "Score your startup idea against 20 battle-tested validation criteria. Free checklist for technical founders to objectively assess ideas before building.",
-  "url": "https://meysam.io/tools/saas-idea-validator",
-  "applicationCategory": "BusinessApplication",
-  "operatingSystem": "Any",
-  "browserRequirements": "Requires JavaScript",
-  "offers": {
+  name: "SaaS Idea Validator",
+  description:
+    "Score your startup idea against 20 battle-tested validation criteria. Free checklist for technical founders to objectively assess ideas before building.",
+  url: "https://meysam.io/tools/saas-idea-validator",
+  applicationCategory: "BusinessApplication",
+  operatingSystem: "Any",
+  browserRequirements: "Requires JavaScript",
+  offers: {
     "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "USD"
+    price: "0",
+    priceCurrency: "USD",
   },
-  "featureList": [
+  featureList: [
     "20 battle-tested validation criteria",
     "5 category scoring (Market, Problem, Solution, Distribution, Founder Fit)",
     "Real-time progress tracking",
@@ -33,61 +31,61 @@ var structuredData = {
     "Shareable results",
     "Save progress locally",
     "Keyboard navigation support",
-    "100% client-side (data never leaves your browser)"
+    "100% client-side (data never leaves your browser)",
   ],
-  "author": {
+  author: {
     "@type": "Person",
-    "name": "Meysam Azad",
-    "url": "https://meysam.io"
-  }
+    name: "Meysam Azad",
+    url: "https://meysam.io",
+  },
 };
 
 // FAQ Structured Data
 var faqData = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  "mainEntity": [
+  mainEntity: [
     {
       "@type": "Question",
-      "name": "How do I validate my SaaS idea?",
-      "acceptedAnswer": {
+      name: "How do I validate my SaaS idea?",
+      acceptedAnswer: {
         "@type": "Answer",
-        "text": "Validate your SaaS idea by answering 20 questions across 5 key areas: Market (who you're selling to), Problem (what pain you're solving), Solution (how you're solving it), Distribution (how you'll reach customers), and Founder Fit (your unique advantages). This tool scores each area and provides specific recommendations."
-      }
+        text: "Validate your SaaS idea by answering 20 questions across 5 key areas: Market (who you're selling to), Problem (what pain you're solving), Solution (how you're solving it), Distribution (how you'll reach customers), and Founder Fit (your unique advantages). This tool scores each area and provides specific recommendations.",
+      },
     },
     {
       "@type": "Question",
-      "name": "What score means my startup idea is viable?",
-      "acceptedAnswer": {
+      name: "What score means my startup idea is viable?",
+      acceptedAnswer: {
         "@type": "Answer",
-        "text": "A score of 70% or higher suggests a strong foundation worth pursuing. Scores between 55-70% indicate promising concepts that need work in specific areas. Below 55% means significant validation is needed before building. The most important factor isn't the total score, but addressing any critical gaps in Problem or Distribution categories."
-      }
+        text: "A score of 70% or higher suggests a strong foundation worth pursuing. Scores between 55-70% indicate promising concepts that need work in specific areas. Below 55% means significant validation is needed before building. The most important factor isn't the total score, but addressing any critical gaps in Problem or Distribution categories.",
+      },
     },
     {
       "@type": "Question",
-      "name": "What are the most important startup validation criteria?",
-      "acceptedAnswer": {
+      name: "What are the most important startup validation criteria?",
+      acceptedAnswer: {
         "@type": "Answer",
-        "text": "The most critical validation criteria are: 1) Have you talked to potential customers about the problem? 2) Is there evidence people will pay? 3) Do you have a clear path to reach customers? 4) Is your solution meaningfully better than alternatives? These four questions predict startup success more than any others."
-      }
+        text: "The most critical validation criteria are: 1) Have you talked to potential customers about the problem? 2) Is there evidence people will pay? 3) Do you have a clear path to reach customers? 4) Is your solution meaningfully better than alternatives? These four questions predict startup success more than any others.",
+      },
     },
     {
       "@type": "Question",
-      "name": "Is my data secure when using this validator?",
-      "acceptedAnswer": {
+      name: "Is my data secure when using this validator?",
+      acceptedAnswer: {
         "@type": "Answer",
-        "text": "Yes, completely. This tool runs 100% in your browser. Your idea name, answers, and results are never sent to any server. All data stays on your device. You can optionally save progress to your browser's local storage for future sessions."
-      }
+        text: "Yes, completely. This tool runs 100% in your browser. Your idea name, answers, and results are never sent to any server. All data stays on your device. You can optionally save progress to your browser's local storage for future sessions.",
+      },
     },
     {
       "@type": "Question",
-      "name": "Who created this startup validation framework?",
-      "acceptedAnswer": {
+      name: "Who created this startup validation framework?",
+      acceptedAnswer: {
         "@type": "Answer",
-        "text": "This framework was created by Meysam Azad, a technical founder with 8+ years of DevOps/SRE experience who is documenting his journey from engineer to indie hacker. The criteria are based on lessons from successful founders, common failure patterns, and frameworks like The Mom Test."
-      }
-    }
-  ]
+        text: "This framework was created by Meysam Azad, a technical founder with 8+ years of DevOps/SRE experience who is documenting his journey from engineer to indie hacker. The criteria are based on lessons from successful founders, common failure patterns, and frameworks like The Mom Test.",
+      },
+    },
+  ],
 };
 
 // Prepare questions and categories for client-side
@@ -110,7 +108,10 @@ var categoriesJson = JSON.stringify(categories);
   <!-- Tool Header -->
   <div class="tool-header">
     <h1>SaaS Idea Validator</h1>
-    <p class="subtitle">Score your startup idea against 20 battle-tested criteria. Objective feedback before you invest months building.</p>
+    <p class="subtitle">
+      Score your startup idea against 20 battle-tested criteria. Objective
+      feedback before you invest months building.
+    </p>
   </div>
 
   <div class="tool-content validator-tool">
@@ -118,15 +119,31 @@ var categoriesJson = JSON.stringify(categories);
     <div class="tool-card start-screen" id="start-screen">
       <div class="start-content">
         <div class="start-icon">
-          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-            <path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/>
+          <svg
+            width="64"
+            height="64"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            aria-hidden="true"
+          >
+            <path
+              d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"
+            ></path>
           </svg>
         </div>
         <h2>Ready to Validate Your Idea?</h2>
-        <p>Answer 20 questions across 5 categories. Takes about 5 minutes. Your answers are never sent anywhere — everything stays in your browser.</p>
+        <p>
+          Answer 20 questions across 5 categories. Takes about 5 minutes. Your
+          answers are never sent anywhere — everything stays in your browser.
+        </p>
 
         <div class="idea-name-input">
-          <label for="idea-name">What's your idea called? <span class="optional">(optional)</span></label>
+          <label for="idea-name"
+            >What's your idea called? <span class="optional">(optional)</span
+            ></label
+          >
           <input
             type="text"
             id="idea-name"
@@ -138,28 +155,52 @@ var categoriesJson = JSON.stringify(categories);
 
         <button type="button" class="btn btn-primary btn-large" id="start-btn">
           <span>Start Validation</span>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M5 12h14M12 5l7 7-7 7"/>
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M5 12h14M12 5l7 7-7 7"></path>
           </svg>
         </button>
 
         <div class="saved-progress hidden" id="saved-progress">
           <div class="saved-progress-content">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
-            <span>You have saved progress. <button type="button" class="link-btn" id="resume-btn">Resume</button> or <button type="button" class="link-btn" id="start-fresh-btn">start fresh</button></span>
+            <span
+              >You have saved progress. <button
+                type="button"
+                class="link-btn"
+                id="resume-btn">Resume</button
+              > or <button type="button" class="link-btn" id="start-fresh-btn"
+                >start fresh</button
+              ></span
+            >
           </div>
         </div>
 
         <div class="categories-preview">
           <h3>What you'll be evaluated on:</h3>
           <div class="category-pills">
-            {categories.map(cat => (
-              <span class="category-pill" style={`--cat-color: ${cat.color}`}>
-                {cat.name}
-              </span>
-            ))}
+            {
+              categories.map((cat) => (
+                <span class="category-pill" style={`--cat-color: ${cat.color}`}>
+                  {cat.name}
+                </span>
+              ))
+            }
           </div>
         </div>
       </div>
@@ -170,25 +211,31 @@ var categoriesJson = JSON.stringify(categories);
       <!-- Progress Header -->
       <div class="progress-header">
         <div class="progress-info">
-          <span class="progress-text">Question <span id="current-q-num">1</span> of <span id="total-q-num">20</span></span>
+          <span class="progress-text"
+            >Question <span id="current-q-num">1</span> of <span
+              id="total-q-num">20</span
+            ></span
+          >
           <span class="progress-percentage" id="progress-percentage">0%</span>
         </div>
         <div class="progress-bar-container">
           <div class="progress-bar" id="progress-bar"></div>
         </div>
         <div class="category-indicators" id="category-indicators">
-          {categories.map(cat => (
-            <button
-              type="button"
-              class="category-indicator"
-              data-category={cat.id}
-              style={`--cat-color: ${cat.color}`}
-              title={cat.name}
-            >
-              <span class="cat-progress">0/4</span>
-              <span class="cat-name">{cat.name}</span>
-            </button>
-          ))}
+          {
+            categories.map((cat) => (
+              <button
+                type="button"
+                class="category-indicator"
+                data-category={cat.id}
+                style={`--cat-color: ${cat.color}`}
+                title={cat.name}
+              >
+                <span class="cat-progress">0/4</span>
+                <span class="cat-name">{cat.name}</span>
+              </button>
+            ))
+          }
         </div>
       </div>
 
@@ -203,10 +250,17 @@ var categoriesJson = JSON.stringify(categories);
           <h2 class="question-text" id="question-text">Loading question...</h2>
 
           <button type="button" class="tooltip-trigger" id="tooltip-trigger">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10"/>
-              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
-              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
             </svg>
             <span>Why this matters</span>
           </button>
@@ -216,17 +270,41 @@ var categoriesJson = JSON.stringify(categories);
           </div>
 
           <div class="answer-buttons">
-            <button type="button" class="answer-btn answer-yes" id="answer-yes" data-answer="yes">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <polyline points="20 6 9 17 4 12"/>
+            <button
+              type="button"
+              class="answer-btn answer-yes"
+              id="answer-yes"
+              data-answer="yes"
+            >
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+              >
+                <polyline points="20 6 9 17 4 12"></polyline>
               </svg>
               <span>Yes</span>
               <kbd>Y</kbd>
             </button>
-            <button type="button" class="answer-btn answer-no" id="answer-no" data-answer="no">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <line x1="18" y1="6" x2="6" y2="18"/>
-                <line x1="6" y1="6" x2="18" y2="18"/>
+            <button
+              type="button"
+              class="answer-btn answer-no"
+              id="answer-no"
+              data-answer="no"
+            >
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+              >
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
               </svg>
               <span>No</span>
               <kbd>N</kbd>
@@ -246,15 +324,29 @@ var categoriesJson = JSON.stringify(categories);
         <!-- Navigation -->
         <div class="question-nav">
           <button type="button" class="nav-btn" id="prev-btn" disabled>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M19 12H5M12 19l-7-7 7-7"/>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M19 12H5M12 19l-7-7 7-7"></path>
             </svg>
             <span>Previous</span>
           </button>
           <button type="button" class="nav-btn nav-next" id="next-btn">
             <span>Next</span>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M5 12h14M12 5l7 7-7 7"></path>
             </svg>
           </button>
         </div>
@@ -280,8 +372,13 @@ var categoriesJson = JSON.stringify(categories);
         <div class="score-display">
           <div class="score-circle" id="score-circle">
             <svg class="score-ring" viewBox="0 0 120 120">
-              <circle class="score-ring-bg" cx="60" cy="60" r="54"/>
-              <circle class="score-ring-progress" cx="60" cy="60" r="54" id="score-ring-progress"/>
+              <circle class="score-ring-bg" cx="60" cy="60" r="54"></circle>
+              <circle
+                class="score-ring-progress"
+                cx="60"
+                cy="60"
+                r="54"
+                id="score-ring-progress"></circle>
             </svg>
             <div class="score-content">
               <span class="score-number" id="score-number">0</span>
@@ -290,29 +387,44 @@ var categoriesJson = JSON.stringify(categories);
           </div>
           <div class="grade-badge" id="grade-badge">A</div>
         </div>
-        <h2 class="results-headline" id="results-headline">Your idea has potential!</h2>
+        <h2 class="results-headline" id="results-headline">
+          Your idea has potential!
+        </h2>
       </div>
 
       <!-- Category Breakdown -->
       <div class="category-breakdown">
         <h3>Category Breakdown</h3>
         <div class="category-cards" id="category-cards">
-          {categories.map(cat => (
-            <div class="category-card" data-category={cat.id} style={`--cat-color: ${cat.color}`}>
-              <div class="category-card-header">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d={cat.icon}/>
-                </svg>
-                <span class="category-card-name">{cat.name}</span>
+          {
+            categories.map((cat) => (
+              <div
+                class="category-card"
+                data-category={cat.id}
+                style={`--cat-color: ${cat.color}`}
+              >
+                <div class="category-card-header">
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path d={cat.icon} />
+                  </svg>
+                  <span class="category-card-name">{cat.name}</span>
+                </div>
+                <div class="category-card-score">
+                  <span class="category-percentage">0%</span>
+                </div>
+                <div class="category-bar">
+                  <div class="category-bar-fill" />
+                </div>
               </div>
-              <div class="category-card-score">
-                <span class="category-percentage">0%</span>
-              </div>
-              <div class="category-bar">
-                <div class="category-bar-fill"></div>
-              </div>
-            </div>
-          ))}
+            ))
+          }
         </div>
       </div>
 
@@ -320,9 +432,16 @@ var categoriesJson = JSON.stringify(categories);
       <div class="strengths-weaknesses" id="strengths-weaknesses">
         <div class="sw-column strengths">
           <h4>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-              <polyline points="22 4 12 14.01 9 11.01"/>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
             </svg>
             Strengths
           </h4>
@@ -330,10 +449,17 @@ var categoriesJson = JSON.stringify(categories);
         </div>
         <div class="sw-column weaknesses">
           <h4>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10"/>
-              <line x1="12" y1="8" x2="12" y2="12"/>
-              <line x1="12" y1="16" x2="12.01" y2="16"/>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
             </svg>
             Areas to Improve
           </h4>
@@ -350,29 +476,60 @@ var categoriesJson = JSON.stringify(categories);
       <!-- Actions -->
       <div class="results-actions">
         <button type="button" class="btn btn-primary" id="share-results-btn">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="18" cy="5" r="3"/>
-            <circle cx="6" cy="12" r="3"/>
-            <circle cx="18" cy="19" r="3"/>
-            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
-            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <circle cx="18" cy="5" r="3"></circle>
+            <circle cx="6" cy="12" r="3"></circle>
+            <circle cx="18" cy="19" r="3"></circle>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
           </svg>
           Share Results
         </button>
         <button type="button" class="btn btn-secondary" id="copy-link-btn">
-          <svg class="copy-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+          <svg
+            class="copy-icon"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+            ></path>
           </svg>
-          <svg class="check-icon hidden" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="20 6 9 17 4 12"/>
+          <svg
+            class="check-icon hidden"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <polyline points="20 6 9 17 4 12"></polyline>
           </svg>
           <span class="btn-text">Copy Link</span>
         </button>
         <button type="button" class="btn btn-secondary" id="restart-btn">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
-            <path d="M3 3v5h5"/>
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+            <path d="M3 3v5h5"></path>
           </svg>
           Start Over
         </button>
@@ -383,8 +540,15 @@ var categoriesJson = JSON.stringify(categories);
 
       <!-- Share Toast -->
       <div class="share-toast hidden" id="share-toast">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="20 6 9 17 4 12"/>
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <polyline points="20 6 9 17 4 12"></polyline>
         </svg>
         <span>Link copied to clipboard!</span>
       </div>
@@ -394,7 +558,9 @@ var categoriesJson = JSON.stringify(categories);
     <div class="tool-card newsletter-section hidden" id="newsletter-section">
       <div class="newsletter-content">
         <h2 id="newsletter-headline">Want to improve your score?</h2>
-        <p id="newsletter-subtext">Get weekly validation insights from my journey building products.</p>
+        <p id="newsletter-subtext">
+          Get weekly validation insights from my journey building products.
+        </p>
 
         <form
           class="newsletter-form listmonk-form"
@@ -406,10 +572,39 @@ var categoriesJson = JSON.stringify(categories);
           method="post"
         >
           <input type="hidden" name="nonce" />
-          <input id="00a2c" type="hidden" name="l" value="00a2c2b8-467a-4d74-9c76-9c6472c91d06" />
-          <input type="text" name="name" value="" class="honeypot-field" tabindex="-1" autocomplete="off" aria-hidden="true" />
-          <input type="text" name="company" value="" class="honeypot-field" tabindex="-1" autocomplete="off" aria-hidden="true" />
-          <input type="text" name="website" value="" class="honeypot-field" tabindex="-1" autocomplete="off" aria-hidden="true" />
+          <input
+            id="00a2c"
+            type="hidden"
+            name="l"
+            value="00a2c2b8-467a-4d74-9c76-9c6472c91d06"
+          />
+          <input
+            type="text"
+            name="name"
+            value=""
+            class="honeypot-field"
+            tabindex="-1"
+            autocomplete="off"
+            aria-hidden="true"
+          />
+          <input
+            type="text"
+            name="company"
+            value=""
+            class="honeypot-field"
+            tabindex="-1"
+            autocomplete="off"
+            aria-hidden="true"
+          />
+          <input
+            type="text"
+            name="website"
+            value=""
+            class="honeypot-field"
+            tabindex="-1"
+            autocomplete="off"
+            aria-hidden="true"
+          />
           <div class="form-row">
             <input
               type="email"
@@ -422,18 +617,32 @@ var categoriesJson = JSON.stringify(categories);
             <altcha-widget
               class="altcha-widget"
               challengeurl="https://newsletter.meysam.io/api/public/captcha/altcha"
-              auto="onfocus"
-            ></altcha-widget>
-            <script type="module" src="https://newsletter.meysam.io/public/static/altcha.umd.js" async defer></script>
-            <button type="submit" class="btn btn-primary">Get Validation Tips</button>
+              auto="onfocus"></altcha-widget>
+            <script
+              type="module"
+              src="https://newsletter.meysam.io/public/static/altcha.umd.js"
+              async
+              defer></script>
+            <button type="submit" class="btn btn-primary"
+              >Get Validation Tips</button
+            >
           </div>
-          <p class="form-note">Join 1,500+ technical founders. No spam, unsubscribe anytime.</p>
+          <p class="form-note">
+            Join 1,500+ technical founders. No spam, unsubscribe anytime.
+          </p>
         </form>
 
         <div class="success-message hidden" id="newsletter-success">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-            <polyline points="22 4 12 14.01 9 11.01"/>
+          <svg
+            width="48"
+            height="48"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
           </svg>
           <h3>Check Your Email!</h3>
           <p>Click the confirmation link to complete your subscription.</p>
@@ -447,44 +656,97 @@ var categoriesJson = JSON.stringify(categories);
 
       <details class="faq-item">
         <summary>How do I validate my SaaS idea?</summary>
-        <p>Validate your SaaS idea by answering 20 questions across 5 key areas: <strong>Market</strong> (who you're selling to), <strong>Problem</strong> (what pain you're solving), <strong>Solution</strong> (how you're solving it), <strong>Distribution</strong> (how you'll reach customers), and <strong>Founder Fit</strong> (your unique advantages). This tool scores each area and provides specific recommendations based on your answers.</p>
+        <p>
+          Validate your SaaS idea by answering 20 questions across 5 key areas: <strong
+            >Market</strong
+          > (who you're selling to), <strong>Problem</strong> (what pain you're solving),
+          <strong>Solution</strong> (how you're solving it), <strong
+            >Distribution</strong
+          > (how you'll reach customers), and <strong>Founder Fit</strong> (your
+          unique advantages). This tool scores each area and provides specific recommendations
+          based on your answers.
+        </p>
       </details>
 
       <details class="faq-item">
         <summary>What score means my startup idea is viable?</summary>
-        <p>A score of <strong>70% or higher (Grade A-B)</strong> suggests a strong foundation worth pursuing. Scores between 55-70% indicate promising concepts that need work in specific areas. Below 55% means significant validation is needed before building. The most important factor isn't the total score, but addressing any critical gaps — especially in Problem and Distribution categories.</p>
+        <p>
+          A score of <strong>70% or higher (Grade A-B)</strong> suggests a strong
+          foundation worth pursuing. Scores between 55-70% indicate promising concepts
+          that need work in specific areas. Below 55% means significant validation
+          is needed before building. The most important factor isn't the total score,
+          but addressing any critical gaps — especially in Problem and Distribution
+          categories.
+        </p>
       </details>
 
       <details class="faq-item">
         <summary>What are the most important validation criteria?</summary>
         <p>The most critical validation criteria are:</p>
         <ol>
-          <li><strong>Have you talked to potential customers?</strong> — Real conversations beat assumptions</li>
-          <li><strong>Is there evidence people will pay?</strong> — Willingness to pay, not just interest</li>
-          <li><strong>Do you have a path to reach customers?</strong> — Distribution is often harder than building</li>
-          <li><strong>Is your solution meaningfully better?</strong> — 10x better on something that matters</li>
+          <li>
+            <strong>Have you talked to potential customers?</strong> — Real conversations
+            beat assumptions
+          </li>
+          <li>
+            <strong>Is there evidence people will pay?</strong> — Willingness to
+            pay, not just interest
+          </li>
+          <li>
+            <strong>Do you have a path to reach customers?</strong> — Distribution
+            is often harder than building
+          </li>
+          <li>
+            <strong>Is your solution meaningfully better?</strong> — 10x better on
+            something that matters
+          </li>
         </ol>
-        <p>These four questions predict startup success more than any others.</p>
+        <p>
+          These four questions predict startup success more than any others.
+        </p>
       </details>
 
       <details class="faq-item">
         <summary>Is my data secure when using this validator?</summary>
-        <p>Yes, <strong>100% secure</strong>. This tool runs entirely in your browser using JavaScript. Your idea name, answers, and results are <strong>never sent to any server</strong>. All data stays on your device. You can optionally save progress to your browser's local storage. Check your network tab — zero data transmitted.</p>
+        <p>
+          Yes, <strong>100% secure</strong>. This tool runs entirely in your
+          browser using JavaScript. Your idea name, answers, and results are <strong
+            >never sent to any server</strong
+          >. All data stays on your device. You can optionally save progress to
+          your browser's local storage. Check your network tab — zero data
+          transmitted.
+        </p>
       </details>
 
       <details class="faq-item">
         <summary>Can I save my progress and come back later?</summary>
-        <p>Yes! Your progress is automatically saved to your browser's local storage. When you return, you'll see an option to resume where you left off. You can also start fresh if you want to validate a new idea.</p>
+        <p>
+          Yes! Your progress is automatically saved to your browser's local
+          storage. When you return, you'll see an option to resume where you
+          left off. You can also start fresh if you want to validate a new idea.
+        </p>
       </details>
 
       <details class="faq-item">
         <summary>What's the methodology behind this framework?</summary>
-        <p>This framework synthesizes lessons from successful founders, common failure patterns documented in post-mortems, and established methodologies like <em>The Mom Test</em> by Rob Fitzpatrick. The questions are weighted based on their predictive value for startup success — problem validation and distribution questions carry more weight than nice-to-haves.</p>
+        <p>
+          This framework synthesizes lessons from successful founders, common
+          failure patterns documented in post-mortems, and established
+          methodologies like <em>The Mom Test</em> by Rob Fitzpatrick. The questions
+          are weighted based on their predictive value for startup success — problem
+          validation and distribution questions carry more weight than nice-to-haves.
+        </p>
       </details>
 
       <details class="faq-item">
         <summary>Should I take the results as final judgment?</summary>
-        <p><strong>No.</strong> This is a thinking tool, not an oracle. A low score doesn't mean your idea is doomed — it means you have specific areas to strengthen. A high score doesn't guarantee success — execution matters. Use the results to identify blind spots and prioritize where to focus your validation efforts.</p>
+        <p>
+          <strong>No.</strong> This is a thinking tool, not an oracle. A low score
+          doesn't mean your idea is doomed — it means you have specific areas to
+          strengthen. A high score doesn't guarantee success — execution matters.
+          Use the results to identify blind spots and prioritize where to focus your
+          validation efforts.
+        </p>
       </details>
     </div>
 
@@ -495,22 +757,34 @@ var categoriesJson = JSON.stringify(categories);
         <div class="how-step">
           <div class="step-number">1</div>
           <h4>Answer 20 Questions</h4>
-          <p>Honest yes/no answers across 5 validation categories. Each question is designed to surface real risks.</p>
+          <p>
+            Honest yes/no answers across 5 validation categories. Each question
+            is designed to surface real risks.
+          </p>
         </div>
         <div class="how-step">
           <div class="step-number">2</div>
           <h4>Get Weighted Scoring</h4>
-          <p>Critical questions (like customer conversations) are weighted higher than nice-to-haves. Your score reflects real risk.</p>
+          <p>
+            Critical questions (like customer conversations) are weighted higher
+            than nice-to-haves. Your score reflects real risk.
+          </p>
         </div>
         <div class="how-step">
           <div class="step-number">3</div>
           <h4>Receive Recommendations</h4>
-          <p>Based on your answers, get prioritized action items — from critical blockers to optimizations.</p>
+          <p>
+            Based on your answers, get prioritized action items — from critical
+            blockers to optimizations.
+          </p>
         </div>
         <div class="how-step">
           <div class="step-number">4</div>
           <h4>Take Action</h4>
-          <p>Don't just read your score. Use the specific recommendations to de-risk your idea before building.</p>
+          <p>
+            Don't just read your score. Use the specific recommendations to
+            de-risk your idea before building.
+          </p>
         </div>
       </div>
     </div>
@@ -539,9 +813,9 @@ var categoriesJson = JSON.stringify(categories);
     type Grade,
     type Answer,
     type CategoryId,
-    type ValidationResult
-  } from '@/utils/idea-validator';
-  import log from '@/utils/logger';
+    type ValidationResult,
+  } from "@/utils/idea-validator";
+  import log from "@/utils/logger";
 
   // ============================================================================
   // TYPE DECLARATIONS
@@ -573,13 +847,15 @@ var categoriesJson = JSON.stringify(categories);
   var questions: Question[] = (window as any).__QUESTIONS__;
   var categories: Category[] = (window as any).__CATEGORIES__;
 
-  var ideaName = '';
+  var ideaName = "";
   var answers: Record<string, Answer> = {};
   var currentQuestionIndex = 0;
   var isAnimating = false;
 
   // Initialize answers
-  questions.forEach(q => { answers[q.id] = null; });
+  questions.forEach((q) => {
+    answers[q.id] = null;
+  });
 
   // ============================================================================
   // DOM ELEMENTS
@@ -657,20 +933,32 @@ var categoriesJson = JSON.stringify(categories);
   var confettiCtx: CanvasRenderingContext2D | null = null;
 
   function initConfetti() {
-    if (!confettiCanvas) {return;}
-    confettiCtx = confettiCanvas.getContext('2d');
+    if (!confettiCanvas) {
+      return;
+    }
+    confettiCtx = confettiCanvas.getContext("2d");
     resizeConfettiCanvas();
-    window.addEventListener('resize', resizeConfettiCanvas);
+    window.addEventListener("resize", resizeConfettiCanvas);
   }
 
   function resizeConfettiCanvas() {
-    if (!confettiCanvas) {return;}
+    if (!confettiCanvas) {
+      return;
+    }
     confettiCanvas.width = window.innerWidth;
     confettiCanvas.height = window.innerHeight;
   }
 
   function createConfetti(count: number) {
-    var colors = ['#8b5cf6', '#f59e0b', '#10b981', '#3b82f6', '#ec4899', '#f43f5e', '#06b6d4'];
+    var colors = [
+      "#8b5cf6",
+      "#f59e0b",
+      "#10b981",
+      "#3b82f6",
+      "#ec4899",
+      "#f43f5e",
+      "#06b6d4",
+    ];
     confettiPieces = [];
 
     for (var i = 0; i < count; i++) {
@@ -682,13 +970,15 @@ var categoriesJson = JSON.stringify(categories);
         color: colors[Math.floor(Math.random() * colors.length)],
         tilt: Math.floor(Math.random() * 10) - 10,
         tiltAngleIncrement: Math.random() * 0.07 + 0.05,
-        tiltAngle: 0
+        tiltAngle: 0,
       });
     }
   }
 
   function drawConfetti() {
-    if (!confettiCtx || !confettiCanvas) {return;}
+    if (!confettiCtx || !confettiCanvas) {
+      return;
+    }
 
     confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
 
@@ -696,14 +986,20 @@ var categoriesJson = JSON.stringify(categories);
       confettiCtx.beginPath();
       confettiCtx.lineWidth = confetto.r / 2;
       confettiCtx.strokeStyle = confetto.color;
-      confettiCtx.moveTo(confetto.x + confetto.tilt + confetto.r / 4, confetto.y);
-      confettiCtx.lineTo(confetto.x + confetto.tilt, confetto.y + confetto.tilt + confetto.r / 4);
+      confettiCtx.moveTo(
+        confetto.x + confetto.tilt + confetto.r / 4,
+        confetto.y,
+      );
+      confettiCtx.lineTo(
+        confetto.x + confetto.tilt,
+        confetto.y + confetto.tilt + confetto.r / 4,
+      );
       confettiCtx.stroke();
     }
 
     updateConfetti();
 
-    if (confettiPieces.some(c => c.y < confettiCanvas.height)) {
+    if (confettiPieces.some((c) => c.y < confettiCanvas.height)) {
       confettiAnimationId = requestAnimationFrame(drawConfetti);
     } else {
       stopConfetti();
@@ -738,71 +1034,75 @@ var categoriesJson = JSON.stringify(categories);
   // UI UPDATES
   // ============================================================================
 
-  function showScreen(screen: 'start' | 'questions' | 'results') {
-    startScreen.classList.toggle('hidden', screen !== 'start');
-    questionScreen.classList.toggle('hidden', screen !== 'questions');
-    resultsScreen.classList.toggle('hidden', screen !== 'results');
-    newsletterSection.classList.toggle('hidden', screen !== 'results');
+  function showScreen(screen: "start" | "questions" | "results") {
+    startScreen.classList.toggle("hidden", screen !== "start");
+    questionScreen.classList.toggle("hidden", screen !== "questions");
+    resultsScreen.classList.toggle("hidden", screen !== "results");
+    newsletterSection.classList.toggle("hidden", screen !== "results");
 
-    if (screen === 'questions') {
+    if (screen === "questions") {
       updateQuestionDisplay();
-    } else if (screen === 'results') {
+    } else if (screen === "results") {
       displayResults();
     }
   }
 
   function updateQuestionDisplay() {
     var question = questions[currentQuestionIndex];
-    var category = categories.find(c => c.id === question.category)!;
+    var category = categories.find((c) => c.id === question.category)!;
 
     // Update progress
     currentQNum.textContent = String(currentQuestionIndex + 1);
     totalQNum.textContent = String(questions.length);
 
     var progress = getProgressPercentage(answers);
-    progressPercentage.textContent = progress + '%';
-    progressBar.style.width = progress + '%';
+    progressPercentage.textContent = progress + "%";
+    progressBar.style.width = progress + "%";
 
     // Update category indicators
     updateCategoryIndicators();
 
     // Animate question change
     if (!isAnimating) {
-      questionCard.classList.add('question-exit');
+      questionCard.classList.add("question-exit");
       isAnimating = true;
 
       setTimeout(() => {
         // Update question content
-        var categoryDot = questionCategory.querySelector('.category-dot') as HTMLElement;
-        var categoryLabel = questionCategory.querySelector('.category-label') as HTMLElement;
+        var categoryDot = questionCategory.querySelector(
+          ".category-dot",
+        ) as HTMLElement;
+        var categoryLabel = questionCategory.querySelector(
+          ".category-label",
+        ) as HTMLElement;
         categoryDot.style.backgroundColor = category.color;
         categoryLabel.textContent = category.name;
-        questionCategory.style.setProperty('--cat-color', category.color);
+        questionCategory.style.setProperty("--cat-color", category.color);
 
         questionText.textContent = question.text;
         tooltipText.textContent = question.tooltip;
-        tooltipContent.classList.add('hidden');
+        tooltipContent.classList.add("hidden");
 
         // Update answer buttons state
         var currentAnswer = answers[question.id];
-        answerYes.classList.toggle('selected', currentAnswer === 'yes');
-        answerNo.classList.toggle('selected', currentAnswer === 'no');
-        skipBtn.classList.toggle('selected', currentAnswer === 'skip');
+        answerYes.classList.toggle("selected", currentAnswer === "yes");
+        answerNo.classList.toggle("selected", currentAnswer === "no");
+        skipBtn.classList.toggle("selected", currentAnswer === "skip");
 
         // Hide feedback initially
-        answerFeedback.classList.add('hidden');
+        answerFeedback.classList.add("hidden");
 
         // Show feedback if already answered
-        if (currentAnswer === 'yes' && question.yesFollowUp) {
+        if (currentAnswer === "yes" && question.yesFollowUp) {
           feedbackText.textContent = question.yesFollowUp;
-          answerFeedback.classList.remove('hidden');
-          answerFeedback.classList.remove('feedback-no');
-          answerFeedback.classList.add('feedback-yes');
-        } else if (currentAnswer === 'no' && question.noFollowUp) {
+          answerFeedback.classList.remove("hidden");
+          answerFeedback.classList.remove("feedback-no");
+          answerFeedback.classList.add("feedback-yes");
+        } else if (currentAnswer === "no" && question.noFollowUp) {
           feedbackText.textContent = question.noFollowUp;
-          answerFeedback.classList.remove('hidden');
-          answerFeedback.classList.remove('feedback-yes');
-          answerFeedback.classList.add('feedback-no');
+          answerFeedback.classList.remove("hidden");
+          answerFeedback.classList.remove("feedback-yes");
+          answerFeedback.classList.add("feedback-no");
         }
 
         // Update navigation
@@ -812,19 +1112,21 @@ var categoriesJson = JSON.stringify(categories);
         var allAnswered = isValidationComplete(answers);
 
         if (isLastQuestion || allAnswered) {
-          nextBtn.innerHTML = '<span>See Results</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
-          nextBtn.classList.add('btn-primary');
+          nextBtn.innerHTML =
+            '<span>See Results</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
+          nextBtn.classList.add("btn-primary");
         } else {
-          nextBtn.innerHTML = '<span>Next</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
-          nextBtn.classList.remove('btn-primary');
+          nextBtn.innerHTML =
+            '<span>Next</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
+          nextBtn.classList.remove("btn-primary");
         }
 
         // Animate in
-        questionCard.classList.remove('question-exit');
-        questionCard.classList.add('question-enter');
+        questionCard.classList.remove("question-exit");
+        questionCard.classList.add("question-enter");
 
         setTimeout(() => {
-          questionCard.classList.remove('question-enter');
+          questionCard.classList.remove("question-enter");
           isAnimating = false;
         }, 300);
       }, 150);
@@ -832,19 +1134,26 @@ var categoriesJson = JSON.stringify(categories);
   }
 
   function updateCategoryIndicators() {
-    var indicatorBtns = categoryIndicators.querySelectorAll('.category-indicator');
+    var indicatorBtns = categoryIndicators.querySelectorAll(
+      ".category-indicator",
+    );
 
-    indicatorBtns.forEach(btn => {
-      var catId = btn.getAttribute('data-category') as CategoryId;
-      var catQuestions = questions.filter(q => q.category === catId);
-      var answeredCount = catQuestions.filter(q => answers[q.id] !== null).length;
+    indicatorBtns.forEach((btn) => {
+      var catId = btn.getAttribute("data-category") as CategoryId;
+      var catQuestions = questions.filter((q) => q.category === catId);
+      var answeredCount = catQuestions.filter(
+        (q) => answers[q.id] !== null,
+      ).length;
 
-      var progressSpan = btn.querySelector('.cat-progress') as HTMLElement;
-      progressSpan.textContent = answeredCount + '/' + catQuestions.length;
+      var progressSpan = btn.querySelector(".cat-progress") as HTMLElement;
+      progressSpan.textContent = answeredCount + "/" + catQuestions.length;
 
       // Add completion class
-      btn.classList.toggle('complete', answeredCount === catQuestions.length);
-      btn.classList.toggle('active', questions[currentQuestionIndex].category === catId);
+      btn.classList.toggle("complete", answeredCount === catQuestions.length);
+      btn.classList.toggle(
+        "active",
+        questions[currentQuestionIndex].category === catId,
+      );
     });
   }
 
@@ -853,21 +1162,21 @@ var categoriesJson = JSON.stringify(categories);
     answers[question.id] = answer;
 
     // Update button states
-    answerYes.classList.toggle('selected', answer === 'yes');
-    answerNo.classList.toggle('selected', answer === 'no');
-    skipBtn.classList.toggle('selected', answer === 'skip');
+    answerYes.classList.toggle("selected", answer === "yes");
+    answerNo.classList.toggle("selected", answer === "no");
+    skipBtn.classList.toggle("selected", answer === "skip");
 
     // Show feedback
-    if (answer === 'yes' && question.yesFollowUp) {
+    if (answer === "yes" && question.yesFollowUp) {
       feedbackText.textContent = question.yesFollowUp;
-      answerFeedback.classList.remove('hidden', 'feedback-no');
-      answerFeedback.classList.add('feedback-yes');
-    } else if (answer === 'no' && question.noFollowUp) {
+      answerFeedback.classList.remove("hidden", "feedback-no");
+      answerFeedback.classList.add("feedback-yes");
+    } else if (answer === "no" && question.noFollowUp) {
       feedbackText.textContent = question.noFollowUp;
-      answerFeedback.classList.remove('hidden', 'feedback-yes');
-      answerFeedback.classList.add('feedback-no');
+      answerFeedback.classList.remove("hidden", "feedback-yes");
+      answerFeedback.classList.add("feedback-no");
     } else {
-      answerFeedback.classList.add('hidden');
+      answerFeedback.classList.add("hidden");
     }
 
     // Save progress
@@ -875,8 +1184,8 @@ var categoriesJson = JSON.stringify(categories);
 
     // Update indicators
     updateCategoryIndicators();
-    progressBar.style.width = getProgressPercentage(answers) + '%';
-    progressPercentage.textContent = getProgressPercentage(answers) + '%';
+    progressBar.style.width = getProgressPercentage(answers) + "%";
+    progressPercentage.textContent = getProgressPercentage(answers) + "%";
 
     // Auto-advance after delay (if not last question)
     if (currentQuestionIndex < questions.length - 1) {
@@ -885,8 +1194,9 @@ var categoriesJson = JSON.stringify(categories);
       }, 600);
     } else {
       // Update button to show results
-      nextBtn.innerHTML = '<span>See Results</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
-      nextBtn.classList.add('btn-primary');
+      nextBtn.innerHTML =
+        '<span>See Results</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
+      nextBtn.classList.add("btn-primary");
     }
   }
 
@@ -902,12 +1212,14 @@ var categoriesJson = JSON.stringify(categories);
       currentQuestionIndex++;
       updateQuestionDisplay();
     } else if (isValidationComplete(answers)) {
-      showScreen('results');
+      showScreen("results");
     }
   }
 
   function goToCategory(categoryId: CategoryId) {
-    var firstQuestionIndex = questions.findIndex(q => q.category === categoryId);
+    var firstQuestionIndex = questions.findIndex(
+      (q) => q.category === categoryId,
+    );
     if (firstQuestionIndex !== -1) {
       currentQuestionIndex = firstQuestionIndex;
       updateQuestionDisplay();
@@ -924,9 +1236,9 @@ var categoriesJson = JSON.stringify(categories);
     // Display idea name
     if (ideaName) {
       ideaNameDisplay.textContent = '"' + ideaName + '"';
-      ideaNameDisplay.classList.remove('hidden');
+      ideaNameDisplay.classList.remove("hidden");
     } else {
-      ideaNameDisplay.classList.add('hidden');
+      ideaNameDisplay.classList.add("hidden");
     }
 
     // Animate score
@@ -962,28 +1274,30 @@ var categoriesJson = JSON.stringify(categories);
       percentage: result.percentage,
       grade: result.grade,
       headline: result.headline,
-      categoryScores: result.categoryScores
+      categoryScores: result.categoryScores,
     };
-    window.dispatchEvent(new CustomEvent('idea-validator:results-ready', { detail: shareData }));
+    window.dispatchEvent(
+      new CustomEvent("idea-validator:results-ready", { detail: shareData }),
+    );
 
     // Scroll to top of results
-    resultsScreen.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    resultsScreen.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
   function getGradeFromScore(score: number): Grade {
     if (score >= 85) {
-      return 'A';
+      return "A";
     }
     if (score >= 70) {
-      return 'B';
+      return "B";
     }
     if (score >= 55) {
-      return 'C';
+      return "C";
     }
     if (score >= 40) {
-      return 'D';
+      return "D";
     }
-    return 'F';
+    return "F";
   }
 
   function animateScore(targetScore: number) {
@@ -997,7 +1311,9 @@ var categoriesJson = JSON.stringify(categories);
     scoreRingProgress.style.strokeDashoffset = String(circumference);
 
     function animate(currentTime: number) {
-      if (!startTime) {startTime = currentTime;}
+      if (!startTime) {
+        startTime = currentTime;
+      }
       var elapsed = currentTime - startTime;
       var progress = Math.min(elapsed / duration, 1);
 
@@ -1008,7 +1324,8 @@ var categoriesJson = JSON.stringify(categories);
       scoreNumber.textContent = String(currentScore);
 
       // Update ring
-      var offset = circumference - (circumference * (targetScore / 100) * easeProgress);
+      var offset =
+        circumference - circumference * (targetScore / 100) * easeProgress;
       scoreRingProgress.style.strokeDashoffset = String(offset);
 
       // Set color based on score
@@ -1026,51 +1343,55 @@ var categoriesJson = JSON.stringify(categories);
   }
 
   function updateCategoryCards(result: ValidationResult) {
-    var cards = categoryCards.querySelectorAll('.category-card');
+    var cards = categoryCards.querySelectorAll(".category-card");
 
     cards.forEach((card, index) => {
-      var catId = card.getAttribute('data-category') as CategoryId;
+      var catId = card.getAttribute("data-category") as CategoryId;
       var catScore = result.categoryScores[catId];
 
-      var percentageEl = card.querySelector('.category-percentage') as HTMLElement;
-      var barFill = card.querySelector('.category-bar-fill') as HTMLElement;
+      var percentageEl = card.querySelector(
+        ".category-percentage",
+      ) as HTMLElement;
+      var barFill = card.querySelector(".category-bar-fill") as HTMLElement;
 
       // Animate with delay
       setTimeout(() => {
-        percentageEl.textContent = catScore.percentage + '%';
-        barFill.style.width = catScore.percentage + '%';
+        percentageEl.textContent = catScore.percentage + "%";
+        barFill.style.width = catScore.percentage + "%";
 
         // Color the bar based on score
         if (catScore.percentage >= 70) {
-          barFill.style.backgroundColor = '#10b981';
+          barFill.style.backgroundColor = "#10b981";
         } else if (catScore.percentage >= 50) {
-          barFill.style.backgroundColor = '#f59e0b';
+          barFill.style.backgroundColor = "#f59e0b";
         } else {
-          barFill.style.backgroundColor = '#ef4444';
+          barFill.style.backgroundColor = "#ef4444";
         }
       }, index * 150);
     });
   }
 
   function updateStrengthsWeaknesses(result: ValidationResult) {
-    strengthsList.innerHTML = '';
-    weaknessesList.innerHTML = '';
+    strengthsList.innerHTML = "";
+    weaknessesList.innerHTML = "";
 
     if (result.strengths.length === 0) {
-      strengthsList.innerHTML = '<li class="empty">Keep working on validation</li>';
+      strengthsList.innerHTML =
+        '<li class="empty">Keep working on validation</li>';
     } else {
-      result.strengths.forEach(strength => {
-        var li = document.createElement('li');
+      result.strengths.forEach((strength) => {
+        var li = document.createElement("li");
         li.textContent = strength;
         strengthsList.appendChild(li);
       });
     }
 
     if (result.weaknesses.length === 0) {
-      weaknessesList.innerHTML = '<li class="empty">No critical weaknesses</li>';
+      weaknessesList.innerHTML =
+        '<li class="empty">No critical weaknesses</li>';
     } else {
-      result.weaknesses.forEach(weakness => {
-        var li = document.createElement('li');
+      result.weaknesses.forEach((weakness) => {
+        var li = document.createElement("li");
         li.textContent = weakness;
         weaknessesList.appendChild(li);
       });
@@ -1078,19 +1399,20 @@ var categoriesJson = JSON.stringify(categories);
   }
 
   function updateRecommendations(result: ValidationResult) {
-    recommendationsList.innerHTML = '';
+    recommendationsList.innerHTML = "";
 
     if (result.recommendations.length === 0) {
-      recommendationsList.innerHTML = '<div class="no-recommendations">Your idea is well-validated! Focus on execution.</div>';
+      recommendationsList.innerHTML =
+        '<div class="no-recommendations">Your idea is well-validated! Focus on execution.</div>';
       return;
     }
 
     result.recommendations.forEach((rec, index) => {
-      var category = categories.find(c => c.id === rec.category)!;
+      var category = categories.find((c) => c.id === rec.category)!;
 
-      var recEl = document.createElement('div');
-      recEl.className = 'recommendation-item priority-' + rec.priority;
-      recEl.style.animationDelay = (index * 100) + 'ms';
+      var recEl = document.createElement("div");
+      recEl.className = "recommendation-item priority-" + rec.priority;
+      recEl.style.animationDelay = index * 100 + "ms";
 
       recEl.innerHTML = `
         <div class="rec-header">
@@ -1107,14 +1429,17 @@ var categoriesJson = JSON.stringify(categories);
 
   function updateNewsletterMessaging(percentage: number) {
     if (percentage < 40) {
-      newsletterHeadline.textContent = 'Learn How to Strengthen Your Idea';
-      newsletterSubtext.textContent = 'Get weekly lessons on validation, customer discovery, and finding ideas worth building.';
+      newsletterHeadline.textContent = "Learn How to Strengthen Your Idea";
+      newsletterSubtext.textContent =
+        "Get weekly lessons on validation, customer discovery, and finding ideas worth building.";
     } else if (percentage < 70) {
-      newsletterHeadline.textContent = 'Get Tips to Level Up Your Validation';
-      newsletterSubtext.textContent = 'Weekly insights from my journey building validated products. Real lessons, no fluff.';
+      newsletterHeadline.textContent = "Get Tips to Level Up Your Validation";
+      newsletterSubtext.textContent =
+        "Weekly insights from my journey building validated products. Real lessons, no fluff.";
     } else {
-      newsletterHeadline.textContent = 'Ready to Build? Get Execution Tips';
-      newsletterSubtext.textContent = 'Your idea looks solid. Join 1,500+ founders getting weekly building insights.';
+      newsletterHeadline.textContent = "Ready to Build? Get Execution Tips";
+      newsletterSubtext.textContent =
+        "Your idea looks solid. Join 1,500+ founders getting weekly building insights.";
     }
   }
 
@@ -1129,13 +1454,13 @@ var categoriesJson = JSON.stringify(categories);
     if (navigator.share) {
       try {
         await navigator.share({
-          title: 'SaaS Idea Validator Results',
+          title: "SaaS Idea Validator Results",
           text: shareText,
-          url: generateShareUrl(answers, ideaName)
+          url: generateShareUrl(answers, ideaName),
         });
       } catch (err) {
         // User cancelled or error
-        log.info('Share cancelled');
+        log.info("Share cancelled");
       }
     } else {
       handleCopyLink();
@@ -1149,28 +1474,28 @@ var categoriesJson = JSON.stringify(categories);
       await navigator.clipboard.writeText(url);
       showShareToast();
 
-      var copyIcon = copyLinkBtn.querySelector('.copy-icon') as SVGElement;
-      var checkIcon = copyLinkBtn.querySelector('.check-icon') as SVGElement;
-      var btnText = copyLinkBtn.querySelector('.btn-text') as HTMLElement;
+      var copyIcon = copyLinkBtn.querySelector(".copy-icon") as SVGElement;
+      var checkIcon = copyLinkBtn.querySelector(".check-icon") as SVGElement;
+      var btnText = copyLinkBtn.querySelector(".btn-text") as HTMLElement;
 
-      copyIcon.classList.add('hidden');
-      checkIcon.classList.remove('hidden');
-      btnText.textContent = 'Copied!';
+      copyIcon.classList.add("hidden");
+      checkIcon.classList.remove("hidden");
+      btnText.textContent = "Copied!";
 
       setTimeout(() => {
-        copyIcon.classList.remove('hidden');
-        checkIcon.classList.add('hidden');
-        btnText.textContent = 'Copy Link';
+        copyIcon.classList.remove("hidden");
+        checkIcon.classList.add("hidden");
+        btnText.textContent = "Copy Link";
       }, 2000);
     } catch (err) {
-      log.error('Failed to copy:', err);
+      log.error("Failed to copy:", err);
     }
   }
 
   function showShareToast() {
-    shareToast.classList.remove('hidden');
+    shareToast.classList.remove("hidden");
     setTimeout(() => {
-      shareToast.classList.add('hidden');
+      shareToast.classList.add("hidden");
     }, 3000);
   }
 
@@ -1180,30 +1505,35 @@ var categoriesJson = JSON.stringify(categories);
 
   function handleKeydown(e: KeyboardEvent) {
     // Only handle keys when on question screen
-    if (questionScreen.classList.contains('hidden')) {return;}
+    if (questionScreen.classList.contains("hidden")) {
+      return;
+    }
 
     switch (e.key.toLowerCase()) {
-      case 'y':
+      case "y":
         e.preventDefault();
-        handleAnswer('yes');
+        handleAnswer("yes");
         break;
-      case 'n':
+      case "n":
         e.preventDefault();
-        handleAnswer('no');
+        handleAnswer("no");
         break;
-      case 's':
+      case "s":
         e.preventDefault();
-        handleAnswer('skip');
+        handleAnswer("skip");
         break;
-      case 'arrowleft':
+      case "arrowleft":
         e.preventDefault();
         goToPreviousQuestion();
         break;
-      case 'arrowright':
-      case 'enter':
+      case "arrowright":
+      case "enter":
         e.preventDefault();
-        if (currentQuestionIndex === questions.length - 1 && isValidationComplete(answers)) {
-          showScreen('results');
+        if (
+          currentQuestionIndex === questions.length - 1 &&
+          isValidationComplete(answers)
+        ) {
+          showScreen("results");
         } else {
           goToNextQuestion();
         }
@@ -1219,185 +1549,238 @@ var categoriesJson = JSON.stringify(categories);
 
   function init() {
     // Get DOM elements
-    startScreen = document.getElementById('start-screen') as HTMLElement;
-    questionScreen = document.getElementById('question-screen') as HTMLElement;
-    resultsScreen = document.getElementById('results-screen') as HTMLElement;
-    newsletterSection = document.getElementById('newsletter-section') as HTMLElement;
+    startScreen = document.getElementById("start-screen") as HTMLElement;
+    questionScreen = document.getElementById("question-screen") as HTMLElement;
+    resultsScreen = document.getElementById("results-screen") as HTMLElement;
+    newsletterSection = document.getElementById(
+      "newsletter-section",
+    ) as HTMLElement;
 
-    ideaNameInput = document.getElementById('idea-name') as HTMLInputElement;
-    startBtn = document.getElementById('start-btn') as HTMLButtonElement;
-    savedProgressDiv = document.getElementById('saved-progress') as HTMLElement;
-    resumeBtn = document.getElementById('resume-btn') as HTMLButtonElement;
-    startFreshBtn = document.getElementById('start-fresh-btn') as HTMLButtonElement;
+    ideaNameInput = document.getElementById("idea-name") as HTMLInputElement;
+    startBtn = document.getElementById("start-btn") as HTMLButtonElement;
+    savedProgressDiv = document.getElementById("saved-progress") as HTMLElement;
+    resumeBtn = document.getElementById("resume-btn") as HTMLButtonElement;
+    startFreshBtn = document.getElementById(
+      "start-fresh-btn",
+    ) as HTMLButtonElement;
 
-    currentQNum = document.getElementById('current-q-num') as HTMLElement;
-    totalQNum = document.getElementById('total-q-num') as HTMLElement;
-    progressPercentage = document.getElementById('progress-percentage') as HTMLElement;
-    progressBar = document.getElementById('progress-bar') as HTMLElement;
-    categoryIndicators = document.getElementById('category-indicators') as HTMLElement;
-    questionCard = document.getElementById('question-card') as HTMLElement;
-    questionCategory = document.getElementById('question-category') as HTMLElement;
-    questionText = document.getElementById('question-text') as HTMLElement;
-    tooltipTrigger = document.getElementById('tooltip-trigger') as HTMLButtonElement;
-    tooltipContent = document.getElementById('tooltip-content') as HTMLElement;
-    tooltipText = document.getElementById('tooltip-text') as HTMLElement;
-    answerYes = document.getElementById('answer-yes') as HTMLButtonElement;
-    answerNo = document.getElementById('answer-no') as HTMLButtonElement;
-    skipBtn = document.getElementById('skip-btn') as HTMLButtonElement;
-    answerFeedback = document.getElementById('answer-feedback') as HTMLElement;
-    feedbackText = document.getElementById('feedback-text') as HTMLElement;
-    prevBtn = document.getElementById('prev-btn') as HTMLButtonElement;
-    nextBtn = document.getElementById('next-btn') as HTMLButtonElement;
+    currentQNum = document.getElementById("current-q-num") as HTMLElement;
+    totalQNum = document.getElementById("total-q-num") as HTMLElement;
+    progressPercentage = document.getElementById(
+      "progress-percentage",
+    ) as HTMLElement;
+    progressBar = document.getElementById("progress-bar") as HTMLElement;
+    categoryIndicators = document.getElementById(
+      "category-indicators",
+    ) as HTMLElement;
+    questionCard = document.getElementById("question-card") as HTMLElement;
+    questionCategory = document.getElementById(
+      "question-category",
+    ) as HTMLElement;
+    questionText = document.getElementById("question-text") as HTMLElement;
+    tooltipTrigger = document.getElementById(
+      "tooltip-trigger",
+    ) as HTMLButtonElement;
+    tooltipContent = document.getElementById("tooltip-content") as HTMLElement;
+    tooltipText = document.getElementById("tooltip-text") as HTMLElement;
+    answerYes = document.getElementById("answer-yes") as HTMLButtonElement;
+    answerNo = document.getElementById("answer-no") as HTMLButtonElement;
+    skipBtn = document.getElementById("skip-btn") as HTMLButtonElement;
+    answerFeedback = document.getElementById("answer-feedback") as HTMLElement;
+    feedbackText = document.getElementById("feedback-text") as HTMLElement;
+    prevBtn = document.getElementById("prev-btn") as HTMLButtonElement;
+    nextBtn = document.getElementById("next-btn") as HTMLButtonElement;
 
-    confettiCanvas = document.getElementById('confetti-canvas') as HTMLCanvasElement;
-    scoreCircle = document.getElementById('score-circle') as HTMLElement;
-    scoreRingProgress = document.getElementById('score-ring-progress') as unknown as SVGCircleElement;
-    scoreNumber = document.getElementById('score-number') as HTMLElement;
-    gradeBadge = document.getElementById('grade-badge') as HTMLElement;
-    resultsHeadline = document.getElementById('results-headline') as HTMLElement;
-    ideaNameDisplay = document.getElementById('idea-name-display') as HTMLElement;
-    categoryCards = document.getElementById('category-cards') as HTMLElement;
-    strengthsWeaknesses = document.getElementById('strengths-weaknesses') as HTMLElement;
-    strengthsList = document.getElementById('strengths-list') as HTMLElement;
-    weaknessesList = document.getElementById('weaknesses-list') as HTMLElement;
-    recommendationsList = document.getElementById('recommendations-list') as HTMLElement;
-    shareResultsBtn = document.getElementById('share-results-btn') as HTMLButtonElement;
-    copyLinkBtn = document.getElementById('copy-link-btn') as HTMLButtonElement;
-    restartBtn = document.getElementById('restart-btn') as HTMLButtonElement;
-    shareToast = document.getElementById('share-toast') as HTMLElement;
+    confettiCanvas = document.getElementById(
+      "confetti-canvas",
+    ) as HTMLCanvasElement;
+    scoreCircle = document.getElementById("score-circle") as HTMLElement;
+    scoreRingProgress = document.getElementById(
+      "score-ring-progress",
+    ) as unknown as SVGCircleElement;
+    scoreNumber = document.getElementById("score-number") as HTMLElement;
+    gradeBadge = document.getElementById("grade-badge") as HTMLElement;
+    resultsHeadline = document.getElementById(
+      "results-headline",
+    ) as HTMLElement;
+    ideaNameDisplay = document.getElementById(
+      "idea-name-display",
+    ) as HTMLElement;
+    categoryCards = document.getElementById("category-cards") as HTMLElement;
+    strengthsWeaknesses = document.getElementById(
+      "strengths-weaknesses",
+    ) as HTMLElement;
+    strengthsList = document.getElementById("strengths-list") as HTMLElement;
+    weaknessesList = document.getElementById("weaknesses-list") as HTMLElement;
+    recommendationsList = document.getElementById(
+      "recommendations-list",
+    ) as HTMLElement;
+    shareResultsBtn = document.getElementById(
+      "share-results-btn",
+    ) as HTMLButtonElement;
+    copyLinkBtn = document.getElementById("copy-link-btn") as HTMLButtonElement;
+    restartBtn = document.getElementById("restart-btn") as HTMLButtonElement;
+    shareToast = document.getElementById("share-toast") as HTMLElement;
 
-    newsletterHeadline = document.getElementById('newsletter-headline') as HTMLElement;
-    newsletterSubtext = document.getElementById('newsletter-subtext') as HTMLElement;
-    newsletterForm = document.querySelector('.newsletter-form') as HTMLFormElement;
-    newsletterSuccess = document.getElementById('newsletter-success') as HTMLElement;
+    newsletterHeadline = document.getElementById(
+      "newsletter-headline",
+    ) as HTMLElement;
+    newsletterSubtext = document.getElementById(
+      "newsletter-subtext",
+    ) as HTMLElement;
+    newsletterForm = document.querySelector(
+      ".newsletter-form",
+    ) as HTMLFormElement;
+    newsletterSuccess = document.getElementById(
+      "newsletter-success",
+    ) as HTMLElement;
 
     // Initialize confetti
     initConfetti();
 
     // Check for URL params (shared results)
     var params = new URLSearchParams(window.location.search);
-    var resultParam = params.get('r');
+    var resultParam = params.get("r");
     if (resultParam) {
       var parsed = parseShareUrl(resultParam);
       if (parsed) {
         ideaName = parsed.ideaName;
         answers = parsed.answers;
         ideaNameInput.value = ideaName;
-        showScreen('results');
+        showScreen("results");
         return;
       }
     }
 
     // Check for saved progress
     var saved = loadProgress();
-    if (saved && Object.values(saved.answers).some(a => a !== null)) {
-      savedProgressDiv.classList.remove('hidden');
+    if (saved && Object.values(saved.answers).some((a) => a !== null)) {
+      savedProgressDiv.classList.remove("hidden");
       ideaNameInput.value = saved.ideaName;
     }
 
     // Event listeners - Start screen
-    startBtn.addEventListener('click', () => {
+    startBtn.addEventListener("click", () => {
       ideaName = ideaNameInput.value.trim();
-      showScreen('questions');
+      showScreen("questions");
     });
 
-    resumeBtn.addEventListener('click', () => {
+    resumeBtn.addEventListener("click", () => {
       var saved = loadProgress();
       if (saved) {
         ideaName = saved.ideaName;
         answers = saved.answers;
         // Find first unanswered question
-        var firstUnanswered = questions.findIndex(q => answers[q.id] === null);
+        var firstUnanswered = questions.findIndex(
+          (q) => answers[q.id] === null,
+        );
         currentQuestionIndex = firstUnanswered !== -1 ? firstUnanswered : 0;
-        showScreen('questions');
+        showScreen("questions");
       }
     });
 
-    startFreshBtn.addEventListener('click', () => {
+    startFreshBtn.addEventListener("click", () => {
       clearProgress();
       ideaName = ideaNameInput.value.trim();
       answers = {};
-      questions.forEach(q => { answers[q.id] = null; });
+      questions.forEach((q) => {
+        answers[q.id] = null;
+      });
       currentQuestionIndex = 0;
-      savedProgressDiv.classList.add('hidden');
-      showScreen('questions');
+      savedProgressDiv.classList.add("hidden");
+      showScreen("questions");
     });
 
     // Event listeners - Question screen
-    answerYes.addEventListener('click', () => handleAnswer('yes'));
-    answerNo.addEventListener('click', () => handleAnswer('no'));
-    skipBtn.addEventListener('click', () => handleAnswer('skip'));
+    answerYes.addEventListener("click", () => handleAnswer("yes"));
+    answerNo.addEventListener("click", () => handleAnswer("no"));
+    skipBtn.addEventListener("click", () => handleAnswer("skip"));
 
-    prevBtn.addEventListener('click', goToPreviousQuestion);
-    nextBtn.addEventListener('click', () => {
-      if (currentQuestionIndex === questions.length - 1 && isValidationComplete(answers)) {
-        showScreen('results');
+    prevBtn.addEventListener("click", goToPreviousQuestion);
+    nextBtn.addEventListener("click", () => {
+      if (
+        currentQuestionIndex === questions.length - 1 &&
+        isValidationComplete(answers)
+      ) {
+        showScreen("results");
       } else {
         goToNextQuestion();
       }
     });
 
-    tooltipTrigger.addEventListener('click', () => {
-      tooltipContent.classList.toggle('hidden');
+    tooltipTrigger.addEventListener("click", () => {
+      tooltipContent.classList.toggle("hidden");
     });
 
     // Category indicator clicks
-    categoryIndicators.querySelectorAll('.category-indicator').forEach(btn => {
-      btn.addEventListener('click', () => {
-        var catId = btn.getAttribute('data-category') as CategoryId;
-        goToCategory(catId);
+    categoryIndicators
+      .querySelectorAll(".category-indicator")
+      .forEach((btn) => {
+        btn.addEventListener("click", () => {
+          var catId = btn.getAttribute("data-category") as CategoryId;
+          goToCategory(catId);
+        });
       });
-    });
 
     // Event listeners - Results screen
-    shareResultsBtn.addEventListener('click', handleShare);
-    copyLinkBtn.addEventListener('click', handleCopyLink);
-    restartBtn.addEventListener('click', () => {
+    shareResultsBtn.addEventListener("click", handleShare);
+    copyLinkBtn.addEventListener("click", handleCopyLink);
+    restartBtn.addEventListener("click", () => {
       clearProgress();
       stopConfetti();
       answers = {};
-      questions.forEach(q => { answers[q.id] = null; });
+      questions.forEach((q) => {
+        answers[q.id] = null;
+      });
       currentQuestionIndex = 0;
-      ideaName = '';
-      ideaNameInput.value = '';
-      showScreen('start');
+      ideaName = "";
+      ideaNameInput.value = "";
+      showScreen("start");
     });
 
     // Newsletter form
     if (newsletterForm) {
-      newsletterForm.addEventListener('submit', (e) => {
+      newsletterForm.addEventListener("submit", (e) => {
         e.preventDefault();
         var formData = new FormData(newsletterForm);
 
         // Check honeypot
-        var honeypotFields = newsletterForm.querySelectorAll('.honeypot-field') as NodeListOf<HTMLInputElement>;
+        var honeypotFields = newsletterForm.querySelectorAll(
+          ".honeypot-field",
+        ) as NodeListOf<HTMLInputElement>;
         var isBot = false;
-        honeypotFields.forEach(field => {
-          if (field.value !== '') {isBot = true;}
+        honeypotFields.forEach((field) => {
+          if (field.value !== "") {
+            isBot = true;
+          }
         });
 
-        if (isBot) {return;}
+        if (isBot) {
+          return;
+        }
 
         fetch(newsletterForm.action, {
-          method: 'POST',
-          body: formData
-        }).then(response => {
-          if (response.ok) {
-            newsletterForm.classList.add('hidden');
-            newsletterSuccess.classList.remove('hidden');
-          }
-        }).catch(err => {
-          log.error('Newsletter error:', err);
-        });
+          method: "POST",
+          body: formData,
+        })
+          .then((response) => {
+            if (response.ok) {
+              newsletterForm.classList.add("hidden");
+              newsletterSuccess.classList.remove("hidden");
+            }
+          })
+          .catch((err) => {
+            log.error("Newsletter error:", err);
+          });
       });
     }
 
     // Keyboard navigation
-    document.addEventListener('keydown', handleKeydown);
+    document.addEventListener("keydown", handleKeydown);
 
     // Handle Enter on idea name input
-    ideaNameInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
+    ideaNameInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
         e.preventDefault();
         startBtn.click();
       }
@@ -1405,8 +1788,8 @@ var categoriesJson = JSON.stringify(categories);
   }
 
   // Run initialization
-  document.addEventListener('DOMContentLoaded', init);
-  document.addEventListener('astro:page-load', init);
+  document.addEventListener("DOMContentLoaded", init);
+  document.addEventListener("astro:page-load", init);
 </script>
 
 <style scoped>
@@ -1443,7 +1826,11 @@ var categoriesJson = JSON.stringify(categories);
     justify-content: center;
     width: 100px;
     height: 100px;
-    background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(59, 130, 246, 0.2));
+    background: linear-gradient(
+      135deg,
+      rgba(139, 92, 246, 0.2),
+      rgba(59, 130, 246, 0.2)
+    );
     border-radius: 24px;
     margin-bottom: var(--space-lg);
     color: var(--color-accent-light);
@@ -2503,14 +2890,14 @@ var categoriesJson = JSON.stringify(categories);
   }
 
   .faq-item summary::after {
-    content: '+';
+    content: "+";
     font-size: 1.25rem;
     color: var(--color-text-muted);
     transition: transform var(--transition-fast);
   }
 
   .faq-item[open] summary::after {
-    content: '-';
+    content: "-";
   }
 
   .faq-item p,
@@ -2589,7 +2976,11 @@ var categoriesJson = JSON.stringify(categories);
   }
 
   @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }
 </style>

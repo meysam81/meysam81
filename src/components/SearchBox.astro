@@ -1,9 +1,18 @@
 ---
+
 ---
 
 <div class="search-container">
   <div class="search-box">
-    <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <svg
+      class="search-icon"
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+    >
       <circle cx="11" cy="11" r="8"></circle>
       <path d="m21 21-4.35-4.35"></path>
     </svg>
@@ -135,7 +144,9 @@
 
     var pagefind;
     var isProduction = import.meta.env.PROD;
-    var pagefindPath = isProduction ? "/pagefind/pagefind.js" : "/dist/pagefind/pagefind.js";
+    var pagefindPath = isProduction
+      ? "/pagefind/pagefind.js"
+      : "/dist/pagefind/pagefind.js";
 
     searchInput.addEventListener(
       "focus",
@@ -152,7 +163,7 @@
           }
         }
       },
-      { once: true }
+      { once: true },
     );
 
     var debounceTimer;
@@ -179,7 +190,8 @@
           var search = await pagefind.search(query);
 
           if (search.results.length === 0) {
-            searchResults.innerHTML = '<p class="no-results">No results found</p>';
+            searchResults.innerHTML =
+              '<p class="no-results">No results found</p>';
             searchResults.style.display = "block";
             return;
           }
@@ -187,7 +199,7 @@
           var results = await Promise.all(
             search.results.slice(0, 5).map(function mapData(r) {
               return r.data();
-            })
+            }),
           );
 
           searchResults.innerHTML = results
@@ -203,7 +215,8 @@
 
           searchResults.style.display = "block";
         } catch (e) {
-          searchResults.innerHTML = '<p class="no-results">Search error occurred</p>';
+          searchResults.innerHTML =
+            '<p class="no-results">Search error occurred</p>';
           searchResults.style.display = "block";
         }
       }, 300);

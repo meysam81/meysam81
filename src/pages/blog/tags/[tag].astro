@@ -1,10 +1,10 @@
 ---
-import { getCollection } from 'astro:content';
-import BaseLayout from '@/layouts/BaseLayout.astro';
-import ContentCard from '@/components/ContentCard.astro';
+import { getCollection } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import ContentCard from "@/components/ContentCard.astro";
 
 export async function getStaticPaths() {
-  var posts = await getCollection('blog', function filterPosts(post) {
+  var posts = await getCollection("blog", function filterPosts(post) {
     return import.meta.env.PROD ? !post.data.draft : true;
   });
 
@@ -36,19 +36,23 @@ export async function getStaticPaths() {
 
 var { tag, posts } = Astro.props;
 
-var allPosts = await getCollection('blog', function filterPosts(post) {
+var allPosts = await getCollection("blog", function filterPosts(post) {
   return import.meta.env.PROD ? !post.data.draft : true;
 });
 
-var allTags = [...new Set(allPosts.flatMap(function flatMapTags(post) {
-  return post.data.tags || [];
-}))].sort();
+var allTags = [
+  ...new Set(
+    allPosts.flatMap(function flatMapTags(post) {
+      return post.data.tags || [];
+    }),
+  ),
+].sort();
 
 function formatDate(date: Date) {
-  return new Intl.DateTimeFormat('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric'
+  return new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
   }).format(date);
 }
 ---
@@ -61,7 +65,14 @@ function formatDate(date: Date) {
     <div class="container">
       <div class="header">
         <a href="/blog" class="back-link">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
             <line x1="19" y1="12" x2="5" y2="12"></line>
             <polyline points="12 19 5 12 12 5"></polyline>
           </svg>
@@ -69,41 +80,49 @@ function formatDate(date: Date) {
         </a>
 
         <h1>Posts tagged "{tag}"</h1>
-        <p class="subtitle">{posts.length} post{posts.length !== 1 ? 's' : ''} found</p>
+        <p class="subtitle">
+          {posts.length} post{posts.length !== 1 ? "s" : ""} found
+        </p>
       </div>
 
-      {allTags.length > 0 && (
-        <div class="tags-filter mb-xl">
-          <h3 class="filter-label">Filter by Tag:</h3>
-          <div class="tags-list">
-            <a href="/blog" class="tag-button">All Posts</a>
-            {allTags.map(function mapTags(tagItem) {
-              return (
-                <a
-                  href={`/blog/tags/${tagItem}`}
-                  class={tagItem === tag ? 'tag-button active' : 'tag-button'}
-                >
-                  {tagItem}
-                </a>
-              );
-            })}
+      {
+        allTags.length > 0 && (
+          <div class="tags-filter mb-xl">
+            <h3 class="filter-label">Filter by Tag:</h3>
+            <div class="tags-list">
+              <a href="/blog" class="tag-button">
+                All Posts
+              </a>
+              {allTags.map(function mapTags(tagItem) {
+                return (
+                  <a
+                    href={`/blog/tags/${tagItem}`}
+                    class={tagItem === tag ? "tag-button active" : "tag-button"}
+                  >
+                    {tagItem}
+                  </a>
+                );
+              })}
+            </div>
           </div>
-        </div>
-      )}
+        )
+      }
 
       <div class="grid grid-3">
-        {posts.map(function mapPosts(post) {
-          var postSlug = post.slug || post.id;
-          return (
-            <ContentCard
-              title={post.data.title}
-              description={post.data.description}
-              url={`/blog/${postSlug}`}
-              badge={formatDate(post.data.pubDate)}
-              linkText="Read Article"
-            />
-          );
-        })}
+        {
+          posts.map(function mapPosts(post) {
+            var postSlug = post.slug || post.id;
+            return (
+              <ContentCard
+                title={post.data.title}
+                description={post.data.description}
+                url={`/blog/${postSlug}`}
+                badge={formatDate(post.data.pubDate)}
+                linkText="Read Article"
+              />
+            );
+          })
+        }
       </div>
     </div>
   </section>
@@ -144,7 +163,11 @@ function formatDate(date: Date) {
 
   .header h1 {
     margin-bottom: var(--space-sm);
-    background: linear-gradient(135deg, var(--color-text) 0%, var(--color-accent-light) 100%);
+    background: linear-gradient(
+      135deg,
+      var(--color-text) 0%,
+      var(--color-accent-light) 100%
+    );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;

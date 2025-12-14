@@ -1,50 +1,176 @@
 ---
 // links.astro - Links page with sponsorships and referrals
-import BaseLayout from '@/layouts/BaseLayout.astro';
-import CopyButton from '@/components/CopyButton.astro';
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Newsletter from "@/components/Newsletter.astro";
+import CopyButton from "@/components/CopyButton.astro";
 
 const links = {
   support: [
-    { title: 'GitHub Sponsors', url: 'https://github.com/sponsors/meysam81', description: 'Support my open source work' },
-    { title: 'Buy Me a Coffee', url: 'https://buymeacoffee.com/meysam', description: 'One-time support' },
-    { title: 'Patreon', url: 'https://patreon.com/meysam81', description: 'Monthly support' },
+    {
+      title: "GitHub Sponsors",
+      url: "https://github.com/sponsors/meysam81",
+      description: "Support my open source work",
+    },
+    {
+      title: "Buy Me a Coffee",
+      url: "https://buymeacoffee.com/meysam",
+      description: "One-time support",
+    },
+    {
+      title: "Patreon",
+      url: "https://patreon.com/meysam81",
+      description: "Monthly support",
+    },
   ],
   payment: [
-    { title: 'PayPal', url: 'https://paypal.me/meysamazad', description: 'Direct payment' },
+    {
+      title: "PayPal",
+      url: "https://paypal.me/meysamazad",
+      description: "Direct payment",
+    },
   ],
   crypto: [
-    { title: 'Bitcoin', url: 'bitcoin:bc1qfn42dnpdderesp5a5fwjx9y70dut4m0p9emx27', description: 'bc1qfn42dnpdderesp5a5fwjx9y70dut4m0p9emx27' },
+    {
+      title: "Bitcoin",
+      url: "bitcoin:bc1qfn42dnpdderesp5a5fwjx9y70dut4m0p9emx27",
+      description: "bc1qfn42dnpdderesp5a5fwjx9y70dut4m0p9emx27",
+    },
   ],
   primary: [
-    { title: 'Website', url: 'https://meysam.io', description: 'Personal website' },
-    { title: 'Email', url: 'mailto:contact@meysam.io', description: 'contact@meysam.io' },
-    { title: 'Cal.com', url: 'https://cal.com/meysam', description: 'Schedule a meeting' },
-    { title: 'GitHub', url: 'https://github.com/meysam81', description: 'Open source projects' },
-    { title: 'LinkedIn', url: 'https://linkedin.com/in/meysamazad', description: 'Professional profile' },
-    { title: 'X / Twitter', url: 'https://x.com/meysamazing', description: '@meysamazing' },
+    {
+      title: "Website",
+      url: "https://meysam.io",
+      description: "Personal website",
+    },
+    {
+      title: "Email",
+      url: "mailto:contact@meysam.io",
+      description: "contact@meysam.io",
+    },
+    {
+      title: "Cal.com",
+      url: "https://cal.com/meysam",
+      description: "Schedule a meeting",
+    },
+    {
+      title: "GitHub",
+      url: "https://github.com/meysam81",
+      description: "Open source projects",
+    },
+    {
+      title: "LinkedIn",
+      url: "https://linkedin.com/in/meysamazad",
+      description: "Professional profile",
+    },
+    {
+      title: "X / Twitter",
+      url: "https://x.com/meysamazing",
+      description: "@meysamazing",
+    },
   ],
   social: [
-    { title: 'YouTube', url: 'https://youtube.com/@meysam', description: 'Video content' },
-    { title: 'Instagram', url: 'https://instagram.com/meysamazing', description: '@meysamazing' },
-    { title: 'Threads', url: 'http://threads.com/meysamazing', description: '@meysamazing' },
-    { title: 'TikTok', url: 'https://tiktok.com/@meysamazing', description: '@meysamazing' },
-    { title: 'Mastodon', url: 'https://mastodon.social/@meysam81', description: '@meysam81' },
-    { title: 'Bluesky', url: 'https://bsky.app/profile/meysamazing.bsky.social', description: '@meysamazing' },
-    { title: 'Telegram', url: 'http://t.me/meysamazing', description: '@meysamazing' },
-    { title: 'Product Hunt', url: 'https://producthunt.com/@meysam', description: '@meysam' },
-    { title: 'Indie Hackers', url: 'https://www.indiehackers.com/meysam', description: '@meysam' },
-    { title: 'Hacker News', url: 'https://news.ycombinator.com/user?id=meysamazad', description: '@meysamazad' },
-    { title: 'Gravatar', url: 'https://gravatar.com/meysamazing', description: '@meysamazing' },
+    {
+      title: "YouTube",
+      url: "https://youtube.com/@meysam",
+      description: "Video content",
+    },
+    {
+      title: "Instagram",
+      url: "https://instagram.com/meysamazing",
+      description: "@meysamazing",
+    },
+    {
+      title: "Threads",
+      url: "http://threads.com/meysamazing",
+      description: "@meysamazing",
+    },
+    {
+      title: "TikTok",
+      url: "https://tiktok.com/@meysamazing",
+      description: "@meysamazing",
+    },
+    {
+      title: "Mastodon",
+      url: "https://mastodon.social/@meysam81",
+      description: "@meysam81",
+    },
+    {
+      title: "Bluesky",
+      url: "https://bsky.app/profile/meysamazing.bsky.social",
+      description: "@meysamazing",
+    },
+    {
+      title: "Telegram",
+      url: "http://t.me/meysamazing",
+      description: "@meysamazing",
+    },
+    {
+      title: "Product Hunt",
+      url: "https://producthunt.com/@meysam",
+      description: "@meysam",
+    },
+    {
+      title: "Indie Hackers",
+      url: "https://www.indiehackers.com/meysam",
+      description: "@meysam",
+    },
+    {
+      title: "Hacker News",
+      url: "https://news.ycombinator.com/user?id=meysamazad",
+      description: "@meysamazad",
+    },
+    {
+      title: "Gravatar",
+      url: "https://gravatar.com/meysamazing",
+      description: "@meysamazing",
+    },
   ],
   referrals: [
-    { title: 'Proton Mail', url: 'https://pr.tn/ref/NS19KFG8SQBG', description: 'Get a free month of Mail Plus' },
-    { title: 'Hetzner Cloud', url: 'https://hetzner.cloud/?ref=ai5E5vaX1J71', description: 'Get €20 credit' },
-    { title: 'DigitalOcean', url: 'https://m.do.co/c/7de094ea6f0d', description: 'Get $200 credit' },
-    { title: 'Maileroo', url: 'https://maileroo.com/?r=developerfriendly', description: 'SMTP/Marketing/Verification' },
-    { title: 'Postmark', url: 'https://www.postmarkapp.com/?via=0983a5', description: 'Transactional Email' },
-    { title: 'Mango Email', url: 'https://admin.mymangomail.com/signup?referred_by=bd96a700', description: 'Email Marketing Platform (1 Month Free)' },
-    { title: 'Apify', url: 'https://apify.com?fpr=meysam', description: 'Web Scraping & Automation Platform' },
-    { title: 'Postiz', url: 'https://postiz.com/?ref=meysam', description: 'Social media scheduling tool' },
+    {
+      title: "Proton Mail",
+      url: "https://pr.tn/ref/NS19KFG8SQBG",
+      description: "Get a free month of Mail Plus",
+    },
+    {
+      title: "Hetzner Cloud",
+      url: "https://hetzner.cloud/?ref=ai5E5vaX1J71",
+      description: "Get €20 credit",
+    },
+    {
+      title: "DigitalOcean",
+      url: "https://m.do.co/c/7de094ea6f0d",
+      description: "Get $200 credit",
+    },
+    {
+      title: "Maileroo",
+      url: "https://maileroo.com/?r=developerfriendly",
+      description: "SMTP/Marketing/Verification",
+    },
+    {
+      title: "Postmark",
+      url: "https://www.postmarkapp.com/?via=0983a5",
+      description: "Transactional Email",
+    },
+    {
+      title: "Mango Email",
+      url: "https://admin.mymangomail.com/signup?referred_by=bd96a700",
+      description: "Email Marketing Platform (1 Month Free)",
+    },
+    {
+      title: "Apify",
+      url: "https://apify.com?fpr=meysam",
+      description: "Web Scraping & Automation Platform",
+    },
+    {
+      title: "Postiz",
+      url: "https://postiz.com/?ref=meysam",
+      description: "Social media scheduling tool",
+    },
+    {
+      title: "Frogdr",
+      url: "https://frogdr.com?via=meysam",
+      description: "Domain-Rating Checker",
+    },
   ],
 };
 ---
@@ -57,84 +183,48 @@ const links = {
     <div class="container-narrow text-center">
       <h1>All My Links</h1>
       <p class="hero-description">
-        Connect with me, support my work, or use these referral links to get great deals on tools I use and recommend.
+        Connect with me, support my work, or use these referral links to get
+        great deals on tools I use and recommend.
       </p>
     </div>
   </section>
 
   <section class="links-content">
     <div class="container-narrow">
-
-      <!-- Support My Work -->
-      <div class="links-section">
-        <h2 class="section-title">💖 Support My Work</h2>
-        <div class="links-grid">
-          {links.support.map(link => (
-            <a href={link.url} target="_blank" rel="noopener noreferrer" class="link-card">
-              <div class="link-info">
-                <h3>{link.title}</h3>
-                <p>{link.description}</p>
-              </div>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="7" y1="17" x2="17" y2="7"></line>
-                <polyline points="7 7 17 7 17 17"></polyline>
-              </svg>
-            </a>
-          ))}
-        </div>
-      </div>
-
-      <!-- Payment -->
-      <div class="links-section">
-        <h2 class="section-title">💳 Direct Payment</h2>
-        <div class="links-grid">
-          {links.payment.map(link => (
-            <a href={link.url} target="_blank" rel="noopener noreferrer" class="link-card">
-              <div class="link-info">
-                <h3>{link.title}</h3>
-                <p>{link.description}</p>
-              </div>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="7" y1="17" x2="17" y2="7"></line>
-                <polyline points="7 7 17 7 17 17"></polyline>
-              </svg>
-            </a>
-          ))}
-        </div>
-      </div>
-
-      <!-- Crypto -->
-      <div class="links-section">
-        <h2 class="section-title">₿ Cryptocurrency</h2>
-        <div class="links-grid">
-          {links.crypto.map(link => (
-            <div class="link-card crypto-card">
-              <div class="link-info">
-                <h3>{link.title}</h3>
-                <p class="crypto-address">{link.description}</p>
-              </div>
-              <CopyButton text={link.description} label={`Copy ${link.title} address`} />
-            </div>
-          ))}
-        </div>
-      </div>
-
       <!-- Primary Contact & Social -->
       <div class="links-section">
         <h2 class="section-title">📫 Primary Links</h2>
         <div class="links-grid">
-          {links.primary.map(link => (
-            <a href={link.url} target={link.url.startsWith('http') ? '_blank' : undefined} rel={link.url.startsWith('http') ? 'noopener noreferrer' : undefined} class="link-card">
-              <div class="link-info">
-                <h3>{link.title}</h3>
-                <p>{link.description}</p>
-              </div>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="7" y1="17" x2="17" y2="7"></line>
-                <polyline points="7 7 17 7 17 17"></polyline>
-              </svg>
-            </a>
-          ))}
+          {
+            links.primary.map((link) => (
+              <a
+                href={link.url}
+                target={link.url.startsWith("http") ? "_blank" : undefined}
+                rel={
+                  link.url.startsWith("http")
+                    ? "noopener noreferrer"
+                    : undefined
+                }
+                class="link-card"
+              >
+                <div class="link-info">
+                  <h3>{link.title}</h3>
+                  <p>{link.description}</p>
+                </div>
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <line x1="7" y1="17" x2="17" y2="7" />
+                  <polyline points="7 7 17 7 17 17" />
+                </svg>
+              </a>
+            ))
+          }
         </div>
       </div>
 
@@ -142,18 +232,105 @@ const links = {
       <div class="links-section">
         <h2 class="section-title">🌐 More Social</h2>
         <div class="links-grid">
-          {links.social.map(link => (
-            <a href={link.url} target="_blank" rel="noopener noreferrer" class="link-card">
-              <div class="link-info">
-                <h3>{link.title}</h3>
-                <p>{link.description}</p>
+          {
+            links.social.map((link) => (
+              <a
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="link-card"
+              >
+                <div class="link-info">
+                  <h3>{link.title}</h3>
+                  <p>{link.description}</p>
+                </div>
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <line x1="7" y1="17" x2="17" y2="7" />
+                  <polyline points="7 7 17 7 17 17" />
+                </svg>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
+      <!-- Support My Work -->
+      <div class="links-section">
+        <h2 class="section-title">💖 Support My Work</h2>
+        <div class="links-grid">
+          {
+            links.support.map((link) => (
+              <a
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="link-card"
+              >
+                <div class="link-info">
+                  <h3>{link.title}</h3>
+                  <p>{link.description}</p>
+                </div>
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <line x1="7" y1="17" x2="17" y2="7" />
+                  <polyline points="7 7 17 7 17 17" />
+                </svg>
+              </a>
+            ))
+          }
+          {
+            links.payment.map((link) => (
+              <a
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="link-card"
+              >
+                <div class="link-info">
+                  <h3>{link.title}</h3>
+                  <p>{link.description}</p>
+                </div>
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <line x1="7" y1="17" x2="17" y2="7" />
+                  <polyline points="7 7 17 7 17 17" />
+                </svg>
+              </a>
+            ))
+          }
+          {
+            links.crypto.map((link) => (
+              <div class="link-card crypto-card">
+                <div class="link-info">
+                  <h3>{link.title}</h3>
+                  <p class="crypto-address">{link.description}</p>
+                </div>
+                <CopyButton
+                  text={link.description}
+                  label={`Copy ${link.title} address`}
+                />
               </div>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="7" y1="17" x2="17" y2="7"></line>
-                <polyline points="7 7 17 7 17 17"></polyline>
-              </svg>
-            </a>
-          ))}
+            ))
+          }
         </div>
       </div>
 
@@ -161,28 +338,37 @@ const links = {
       <div class="links-section">
         <h2 class="section-title">🎁 Referral Links (You Get Benefits Too!)</h2>
         <div class="links-grid">
-          {links.referrals.map(link => (
-            <a href={link.url} target="_blank" rel="noopener noreferrer" class="link-card">
-              <div class="link-info">
-                <h3>{link.title}</h3>
-                <p>{link.description}</p>
-              </div>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="7" y1="17" x2="17" y2="7"></line>
-                <polyline points="7 7 17 7 17 17"></polyline>
-              </svg>
-            </a>
-          ))}
+          {
+            links.referrals.map((link) => (
+              <a
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="link-card"
+              >
+                <div class="link-info">
+                  <h3>{link.title}</h3>
+                  <p>{link.description}</p>
+                </div>
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <line x1="7" y1="17" x2="17" y2="7" />
+                  <polyline points="7 7 17 7 17 17" />
+                </svg>
+              </a>
+            ))
+          }
         </div>
       </div>
 
-      <!-- Newsletter CTA -->
-      <div class="newsletter-cta">
-        <h2>Or Subscribe to My Newsletter</h2>
-        <p>Get weekly insights on customer discovery, product validation, and building with DevOps discipline.</p>
-        <a href="/#newsletter" class="btn btn-primary">Join 1,500+ Engineers</a>
-      </div>
-
+      <!-- Newsletter -->
+      <Newsletter variant="section" />
     </div>
   </section>
 </BaseLayout>
@@ -291,24 +477,6 @@ const links = {
     border-color: var(--color-success);
     color: var(--color-success);
     background: rgba(16, 185, 129, 0.1);
-  }
-
-  .newsletter-cta {
-    text-align: center;
-    padding: var(--space-2xl);
-    background: var(--color-bg-card);
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius);
-    margin-top: var(--space-2xl);
-  }
-
-  .newsletter-cta h2 {
-    margin-bottom: var(--space-sm);
-  }
-
-  .newsletter-cta p {
-    color: var(--color-text-muted);
-    margin-bottom: var(--space-lg);
   }
 
   @media (max-width: 768px) {

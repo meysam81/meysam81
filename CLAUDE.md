@@ -345,7 +345,7 @@ Default values are in `src/layouts/BaseLayout.astro`. Override per-page by passi
   title="Custom Title"
   description="Custom description"
   ogImage="https://meysam.io/custom-og-image.png"
->
+/>
 ```
 
 ### Newsletter Form

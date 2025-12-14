@@ -16,12 +16,12 @@ interface Props {
 
 const {
   title,
-  subtitle = '',
-  category = '',
+  subtitle = "",
+  category = "",
   features = [],
-  url = 'meysam.io',
-  demoInput = '',
-  demoOutput = ''
+  url = "meysam.io",
+  demoInput = "",
+  demoOutput = "",
 } = Astro.props;
 ---
 
@@ -34,68 +34,95 @@ const {
 
   <!-- Left content -->
   <div class="left-content">
-    {category && (
-      <div class="category-badge">{category}</div>
-    )}
+    {category && <div class="category-badge">{category}</div>}
 
     <h1 class="title">{title}</h1>
 
-    {subtitle && (
-      <p class="subtitle">{subtitle}</p>
-    )}
+    {subtitle && <p class="subtitle">{subtitle}</p>}
 
-    {features.length > 0 && (
-      <div class="features">
-        {features.slice(0, 3).map((feature) => (
-          <div class="feature">
-            <span class="feature-check">&#10003;</span>
-            <span>{feature}</span>
-          </div>
-        ))}
-      </div>
-    )}
+    {
+      features.length > 0 && (
+        <div class="features">
+          {features.slice(0, 3).map((feature) => (
+            <div class="feature">
+              <span class="feature-check">&#10003;</span>
+              <span>{feature}</span>
+            </div>
+          ))}
+        </div>
+      )
+    }
   </div>
 
   <!-- Right demo card -->
-  {(demoInput || demoOutput) && (
-    <div class="demo-card">
-      <div class="demo-inner">
-        {demoInput && (
-          <div class="demo-section">
-            <span class="demo-label">Input</span>
-            <div class="demo-value input-value">{demoInput}</div>
-          </div>
-        )}
+  {
+    (demoInput || demoOutput) && (
+      <div class="demo-card">
+        <div class="demo-inner">
+          {demoInput && (
+            <div class="demo-section">
+              <span class="demo-label">Input</span>
+              <div class="demo-value input-value">{demoInput}</div>
+            </div>
+          )}
 
-        {demoInput && demoOutput && (
-          <div class="demo-arrow">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="12" y1="5" x2="12" y2="19"></line>
-              <polyline points="19 12 12 19 5 12"></polyline>
-            </svg>
-          </div>
-        )}
+          {demoInput && demoOutput && (
+            <div class="demo-arrow">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <polyline points="19 12 12 19 5 12" />
+              </svg>
+            </div>
+          )}
 
-        {demoOutput && (
-          <div class="demo-section">
-            <span class="demo-label">Output</span>
-            <div class="demo-value output-value">{demoOutput}</div>
-          </div>
-        )}
+          {demoOutput && (
+            <div class="demo-section">
+              <span class="demo-label">Output</span>
+              <div class="demo-value output-value">{demoOutput}</div>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
-  )}
+    )
+  }
 
   <!-- Footer -->
   <div class="footer">
     <div class="author-section">
-      <svg width="36" height="36" viewBox="0 0 200 200" fill="none" class="logo">
-        <circle cx="100" cy="100" r="70" fill="none" stroke="url(#splitGrad)" stroke-width="3"/>
-        <text x="100" y="135" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="110" font-weight="700" fill="url(#splitGrad)" text-anchor="middle">M</text>
+      <svg
+        width="36"
+        height="36"
+        viewBox="0 0 200 200"
+        fill="none"
+        class="logo"
+      >
+        <circle
+          cx="100"
+          cy="100"
+          r="70"
+          fill="none"
+          stroke="url(#splitGrad)"
+          stroke-width="3"></circle>
+        <text
+          x="100"
+          y="135"
+          font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+          font-size="110"
+          font-weight="700"
+          fill="url(#splitGrad)"
+          text-anchor="middle">M</text
+        >
         <defs>
           <linearGradient id="splitGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" style="stop-color:#3b82f6" />
-            <stop offset="100%" style="stop-color:#60a5fa" />
+            <stop offset="0%" style="stop-color:#3b82f6"></stop>
+            <stop offset="100%" style="stop-color:#60a5fa"></stop>
           </linearGradient>
         </defs>
       </svg>
@@ -123,7 +150,9 @@ const {
     height: 630px;
     background: #0a0a0a;
     position: relative;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    font-family:
+      -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
+      sans-serif;
     overflow: hidden;
   }
 
@@ -142,7 +171,11 @@ const {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, transparent 50%);
+    background: linear-gradient(
+      135deg,
+      rgba(59, 130, 246, 0.08) 0%,
+      transparent 50%
+    );
   }
 
   .left-content {
@@ -251,7 +284,7 @@ const {
     background: #0a0a0a;
     border: 1px solid #2a2a2a;
     border-radius: 10px;
-    font-family: 'SF Mono', Monaco, Consolas, monospace;
+    font-family: "SF Mono", Monaco, Consolas, monospace;
     font-size: 20px;
   }
 
