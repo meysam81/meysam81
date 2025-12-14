@@ -54,7 +54,14 @@ var totalReadingTime = calculateTotalReadingTime(series.posts);
   <section class="series-hero">
     <div class="container">
       <a href="/blog" class="back-link">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
           <line x1="19" y1="12" x2="5" y2="12"></line>
           <polyline points="12 19 5 12 12 5"></polyline>
         </svg>
@@ -62,9 +69,18 @@ var totalReadingTime = calculateTotalReadingTime(series.posts);
       </a>
 
       <div class="series-badge">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
           <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+          <path
+            d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"
+          ></path>
         </svg>
         Series
       </div>
@@ -73,15 +89,31 @@ var totalReadingTime = calculateTotalReadingTime(series.posts);
 
       <div class="series-meta">
         <span class="meta-item">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+            ></path>
             <polyline points="14 2 14 8 20 8"></polyline>
           </svg>
-          {series.postCount} {series.postCount === 1 ? "article" : "articles"}
+          {series.postCount}
+          {series.postCount === 1 ? "article" : "articles"}
         </span>
         <span class="meta-divider">•</span>
         <span class="meta-item">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
             <circle cx="12" cy="12" r="10"></circle>
             <polyline points="12 6 12 12 16 14"></polyline>
           </svg>
@@ -94,26 +126,28 @@ var totalReadingTime = calculateTotalReadingTime(series.posts);
   <section class="series-content">
     <div class="container">
       <div class="series-posts">
-        {series.posts.map(function mapPost(post, index) {
-          var postSlug = post.slug || slugify(post.data.title);
-          return (
-            <div class="series-post-item">
-              <div class="post-number">{index + 1}</div>
-              <div class="post-card-wrapper">
-                <ContentCard
-                  title={post.data.title}
-                  description={post.data.description}
-                  url={`/blog/${postSlug}`}
-                  badge={formatDate(post.data.pubDate)}
-                  linkText="Read Article"
-                  variant="blog"
-                  tags={post.data.tags}
-                  readingTime={calculateReadingTime(post.body)}
-                />
+        {
+          series.posts.map(function mapPost(post, index) {
+            var postSlug = post.slug || slugify(post.data.title);
+            return (
+              <div class="series-post-item">
+                <div class="post-number">{index + 1}</div>
+                <div class="post-card-wrapper">
+                  <ContentCard
+                    title={post.data.title}
+                    description={post.data.description}
+                    url={`/blog/${postSlug}`}
+                    badge={formatDate(post.data.pubDate)}
+                    linkText="Read Article"
+                    variant="blog"
+                    tags={post.data.tags}
+                    readingTime={calculateReadingTime(post.body)}
+                  />
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })
+        }
       </div>
     </div>
   </section>
@@ -165,7 +199,11 @@ var totalReadingTime = calculateTotalReadingTime(series.posts);
   }
 
   .series-title {
-    background: linear-gradient(135deg, var(--color-text) 0%, var(--color-accent-light) 100%);
+    background: linear-gradient(
+      135deg,
+      var(--color-text) 0%,
+      var(--color-accent-light) 100%
+    );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;

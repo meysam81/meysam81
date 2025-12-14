@@ -1,85 +1,87 @@
 ---
-import ToolLayout from '@/layouts/ToolLayout.astro';
-import { getPresets, getExamplePhrases } from '@/utils/cron.js';
+import ToolLayout from "@/layouts/ToolLayout.astro";
+import { getPresets, getExamplePhrases } from "@/utils/cron.js";
 
 var presets = getPresets();
 var examplePhrases = getExamplePhrases();
 
-var cronKeywords = "cron expression generator, cron job scheduler, crontab generator, cron syntax, cron expression validator, cron to english, english to cron, cron calculator, next cron run time, cron expression examples, kubernetes cronjob, linux cron, unix cron, schedule task, recurring job scheduler, cron expression builder, crontab syntax, cron job examples, free cron generator, online cron tool";
+var cronKeywords =
+  "cron expression generator, cron job scheduler, crontab generator, cron syntax, cron expression validator, cron to english, english to cron, cron calculator, next cron run time, cron expression examples, kubernetes cronjob, linux cron, unix cron, schedule task, recurring job scheduler, cron expression builder, crontab syntax, cron job examples, free cron generator, online cron tool";
 
 var structuredData = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
-  "name": "Cron Expression Generator",
-  "description": "Build and decode cron expressions with plain English. Instant validation, next 10 run times, and copy-ready output. Free, no ads.",
-  "url": "https://meysam.io/tools/cron",
-  "applicationCategory": "DeveloperApplication",
-  "operatingSystem": "Any",
-  "offers": {
+  name: "Cron Expression Generator",
+  description:
+    "Build and decode cron expressions with plain English. Instant validation, next 10 run times, and copy-ready output. Free, no ads.",
+  url: "https://meysam.io/tools/cron",
+  applicationCategory: "DeveloperApplication",
+  operatingSystem: "Any",
+  offers: {
     "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "USD"
+    price: "0",
+    priceCurrency: "USD",
   },
-  "featureList": [
+  featureList: [
     "Natural language to cron conversion",
     "Cron expression to English translation",
     "Next 10 run times calculation",
     "Copy to clipboard",
     "Shareable URLs",
-    "Common presets"
+    "Common presets",
   ],
-  "author": {
+  author: {
     "@type": "Person",
-    "name": "Meysam Azad",
-    "url": "https://meysam.io"
-  }
+    name: "Meysam Azad",
+    url: "https://meysam.io",
+  },
 };
 
 var faqData = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  "mainEntity": [
+  mainEntity: [
     {
       "@type": "Question",
-      "name": "What is a cron expression?",
-      "acceptedAnswer": {
+      name: "What is a cron expression?",
+      acceptedAnswer: {
         "@type": "Answer",
-        "text": "A cron expression is a string format used to schedule recurring tasks in Unix-like systems. It consists of 5 fields: minute (0-59), hour (0-23), day of month (1-31), month (1-12), and day of week (0-7)."
-      }
+        text: "A cron expression is a string format used to schedule recurring tasks in Unix-like systems. It consists of 5 fields: minute (0-59), hour (0-23), day of month (1-31), month (1-12), and day of week (0-7).",
+      },
     },
     {
       "@type": "Question",
-      "name": "How do I run a cron job every 5 minutes?",
-      "acceptedAnswer": {
+      name: "How do I run a cron job every 5 minutes?",
+      acceptedAnswer: {
         "@type": "Answer",
-        "text": "Use the expression */5 * * * * to run every 5 minutes. The */5 in the minute field means 'every 5 minutes' starting from 0."
-      }
+        text: "Use the expression */5 * * * * to run every 5 minutes. The */5 in the minute field means 'every 5 minutes' starting from 0.",
+      },
     },
     {
       "@type": "Question",
-      "name": "What does * mean in cron?",
-      "acceptedAnswer": {
+      name: "What does * mean in cron?",
+      acceptedAnswer: {
         "@type": "Answer",
-        "text": "The asterisk (*) in cron means 'every' or 'all values'. For example, * in the hour field means 'every hour', and * in the day field means 'every day'."
-      }
+        text: "The asterisk (*) in cron means 'every' or 'all values'. For example, * in the hour field means 'every hour', and * in the day field means 'every day'.",
+      },
     },
     {
       "@type": "Question",
-      "name": "How do I schedule a cron job for weekdays only?",
-      "acceptedAnswer": {
+      name: "How do I schedule a cron job for weekdays only?",
+      acceptedAnswer: {
         "@type": "Answer",
-        "text": "Use 1-5 or MON-FRI in the day of week field. For example, 0 9 * * 1-5 runs at 9:00 AM Monday through Friday."
-      }
+        text: "Use 1-5 or MON-FRI in the day of week field. For example, 0 9 * * 1-5 runs at 9:00 AM Monday through Friday.",
+      },
     },
     {
       "@type": "Question",
-      "name": "What is the difference between / and - in cron?",
-      "acceptedAnswer": {
+      name: "What is the difference between / and - in cron?",
+      acceptedAnswer: {
         "@type": "Answer",
-        "text": "The slash (/) specifies step values like 'every N units'. The hyphen (-) specifies ranges. For example, */15 means 'every 15 minutes' while 9-17 means 'hours 9 through 17'."
-      }
-    }
-  ]
+        text: "The slash (/) specifies step values like 'every N units'. The hyphen (-) specifies ranges. For example, */15 means 'every 15 minutes' while 9-17 means 'hours 9 through 17'.",
+      },
+    },
+  ],
 };
 ---
 
@@ -98,7 +100,9 @@ var faqData = {
   <!-- Tool Header -->
   <div class="tool-header">
     <h1>Cron Expression Generator</h1>
-    <p class="subtitle">Build and decode cron schedules with plain English. No signup, no ads.</p>
+    <p class="subtitle">
+      Build and decode cron schedules with plain English. No signup, no ads.
+    </p>
   </div>
 
   <div class="tool-content">
@@ -107,13 +111,29 @@ var faqData = {
       <!-- Mode Toggle -->
       <div class="mode-toggle">
         <button type="button" class="mode-btn active" data-mode="english">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+            ></path>
           </svg>
           Plain English
         </button>
         <button type="button" class="mode-btn" data-mode="expression">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
             <polyline points="16 18 22 12 16 6"></polyline>
             <polyline points="8 6 2 12 8 18"></polyline>
           </svg>
@@ -123,7 +143,9 @@ var faqData = {
 
       <!-- English Input Mode -->
       <div class="input-section" id="english-mode">
-        <label for="english-input" class="input-label">Describe your schedule</label>
+        <label for="english-input" class="input-label"
+          >Describe your schedule</label
+        >
         <input
           type="text"
           id="english-input"
@@ -133,13 +155,16 @@ var faqData = {
           spellcheck="false"
         />
         <div class="input-hint">
-          Try: "every 5 minutes", "daily at 9am", "every friday at 5pm", "first monday of month"
+          Try: "every 5 minutes", "daily at 9am", "every friday at 5pm", "first
+          monday of month"
         </div>
       </div>
 
       <!-- Expression Input Mode -->
       <div class="input-section hidden" id="expression-mode">
-        <label for="expression-input" class="input-label">Enter cron expression</label>
+        <label for="expression-input" class="input-label"
+          >Enter cron expression</label
+        >
         <input
           type="text"
           id="expression-input"
@@ -166,12 +191,35 @@ var faqData = {
           <div class="output-label">Cron Expression</div>
           <div class="output-value">
             <code id="cron-output" class="cron-expression">* * * * *</code>
-            <button type="button" class="copy-btn" id="copy-expression" aria-label="Copy expression">
-              <svg class="copy-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <button
+              type="button"
+              class="copy-btn"
+              id="copy-expression"
+              aria-label="Copy expression"
+            >
+              <svg
+                class="copy-icon"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
                 <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                <path
+                  d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+                ></path>
               </svg>
-              <svg class="check-icon hidden" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <svg
+                class="check-icon hidden"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
                 <polyline points="20 6 9 17 4 12"></polyline>
               </svg>
             </button>
@@ -189,8 +237,20 @@ var faqData = {
         <div class="next-runs">
           <div class="next-runs-header">
             <span class="output-label">Next 10 Runs</span>
-            <button type="button" class="toggle-runs" id="toggle-runs" aria-expanded="true">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <button
+              type="button"
+              class="toggle-runs"
+              id="toggle-runs"
+              aria-expanded="true"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
                 <polyline points="6 9 12 15 18 9"></polyline>
               </svg>
             </button>
@@ -204,7 +264,14 @@ var faqData = {
       <!-- Share Button -->
       <div class="share-section">
         <button type="button" class="btn btn-secondary" id="share-btn">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
             <circle cx="18" cy="5" r="3"></circle>
             <circle cx="6" cy="12" r="3"></circle>
             <circle cx="18" cy="19" r="3"></circle>
@@ -221,16 +288,18 @@ var faqData = {
     <div class="tool-card presets-section">
       <h2>Common Schedules</h2>
       <div class="presets-grid">
-        {presets.map(preset => (
-          <button
-            type="button"
-            class="preset-btn"
-            data-expression={preset.expression}
-          >
-            <span class="preset-label">{preset.label}</span>
-            <code class="preset-expression">{preset.expression}</code>
-          </button>
-        ))}
+        {
+          presets.map((preset) => (
+            <button
+              type="button"
+              class="preset-btn"
+              data-expression={preset.expression}
+            >
+              <span class="preset-label">{preset.label}</span>
+              <code class="preset-expression">{preset.expression}</code>
+            </button>
+          ))
+        }
       </div>
     </div>
 
@@ -285,18 +354,24 @@ var faqData = {
       <h2>Example Phrases</h2>
       <p class="examples-intro">Click any phrase to try it:</p>
       <div class="examples-grid" id="examples-grid">
-        {examplePhrases.slice(0, 24).map(example => (
-          <button
-            type="button"
-            class="example-btn"
-            data-phrase={example.phrase}
-            data-expression={example.expression}
-          >
-            {example.phrase}
-          </button>
-        ))}
+        {
+          examplePhrases.slice(0, 24).map((example) => (
+            <button
+              type="button"
+              class="example-btn"
+              data-phrase={example.phrase}
+              data-expression={example.expression}
+            >
+              {example.phrase}
+            </button>
+          ))
+        }
       </div>
-      <button type="button" class="btn btn-secondary mt-lg" id="show-more-examples">
+      <button
+        type="button"
+        class="btn btn-secondary mt-lg"
+        id="show-more-examples"
+      >
         Show More Examples
       </button>
     </div>
@@ -307,39 +382,71 @@ var faqData = {
 
       <details class="faq-item">
         <summary>What is a cron expression?</summary>
-        <p>A cron expression is a string format used to schedule recurring tasks in Unix-like systems. It consists of 5 fields: minute (0-59), hour (0-23), day of month (1-31), month (1-12), and day of week (0-7). For example, <code>0 9 * * 1-5</code> means "at 9:00 AM, Monday through Friday".</p>
+        <p>
+          A cron expression is a string format used to schedule recurring tasks
+          in Unix-like systems. It consists of 5 fields: minute (0-59), hour
+          (0-23), day of month (1-31), month (1-12), and day of week (0-7). For
+          example, <code>0 9 * * 1-5</code> means "at 9:00 AM, Monday through Friday".
+        </p>
       </details>
 
       <details class="faq-item">
         <summary>How do I run a cron job every 5 minutes?</summary>
-        <p>Use the expression <code>*/5 * * * *</code>. The <code>*/5</code> in the minute field means "every 5 minutes" starting from minute 0 (0, 5, 10, 15, etc.).</p>
+        <p>
+          Use the expression <code>*/5 * * * *</code>. The <code>*/5</code> in the
+          minute field means "every 5 minutes" starting from minute 0 (0, 5, 10, 15,
+          etc.).
+        </p>
       </details>
 
       <details class="faq-item">
         <summary>What does * mean in cron?</summary>
-        <p>The asterisk (*) means "every" or "all values" for that field. For example, <code>*</code> in the hour field means "every hour", and <code>*</code> in the day of month field means "every day".</p>
+        <p>
+          The asterisk (*) means "every" or "all values" for that field. For
+          example, <code>*</code> in the hour field means "every hour", and <code
+            >*</code
+          > in the day of month field means "every day".
+        </p>
       </details>
 
       <details class="faq-item">
         <summary>How do I schedule a cron job for weekdays only?</summary>
-        <p>Use <code>1-5</code> or <code>MON-FRI</code> in the day of week field (the 5th field). For example, <code>0 9 * * 1-5</code> runs at 9:00 AM Monday through Friday.</p>
+        <p>
+          Use <code>1-5</code> or <code>MON-FRI</code> in the day of week field (the
+          5th field). For example, <code>0 9 * * 1-5</code> runs at 9:00 AM Monday
+          through Friday.
+        </p>
       </details>
 
       <details class="faq-item">
         <summary>What's the difference between / and - in cron?</summary>
-        <p>The slash (<code>/</code>) specifies step values, like "every N units". For example, <code>*/15</code> means "every 15 minutes". The hyphen (<code>-</code>) specifies ranges. For example, <code>9-17</code> means "hours 9 through 17".</p>
+        <p>
+          The slash (<code>/</code>) specifies step values, like "every N
+          units". For example, <code>*/15</code> means "every 15 minutes". The hyphen
+          (<code>-</code>) specifies ranges. For example, <code>9-17</code> means
+          "hours 9 through 17".
+        </p>
       </details>
 
       <details class="faq-item">
-        <summary>How do I run something on the last day of every month?</summary>
-        <p>Some cron implementations support <code>L</code> for "last". Use <code>0 0 L * *</code> for midnight on the last day of every month. Note: Standard cron doesn't support L, but many modern schedulers (like Kubernetes CronJobs) do.</p>
+        <summary>How do I run something on the last day of every month?</summary
+        >
+        <p>
+          Some cron implementations support <code>L</code> for "last". Use <code
+            >0 0 L * *</code
+          > for midnight on the last day of every month. Note: Standard cron doesn't
+          support L, but many modern schedulers (like Kubernetes CronJobs) do.
+        </p>
       </details>
     </div>
 
     <!-- Newsletter CTA -->
     <div class="tool-card newsletter-section">
       <h2>Like This Tool?</h2>
-      <p>Get weekly DevOps tips and production insights from 8+ years in the trenches.</p>
+      <p>
+        Get weekly DevOps tips and production insights from 8+ years in the
+        trenches.
+      </p>
 
       <form
         class="newsletter-form listmonk-form"
@@ -351,10 +458,39 @@ var faqData = {
         method="post"
       >
         <input type="hidden" name="nonce" />
-        <input id="00a2c" type="hidden" name="l" value="00a2c2b8-467a-4d74-9c76-9c6472c91d06" />
-        <input type="text" name="name" value="" class="honeypot-field" tabindex="-1" autocomplete="off" aria-hidden="true" />
-        <input type="text" name="company" value="" class="honeypot-field" tabindex="-1" autocomplete="off" aria-hidden="true" />
-        <input type="text" name="website" value="" class="honeypot-field" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        <input
+          id="00a2c"
+          type="hidden"
+          name="l"
+          value="00a2c2b8-467a-4d74-9c76-9c6472c91d06"
+        />
+        <input
+          type="text"
+          name="name"
+          value=""
+          class="honeypot-field"
+          tabindex="-1"
+          autocomplete="off"
+          aria-hidden="true"
+        />
+        <input
+          type="text"
+          name="company"
+          value=""
+          class="honeypot-field"
+          tabindex="-1"
+          autocomplete="off"
+          aria-hidden="true"
+        />
+        <input
+          type="text"
+          name="website"
+          value=""
+          class="honeypot-field"
+          tabindex="-1"
+          autocomplete="off"
+          aria-hidden="true"
+        />
         <div class="form-row">
           <input
             type="email"
@@ -367,16 +503,28 @@ var faqData = {
           <altcha-widget
             class="altcha-widget"
             challengeurl="https://newsletter.meysam.io/api/public/captcha/altcha"
-            auto="onfocus"
-          ></altcha-widget>
-          <script type="module" src="https://newsletter.meysam.io/public/static/altcha.umd.js" async defer></script>
+            auto="onfocus"></altcha-widget>
+          <script
+            type="module"
+            src="https://newsletter.meysam.io/public/static/altcha.umd.js"
+            async
+            defer></script>
           <button type="submit" class="btn btn-primary">Get Weekly Tips</button>
         </div>
-        <p class="form-note">Join 1,500+ engineers. No spam, unsubscribe anytime.</p>
+        <p class="form-note">
+          Join 1,500+ engineers. No spam, unsubscribe anytime.
+        </p>
       </form>
 
       <div class="success-message hidden" id="newsletter-success">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <svg
+          width="48"
+          height="48"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
           <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
           <polyline points="22 4 12 14.01 9 11.01"></polyline>
         </svg>
@@ -388,40 +536,64 @@ var faqData = {
 </ToolLayout>
 
 <script>
-  import cronstrue from 'cronstrue';
-  import { CronExpressionParser } from 'cron-parser';
-  import { englishToCron, validateCron, getExamplePhrases } from '@/utils/cron.js';
-  import log from 'loglevel';
+  import cronstrue from "cronstrue";
+  import { CronExpressionParser } from "cron-parser";
+  import {
+    englishToCron,
+    validateCron,
+    getExamplePhrases,
+  } from "@/utils/cron.js";
+  import log from "loglevel";
 
   // DOM Elements
-  var englishInput = document.getElementById('english-input') as HTMLInputElement;
-  var expressionInput = document.getElementById('expression-input') as HTMLInputElement;
-  var cronOutput = document.getElementById('cron-output') as HTMLElement;
-  var humanReadable = document.getElementById('human-readable') as HTMLElement;
-  var nextRunsList = document.getElementById('next-runs-list') as HTMLElement;
-  var errorMessage = document.getElementById('error-message') as HTMLElement;
-  var outputSection = document.getElementById('output-section') as HTMLElement;
-  var modeButtons = document.querySelectorAll('.mode-btn') as NodeListOf<HTMLButtonElement>;
-  var englishMode = document.getElementById('english-mode') as HTMLElement;
-  var expressionMode = document.getElementById('expression-mode') as HTMLElement;
-  var copyBtn = document.getElementById('copy-expression') as HTMLButtonElement;
-  var shareBtn = document.getElementById('share-btn') as HTMLButtonElement;
-  var shareToast = document.getElementById('share-toast') as HTMLElement;
-  var toggleRunsBtn = document.getElementById('toggle-runs') as HTMLButtonElement;
-  var presetButtons = document.querySelectorAll('.preset-btn') as NodeListOf<HTMLButtonElement>;
-  var exampleButtons = document.querySelectorAll('.example-btn') as NodeListOf<HTMLButtonElement>;
-  var showMoreBtn = document.getElementById('show-more-examples') as HTMLButtonElement;
-  var examplesGrid = document.getElementById('examples-grid') as HTMLElement;
-  var newsletterForm = document.querySelector('.newsletter-form') as HTMLFormElement | null;
-  var newsletterSuccess = document.getElementById('newsletter-success') as HTMLElement;
+  var englishInput = document.getElementById(
+    "english-input",
+  ) as HTMLInputElement;
+  var expressionInput = document.getElementById(
+    "expression-input",
+  ) as HTMLInputElement;
+  var cronOutput = document.getElementById("cron-output") as HTMLElement;
+  var humanReadable = document.getElementById("human-readable") as HTMLElement;
+  var nextRunsList = document.getElementById("next-runs-list") as HTMLElement;
+  var errorMessage = document.getElementById("error-message") as HTMLElement;
+  var outputSection = document.getElementById("output-section") as HTMLElement;
+  var modeButtons = document.querySelectorAll(
+    ".mode-btn",
+  ) as NodeListOf<HTMLButtonElement>;
+  var englishMode = document.getElementById("english-mode") as HTMLElement;
+  var expressionMode = document.getElementById(
+    "expression-mode",
+  ) as HTMLElement;
+  var copyBtn = document.getElementById("copy-expression") as HTMLButtonElement;
+  var shareBtn = document.getElementById("share-btn") as HTMLButtonElement;
+  var shareToast = document.getElementById("share-toast") as HTMLElement;
+  var toggleRunsBtn = document.getElementById(
+    "toggle-runs",
+  ) as HTMLButtonElement;
+  var presetButtons = document.querySelectorAll(
+    ".preset-btn",
+  ) as NodeListOf<HTMLButtonElement>;
+  var exampleButtons = document.querySelectorAll(
+    ".example-btn",
+  ) as NodeListOf<HTMLButtonElement>;
+  var showMoreBtn = document.getElementById(
+    "show-more-examples",
+  ) as HTMLButtonElement;
+  var examplesGrid = document.getElementById("examples-grid") as HTMLElement;
+  var newsletterForm = document.querySelector(
+    ".newsletter-form",
+  ) as HTMLFormElement | null;
+  var newsletterSuccess = document.getElementById(
+    "newsletter-success",
+  ) as HTMLElement;
 
-  var currentExpression = '* * * * *';
-  var currentMode = 'english';
+  var currentExpression = "* * * * *";
+  var currentMode = "english";
 
   // Initialize from URL params
   function initFromURL() {
     var params = new URLSearchParams(window.location.search);
-    var expr = params.get('expr');
+    var expr = params.get("expr");
     if (expr) {
       try {
         var decoded = atob(expr);
@@ -430,9 +602,9 @@ var faqData = {
         updateOutput(decoded);
 
         // Switch to expression mode if coming from URL
-        setMode('expression');
+        setMode("expression");
       } catch (e) {
-        log.error('Failed to decode expression from URL:', e);
+        log.error("Failed to decode expression from URL:", e);
       }
     }
   }
@@ -441,12 +613,12 @@ var faqData = {
   function setMode(mode: string) {
     currentMode = mode;
     modeButtons.forEach(function toggleButtonActive(btn) {
-      btn.classList.toggle('active', btn.dataset.mode === mode);
+      btn.classList.toggle("active", btn.dataset.mode === mode);
     });
-    englishMode.classList.toggle('hidden', mode !== 'english');
-    expressionMode.classList.toggle('hidden', mode !== 'expression');
+    englishMode.classList.toggle("hidden", mode !== "english");
+    expressionMode.classList.toggle("hidden", mode !== "expression");
 
-    if (mode === 'english') {
+    if (mode === "english") {
       englishInput.focus();
     } else {
       expressionInput.focus();
@@ -471,36 +643,37 @@ var faqData = {
       var readable = cronstrue.toString(expression, { verbose: true });
       humanReadable.textContent = readable;
     } catch (e) {
-      humanReadable.textContent = 'Unable to describe expression';
+      humanReadable.textContent = "Unable to describe expression";
     }
 
     // Calculate next runs
     updateNextRuns(expression);
 
     // Show output section
-    outputSection.classList.remove('hidden');
+    outputSection.classList.remove("hidden");
   }
 
   // Calculate and display next run times
   function updateNextRuns(expression: string) {
     try {
       // Handle special strings
-      if (expression.startsWith('@')) {
+      if (expression.startsWith("@")) {
         var specialMap = {
-          '@yearly': '0 0 1 1 *',
-          '@annually': '0 0 1 1 *',
-          '@monthly': '0 0 1 * *',
-          '@weekly': '0 0 * * 0',
-          '@daily': '0 0 * * *',
-          '@midnight': '0 0 * * *',
-          '@hourly': '0 * * * *'
+          "@yearly": "0 0 1 1 *",
+          "@annually": "0 0 1 1 *",
+          "@monthly": "0 0 1 * *",
+          "@weekly": "0 0 * * 0",
+          "@daily": "0 0 * * *",
+          "@midnight": "0 0 * * *",
+          "@hourly": "0 * * * *",
         };
         expression = specialMap[expression.toLowerCase()] || expression;
       }
 
       // Skip @reboot
-      if (expression === '@reboot') {
-        nextRunsList.innerHTML = '<div class="next-run-item">Runs once at system startup</div>';
+      if (expression === "@reboot") {
+        nextRunsList.innerHTML =
+          '<div class="next-run-item">Runs once at system startup</div>';
         return;
       }
 
@@ -512,33 +685,42 @@ var faqData = {
         runs.push(next.toDate());
       }
 
-      var html = runs.map(function html(date) {
-        var formatted = formatDate(date);
-        var relative = getRelativeTime(date);
-        return '<div class="next-run-item">' +
-          '<span class="run-date">' + formatted + '</span>' +
-          '<span class="run-relative">' + relative + '</span>' +
-          '</div>';
-      }).join('');
+      var html = runs
+        .map(function html(date) {
+          var formatted = formatDate(date);
+          var relative = getRelativeTime(date);
+          return (
+            '<div class="next-run-item">' +
+            '<span class="run-date">' +
+            formatted +
+            "</span>" +
+            '<span class="run-relative">' +
+            relative +
+            "</span>" +
+            "</div>"
+          );
+        })
+        .join("");
 
       nextRunsList.innerHTML = html;
     } catch (e) {
-      log.error('Failed to calculate next runs:', e);
-      nextRunsList.innerHTML = '<div class="next-run-item">Unable to calculate next runs</div>';
+      log.error("Failed to calculate next runs:", e);
+      nextRunsList.innerHTML =
+        '<div class="next-run-item">Unable to calculate next runs</div>';
     }
   }
 
   // Format date for display
   function formatDate(date: Date) {
     var options: Intl.DateTimeFormatOptions = {
-      weekday: 'short',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true
+      weekday: "short",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
     };
-    return date.toLocaleDateString('en-US', options);
+    return date.toLocaleDateString("en-US", options);
   }
 
   // Get relative time string
@@ -550,29 +732,29 @@ var faqData = {
     var days = Math.floor(diff / 86400000);
 
     if (minutes < 1) {
-      return 'now';
+      return "now";
     }
     if (minutes < 60) {
-      return 'in ' + minutes + ' min';
+      return "in " + minutes + " min";
     }
     if (hours < 24) {
-      return 'in ' + hours + ' hour' + (hours > 1 ? 's' : '');
+      return "in " + hours + " hour" + (hours > 1 ? "s" : "");
     }
     if (days === 1) {
-      return 'tomorrow';
+      return "tomorrow";
     }
-    return 'in ' + days + ' days';
+    return "in " + days + " days";
   }
 
   // Show error message
   function showError(message: string) {
     errorMessage.textContent = message;
-    errorMessage.classList.remove('hidden');
+    errorMessage.classList.remove("hidden");
   }
 
   // Hide error message
   function hideError() {
-    errorMessage.classList.add('hidden');
+    errorMessage.classList.add("hidden");
   }
 
   // Handle English input
@@ -587,7 +769,9 @@ var faqData = {
     if (result && result.expression) {
       updateOutput(result.expression);
     } else {
-      showError('Could not parse. Try: "every 5 minutes", "daily at 9am", "every monday at noon"');
+      showError(
+        'Could not parse. Try: "every 5 minutes", "daily at 9am", "every monday at noon"',
+      );
     }
   }
 
@@ -604,61 +788,67 @@ var faqData = {
 
   // Copy expression to clipboard
   function copyExpression() {
-    navigator.clipboard.writeText(currentExpression).then(function handleSuccess() {
-      var copyIcon = copyBtn.querySelector('.copy-icon');
-      var checkIcon = copyBtn.querySelector('.check-icon');
+    navigator.clipboard
+      .writeText(currentExpression)
+      .then(function handleSuccess() {
+        var copyIcon = copyBtn.querySelector(".copy-icon");
+        var checkIcon = copyBtn.querySelector(".check-icon");
 
-      copyIcon.classList.add('hidden');
-      checkIcon.classList.remove('hidden');
+        copyIcon.classList.add("hidden");
+        checkIcon.classList.remove("hidden");
 
-      setTimeout(function toggleIcons() {
-        copyIcon.classList.remove('hidden');
-        checkIcon.classList.add('hidden');
-      }, 2000);
-    }).catch(function handleError(err) {
-      log.error('Failed to copy:', err);
-    });
+        setTimeout(function toggleIcons() {
+          copyIcon.classList.remove("hidden");
+          checkIcon.classList.add("hidden");
+        }, 2000);
+      })
+      .catch(function handleError(err) {
+        log.error("Failed to copy:", err);
+      });
   }
 
   // Share link
   function shareLink() {
     var url = new URL(window.location.href);
-    url.search = '';
-    url.searchParams.set('expr', btoa(currentExpression));
+    url.search = "";
+    url.searchParams.set("expr", btoa(currentExpression));
 
-    navigator.clipboard.writeText(url.toString()).then(function handleSuccess() {
-      shareToast.classList.remove('hidden');
-      setTimeout(function toggleToast() {
-        shareToast.classList.add('hidden');
-      }, 2000);
-    }).catch(function handleError(err) {
-      log.error('Failed to share:', err);
-    });
+    navigator.clipboard
+      .writeText(url.toString())
+      .then(function handleSuccess() {
+        shareToast.classList.remove("hidden");
+        setTimeout(function toggleToast() {
+          shareToast.classList.add("hidden");
+        }, 2000);
+      })
+      .catch(function handleError(err) {
+        log.error("Failed to share:", err);
+      });
   }
 
   // Toggle next runs visibility
   function toggleNextRuns() {
-    var isExpanded = toggleRunsBtn.getAttribute('aria-expanded') === 'true';
-    toggleRunsBtn.setAttribute('aria-expanded', String(!isExpanded));
-    nextRunsList.classList.toggle('collapsed', isExpanded);
-    toggleRunsBtn.classList.toggle('collapsed', isExpanded);
+    var isExpanded = toggleRunsBtn.getAttribute("aria-expanded") === "true";
+    toggleRunsBtn.setAttribute("aria-expanded", String(!isExpanded));
+    nextRunsList.classList.toggle("collapsed", isExpanded);
+    toggleRunsBtn.classList.toggle("collapsed", isExpanded);
   }
 
   // Handle preset click
   function handlePresetClick(e: Event) {
     var btn = e.currentTarget as HTMLButtonElement;
-    var expression = btn.dataset.expression || '';
+    var expression = btn.dataset.expression || "";
     expressionInput.value = expression;
-    setMode('expression');
+    setMode("expression");
     updateOutput(expression);
   }
 
   // Handle example click
   function handleExampleClick(e: Event) {
     var btn = e.currentTarget as HTMLButtonElement;
-    var phrase = btn.dataset.phrase || '';
+    var phrase = btn.dataset.phrase || "";
     englishInput.value = phrase;
-    setMode('english');
+    setMode("english");
 
     var result = englishToCron(phrase);
     if (result && result.expression) {
@@ -669,19 +859,29 @@ var faqData = {
   // Show more examples
   function showMoreExamples() {
     var allExamples = getExamplePhrases();
-    var html = allExamples.map(function html(example) {
-      return '<button type="button" class="example-btn" data-phrase="' +
-        example.phrase + '" data-expression="' + example.expression + '">' +
-        example.phrase + '</button>';
-    }).join('');
+    var html = allExamples
+      .map(function html(example) {
+        return (
+          '<button type="button" class="example-btn" data-phrase="' +
+          example.phrase +
+          '" data-expression="' +
+          example.expression +
+          '">' +
+          example.phrase +
+          "</button>"
+        );
+      })
+      .join("");
 
     examplesGrid.innerHTML = html;
-    showMoreBtn.classList.add('hidden');
+    showMoreBtn.classList.add("hidden");
 
     // Reattach event listeners
-    document.querySelectorAll('.example-btn').forEach(function handleExampleButton(btn) {
-      btn.addEventListener('click', handleExampleClick);
-    });
+    document
+      .querySelectorAll(".example-btn")
+      .forEach(function handleExampleButton(btn) {
+        btn.addEventListener("click", handleExampleClick);
+      });
   }
 
   // Handle newsletter form
@@ -691,10 +891,10 @@ var faqData = {
     var formData = new FormData(form);
 
     // Check honeypot
-    var honeypotFields = form.querySelectorAll('.honeypot-field');
+    var honeypotFields = form.querySelectorAll(".honeypot-field");
     var isBot = false;
     honeypotFields.forEach(function checkHoneypot(field) {
-      if (field.value !== '') {
+      if (field.value !== "") {
         isBot = true;
       }
     });
@@ -704,16 +904,18 @@ var faqData = {
     }
 
     fetch(form.action, {
-      method: 'POST',
-      body: formData
-    }).then(function handleResponse(response) {
-      if (response.ok) {
-        form.classList.add('hidden');
-        newsletterSuccess.classList.remove('hidden');
-      }
-    }).catch(function handleError(err) {
-      log.error('Newsletter error:', err);
-    });
+      method: "POST",
+      body: formData,
+    })
+      .then(function handleResponse(response) {
+        if (response.ok) {
+          form.classList.add("hidden");
+          newsletterSuccess.classList.remove("hidden");
+        }
+      })
+      .catch(function handleError(err) {
+        log.error("Newsletter error:", err);
+      });
   }
 
   // Debounce function
@@ -732,52 +934,55 @@ var faqData = {
   function init() {
     // Mode toggle
     modeButtons.forEach(function toggleButtonActive(btn) {
-      btn.addEventListener('click', function handleClick() {
+      btn.addEventListener("click", function handleClick() {
         setMode(btn.dataset.mode);
       });
     });
 
     // Input handlers with debounce
-    englishInput.addEventListener('input', debounce(handleEnglishInput, 300));
-    expressionInput.addEventListener('input', debounce(handleExpressionInput, 300));
+    englishInput.addEventListener("input", debounce(handleEnglishInput, 300));
+    expressionInput.addEventListener(
+      "input",
+      debounce(handleExpressionInput, 300),
+    );
 
     // Copy and share
-    copyBtn.addEventListener('click', copyExpression);
-    shareBtn.addEventListener('click', shareLink);
+    copyBtn.addEventListener("click", copyExpression);
+    shareBtn.addEventListener("click", shareLink);
 
     // Toggle next runs
-    toggleRunsBtn.addEventListener('click', toggleNextRuns);
+    toggleRunsBtn.addEventListener("click", toggleNextRuns);
 
     // Presets
     presetButtons.forEach(function addPresetClickListener(btn) {
-      btn.addEventListener('click', handlePresetClick);
+      btn.addEventListener("click", handlePresetClick);
     });
 
     // Examples
     exampleButtons.forEach(function addExampleClickListener(btn) {
-      btn.addEventListener('click', handleExampleClick);
+      btn.addEventListener("click", handleExampleClick);
     });
 
     // Show more
-    showMoreBtn.addEventListener('click', showMoreExamples);
+    showMoreBtn.addEventListener("click", showMoreExamples);
 
     // Newsletter
     if (newsletterForm) {
-      newsletterForm.addEventListener('submit', handleNewsletterSubmit);
+      newsletterForm.addEventListener("submit", handleNewsletterSubmit);
     }
 
     // Initialize from URL or default
     initFromURL();
 
     // Focus English input on load
-    if (currentMode === 'english') {
+    if (currentMode === "english") {
       englishInput.focus();
     }
   }
 
   // Run on DOM ready
-  document.addEventListener('DOMContentLoaded', init);
-  document.addEventListener('astro:page-load', init);
+  document.addEventListener("DOMContentLoaded", init);
+  document.addEventListener("astro:page-load", init);
 </script>
 
 <style scoped>
@@ -1172,14 +1377,14 @@ var faqData = {
   }
 
   .faq-item summary::after {
-    content: '+';
+    content: "+";
     font-size: 1.25rem;
     color: var(--color-text-muted);
     transition: transform var(--transition-fast);
   }
 
   .faq-item[open] summary::after {
-    content: '-';
+    content: "-";
   }
 
   .faq-item p {

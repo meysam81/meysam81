@@ -10,9 +10,17 @@ var { seriesInfo } = Astro.props;
 
 <aside class="series-banner">
   <div class="series-icon">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+    >
       <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"
+      ></path>
     </svg>
   </div>
   <div class="series-content">
@@ -32,7 +40,11 @@ var { seriesInfo } = Astro.props;
     align-items: flex-start;
     gap: var(--space-md);
     padding: var(--space-md);
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%);
+    background: linear-gradient(
+      135deg,
+      rgba(59, 130, 246, 0.1) 0%,
+      rgba(59, 130, 246, 0.05) 100%
+    );
     border: 1px solid rgba(59, 130, 246, 0.2);
     border-radius: var(--border-radius-sm);
     margin-bottom: var(--space-lg);

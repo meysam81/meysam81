@@ -1,7 +1,7 @@
 ---
-import Header from '@/components/Header.astro';
-import Footer from '@/components/Footer.astro';
-import '@/styles/global.css';
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import "@/styles/global.css";
 import "@/main.js";
 
 interface Props {
@@ -21,7 +21,7 @@ var {
   canonicalPath,
   structuredData,
   noDefaultStructuredData = false,
-  keywords = "indie hacker, solopreneur, SaaS, bootstrapped startup, DevOps, SRE, technical founder, customer discovery, product validation, building in public"
+  keywords = "indie hacker, solopreneur, SaaS, bootstrapped startup, DevOps, SRE, technical founder, customer discovery, product validation, building in public",
 } = Astro.props;
 
 var fullTitle = title.includes("Meysam") ? title : title + " | Meysam";
@@ -31,21 +31,21 @@ var twitterImage = ogImage;
 var defaultPersonStructuredData = {
   "@context": "https://schema.org",
   "@type": "Person",
-  "name": "Meysam Azad",
-  "url": "https://meysam.io",
-  "image": "https://meysam.io/og-image.png",
-  "jobTitle": "Technical Founder & DevOps Engineer",
-  "description": "Technical engineer building bootstrapped SaaS products",
-  "sameAs": [
+  name: "Meysam Azad",
+  url: "https://meysam.io",
+  image: "https://meysam.io/og-image.png",
+  jobTitle: "Technical Founder & DevOps Engineer",
+  description: "Technical engineer building bootstrapped SaaS products",
+  sameAs: [
     "https://x.com/meysamazing",
     "https://github.com/meysam81",
     "https://linkedin.com/in/meysamazad",
-    "https://youtube.com/@meysam"
-  ]
+    "https://youtube.com/@meysam",
+  ],
 };
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <!-- 1. Character Encoding (must be within first 1024 bytes) -->
@@ -77,7 +77,10 @@ var defaultPersonStructuredData = {
     <meta name="generator" content={Astro.generator} />
 
     <!-- 7. Robots & Crawling -->
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta
+      name="robots"
+      content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    />
 
     <!-- 8. Open Graph / Facebook -->
     <meta property="og:type" content="website" />
@@ -107,19 +110,39 @@ var defaultPersonStructuredData = {
     <link rel="me" href="https://github.com/meysam81" />
 
     <!-- 12. Structured Data (JSON-LD) -->
-    {!noDefaultStructuredData && (
-      <script type="application/ld+json" set:html={JSON.stringify(defaultPersonStructuredData)} />
-    )}
-    {structuredData && Array.isArray(structuredData) ? (
-      structuredData.map(function(data) {
-        return <script type="application/ld+json" set:html={JSON.stringify(data)} />;
-      })
-    ) : structuredData && (
-      <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
-    )}
+    {
+      !noDefaultStructuredData && (
+        <script
+          type="application/ld+json"
+          set:html={JSON.stringify(defaultPersonStructuredData)}
+        />
+      )
+    }
+    {
+      structuredData && Array.isArray(structuredData)
+        ? structuredData.map(function (data) {
+            return (
+              <script
+                type="application/ld+json"
+                set:html={JSON.stringify(data)}
+              />
+            );
+          })
+        : structuredData && (
+            <script
+              type="application/ld+json"
+              set:html={JSON.stringify(structuredData)}
+            />
+          )
+    }
 
     <!-- 13. RSS & Alternate Links -->
-    <link rel="alternate" type="application/rss+xml" title="Meysam Azad - Shipping SaaS with DevOps Discipline" href="/rss.xml" />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="Meysam Azad - Shipping SaaS with DevOps Discipline"
+      href="/rss.xml"
+    />
 
     <!-- 14. Favicon & Icons -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -143,37 +166,44 @@ var defaultPersonStructuredData = {
 
     <script>
       function initSmoothScroll() {
-        document.querySelectorAll('a[href^="#"]').forEach(function addSmoothScroll(anchor) {
-          anchor.addEventListener('click', function handleAnchorClick(e) {
-            var href = this.getAttribute('href');
-            if (href === '#') {return;}
+        document
+          .querySelectorAll('a[href^="#"]')
+          .forEach(function addSmoothScroll(anchor) {
+            anchor.addEventListener("click", function handleAnchorClick(e) {
+              var href = this.getAttribute("href");
+              if (href === "#") {
+                return;
+              }
 
-            e.preventDefault();
-            var target = document.querySelector(href);
-            if (target) {
-              var headerOffset = 80;
-              var elementPosition = target.getBoundingClientRect().top;
-              var offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+              e.preventDefault();
+              var target = document.querySelector(href);
+              if (target) {
+                var headerOffset = 80;
+                var elementPosition = target.getBoundingClientRect().top;
+                var offsetPosition =
+                  elementPosition + window.pageYOffset - headerOffset;
 
-              window.scrollTo({
-                top: offsetPosition,
-                behavior: 'smooth'
-              });
-            }
+                window.scrollTo({
+                  top: offsetPosition,
+                  behavior: "smooth",
+                });
+              }
+            });
           });
-        });
       }
 
-      document.addEventListener('DOMContentLoaded', initSmoothScroll);
-      document.addEventListener('astro:page-load', initSmoothScroll);
+      document.addEventListener("DOMContentLoaded", initSmoothScroll);
+      document.addEventListener("astro:page-load", initSmoothScroll);
     </script>
 
-    <script defer src="https://analytics.meysam.io/pa.js"
-        id="pianjs"
-        data-code="m9Chz179Udt3YeVXRHXyxWthr2A3vbLb"
-        data-hit-endpoint="https://analytics.meysam.io/hit"
-        data-event-endpoint="https://analytics.meysam.io/event"
-        data-session-endpoint="https://analytics.meysam.io/session"></script>
+    <script
+      defer
+      src="https://analytics.meysam.io/pa.js"
+      id="pianjs"
+      data-code="m9Chz179Udt3YeVXRHXyxWthr2A3vbLb"
+      data-hit-endpoint="https://analytics.meysam.io/hit"
+      data-event-endpoint="https://analytics.meysam.io/event"
+      data-session-endpoint="https://analytics.meysam.io/session"></script>
   </body>
 </html>
 

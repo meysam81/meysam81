@@ -16,9 +16,17 @@ var nextTitle = seriesInfo.nextPost?.data.title;
 <nav class="series-nav" aria-label="Series navigation">
   <div class="series-nav-header">
     <a href={`/blog/series/${seriesInfo.slug}`} class="series-nav-title">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
         <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"
+        ></path>
       </svg>
       {seriesInfo.name}
     </a>
@@ -28,35 +36,53 @@ var nextTitle = seriesInfo.nextPost?.data.title;
   </div>
 
   <div class="series-nav-links">
-    {prevSlug ? (
-      <a href={`/blog/${prevSlug}`} class="series-nav-link series-nav-prev">
-        <span class="nav-direction">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="19" y1="12" x2="5" y2="12"></line>
-            <polyline points="12 19 5 12 12 5"></polyline>
-          </svg>
-          Previous
-        </span>
-        <span class="nav-title">{prevTitle}</span>
-      </a>
-    ) : (
-      <div class="series-nav-link series-nav-placeholder"></div>
-    )}
+    {
+      prevSlug ? (
+        <a href={`/blog/${prevSlug}`} class="series-nav-link series-nav-prev">
+          <span class="nav-direction">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <line x1="19" y1="12" x2="5" y2="12" />
+              <polyline points="12 19 5 12 12 5" />
+            </svg>
+            Previous
+          </span>
+          <span class="nav-title">{prevTitle}</span>
+        </a>
+      ) : (
+        <div class="series-nav-link series-nav-placeholder" />
+      )
+    }
 
-    {nextSlug ? (
-      <a href={`/blog/${nextSlug}`} class="series-nav-link series-nav-next">
-        <span class="nav-direction">
-          Next
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="5" y1="12" x2="19" y2="12"></line>
-            <polyline points="12 5 19 12 12 19"></polyline>
-          </svg>
-        </span>
-        <span class="nav-title">{nextTitle}</span>
-      </a>
-    ) : (
-      <div class="series-nav-link series-nav-placeholder"></div>
-    )}
+    {
+      nextSlug ? (
+        <a href={`/blog/${nextSlug}`} class="series-nav-link series-nav-next">
+          <span class="nav-direction">
+            Next
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
+          </span>
+          <span class="nav-title">{nextTitle}</span>
+        </a>
+      ) : (
+        <div class="series-nav-link series-nav-placeholder" />
+      )
+    }
   </div>
 </nav>
 

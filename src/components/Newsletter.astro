@@ -1,42 +1,80 @@
 ---
 interface Props {
-  variant?: 'hero' | 'section';
+  variant?: "hero" | "section";
 }
 
-var { variant = 'section' } = Astro.props;
+var { variant = "section" } = Astro.props;
 ---
-<div class:list={['newsletter', `newsletter-${variant}`]}>
-  {variant === 'section' && (
-    <h2>Build Alongside Me</h2>
-    <p class="newsletter-description">
-      Join technical founders getting weekly insights on customer discovery, product validation, and building with production-grade discipline.
-    </p>
-  )}
+
+<div class:list={["newsletter", `newsletter-${variant}`]}>
+  {
+    variant === "section" && (
+      <div>
+        <h2>Build Alongside Me</h2>
+        <p class="newsletter-description">
+          Join technical founders getting weekly insights on customer discovery,
+          product validation, and building with production-grade discipline.
+        </p>
+      </div>
+    )
+  }
 
   <div class="newsletter-benefits">
     <div class="benefit">
-      <svg class="benefit-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <svg
+        class="benefit-icon"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
         <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
         <polyline points="22 4 12 14.01 9 11.01"></polyline>
       </svg>
       <span>Customer discovery insights as I interview potential users</span>
     </div>
     <div class="benefit">
-      <svg class="benefit-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <svg
+        class="benefit-icon"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
         <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
         <polyline points="22 4 12 14.01 9 11.01"></polyline>
       </svg>
       <span>Production DevOps lessons applied to product development</span>
     </div>
     <div class="benefit">
-      <svg class="benefit-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <svg
+        class="benefit-icon"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
         <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
         <polyline points="22 4 12 14.01 9 11.01"></polyline>
       </svg>
       <span>Honest updates—experiments, failures, and what I'm learning</span>
     </div>
     <div class="benefit">
-      <svg class="benefit-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <svg
+        class="benefit-icon"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
         <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
         <polyline points="22 4 12 14.01 9 11.01"></polyline>
       </svg>
@@ -52,13 +90,42 @@ var { variant = 'section' } = Astro.props;
     data-pirsch-non-interactive
     action="https://newsletter.meysam.io/subscription/form"
     method="post"
-    >
+  >
     <input type="hidden" name="nonce" />
-    <input id="00a2c" type="hidden" name="l" value="00a2c2b8-467a-4d74-9c76-9c6472c91d06" />
+    <input
+      id="00a2c"
+      type="hidden"
+      name="l"
+      value="00a2c2b8-467a-4d74-9c76-9c6472c91d06"
+    />
 
-    <input type="text" name="name" value="" class="honeypot-field" tabindex="-1" autocomplete="off" aria-hidden="true" />
-    <input type="text" name="company" value="" class="honeypot-field" tabindex="-1" autocomplete="off" aria-hidden="true" />
-    <input type="text" name="website" value="" class="honeypot-field" tabindex="-1" autocomplete="off" aria-hidden="true" />
+    <input
+      type="text"
+      name="name"
+      value=""
+      class="honeypot-field"
+      tabindex="-1"
+      autocomplete="off"
+      aria-hidden="true"
+    />
+    <input
+      type="text"
+      name="company"
+      value=""
+      class="honeypot-field"
+      tabindex="-1"
+      autocomplete="off"
+      aria-hidden="true"
+    />
+    <input
+      type="text"
+      name="website"
+      value=""
+      class="honeypot-field"
+      tabindex="-1"
+      autocomplete="off"
+      aria-hidden="true"
+    />
 
     <div class="form-group">
       <input
@@ -74,14 +141,25 @@ var { variant = 'section' } = Astro.props;
     <altcha-widget
       class="altcha-widget"
       challengeurl="https://newsletter.meysam.io/api/public/captcha/altcha"
-      auto="onfocus"
-    ></altcha-widget>
-    <script type="module" src="https://newsletter.meysam.io/public/static/altcha.umd.js" async defer></script>
+      auto="onfocus"></altcha-widget>
+    <script
+      type="module"
+      src="https://newsletter.meysam.io/public/static/altcha.umd.js"
+      async
+      defer></script>
 
     <button type="submit" class="btn btn-primary submit-button">
       <span class="button-text">Join 1,500+ Engineers</span>
       <span class="button-loader hidden">
-        <svg class="spinner" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <svg
+          class="spinner"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
           <path d="M21 12a9 9 0 1 1-6.219-8.56"></path>
         </svg>
         Subscribing...
@@ -93,30 +171,44 @@ var { variant = 'section' } = Astro.props;
 
   <div class="success-message hidden">
     <div class="success-icon">
-      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <svg
+        width="64"
+        height="64"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
         <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
         <polyline points="22 4 12 14.01 9 11.01"></polyline>
       </svg>
     </div>
     <h3 class="success-title">Check Your Email!</h3>
     <p class="success-description">
-      We've sent a confirmation link to your inbox. Click it to complete your subscription and start receiving weekly insights.
+      We've sent a confirmation link to your inbox. Click it to complete your
+      subscription and start receiving weekly insights.
     </p>
     <p class="success-note">
-      Don't see it? Check your spam folder or <a href="#" class="resend-link">click here to resend</a>.
+      Don't see it? Check your spam folder or <a href="#" class="resend-link"
+        >click here to resend</a
+      >.
     </p>
   </div>
 </div>
 
 <script>
-  import log from 'loglevel';
-  import { getScrollPercentage, updateScrollPercentage, subscribe } from '@/stores/scrollStore';
+  import log from "loglevel";
+  import {
+    getScrollPercentage,
+    updateScrollPercentage,
+    subscribe,
+  } from "@/stores/scrollStore";
 
   function updateFormScroll() {
     var scrollPercentage = getScrollPercentage();
-    var forms = document.querySelectorAll('.newsletter-form');
+    var forms = document.querySelectorAll(".newsletter-form");
     forms.forEach(function handleForm(form) {
-      form.setAttribute('data-pirsch-meta-scroll', String(scrollPercentage));
+      form.setAttribute("data-pirsch-meta-scroll", String(scrollPercentage));
     });
   }
 
@@ -127,53 +219,53 @@ var { variant = 'section' } = Astro.props;
 
   function showSuccessMessage(formElement) {
     var container = formElement.parentElement;
-    var successMessage = container.querySelector('.success-message');
+    var successMessage = container.querySelector(".success-message");
 
-    formElement.classList.add('hidden');
-    successMessage.classList.remove('hidden');
-    successMessage.classList.add('fade-in');
+    formElement.classList.add("hidden");
+    successMessage.classList.remove("hidden");
+    successMessage.classList.add("fade-in");
   }
 
   function resetAltcha() {
-    var altchaWidget: any = document.querySelector('altcha-widget');
-    if (altchaWidget && typeof altchaWidget.reset === 'function') {
+    var altchaWidget: any = document.querySelector("altcha-widget");
+    if (altchaWidget && typeof altchaWidget.reset === "function") {
       altchaWidget.reset();
     }
   }
 
   function handleReset() {
-    var resendLink = document.querySelector('.resend-link');
-    resendLink.addEventListener('click', function handleResend(e) {
+    var resendLink = document.querySelector(".resend-link");
+    resendLink.addEventListener("click", function handleResend(e) {
       e.preventDefault();
-      var formElement = document.querySelector('.newsletter-form');
-      var successMessage = document.querySelector('.success-message');
+      var formElement = document.querySelector(".newsletter-form");
+      var successMessage = document.querySelector(".success-message");
       resetForm(formElement, successMessage);
       resetAltcha();
     });
   }
 
   function resetForm(formElement, successMessage) {
-    successMessage.classList.add('hidden');
-    successMessage.classList.remove('fade-in');
+    successMessage.classList.add("hidden");
+    successMessage.classList.remove("fade-in");
 
-    formElement.classList.remove('hidden');
+    formElement.classList.remove("hidden");
     formElement.reset();
 
-    var submitButton = formElement.querySelector('.submit-button');
-    var buttonText = submitButton.querySelector('.button-text');
-    var buttonLoader = submitButton.querySelector('.button-loader');
+    var submitButton = formElement.querySelector(".submit-button");
+    var buttonText = submitButton.querySelector(".button-text");
+    var buttonLoader = submitButton.querySelector(".button-loader");
 
     submitButton.disabled = false;
-    buttonText.classList.remove('hidden');
-    buttonLoader.classList.add('hidden');
+    buttonText.classList.remove("hidden");
+    buttonLoader.classList.add("hidden");
 
-    var existingError = formElement.querySelector('.error-message');
+    var existingError = formElement.querySelector(".error-message");
     if (existingError) {
       existingError.remove();
     }
 
     setTimeout(function focusEmail() {
-      var emailInput = formElement.querySelector('.email-input');
+      var emailInput = formElement.querySelector(".email-input");
       if (emailInput) {
         emailInput.focus();
       }
@@ -181,16 +273,16 @@ var { variant = 'section' } = Astro.props;
   }
 
   function showErrorMessage(formElement, message) {
-    var existingError = formElement.querySelector('.error-message');
+    var existingError = formElement.querySelector(".error-message");
     if (existingError) {
       existingError.remove();
     }
 
-    var errorDiv = document.createElement('div');
-    errorDiv.className = 'error-message';
-    errorDiv.textContent = message || 'Something went wrong. Please try again.';
+    var errorDiv = document.createElement("div");
+    errorDiv.className = "error-message";
+    errorDiv.textContent = message || "Something went wrong. Please try again.";
 
-    var submitButton = formElement.querySelector('.submit-button');
+    var submitButton = formElement.querySelector(".submit-button");
     formElement.insertBefore(errorDiv, submitButton);
 
     setTimeout(function removeError() {
@@ -203,69 +295,69 @@ var { variant = 'section' } = Astro.props;
 
     var form = event.target;
 
-    var honeypotFields = form.querySelectorAll('.honeypot-field');
+    var honeypotFields = form.querySelectorAll(".honeypot-field");
     var isBot = false;
     honeypotFields.forEach(function checkHoneypot(field) {
-      if (field.value !== '') {
+      if (field.value !== "") {
         isBot = true;
       }
     });
 
     if (isBot) {
-      log.warn('Bot detected via honeypot');
-      showErrorMessage(form, 'Unable to subscribe. Please try again.');
+      log.warn("Bot detected via honeypot");
+      showErrorMessage(form, "Unable to subscribe. Please try again.");
       return;
     }
 
-    var submitButton = form.querySelector('.submit-button');
-    var buttonText = submitButton.querySelector('.button-text');
-    var buttonLoader = submitButton.querySelector('.button-loader');
+    var submitButton = form.querySelector(".submit-button");
+    var buttonText = submitButton.querySelector(".button-text");
+    var buttonLoader = submitButton.querySelector(".button-loader");
 
     submitButton.disabled = true;
-    buttonText.classList.add('hidden');
-    buttonLoader.classList.remove('hidden');
+    buttonText.classList.add("hidden");
+    buttonLoader.classList.remove("hidden");
 
     updateFormScroll();
 
     var formData = new FormData(form);
 
     fetch(form.action, {
-      method: 'POST',
+      method: "POST",
       body: formData,
     })
       .then(function handleResponse(response) {
         if (response.ok) {
           return response;
         }
-        throw new Error('Subscription failed');
+        throw new Error("Subscription failed");
       })
       .then(function onSuccess() {
-        log.info('Subscription successful');
+        log.info("Subscription successful");
         showSuccessMessage(form);
       })
       .catch(function onError(error) {
-        log.error('Subscription error:', error);
-        showErrorMessage(form, 'Unable to subscribe. Please try again.');
+        log.error("Subscription error:", error);
+        showErrorMessage(form, "Unable to subscribe. Please try again.");
         submitButton.disabled = false;
-        buttonText.classList.remove('hidden');
-        buttonLoader.classList.add('hidden');
+        buttonText.classList.remove("hidden");
+        buttonLoader.classList.add("hidden");
       });
   }
 
-  document.addEventListener('DOMContentLoaded', function initialize() {
+  document.addEventListener("DOMContentLoaded", function initialize() {
     updateScrollPercentage();
     updateFormScroll();
     handleReset();
 
     subscribe(function onScrollChange(percentage) {
-      log.debug('Scroll percentage changed to', percentage);
+      log.debug("Scroll percentage changed to", percentage);
     });
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
 
-    var forms = document.querySelectorAll('.newsletter-form');
+    var forms = document.querySelectorAll(".newsletter-form");
     forms.forEach(function attachSubmitHandler(form) {
-      form.addEventListener('submit', handleFormSubmit);
+      form.addEventListener("submit", handleFormSubmit);
     });
   });
 </script>

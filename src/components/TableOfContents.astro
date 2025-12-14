@@ -16,33 +16,43 @@ var tocHeadings = headings.filter(function filterHeadings(h) {
 var showToc = tocHeadings.length > 0 || hasReferences;
 ---
 
-{showToc && (
-  <nav class="table-of-contents">
-    <h2 class="toc-title">Table of Contents</h2>
-    <ul class="toc-list">
-      {tocHeadings.map(function mapHeadings(heading) {
-        return (
-          <li class={`toc-item toc-depth-${heading.depth}`}>
-            <a href={`#${heading.slug}`} class="toc-link">
-              {heading.text}
+{
+  showToc && (
+    <nav class="table-of-contents">
+      <h2 class="toc-title">Table of Contents</h2>
+      <ul class="toc-list">
+        {tocHeadings.map(function mapHeadings(heading) {
+          return (
+            <li class={`toc-item toc-depth-${heading.depth}`}>
+              <a href={`#${heading.slug}`} class="toc-link">
+                {heading.text}
+              </a>
+            </li>
+          );
+        })}
+        {hasReferences && (
+          <li class="toc-item toc-depth-2 toc-special">
+            <a href="#references" class="toc-link toc-link-special">
+              <svg
+                class="toc-icon"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" />
+                <polyline points="13 2 13 9 20 9" />
+              </svg>
+              References & Further Reading
             </a>
           </li>
-        );
-      })}
-      {hasReferences && (
-        <li class="toc-item toc-depth-2 toc-special">
-          <a href="#references" class="toc-link toc-link-special">
-            <svg class="toc-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
-              <polyline points="13 2 13 9 20 9"></polyline>
-            </svg>
-            References & Further Reading
-          </a>
-        </li>
-      )}
-    </ul>
-  </nav>
-)}
+        )}
+      </ul>
+    </nav>
+  )
+}
 
 <style scoped>
   .table-of-contents {
