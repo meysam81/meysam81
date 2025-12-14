@@ -10,17 +10,17 @@ interface Props {
   category?: string;
   features?: string[];
   url?: string;
-  icon?: 'clock' | 'code' | 'chart' | 'lightbulb' | 'rocket' | 'tool' | 'none';
+  icon?: "clock" | "code" | "chart" | "lightbulb" | "rocket" | "tool" | "none";
 }
 
 const {
   title,
-  subtitle = '',
-  description = '',
-  category = '',
+  subtitle = "",
+  description = "",
+  category = "",
   features = [],
-  url = 'meysam.io',
-  icon = 'none'
+  url = "meysam.io",
+  icon = "none",
 } = Astro.props;
 
 const ICONS: Record<string, string> = {
@@ -51,7 +51,7 @@ const ICONS: Record<string, string> = {
   tool: `<circle cx="60" cy="60" r="48" stroke="currentColor" stroke-width="4" fill="none"/>
     <path d="M45 45 L55 55 M75 75 L55 55 M55 55 L55 75 L75 75" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>`,
 
-  none: ''
+  none: "",
 };
 ---
 
@@ -66,44 +66,68 @@ const ICONS: Record<string, string> = {
   <div class="border-frame"></div>
 
   <!-- Icon -->
-  {icon !== 'none' && ICONS[icon] && (
-    <div class="icon-wrapper">
-      <svg width="120" height="120" viewBox="0 0 120 120" class="icon">
-        <Fragment set:html={ICONS[icon]} />
-      </svg>
-    </div>
-  )}
+  {
+    icon !== "none" && ICONS[icon] && (
+      <div class="icon-wrapper">
+        <svg width="120" height="120" viewBox="0 0 120 120" class="icon">
+          <Fragment set:html={ICONS[icon]} />
+        </svg>
+      </div>
+    )
+  }
 
   <!-- Content -->
-  <div class="content" class:list={[{ 'has-icon': icon !== 'none' }]}>
-    {category && (
-      <div class="category-badge">{category}</div>
-    )}
+  <div class="content" class:list={[{ "has-icon": icon !== "none" }]}>
+    {category && <div class="category-badge">{category}</div>}
 
     <h1 class="title">{title}</h1>
 
-    {(subtitle || description) && (
-      <p class="description">{subtitle || description}</p>
-    )}
+    {
+      (subtitle || description) && (
+        <p class="description">{subtitle || description}</p>
+      )
+    }
 
-    {features.length > 0 && (
-      <div class="features">
-        {features.slice(0, 3).map((feature) => (
-          <div class="feature-badge">
-            <span class="check-icon">&#10003;</span>
-            {feature}
-          </div>
-        ))}
-      </div>
-    )}
+    {
+      features.length > 0 && (
+        <div class="features">
+          {features.slice(0, 3).map((feature) => (
+            <div class="feature-badge">
+              <span class="check-icon">&#10003;</span>
+              {feature}
+            </div>
+          ))}
+        </div>
+      )
+    }
   </div>
 
   <!-- Footer -->
   <div class="footer">
     <div class="author">
-      <svg width="32" height="32" viewBox="0 0 200 200" fill="none" class="logo">
-        <circle cx="100" cy="100" r="70" fill="none" stroke="#3b82f6" stroke-width="3"/>
-        <text x="100" y="135" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="110" font-weight="700" fill="#3b82f6" text-anchor="middle">M</text>
+      <svg
+        width="32"
+        height="32"
+        viewBox="0 0 200 200"
+        fill="none"
+        class="logo"
+      >
+        <circle
+          cx="100"
+          cy="100"
+          r="70"
+          fill="none"
+          stroke="#3b82f6"
+          stroke-width="3"></circle>
+        <text
+          x="100"
+          y="135"
+          font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+          font-size="110"
+          font-weight="700"
+          fill="#3b82f6"
+          text-anchor="middle">M</text
+        >
       </svg>
       <span class="author-name">Meysam Azad</span>
       <span class="separator">|</span>
@@ -123,7 +147,9 @@ const ICONS: Record<string, string> = {
     height: 630px;
     background: #0a0a0a;
     position: relative;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    font-family:
+      -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
+      sans-serif;
     overflow: hidden;
   }
 
@@ -142,7 +168,11 @@ const ICONS: Record<string, string> = {
     right: -150px;
     width: 500px;
     height: 500px;
-    background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+    background: radial-gradient(
+      circle,
+      rgba(59, 130, 246, 0.15) 0%,
+      transparent 70%
+    );
     border-radius: 50%;
   }
 
@@ -181,7 +211,11 @@ const ICONS: Record<string, string> = {
   .category-badge {
     display: inline-block;
     padding: 6px 16px;
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(59, 130, 246, 0.1) 100%);
+    background: linear-gradient(
+      135deg,
+      rgba(59, 130, 246, 0.2) 0%,
+      rgba(59, 130, 246, 0.1) 100%
+    );
     border: 1px solid rgba(59, 130, 246, 0.4);
     border-radius: 20px;
     color: #60a5fa;

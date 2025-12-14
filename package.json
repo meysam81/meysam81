@@ -23,6 +23,8 @@
     "@vitejs/plugin-vue": "^6.0.3",
     "ky": "^1.14.1",
     "oxlint": "^1.32.0",
+    "prettier": "^3.7.4",
+    "prettier-plugin-astro": "^0.14.1",
     "typescript": "^5.9.3",
     "vite": "^6.4.1",
     "vite-plugin-compression2": "^2.4.0"
@@ -31,6 +33,7 @@
   "scripts": {
     "build": "astro check && astro build",
     "convert:images": "bun ./scripts/convert-svgs.js",
+    "lint": "prettier -w . && oxlint --fix --fix-suggestions .",
     "start": "astro dev"
   },
   "type": "module",

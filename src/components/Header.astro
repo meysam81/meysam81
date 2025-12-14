@@ -1,11 +1,10 @@
 ---
+
 ---
 
 <header class="header">
   <nav class="nav container">
-    <a href="/" class="logo">
-      Meysam
-    </a>
+    <a href="/" class="logo"> Meysam </a>
 
     <button class="hamburger" aria-label="Toggle menu" aria-expanded="false">
       <span class="hamburger-line"></span>
@@ -25,43 +24,43 @@
 
 <script>
   function initHeaderMenu() {
-    const hamburger = document.querySelector('.hamburger');
-    const navLinks = document.querySelector('.nav-links');
+    const hamburger = document.querySelector(".hamburger");
+    const navLinks = document.querySelector(".nav-links");
 
     if (!hamburger || !navLinks) {
       return;
     }
 
-    hamburger.addEventListener('click', (e) => {
+    hamburger.addEventListener("click", (e) => {
       e.stopPropagation();
-      const isExpanded = hamburger.getAttribute('aria-expanded') === 'true';
-      hamburger.setAttribute('aria-expanded', String(!isExpanded));
-      hamburger.classList.toggle('active');
-      navLinks.classList.toggle('active');
+      const isExpanded = hamburger.getAttribute("aria-expanded") === "true";
+      hamburger.setAttribute("aria-expanded", String(!isExpanded));
+      hamburger.classList.toggle("active");
+      navLinks.classList.toggle("active");
     });
 
     // Close menu when clicking on a link
-    document.querySelectorAll('.nav-link, .nav-links .btn').forEach(link => {
-      link.addEventListener('click', () => {
-        hamburger.classList.remove('active');
-        navLinks.classList.remove('active');
-        hamburger.setAttribute('aria-expanded', 'false');
+    document.querySelectorAll(".nav-link, .nav-links .btn").forEach((link) => {
+      link.addEventListener("click", () => {
+        hamburger.classList.remove("active");
+        navLinks.classList.remove("active");
+        hamburger.setAttribute("aria-expanded", "false");
       });
     });
 
     // Close menu when clicking outside
-    document.addEventListener('click', (e) => {
+    document.addEventListener("click", (e) => {
       const target = e.target as HTMLElement;
-      if (!target.closest('.nav') && navLinks.classList.contains('active')) {
-        hamburger.classList.remove('active');
-        navLinks.classList.remove('active');
-        hamburger.setAttribute('aria-expanded', 'false');
+      if (!target.closest(".nav") && navLinks.classList.contains("active")) {
+        hamburger.classList.remove("active");
+        navLinks.classList.remove("active");
+        hamburger.setAttribute("aria-expanded", "false");
       }
     });
   }
 
-  document.addEventListener('DOMContentLoaded', initHeaderMenu);
-  document.addEventListener('astro:page-load', initHeaderMenu);
+  document.addEventListener("DOMContentLoaded", initHeaderMenu);
+  document.addEventListener("astro:page-load", initHeaderMenu);
 </script>
 
 <style scoped>
@@ -121,7 +120,10 @@
   }
 
   .hamburger.active .hamburger-line:nth-child(1) {
-    transform: translateY(calc(var(--hamburger-gap) + var(--hamburger-line-height))) rotate(45deg);
+    transform: translateY(
+        calc(var(--hamburger-gap) + var(--hamburger-line-height))
+      )
+      rotate(45deg);
   }
 
   .hamburger.active .hamburger-line:nth-child(2) {
@@ -129,7 +131,10 @@
   }
 
   .hamburger.active .hamburger-line:nth-child(3) {
-    transform: translateY(calc(-1 * (var(--hamburger-gap) + var(--hamburger-line-height)))) rotate(-45deg);
+    transform: translateY(
+        calc(-1 * (var(--hamburger-gap) + var(--hamburger-line-height)))
+      )
+      rotate(-45deg);
   }
 
   .hamburger:hover .hamburger-line {
@@ -184,7 +189,10 @@
       max-height: 0;
       overflow: hidden;
       opacity: 0;
-      transition: max-height var(--transition-base), opacity var(--transition-base), padding var(--transition-base);
+      transition:
+        max-height var(--transition-base),
+        opacity var(--transition-base),
+        padding var(--transition-base);
     }
 
     .nav-links.active {

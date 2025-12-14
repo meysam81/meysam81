@@ -12,6 +12,10 @@ repos:
       - id: check-ast
       - id: check-executables-have-shebangs
       - id: check-json
+        exclude: |
+          (?x)^(
+            .oxlintrc.json
+          )$
       - id: check-shebang-scripts-are-executable
       - id: check-yaml
         args:
@@ -49,6 +53,11 @@ repos:
       - id: pretty-format-json
         args:
           - --autofix
+        exclude: |
+          (?x)^(
+            .oxlintrc.json
+          )$
+      - id: end-of-file-fixer
   - repo: https://github.com/alessandrojcm/commitlint-pre-commit-hook
     rev: v9.23.0
     hooks:

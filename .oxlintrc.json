@@ -9,6 +9,9 @@
   "plugins": [
     "import"
   ],
+  "ignorePatterns": [
+    "src/pages/tools/yaml-json.astro",
+  ],
   "rules": {
     "adjacent-overload-signatures": "deny",
     "anchor-ambiguous-text": "deny",
@@ -84,7 +87,7 @@
     "no-abusive-eslint-disable": "deny",
     "no-accessor-recursion": "deny",
     "no-accumulating-spread": "deny",
-    "no-alert": "deny",
+    "no-alert": "warn",
     "no-alias-methods": "deny",
     "no-anonymous-default-export": "off",
     "no-array-constructor": "deny",

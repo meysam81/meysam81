@@ -1,5 +1,5 @@
 ---
-import BaseLayout from '@/layouts/BaseLayout.astro';
+import BaseLayout from "@/layouts/BaseLayout.astro";
 
 interface Props {
   title: string;
@@ -16,38 +16,39 @@ var {
   ogImage = "https://meysam.io/og-image.png",
   canonicalPath,
   structuredData,
-  keywords
+  keywords,
 } = Astro.props;
 
 var fullTitle = title.includes("Meysam") ? title : title + " | Meysam";
 var canonicalURL = new URL(canonicalPath || Astro.url.pathname, Astro.site);
 
-var defaultToolKeywords = "developer tools, free online tools, DevOps tools, web tools, no signup required";
+var defaultToolKeywords =
+  "developer tools, free online tools, DevOps tools, web tools, no signup required";
 var finalKeywords = keywords || defaultToolKeywords;
 
 var breadcrumbStructuredData = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
-  "itemListElement": [
+  itemListElement: [
     {
       "@type": "ListItem",
-      "position": 1,
-      "name": "Home",
-      "item": "https://meysam.io"
+      position: 1,
+      name: "Home",
+      item: "https://meysam.io",
     },
     {
       "@type": "ListItem",
-      "position": 2,
-      "name": "Tools",
-      "item": "https://meysam.io/tools"
+      position: 2,
+      name: "Tools",
+      item: "https://meysam.io/tools",
     },
     {
       "@type": "ListItem",
-      "position": 3,
-      "name": title,
-      "item": canonicalURL.toString()
-    }
-  ]
+      position: 3,
+      name: title,
+      item: canonicalURL.toString(),
+    },
+  ],
 };
 
 var allStructuredData = structuredData
@@ -111,7 +112,7 @@ var allStructuredData = structuredData
   }
 
   .breadcrumb li:not(:last-child)::after {
-    content: '/';
+    content: "/";
     margin-left: var(--space-xs);
     color: var(--color-text-dim);
   }

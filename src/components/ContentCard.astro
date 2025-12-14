@@ -8,7 +8,7 @@ interface Props {
   linkText?: string;
   target?: string;
   rel?: string;
-  variant?: 'default' | 'blog';
+  variant?: "default" | "blog";
   tags?: string[];
   readingTime?: string;
 }
@@ -22,20 +22,24 @@ var {
   linkText,
   target = "",
   rel = "",
-  variant = 'default',
+  variant = "default",
   tags = [],
   readingTime,
 } = Astro.props;
 ---
 
-<div class={`content-card ${featured ? "content-featured" : ""} ${variant === 'blog' ? 'content-blog' : ''}`}>
-  {variant === 'blog' && tags.length > 0 && (
-    <div class="card-tags">
-      {tags.slice(0, 3).map(function mapTag(tag) {
-        return <span class="card-tag">{tag}</span>;
-      })}
-    </div>
-  )}
+<div
+  class={`content-card ${featured ? "content-featured" : ""} ${variant === "blog" ? "content-blog" : ""}`}
+>
+  {
+    variant === "blog" && tags.length > 0 && (
+      <div class="card-tags">
+        {tags.slice(0, 3).map(function mapTag(tag) {
+          return <span class="card-tag">{tag}</span>;
+        })}
+      </div>
+    )
+  }
 
   <h3 class="content-title">{title}</h3>
   <p class="content-description">{description}</p>
@@ -56,9 +60,11 @@ var {
       </svg>
     </a>
     <div class="footer-meta">
-      {readingTime && variant === 'blog' && (
-        <span class="reading-time">{readingTime}</span>
-      )}
+      {
+        readingTime && variant === "blog" && (
+          <span class="reading-time">{readingTime}</span>
+        )
+      }
       {badge && <span class="content-badge">{badge}</span>}
     </div>
   </div>
@@ -98,12 +104,22 @@ var {
   }
 
   .content-blog {
-    background: linear-gradient(135deg, var(--color-bg-card) 0%, rgba(26, 26, 26, 0.5) 100%);
-    transition: all var(--transition-base), background 0.5s ease;
+    background: linear-gradient(
+      135deg,
+      var(--color-bg-card) 0%,
+      rgba(26, 26, 26, 0.5) 100%
+    );
+    transition:
+      all var(--transition-base),
+      background 0.5s ease;
   }
 
   .content-blog:hover {
-    background: linear-gradient(135deg, var(--color-bg-elevated) 0%, var(--color-bg-card) 100%);
+    background: linear-gradient(
+      135deg,
+      var(--color-bg-elevated) 0%,
+      var(--color-bg-card) 100%
+    );
   }
 
   .card-tags {
@@ -159,7 +175,11 @@ var {
     font-size: 1.375rem;
     line-height: 1.3;
     margin-bottom: var(--space-md);
-    background: linear-gradient(135deg, var(--color-text) 0%, var(--color-text-muted) 100%);
+    background: linear-gradient(
+      135deg,
+      var(--color-text) 0%,
+      var(--color-text-muted) 100%
+    );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -167,7 +187,11 @@ var {
   }
 
   .content-blog:hover .content-title {
-    background: linear-gradient(135deg, var(--color-accent-light) 0%, var(--color-text) 100%);
+    background: linear-gradient(
+      135deg,
+      var(--color-accent-light) 0%,
+      var(--color-text) 100%
+    );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;

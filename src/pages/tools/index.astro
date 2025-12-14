@@ -1,53 +1,59 @@
 ---
-import BaseLayout from '@/layouts/BaseLayout.astro';
-import ContentCard from '@/components/ContentCard.astro';
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import ContentCard from "@/components/ContentCard.astro";
 
-var toolsKeywords = "free developer tools, online devops tools, web developer utilities, cron generator, yaml validator, json converter, free online tools, no signup tools, developer productivity, devops utilities, sre tools, technical tools, software engineering tools, startup idea validator, saas validation checklist, founder tools, social preview generator, og image generator, open graph image maker";
+var toolsKeywords =
+  "free developer tools, online devops tools, web developer utilities, cron generator, yaml validator, json converter, free online tools, no signup tools, developer productivity, devops utilities, sre tools, technical tools, software engineering tools, startup idea validator, saas validation checklist, founder tools, social preview generator, og image generator, open graph image maker";
 
 var tools = [
   {
     title: "Cron Expression Generator",
-    description: "Build and decode cron expressions with plain English. Instant validation, next run times, and copy-ready output.",
+    description:
+      "Build and decode cron expressions with plain English. Instant validation, next run times, and copy-ready output.",
     url: "/tools/cron",
-    badge: "DevOps"
+    badge: "DevOps",
   },
   {
     title: "YAML/JSON Validator",
-    description: "Validate, format, and convert between YAML and JSON instantly. Detailed error messages with line numbers.",
+    description:
+      "Validate, format, and convert between YAML and JSON instantly. Detailed error messages with line numbers.",
     url: "/tools/yaml-json",
-    badge: "DevOps"
+    badge: "DevOps",
   },
   {
     title: "SaaS Idea Validator",
-    description: "Score your startup idea against 20 battle-tested criteria. Get objective feedback before you invest months building.",
+    description:
+      "Score your startup idea against 20 battle-tested criteria. Get objective feedback before you invest months building.",
     url: "/tools/saas-idea-validator",
-    badge: "Founders"
+    badge: "Founders",
   },
   {
     title: "Social Preview Generator",
-    description: "Create beautiful Open Graph images for your pages. Three professional variants with instant PNG export.",
+    description:
+      "Create beautiful Open Graph images for your pages. Three professional variants with instant PNG export.",
     url: "/tools/social-preview",
-    badge: "Marketing"
-  }
+    badge: "Marketing",
+  },
 ];
 
 var structuredData = {
   "@context": "https://schema.org",
   "@type": "CollectionPage",
-  "name": "Free Developer Tools",
-  "description": "Free tools for developers, DevOps engineers, and technical founders. No signup required.",
-  "url": "https://meysam.io/tools",
-  "mainEntity": {
+  name: "Free Developer Tools",
+  description:
+    "Free tools for developers, DevOps engineers, and technical founders. No signup required.",
+  url: "https://meysam.io/tools",
+  mainEntity: {
     "@type": "ItemList",
-    "itemListElement": tools.map(function itemListElement(tool, index) {
+    itemListElement: tools.map(function itemListElement(tool, index) {
       return {
         "@type": "ListItem",
-        "position": index + 1,
-        "name": tool.title,
-        "url": "https://meysam.io" + tool.url
+        position: index + 1,
+        name: tool.title,
+        url: "https://meysam.io" + tool.url,
       };
-    })
-  }
+    }),
+  },
 };
 ---
 
@@ -62,7 +68,8 @@ var structuredData = {
     <div class="container">
       <h1>Free Developer Tools</h1>
       <p class="hero-subtitle">
-        Production-tested utilities from 8+ years of DevOps experience. No signup, no ads, just tools that work.
+        Production-tested utilities from 8+ years of DevOps experience. No
+        signup, no ads, just tools that work.
       </p>
     </div>
   </section>
@@ -70,17 +77,19 @@ var structuredData = {
   <section class="tools-grid">
     <div class="container">
       <div class="grid grid-3">
-        {tools.map(function(tool) {
-          return (
-            <ContentCard
-              title={tool.title}
-              description={tool.description}
-              url={tool.url}
-              badge={tool.badge}
-              linkText={"Use " + tool.title}
-            />
-          );
-        })}
+        {
+          tools.map(function (tool) {
+            return (
+              <ContentCard
+                title={tool.title}
+                description={tool.description}
+                url={tool.url}
+                badge={tool.badge}
+                linkText={"Use " + tool.title}
+              />
+            );
+          })
+        }
 
         <div class="card coming-soon">
           <span class="badge">Coming Soon</span>
@@ -101,7 +110,10 @@ var structuredData = {
     <div class="container-narrow">
       <div class="newsletter-card">
         <h2>Get Notified When New Tools Launch</h2>
-        <p>Join 1,500+ engineers getting weekly DevOps insights and early access to new tools.</p>
+        <p>
+          Join 1,500+ engineers getting weekly DevOps insights and early access
+          to new tools.
+        </p>
         <form
           class="newsletter-form listmonk-form"
           data-pirsch-event="subscribe"
@@ -112,10 +124,39 @@ var structuredData = {
           method="post"
         >
           <input type="hidden" name="nonce" />
-          <input id="00a2c" type="hidden" name="l" value="00a2c2b8-467a-4d74-9c76-9c6472c91d06" />
-          <input type="text" name="name" value="" class="honeypot-field" tabindex="-1" autocomplete="off" aria-hidden="true" />
-          <input type="text" name="company" value="" class="honeypot-field" tabindex="-1" autocomplete="off" aria-hidden="true" />
-          <input type="text" name="website" value="" class="honeypot-field" tabindex="-1" autocomplete="off" aria-hidden="true" />
+          <input
+            id="00a2c"
+            type="hidden"
+            name="l"
+            value="00a2c2b8-467a-4d74-9c76-9c6472c91d06"
+          />
+          <input
+            type="text"
+            name="name"
+            value=""
+            class="honeypot-field"
+            tabindex="-1"
+            autocomplete="off"
+            aria-hidden="true"
+          />
+          <input
+            type="text"
+            name="company"
+            value=""
+            class="honeypot-field"
+            tabindex="-1"
+            autocomplete="off"
+            aria-hidden="true"
+          />
+          <input
+            type="text"
+            name="website"
+            value=""
+            class="honeypot-field"
+            tabindex="-1"
+            autocomplete="off"
+            aria-hidden="true"
+          />
           <div class="form-row">
             <input
               type="email"
@@ -128,10 +169,15 @@ var structuredData = {
             <altcha-widget
               class="altcha-widget"
               challengeurl="https://newsletter.meysam.io/api/public/captcha/altcha"
-              auto="onfocus"
-            ></altcha-widget>
-            <script type="module" src="https://newsletter.meysam.io/public/static/altcha.umd.js" async defer></script>
-            <button type="submit" class="btn btn-primary">Get Early Access</button>
+              auto="onfocus"></altcha-widget>
+            <script
+              type="module"
+              src="https://newsletter.meysam.io/public/static/altcha.umd.js"
+              async
+              defer></script>
+            <button type="submit" class="btn btn-primary"
+              >Get Early Access</button
+            >
           </div>
           <p class="form-note">No spam. Unsubscribe anytime.</p>
         </form>

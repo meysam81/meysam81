@@ -1,12 +1,12 @@
 ---
-import BaseLayout from '@/layouts/BaseLayout.astro';
-import ContentCard from '@/components/ContentCard.astro';
-import SearchBox from '@/components/SearchBox.astro';
-import { getCollection } from 'astro:content';
-import { slugify } from '@/utils/slug';
-import { filterPublishedPosts } from '@/utils/blog';
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import ContentCard from "@/components/ContentCard.astro";
+import SearchBox from "@/components/SearchBox.astro";
+import { getCollection } from "astro:content";
+import { slugify } from "@/utils/slug";
+import { filterPublishedPosts } from "@/utils/blog";
 
-var allPosts = await getCollection('blog');
+var allPosts = await getCollection("blog");
 
 var publishedPosts = filterPublishedPosts(allPosts);
 
@@ -18,15 +18,19 @@ var regularPosts = publishedPosts.filter(function filterRegular(post) {
   return !post.data.featured;
 });
 
-var allTags = [...new Set(publishedPosts.flatMap(function flatMapTags(post) {
-  return post.data.tags;
-}))].sort();
+var allTags = [
+  ...new Set(
+    publishedPosts.flatMap(function flatMapTags(post) {
+      return post.data.tags;
+    }),
+  ),
+].sort();
 
 function formatDate(date: Date) {
-  return new Intl.DateTimeFormat('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric'
+  return new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
   }).format(date);
 }
 
@@ -47,7 +51,8 @@ function calculateReadingTime(content: string) {
       <div class="hero-content">
         <h1 class="hero-title">Building in Public</h1>
         <p class="hero-subtitle">
-          Customer discovery insights, production DevOps lessons, and honest updates from the journey of finding problems worth solving.
+          Customer discovery insights, production DevOps lessons, and honest
+          updates from the journey of finding problems worth solving.
         </p>
       </div>
     </div>
@@ -57,75 +62,88 @@ function calculateReadingTime(content: string) {
     <div class="container">
       <SearchBox />
 
-      {allTags.length > 0 && (
-        <div class="tags-filter mb-xl">
-          <h3 class="filter-label">Filter by Tag:</h3>
-          <div class="tags-list">
-            <a href="/blog" class="tag-button active">All Posts</a>
-            {allTags.map(function mapTags(tag) {
-              return (
-                <a href={`/blog/tags/${tag}`} class="tag-button">
-                  {tag}
-                </a>
-              );
-            })}
+      {
+        allTags.length > 0 && (
+          <div class="tags-filter mb-xl">
+            <h3 class="filter-label">Filter by Tag:</h3>
+            <div class="tags-list">
+              <a href="/blog" class="tag-button active">
+                All Posts
+              </a>
+              {allTags.map(function mapTags(tag) {
+                return (
+                  <a href={`/blog/tags/${tag}`} class="tag-button">
+                    {tag}
+                  </a>
+                );
+              })}
+            </div>
           </div>
-        </div>
-      )}
+        )
+      }
 
-      {featuredPosts.length > 0 && (
-        <div class="featured-section mb-xl">
-          <h2 class="section-label">Featured Posts</h2>
-          <div class="grid grid-2">
-            {featuredPosts.map(function mapFeatured(post) {
-              var postSlug = post.slug || slugify(post.data.title);
-              return (
-                <ContentCard
-                  title={post.data.title}
-                  description={post.data.description}
-                  url={`/blog/${postSlug}`}
-                  badge={formatDate(post.data.pubDate)}
-                  featured={true}
-                  linkText="Read Article"
-                  variant="blog"
-                  tags={post.data.tags}
-                  readingTime={calculateReadingTime(post.body)}
-                />
-              );
-            })}
+      {
+        featuredPosts.length > 0 && (
+          <div class="featured-section mb-xl">
+            <h2 class="section-label">Featured Posts</h2>
+            <div class="grid grid-2">
+              {featuredPosts.map(function mapFeatured(post) {
+                var postSlug = post.slug || slugify(post.data.title);
+                return (
+                  <ContentCard
+                    title={post.data.title}
+                    description={post.data.description}
+                    url={`/blog/${postSlug}`}
+                    badge={formatDate(post.data.pubDate)}
+                    featured={true}
+                    linkText="Read Article"
+                    variant="blog"
+                    tags={post.data.tags}
+                    readingTime={calculateReadingTime(post.body)}
+                  />
+                );
+              })}
+            </div>
           </div>
-        </div>
-      )}
+        )
+      }
 
       <div class="posts-section">
         <h2 class="section-label">All Posts</h2>
         <div class="grid grid-3" id="posts-grid">
-          {regularPosts.map(function mapRegular(post) {
-            var postSlug = post.slug || slugify(post.data.title);
-            return (
-              <div class="post-item">
-                <ContentCard
-                  title={post.data.title}
-                  description={post.data.description}
-                  url={`/blog/${postSlug}`}
-                  badge={formatDate(post.data.pubDate)}
-                  linkText="Read Article"
-                  variant="blog"
-                  tags={post.data.tags}
-                  readingTime={calculateReadingTime(post.body)}
-                />
-              </div>
-            );
-          })}
+          {
+            regularPosts.map(function mapRegular(post) {
+              var postSlug = post.slug || slugify(post.data.title);
+              return (
+                <div class="post-item">
+                  <ContentCard
+                    title={post.data.title}
+                    description={post.data.description}
+                    url={`/blog/${postSlug}`}
+                    badge={formatDate(post.data.pubDate)}
+                    linkText="Read Article"
+                    variant="blog"
+                    tags={post.data.tags}
+                    readingTime={calculateReadingTime(post.body)}
+                  />
+                </div>
+              );
+            })
+          }
         </div>
       </div>
 
-      {publishedPosts.length === 0 && (
-        <div class="empty-state">
-          <h3>No posts yet</h3>
-          <p>Check back soon for customer discovery insights and technical content.</p>
-        </div>
-      )}
+      {
+        publishedPosts.length === 0 && (
+          <div class="empty-state">
+            <h3>No posts yet</h3>
+            <p>
+              Check back soon for customer discovery insights and technical
+              content.
+            </p>
+          </div>
+        )
+      }
     </div>
   </section>
 </BaseLayout>
@@ -142,7 +160,11 @@ function calculateReadingTime(content: string) {
   }
 
   .hero-title {
-    background: linear-gradient(135deg, var(--color-text) 0%, var(--color-accent-light) 100%);
+    background: linear-gradient(
+      135deg,
+      var(--color-text) 0%,
+      var(--color-accent-light) 100%
+    );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
