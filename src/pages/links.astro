@@ -185,93 +185,6 @@ const links = {
 
   <section class="links-content">
     <div class="container-narrow">
-      <!-- Support My Work -->
-      <div class="links-section">
-        <h2 class="section-title">💖 Support My Work</h2>
-        <div class="links-grid">
-          {
-            links.support.map((link) => (
-              <a
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="link-card"
-              >
-                <div class="link-info">
-                  <h3>{link.title}</h3>
-                  <p>{link.description}</p>
-                </div>
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <line x1="7" y1="17" x2="17" y2="7" />
-                  <polyline points="7 7 17 7 17 17" />
-                </svg>
-              </a>
-            ))
-          }
-        </div>
-      </div>
-
-      <!-- Payment -->
-      <div class="links-section">
-        <h2 class="section-title">💳 Direct Payment</h2>
-        <div class="links-grid">
-          {
-            links.payment.map((link) => (
-              <a
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="link-card"
-              >
-                <div class="link-info">
-                  <h3>{link.title}</h3>
-                  <p>{link.description}</p>
-                </div>
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <line x1="7" y1="17" x2="17" y2="7" />
-                  <polyline points="7 7 17 7 17 17" />
-                </svg>
-              </a>
-            ))
-          }
-        </div>
-      </div>
-
-      <!-- Crypto -->
-      <div class="links-section">
-        <h2 class="section-title">₿ Cryptocurrency</h2>
-        <div class="links-grid">
-          {
-            links.crypto.map((link) => (
-              <div class="link-card crypto-card">
-                <div class="link-info">
-                  <h3>{link.title}</h3>
-                  <p class="crypto-address">{link.description}</p>
-                </div>
-                <CopyButton
-                  text={link.description}
-                  label={`Copy ${link.title} address`}
-                />
-              </div>
-            ))
-          }
-        </div>
-      </div>
-
       <!-- Primary Contact & Social -->
       <div class="links-section">
         <h2 class="section-title">📫 Primary Links</h2>
@@ -341,7 +254,6 @@ const links = {
           }
         </div>
       </div>
-
       <!-- Referrals -->
       <div class="links-section">
         <h2 class="section-title">🎁 Referral Links (You Get Benefits Too!)</h2>
@@ -370,6 +282,79 @@ const links = {
                   <polyline points="7 7 17 7 17 17" />
                 </svg>
               </a>
+            ))
+          }
+        </div>
+      </div>
+
+      <!-- Support My Work -->
+      <div class="links-section">
+        <h2 class="section-title">💖 Support My Work</h2>
+        <div class="links-grid">
+          {
+            links.support.map((link) => (
+              <a
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="link-card"
+              >
+                <div class="link-info">
+                  <h3>{link.title}</h3>
+                  <p>{link.description}</p>
+                </div>
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <line x1="7" y1="17" x2="17" y2="7" />
+                  <polyline points="7 7 17 7 17 17" />
+                </svg>
+              </a>
+            ))
+          }
+          {
+            links.payment.map((link) => (
+              <a
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="link-card"
+              >
+                <div class="link-info">
+                  <h3>{link.title}</h3>
+                  <p>{link.description}</p>
+                </div>
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <line x1="7" y1="17" x2="17" y2="7" />
+                  <polyline points="7 7 17 7 17 17" />
+                </svg>
+              </a>
+            ))
+          }
+          {
+            links.crypto.map((link) => (
+              <div class="link-card crypto-card">
+                <div class="link-info">
+                  <h3>{link.title}</h3>
+                  <p class="crypto-address">{link.description}</p>
+                </div>
+                <CopyButton
+                  text={link.description}
+                  label={`Copy ${link.title} address`}
+                />
+              </div>
             ))
           }
         </div>
