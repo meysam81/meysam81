@@ -164,10 +164,21 @@ var structuredData = {
 
     <!-- Previews Section -->
     <div class="tool-card previews-section">
-      <h2>Preview & Download</h2>
-      <p class="section-note">
-        Click any variant to download as PNG (1200x630)
-      </p>
+      <div class="section-header">
+        <div>
+          <h2>Preview & Download</h2>
+          <p class="section-note">
+            Click any variant to download as PNG (1200x630)
+          </p>
+        </div>
+        <button type="button" class="share-link-btn" id="share-link-btn" title="Copy shareable link">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+          </svg>
+          <span class="btn-text">Share Link</span>
+        </button>
+      </div>
 
       <div class="variants-grid">
         <!-- Minimal Variant -->
@@ -623,6 +634,7 @@ var structuredData = {
   var downloadButtons = document.querySelectorAll(".download-btn");
   var copyButtons = document.querySelectorAll(".copy-btn");
   var themeButtons = document.querySelectorAll(".theme-btn");
+  var shareLinkBtn = document.getElementById("share-link-btn");
 
   // Current state
   var currentData = {
@@ -1190,6 +1202,7 @@ var structuredData = {
 
     if (themeName && THEMES[themeName]) {
       currentTheme = THEMES[themeName];
+      currentThemeName = themeName;
 
       // Update active button
       themeButtons.forEach(function updateThemeBtn(btn) {
@@ -1203,8 +1216,150 @@ var structuredData = {
     }
   }
 
+  // Current theme name for URL sharing
+  var currentThemeName = "blue";
+
+  // Generate shareable URL from current state
+  function generateShareableURL() {
+    var params = new URLSearchParams();
+
+    if (currentData.title !== "Your Title Here") {
+      params.set("title", currentData.title);
+    }
+    if (currentData.subtitle) {
+      params.set("subtitle", currentData.subtitle);
+    }
+    if (currentData.category) {
+      params.set("category", currentData.category);
+    }
+    if (currentData.url !== "meysam.io") {
+      params.set("url", currentData.url);
+    }
+    if (currentData.features.length > 0) {
+      params.set("features", currentData.features.join(","));
+    }
+    if (currentData.icon !== "none") {
+      params.set("icon", currentData.icon);
+    }
+    if (currentThemeName !== "blue") {
+      params.set("theme", currentThemeName);
+    }
+    if (currentData.demoInput) {
+      params.set("demoInput", currentData.demoInput);
+    }
+    if (currentData.demoOutput) {
+      params.set("demoOutput", currentData.demoOutput);
+    }
+
+    var baseURL = window.location.origin + window.location.pathname;
+    var paramString = params.toString();
+    return paramString ? baseURL + "?" + paramString : baseURL;
+  }
+
+  // Parse URL params and apply to form
+  function applyURLParams() {
+    var params = new URLSearchParams(window.location.search);
+
+    if (params.has("title")) {
+      var title = params.get("title") || "";
+      titleInput.value = title;
+      currentData.title = title || "Your Title Here";
+    }
+    if (params.has("subtitle")) {
+      subtitleInput.value = params.get("subtitle") || "";
+      currentData.subtitle = subtitleInput.value;
+    }
+    if (params.has("category")) {
+      categoryInput.value = params.get("category") || "";
+      currentData.category = categoryInput.value;
+    }
+    if (params.has("url")) {
+      urlInput.value = params.get("url") || "";
+      currentData.url = urlInput.value || "meysam.io";
+    }
+    if (params.has("features")) {
+      featuresInput.value = params.get("features") || "";
+      currentData.features = featuresInput.value
+        .split(",")
+        .map(function trim(f) {
+          return f.trim();
+        })
+        .filter(Boolean);
+    }
+    if (params.has("icon")) {
+      var icon = params.get("icon") || "none";
+      iconSelect.value = icon;
+      currentData.icon = icon;
+    }
+    if (params.has("theme")) {
+      var themeName = params.get("theme") as keyof typeof THEMES;
+      if (themeName && THEMES[themeName]) {
+        currentTheme = THEMES[themeName];
+        currentThemeName = themeName;
+        // Update active theme button
+        themeButtons.forEach(function updateBtn(btn) {
+          var btnEl = btn as HTMLElement;
+          if (btnEl.dataset.theme === themeName) {
+            btn.classList.add("active");
+          } else {
+            btn.classList.remove("active");
+          }
+        });
+      }
+    }
+    if (params.has("demoInput")) {
+      demoInputEl.value = params.get("demoInput") || "";
+      currentData.demoInput = demoInputEl.value;
+    }
+    if (params.has("demoOutput")) {
+      demoOutputEl.value = params.get("demoOutput") || "";
+      currentData.demoOutput = demoOutputEl.value;
+    }
+
+    // Update character counts
+    if (titleCount) {
+      titleCount.textContent = String(titleInput.value.length);
+    }
+    if (subtitleCount) {
+      subtitleCount.textContent = String(subtitleInput.value.length);
+    }
+  }
+
+  // Handle share link button click
+  async function handleShareLinkClick() {
+    var url = generateShareableURL();
+
+    try {
+      await navigator.clipboard.writeText(url);
+
+      // Show success state
+      if (shareLinkBtn) {
+        shareLinkBtn.classList.add("success");
+        var btnText = shareLinkBtn.querySelector(".btn-text");
+        if (btnText) {
+          btnText.textContent = "Copied!";
+        }
+
+        // Reset after 2 seconds
+        setTimeout(function resetBtn() {
+          shareLinkBtn.classList.remove("success");
+          if (btnText) {
+            btnText.textContent = "Share Link";
+          }
+        }, 2000);
+      }
+    } catch (error) {
+      log.error("Failed to copy URL:", error);
+      // Fallback: show the URL
+      prompt("Copy this shareable link:", url);
+    }
+  }
+
   // Initialize
   function init() {
+    // Apply URL parameters first (before any updates)
+    applyURLParams();
+
     // Set up input listeners
     [
       titleInput,
@@ -1246,6 +1401,11 @@ var structuredData = {
     themeButtons.forEach(function addThemeBtnListener(btn) {
       btn.addEventListener("click", handleThemeClick);
     });
+
+    // Set up share link button
+    if (shareLinkBtn) {
+      shareLinkBtn.addEventListener("click", handleShareLinkClick);
+    }
 
     // Set up responsive scaling
     updatePreviewScales();
@@ -1383,6 +1543,15 @@ var structuredData = {
     border-radius: 4px;
   }
 
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
+    flex-wrap: wrap;
+  }
+
   .previews-section h2 {
     font-size: 1.25rem;
     margin-bottom: var(--space-xs);
@@ -1391,7 +1560,35 @@ var structuredData = {
   .section-note {
     font-size: 0.875rem;
     color: var(--color-text-dim);
-    margin-bottom: var(--space-lg);
+    margin: 0;
+  }
+
+  .share-link-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: 0.625rem 1rem;
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    font-family: inherit;
+  }
+
+  .share-link-btn:hover {
+    border-color: var(--color-text-dim);
+    color: var(--color-text);
+    background: var(--color-bg-elevated);
+  }
+
+  .share-link-btn.success {
+    border-color: var(--color-success);
+    color: var(--color-success);
+    background: rgba(16, 185, 129, 0.1);
   }
 
   .variants-grid {
