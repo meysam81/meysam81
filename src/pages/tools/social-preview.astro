@@ -232,6 +232,115 @@ var structuredData = {
       </div>
     </div>
 
+    <!-- Platform Mockups Section -->
+    <div class="tool-card platform-section">
+      <h2>See How It Looks</h2>
+      <p class="section-note">
+        Preview your image on popular platforms
+      </p>
+
+      <div class="platform-tabs">
+        <button type="button" class="platform-tab active" data-platform="twitter">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+          </svg>
+          X / Twitter
+        </button>
+        <button type="button" class="platform-tab" data-platform="linkedin">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+          </svg>
+          LinkedIn
+        </button>
+        <button type="button" class="platform-tab" data-platform="slack">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zM6.313 15.165a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zM8.834 6.313a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zM18.956 8.834a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zM17.688 8.834a2.528 2.528 0 0 1-2.523 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.165 0a2.528 2.528 0 0 1 2.523 2.522v6.312zM15.165 18.956a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.165 24a2.527 2.527 0 0 1-2.52-2.522v-2.522h2.52zM15.165 17.688a2.527 2.527 0 0 1-2.52-2.523 2.526 2.526 0 0 1 2.52-2.52h6.313A2.527 2.527 0 0 1 24 15.165a2.528 2.528 0 0 1-2.522 2.523h-6.313z"/>
+          </svg>
+          Slack
+        </button>
+      </div>
+
+      <div class="platform-mockups">
+        <!-- Twitter/X Mockup -->
+        <div class="platform-mockup twitter-mockup active" data-platform="twitter">
+          <div class="tweet-container">
+            <div class="tweet-header">
+              <div class="tweet-avatar"></div>
+              <div class="tweet-user">
+                <span class="tweet-name">Your Name</span>
+                <span class="tweet-handle">@yourhandle</span>
+              </div>
+            </div>
+            <p class="tweet-text">Check out this awesome tool I just found! 🚀</p>
+            <div class="tweet-card">
+              <div class="tweet-card-image" id="twitter-preview"></div>
+              <div class="tweet-card-content">
+                <span class="tweet-card-url" id="twitter-url">meysam.io</span>
+                <span class="tweet-card-title" id="twitter-title">Your Title Here</span>
+                <span class="tweet-card-desc" id="twitter-desc">Add a compelling description</span>
+              </div>
+            </div>
+            <div class="tweet-actions">
+              <span>💬 12</span>
+              <span>🔄 48</span>
+              <span>❤️ 256</span>
+              <span>📊 1.2K</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- LinkedIn Mockup -->
+        <div class="platform-mockup linkedin-mockup" data-platform="linkedin">
+          <div class="linkedin-post">
+            <div class="linkedin-header">
+              <div class="linkedin-avatar"></div>
+              <div class="linkedin-user">
+                <span class="linkedin-name">Your Name</span>
+                <span class="linkedin-meta">Developer • 2h</span>
+              </div>
+            </div>
+            <p class="linkedin-text">Excited to share this tool with my network! Perfect for anyone building a personal brand online.</p>
+            <div class="linkedin-card">
+              <div class="linkedin-card-image" id="linkedin-preview"></div>
+              <div class="linkedin-card-content">
+                <span class="linkedin-card-title" id="linkedin-title">Your Title Here</span>
+                <span class="linkedin-card-url" id="linkedin-url">meysam.io</span>
+              </div>
+            </div>
+            <div class="linkedin-actions">
+              <span>👍 Like</span>
+              <span>💬 Comment</span>
+              <span>↗️ Repost</span>
+              <span>📨 Send</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slack Mockup -->
+        <div class="platform-mockup slack-mockup" data-platform="slack">
+          <div class="slack-message">
+            <div class="slack-avatar"></div>
+            <div class="slack-content">
+              <div class="slack-header">
+                <span class="slack-name">You</span>
+                <span class="slack-time">2:34 PM</span>
+              </div>
+              <p class="slack-text">Hey team, found this great tool for creating OG images!</p>
+              <div class="slack-unfurl">
+                <div class="slack-unfurl-bar"></div>
+                <div class="slack-unfurl-content">
+                  <div class="slack-unfurl-image" id="slack-preview"></div>
+                  <span class="slack-unfurl-site" id="slack-site">meysam.io</span>
+                  <span class="slack-unfurl-title" id="slack-title">Your Title Here</span>
+                  <span class="slack-unfurl-desc" id="slack-desc">Add a compelling description</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Tips Section -->
     <div class="tool-card tips-section">
       <h2>Tips for Great Social Previews</h2>
@@ -779,6 +888,7 @@ var structuredData = {
     }
 
     debouncedUpdate();
+    debouncedPlatformUpdate();
   }
 
   // Calculate and apply proper scale for preview canvases
@@ -793,6 +903,79 @@ var structuredData = {
       }
     });
   }
+
+  // Platform mockup elements
+  var platformTabs = document.querySelectorAll(".platform-tab");
+  var platformMockups = document.querySelectorAll(".platform-mockup");
+
+  // Platform preview containers
+  var twitterPreview = document.getElementById("twitter-preview");
+  var linkedinPreview = document.getElementById("linkedin-preview");
+  var slackPreview = document.getElementById("slack-preview");
+
+  // Platform text elements
+  var twitterTitle = document.getElementById("twitter-title");
+  var twitterDesc = document.getElementById("twitter-desc");
+  var twitterUrl = document.getElementById("twitter-url");
+  var linkedinTitle = document.getElementById("linkedin-title");
+  var linkedinUrl = document.getElementById("linkedin-url");
+  var slackTitle = document.getElementById("slack-title");
+  var slackDesc = document.getElementById("slack-desc");
+  var slackSite = document.getElementById("slack-site");
+
+  // Handle platform tab switching
+  function handlePlatformTabClick(event: Event) {
+    var target = event.currentTarget as HTMLElement;
+    var platform = target.dataset.platform;
+
+    // Update active tab
+    platformTabs.forEach(function updateTab(tab) {
+      tab.classList.remove("active");
+    });
+    target.classList.add("active");
+
+    // Update active mockup
+    platformMockups.forEach(function updateMockup(mockup) {
+      var mockupEl = mockup as HTMLElement;
+      if (mockupEl.dataset.platform === platform) {
+        mockupEl.classList.add("active");
+      } else {
+        mockupEl.classList.remove("active");
+      }
+    });
+  }
+
+  // Update platform mockups with current preview (use minimal variant)
+  function updatePlatformMockups() {
+    var previewHTML = generateMinimalHTML(currentData);
+
+    // Update platform preview containers with scaled preview
+    [twitterPreview, linkedinPreview, slackPreview].forEach(function updateContainer(container) {
+      if (container) {
+        var containerWidth = container.clientWidth;
+        var scale = containerWidth / 1200;
+        container.innerHTML =
+          '<div class="platform-preview-canvas" style="transform: scale(' +
+          scale +
+          ');">' +
+          previewHTML +
+          "</div>";
+      }
+    });
+
+    // Update text elements
+    if (twitterTitle) twitterTitle.textContent = currentData.title;
+    if (twitterDesc) twitterDesc.textContent = currentData.subtitle || "Add a compelling description";
+    if (twitterUrl) twitterUrl.textContent = currentData.url;
+    if (linkedinTitle) linkedinTitle.textContent = currentData.title;
+    if (linkedinUrl) linkedinUrl.textContent = currentData.url;
+    if (slackTitle) slackTitle.textContent = currentData.title;
+    if (slackDesc) slackDesc.textContent = currentData.subtitle || "Add a compelling description";
+    if (slackSite) slackSite.textContent = currentData.url;
+  }
+
+  // Debounced platform mockup update
+  var debouncedPlatformUpdate = debounce(updatePlatformMockups, 200);
 
   // Initialize
   function init() {
@@ -829,14 +1012,27 @@ var structuredData = {
 
     // Use ResizeObserver for more accurate container size tracking
     if (typeof ResizeObserver !== "undefined") {
-      var resizeObserver = new ResizeObserver(updatePreviewScales);
+      var resizeObserver = new ResizeObserver(function onResize() {
+        updatePreviewScales();
+        updatePlatformMockups();
+      });
       document.querySelectorAll(".variant-preview").forEach(function observe(el) {
+        resizeObserver.observe(el);
+      });
+      // Also observe platform mockup containers
+      document.querySelectorAll(".tweet-card-image, .linkedin-card-image, .slack-unfurl-image").forEach(function observe(el) {
         resizeObserver.observe(el);
       });
     }
 
+    // Set up platform tab switching
+    platformTabs.forEach(function addTabListener(tab) {
+      tab.addEventListener("click", handlePlatformTabClick);
+    });
+
     // Initial render
     updatePreviews();
+    updatePlatformMockups();
   }
 
   document.addEventListener("DOMContentLoaded", init);
@@ -1015,6 +1211,351 @@ var structuredData = {
     transform: scale(var(--preview-scale, 0.5));
     transform-origin: center center;
     flex-shrink: 0;
+  }
+
+  /* Platform Mockups */
+  .platform-section h2 {
+    font-size: 1.25rem;
+    margin-bottom: var(--space-xs);
+  }
+
+  .platform-tabs {
+    display: flex;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-lg);
+    flex-wrap: wrap;
+  }
+
+  .platform-tab {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: 0.625rem 1rem;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    font-family: inherit;
+  }
+
+  .platform-tab:hover {
+    border-color: var(--color-text-dim);
+    color: var(--color-text);
+  }
+
+  .platform-tab.active {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: white;
+  }
+
+  .platform-mockups {
+    position: relative;
+    min-height: 400px;
+  }
+
+  .platform-mockup {
+    display: none;
+  }
+
+  .platform-mockup.active {
+    display: block;
+    animation: fadeIn 0.3s ease;
+  }
+
+  /* Twitter/X Mockup */
+  .tweet-container {
+    background: #000;
+    border: 1px solid #2f3336;
+    border-radius: 16px;
+    padding: var(--space-md);
+    max-width: 550px;
+  }
+
+  .tweet-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
+  }
+
+  .tweet-avatar {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #3b82f6, #60a5fa);
+    border-radius: 50%;
+  }
+
+  .tweet-user {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .tweet-name {
+    color: #e7e9ea;
+    font-weight: 700;
+    font-size: 0.9375rem;
+  }
+
+  .tweet-handle {
+    color: #71767b;
+    font-size: 0.875rem;
+  }
+
+  .tweet-text {
+    color: #e7e9ea;
+    font-size: 0.9375rem;
+    margin-bottom: var(--space-sm);
+    line-height: 1.4;
+  }
+
+  .tweet-card {
+    border: 1px solid #2f3336;
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: var(--space-sm);
+  }
+
+  .tweet-card-image {
+    width: 100%;
+    aspect-ratio: 1200 / 630;
+    background: #0a0a0a;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .tweet-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .tweet-card-content {
+    padding: var(--space-sm);
+    background: #000;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .tweet-card-url {
+    color: #71767b;
+    font-size: 0.8125rem;
+  }
+
+  .tweet-card-title {
+    color: #e7e9ea;
+    font-size: 0.9375rem;
+    font-weight: 400;
+  }
+
+  .tweet-card-desc {
+    color: #71767b;
+    font-size: 0.8125rem;
+  }
+
+  .tweet-actions {
+    display: flex;
+    justify-content: space-between;
+    color: #71767b;
+    font-size: 0.8125rem;
+    max-width: 400px;
+  }
+
+  /* LinkedIn Mockup */
+  .linkedin-post {
+    background: #1b1f23;
+    border: 1px solid #38434f;
+    border-radius: 8px;
+    padding: var(--space-md);
+    max-width: 550px;
+  }
+
+  .linkedin-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
+  }
+
+  .linkedin-avatar {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #0a66c2, #378fe9);
+    border-radius: 50%;
+  }
+
+  .linkedin-user {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .linkedin-name {
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.875rem;
+  }
+
+  .linkedin-meta {
+    color: #b0b7bf;
+    font-size: 0.75rem;
+  }
+
+  .linkedin-text {
+    color: #fff;
+    font-size: 0.875rem;
+    margin-bottom: var(--space-sm);
+    line-height: 1.5;
+  }
+
+  .linkedin-card {
+    border: 1px solid #38434f;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: var(--space-sm);
+  }
+
+  .linkedin-card-image {
+    width: 100%;
+    aspect-ratio: 1200 / 630;
+    background: #0a0a0a;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .linkedin-card-content {
+    padding: var(--space-sm);
+    background: #1b1f23;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .linkedin-card-title {
+    color: #fff;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .linkedin-card-url {
+    color: #b0b7bf;
+    font-size: 0.75rem;
+  }
+
+  .linkedin-actions {
+    display: flex;
+    justify-content: space-around;
+    color: #b0b7bf;
+    font-size: 0.8125rem;
+    padding-top: var(--space-sm);
+    border-top: 1px solid #38434f;
+  }
+
+  /* Slack Mockup */
+  .slack-message {
+    background: #1a1d21;
+    border-radius: 8px;
+    padding: var(--space-md);
+    display: flex;
+    gap: var(--space-sm);
+    max-width: 600px;
+  }
+
+  .slack-avatar {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, #4a154b, #e01e5a);
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  .slack-content {
+    flex: 1;
+  }
+
+  .slack-header {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-sm);
+    margin-bottom: 4px;
+  }
+
+  .slack-name {
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.9375rem;
+  }
+
+  .slack-time {
+    color: #ababad;
+    font-size: 0.75rem;
+  }
+
+  .slack-text {
+    color: #d1d2d3;
+    font-size: 0.9375rem;
+    margin-bottom: var(--space-sm);
+  }
+
+  .slack-unfurl {
+    display: flex;
+    gap: var(--space-sm);
+    margin-top: var(--space-sm);
+  }
+
+  .slack-unfurl-bar {
+    width: 4px;
+    background: #1264a3;
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+
+  .slack-unfurl-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .slack-unfurl-image {
+    width: 360px;
+    max-width: 100%;
+    aspect-ratio: 1200 / 630;
+    background: #0a0a0a;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .slack-unfurl-site {
+    color: #ababad;
+    font-size: 0.75rem;
+  }
+
+  .slack-unfurl-title {
+    color: #1d9bd1;
+    font-size: 0.9375rem;
+    font-weight: 700;
+  }
+
+  .slack-unfurl-desc {
+    color: #d1d2d3;
+    font-size: 0.875rem;
+  }
+
+  /* Platform mockup preview canvas (scaled down version) */
+  .tweet-card-image .platform-preview-canvas,
+  .linkedin-card-image .platform-preview-canvas,
+  .slack-unfurl-image .platform-preview-canvas {
+    width: 1200px;
+    height: 630px;
+    transform-origin: top left;
+    position: absolute;
+    top: 0;
+    left: 0;
   }
 
   .tips-section h2 {
