@@ -53,7 +53,20 @@ var structuredData = {
   <div class="tool-content">
     <!-- Input Form -->
     <div class="tool-card input-section">
-      <h2>Content</h2>
+      <div class="section-header input-header">
+        <h2>Content</h2>
+        <div class="template-selector">
+          <span class="template-label">Quick start:</span>
+          <select id="template-select" class="template-dropdown">
+            <option value="">Choose a template...</option>
+            <option value="devtool">Developer Tool</option>
+            <option value="blog">Blog Post</option>
+            <option value="saas">SaaS Product</option>
+            <option value="opensource">Open Source Project</option>
+            <option value="course">Online Course</option>
+          </select>
+        </div>
+      </div>
 
       <div class="form-grid">
         <div class="form-group full-width">
@@ -609,6 +622,60 @@ var structuredData = {
   // Current theme
   var currentTheme = THEMES.blue;
 
+  // Template presets
+  var TEMPLATES = {
+    devtool: {
+      title: "Cron Expression Generator",
+      subtitle: "Build and decode cron schedules with plain English",
+      category: "Developer Tool",
+      features: ["Free", "No Signup", "Open Source"],
+      icon: "tool",
+      theme: "blue",
+      demoInput: "0 9 * * 1-5",
+      demoOutput: "Every weekday at 9:00 AM",
+    },
+    blog: {
+      title: "10 Tips for Better Code Reviews",
+      subtitle: "Practical advice to improve your team's code review process",
+      category: "Blog Post",
+      features: ["5 min read", "Engineering", "Best Practices"],
+      icon: "lightbulb",
+      theme: "purple",
+      demoInput: "",
+      demoOutput: "",
+    },
+    saas: {
+      title: "Ship faster with AutoDeploy",
+      subtitle: "Automated deployment pipelines that just work",
+      category: "SaaS",
+      features: ["Free Trial", "No Credit Card", "SOC2 Compliant"],
+      icon: "rocket",
+      theme: "green",
+      demoInput: "",
+      demoOutput: "",
+    },
+    opensource: {
+      title: "FastCache",
+      subtitle: "Lightning-fast in-memory caching for Node.js",
+      category: "Open Source",
+      features: ["MIT License", "TypeScript", "Zero Dependencies"],
+      icon: "code",
+      theme: "orange",
+      demoInput: "",
+      demoOutput: "",
+    },
+    course: {
+      title: "Master System Design",
+      subtitle: "Learn to design scalable systems like a senior engineer",
+      category: "Online Course",
+      features: ["20+ Hours", "Projects Included", "Certificate"],
+      icon: "chart",
+      theme: "pink",
+      demoInput: "",
+      demoOutput: "",
+    },
+  };
+
   // DOM Elements
   var titleInput = document.getElementById("title-input") as HTMLInputElement;
   var subtitleInput = document.getElementById(
@@ -635,6 +702,7 @@ var structuredData = {
   var copyButtons = document.querySelectorAll(".copy-btn");
   var themeButtons = document.querySelectorAll(".theme-btn");
   var shareLinkBtn = document.getElementById("share-link-btn");
+  var templateSelect = document.getElementById("template-select") as HTMLSelectElement;
 
   // Current state
   var currentData = {
@@ -1355,6 +1423,69 @@ var structuredData = {
     }
   }
 
+  // Handle template selection
+  function handleTemplateChange() {
+    var templateName = templateSelect.value as keyof typeof TEMPLATES;
+
+    if (!templateName || !TEMPLATES[templateName]) {
+      return;
+    }
+
+    var template = TEMPLATES[templateName];
+
+    // Apply template values to form
+    titleInput.value = template.title;
+    currentData.title = template.title;
+
+    subtitleInput.value = template.subtitle;
+    currentData.subtitle = template.subtitle;
+
+    categoryInput.value = template.category;
+    currentData.category = template.category;
+
+    featuresInput.value = template.features.join(", ");
+    currentData.features = template.features;
+
+    iconSelect.value = template.icon;
+    currentData.icon = template.icon;
+
+    demoInputEl.value = template.demoInput;
+    currentData.demoInput = template.demoInput;
+
+    demoOutputEl.value = template.demoOutput;
+    currentData.demoOutput = template.demoOutput;
+
+    // Apply theme
+    var themeName = template.theme as keyof typeof THEMES;
+    if (THEMES[themeName]) {
+      currentTheme = THEMES[themeName];
+      currentThemeName = themeName;
+      themeButtons.forEach(function updateBtn(btn) {
+        var btnEl = btn as HTMLElement;
+        if (btnEl.dataset.theme === themeName) {
+          btn.classList.add("active");
+        } else {
+          btn.classList.remove("active");
+        }
+      });
+    }
+
+    // Update character counts
+    if (titleCount) {
+      titleCount.textContent = String(titleInput.value.length);
+    }
+    if (subtitleCount) {
+      subtitleCount.textContent = String(subtitleInput.value.length);
+    }
+
+    // Reset dropdown to placeholder
+    templateSelect.value = "";
+
+    // Trigger updates
+    updatePreviews();
+    updatePlatformMockups();
+  }
+
   // Initialize
   function init() {
     // Apply URL parameters first (before any updates)
@@ -1405,6 +1536,11 @@ var structuredData = {
     // Set up share link button
     if (shareLinkBtn) {
       shareLinkBtn.addEventListener("click", handleShareLinkClick);
+    }
+
+    // Set up template selector
+    if (templateSelect) {
+      templateSelect.addEventListener("change", handleTemplateChange);
     }
 
     // Set up responsive scaling
@@ -1589,6 +1725,47 @@ var structuredData = {
     border-color: var(--color-success);
     color: var(--color-success);
     background: rgba(16, 185, 129, 0.1);
+  }
+
+  .input-header {
+    margin-bottom: var(--space-md);
+  }
+
+  .input-header h2 {
+    margin: 0;
+  }
+
+  .template-selector {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+
+  .template-label {
+    font-size: 0.875rem;
+    color: var(--color-text-dim);
+  }
+
+  .template-dropdown {
+    padding: 0.5rem 0.875rem;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+    color: var(--color-text);
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    font-family: inherit;
+  }
+
+  .template-dropdown:hover {
+    border-color: var(--color-text-dim);
+  }
+
+  .template-dropdown:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
   }
 
   .variants-grid {
