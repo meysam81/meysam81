@@ -122,6 +122,27 @@ var structuredData = {
         </div>
 
         <div class="form-group">
+          <label for="theme-select">Color Theme</label>
+          <div class="theme-options">
+            <button type="button" class="theme-btn active" data-theme="blue" title="Blue">
+              <span class="theme-swatch" style="background: linear-gradient(135deg, #3b82f6, #60a5fa);"></span>
+            </button>
+            <button type="button" class="theme-btn" data-theme="green" title="Green">
+              <span class="theme-swatch" style="background: linear-gradient(135deg, #10b981, #34d399);"></span>
+            </button>
+            <button type="button" class="theme-btn" data-theme="purple" title="Purple">
+              <span class="theme-swatch" style="background: linear-gradient(135deg, #8b5cf6, #a78bfa);"></span>
+            </button>
+            <button type="button" class="theme-btn" data-theme="orange" title="Orange">
+              <span class="theme-swatch" style="background: linear-gradient(135deg, #f97316, #fb923c);"></span>
+            </button>
+            <button type="button" class="theme-btn" data-theme="pink" title="Pink">
+              <span class="theme-swatch" style="background: linear-gradient(135deg, #ec4899, #f472b6);"></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group">
           <label>Demo (Split variant)</label>
           <div class="demo-inputs">
             <input
@@ -530,6 +551,53 @@ var structuredData = {
     none: "",
   };
 
+  // Color theme configurations
+  var THEMES = {
+    blue: {
+      primary: "#3b82f6",
+      secondary: "#60a5fa",
+      gradient: "linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%)",
+      bgGlow: "rgba(59, 130, 246, 0.15)",
+      bgSubtle: "rgba(59, 130, 246, 0.03)",
+      borderSubtle: "rgba(59, 130, 246, 0.3)",
+    },
+    green: {
+      primary: "#10b981",
+      secondary: "#34d399",
+      gradient: "linear-gradient(135deg, #10b981 0%, #34d399 100%)",
+      bgGlow: "rgba(16, 185, 129, 0.15)",
+      bgSubtle: "rgba(16, 185, 129, 0.03)",
+      borderSubtle: "rgba(16, 185, 129, 0.3)",
+    },
+    purple: {
+      primary: "#8b5cf6",
+      secondary: "#a78bfa",
+      gradient: "linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%)",
+      bgGlow: "rgba(139, 92, 246, 0.15)",
+      bgSubtle: "rgba(139, 92, 246, 0.03)",
+      borderSubtle: "rgba(139, 92, 246, 0.3)",
+    },
+    orange: {
+      primary: "#f97316",
+      secondary: "#fb923c",
+      gradient: "linear-gradient(135deg, #f97316 0%, #fb923c 100%)",
+      bgGlow: "rgba(249, 115, 22, 0.15)",
+      bgSubtle: "rgba(249, 115, 22, 0.03)",
+      borderSubtle: "rgba(249, 115, 22, 0.3)",
+    },
+    pink: {
+      primary: "#ec4899",
+      secondary: "#f472b6",
+      gradient: "linear-gradient(135deg, #ec4899 0%, #f472b6 100%)",
+      bgGlow: "rgba(236, 72, 153, 0.15)",
+      bgSubtle: "rgba(236, 72, 153, 0.03)",
+      borderSubtle: "rgba(236, 72, 153, 0.3)",
+    },
+  };
+
+  // Current theme
+  var currentTheme = THEMES.blue;
+
   // DOM Elements
   var titleInput = document.getElementById("title-input") as HTMLInputElement;
   var subtitleInput = document.getElementById(
@@ -554,6 +622,7 @@ var structuredData = {
 
   var downloadButtons = document.querySelectorAll(".download-btn");
   var copyButtons = document.querySelectorAll(".copy-btn");
+  var themeButtons = document.querySelectorAll(".theme-btn");
 
   // Current state
   var currentData = {
@@ -589,21 +658,21 @@ var structuredData = {
         : "";
 
     var categoryHTML = data.category
-      ? '<div style="display:inline-block;padding:8px 20px;background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.3);border-radius:6px;color:#60a5fa;font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:24px;">' +
+      ? '<div style="display:inline-block;padding:8px 20px;background:' + currentTheme.bgSubtle + ';border:1px solid ' + currentTheme.borderSubtle + ';border-radius:6px;color:' + currentTheme.secondary + ';font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:24px;">' +
         escapeHtml(data.category) +
         "</div>"
       : "";
 
     return (
       "<div style=\"width:1200px;height:630px;background:#0a0a0a;position:relative;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;overflow:hidden;\">" +
-      '<div style="position:absolute;top:0;left:0;right:0;bottom:0;background-image:linear-gradient(rgba(59,130,246,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(59,130,246,0.03) 1px,transparent 1px);background-size:60px 60px;"></div>' +
-      '<div style="position:absolute;left:0;top:0;width:8px;height:100%;background:linear-gradient(180deg,#3b82f6 0%,#60a5fa 100%);"></div>' +
+      '<div style="position:absolute;top:0;left:0;right:0;bottom:0;background-image:linear-gradient(' + currentTheme.bgSubtle + ' 1px,transparent 1px),linear-gradient(90deg,' + currentTheme.bgSubtle + ' 1px,transparent 1px);background-size:60px 60px;"></div>' +
+      '<div style="position:absolute;left:0;top:0;width:8px;height:100%;background:' + currentTheme.gradient + ';"></div>' +
       '<div style="position:absolute;left:100px;top:140px;right:100px;">' +
       categoryHTML +
       '<h1 style="font-size:64px;font-weight:700;color:#f5f5f5;margin:0 0 16px 0;letter-spacing:-0.02em;line-height:1.1;max-width:900px;">' +
       escapeHtml(data.title) +
       "</h1>" +
-      '<div style="width:120px;height:4px;background:linear-gradient(90deg,#3b82f6 0%,#60a5fa 100%);border-radius:2px;margin-bottom:24px;"></div>' +
+      '<div style="width:120px;height:4px;background:' + currentTheme.gradient + ';border-radius:2px;margin-bottom:24px;"></div>' +
       (data.subtitle
         ? '<p style="font-size:26px;color:#a0a0a0;margin:0;max-width:700px;line-height:1.4;">' +
           escapeHtml(data.subtitle) +
@@ -612,7 +681,7 @@ var structuredData = {
       featuresHTML +
       "</div>" +
       '<div style="position:absolute;left:100px;right:100px;bottom:60px;display:flex;justify-content:space-between;align-items:center;">' +
-      '<svg width="40" height="40" viewBox="0 0 200 200"><circle cx="100" cy="100" r="70" fill="none" stroke="url(#mg1)" stroke-width="3"/><text x="100" y="135" font-family="-apple-system,BlinkMacSystemFont,\'Segoe UI\',sans-serif" font-size="110" font-weight="700" fill="url(#mg1)" text-anchor="middle">M</text><defs><linearGradient id="mg1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#3b82f6"/><stop offset="100%" style="stop-color:#60a5fa"/></linearGradient></defs></svg>' +
+      '<svg width="40" height="40" viewBox="0 0 200 200"><circle cx="100" cy="100" r="70" fill="none" stroke="url(#mg1)" stroke-width="3"/><text x="100" y="135" font-family="-apple-system,BlinkMacSystemFont,\'Segoe UI\',sans-serif" font-size="110" font-weight="700" fill="url(#mg1)" text-anchor="middle">M</text><defs><linearGradient id="mg1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:' + currentTheme.primary + '"/><stop offset="100%" style="stop-color:' + currentTheme.secondary + '"/></linearGradient></defs></svg>' +
       '<span style="font-size:20px;color:#6a6a6a;letter-spacing:0.02em;">' +
       escapeHtml(data.url) +
       "</span>" +
@@ -625,7 +694,7 @@ var structuredData = {
   function generateGradientHTML(data: typeof currentData) {
     var iconHTML =
       data.icon !== "none" && ICONS[data.icon]
-        ? '<div style="position:absolute;left:80px;top:120px;"><svg width="120" height="120" viewBox="0 0 120 120" style="color:#3b82f6;">' +
+        ? '<div style="position:absolute;left:80px;top:120px;"><svg width="120" height="120" viewBox="0 0 120 120" style="color:' + currentTheme.primary + ';">' +
           ICONS[data.icon] +
           "</svg></div>"
         : "";
@@ -640,7 +709,7 @@ var structuredData = {
             .map(function featuresHTML(f) {
               return (
                 '<div style="display:flex;align-items:center;gap:10px;padding:12px 20px;background:rgba(26,26,26,0.8);border:1px solid #2a2a2a;border-radius:8px;color:#f5f5f5;font-size:16px;font-weight:500;">' +
-                '<span style="color:#10b981;font-weight:bold;">&#10003;</span>' +
+                '<span style="color:' + currentTheme.primary + ';font-weight:bold;">&#10003;</span>' +
                 escapeHtml(f) +
                 "</div>"
               );
@@ -650,7 +719,7 @@ var structuredData = {
         : "";
 
     var categoryHTML = data.category
-      ? '<div style="display:inline-block;padding:6px 16px;background:linear-gradient(135deg,rgba(59,130,246,0.2) 0%,rgba(59,130,246,0.1) 100%);border:1px solid rgba(59,130,246,0.4);border-radius:20px;color:#60a5fa;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:20px;">' +
+      ? '<div style="display:inline-block;padding:6px 16px;background:' + currentTheme.bgGlow + ';border:1px solid ' + currentTheme.borderSubtle + ';border-radius:20px;color:' + currentTheme.secondary + ';font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:20px;">' +
         escapeHtml(data.category) +
         "</div>"
       : "";
@@ -658,7 +727,7 @@ var structuredData = {
     return (
       "<div style=\"width:1200px;height:630px;background:#0a0a0a;position:relative;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;overflow:hidden;\">" +
       '<div style="position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,#0a0a0a 0%,#151515 50%,#0a0a0a 100%);"></div>' +
-      '<div style="position:absolute;top:-150px;right:-150px;width:500px;height:500px;background:radial-gradient(circle,rgba(59,130,246,0.15) 0%,transparent 70%);border-radius:50%;"></div>' +
+      '<div style="position:absolute;top:-150px;right:-150px;width:500px;height:500px;background:radial-gradient(circle,' + currentTheme.bgGlow + ' 0%,transparent 70%);border-radius:50%;"></div>' +
       '<div style="position:absolute;top:1px;left:1px;right:1px;bottom:1px;border:2px solid #2a2a2a;"></div>' +
       iconHTML +
       '<div style="position:absolute;left:' +
@@ -677,7 +746,7 @@ var structuredData = {
       "</div>" +
       '<div style="position:absolute;left:80px;right:80px;bottom:50px;display:flex;justify-content:space-between;align-items:center;">' +
       '<div style="display:flex;align-items:center;gap:12px;">' +
-      '<svg width="32" height="32" viewBox="0 0 200 200"><circle cx="100" cy="100" r="70" fill="none" stroke="#3b82f6" stroke-width="3"/><text x="100" y="135" font-family="-apple-system,BlinkMacSystemFont,\'Segoe UI\',sans-serif" font-size="110" font-weight="700" fill="#3b82f6" text-anchor="middle">M</text></svg>' +
+      '<svg width="32" height="32" viewBox="0 0 200 200"><circle cx="100" cy="100" r="70" fill="none" stroke="' + currentTheme.primary + '" stroke-width="3"/><text x="100" y="135" font-family="-apple-system,BlinkMacSystemFont,\'Segoe UI\',sans-serif" font-size="110" font-weight="700" fill="' + currentTheme.primary + '" text-anchor="middle">M</text></svg>' +
       '<span style="font-size:18px;font-weight:600;color:#f5f5f5;">Meysam Azad</span>' +
       '<span style="color:#6a6a6a;">|</span>' +
       '<span style="font-size:18px;color:#6a6a6a;">' +
@@ -686,7 +755,7 @@ var structuredData = {
       "</div>" +
       '<div style="display:flex;gap:12px;">' +
       '<span style="padding:8px 16px;border-radius:6px;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);color:#10b981;">Free</span>' +
-      '<span style="padding:8px 16px;border-radius:6px;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.3);color:#60a5fa;">No Signup</span>' +
+      '<span style="padding:8px 16px;border-radius:6px;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;background:' + currentTheme.bgGlow + ';border:1px solid ' + currentTheme.borderSubtle + ';color:' + currentTheme.secondary + ';">No Signup</span>' +
       "</div>" +
       "</div>" +
       "</div>"
@@ -703,7 +772,7 @@ var structuredData = {
             .map(function featuresHTML(f) {
               return (
                 '<div style="display:flex;align-items:center;gap:12px;color:#d0d0d0;font-size:17px;">' +
-                '<span style="display:flex;align-items:center;justify-content:center;width:22px;height:22px;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);border-radius:50%;color:#10b981;font-size:12px;font-weight:bold;">&#10003;</span>' +
+                '<span style="display:flex;align-items:center;justify-content:center;width:22px;height:22px;background:' + currentTheme.bgGlow + ';border:1px solid ' + currentTheme.borderSubtle + ';border-radius:50%;color:' + currentTheme.primary + ';font-size:12px;font-weight:bold;">&#10003;</span>' +
                 "<span>" +
                 escapeHtml(f) +
                 "</span>" +
@@ -715,7 +784,7 @@ var structuredData = {
         : "";
 
     var categoryHTML = data.category
-      ? '<div style="display:inline-block;padding:8px 18px;background:rgba(59,130,246,0.12);border:1px solid rgba(59,130,246,0.25);border-radius:6px;color:#60a5fa;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:28px;">' +
+      ? '<div style="display:inline-block;padding:8px 18px;background:' + currentTheme.bgSubtle + ';border:1px solid ' + currentTheme.borderSubtle + ';border-radius:6px;color:' + currentTheme.secondary + ';font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:28px;">' +
         escapeHtml(data.category) +
         "</div>"
       : "";
@@ -725,7 +794,7 @@ var structuredData = {
         ? '<div style="position:absolute;right:80px;top:100px;width:420px;height:380px;background:#1a1a1a;border:2px solid #2a2a2a;border-radius:16px;padding:32px;display:flex;flex-direction:column;">' +
           '<div style="display:flex;flex-direction:column;gap:24px;height:100%;justify-content:center;">' +
           (data.demoInput
-            ? '<div style="display:flex;flex-direction:column;gap:10px;"><span style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:#6a6a6a;">Input</span><div style="padding:16px 20px;background:#0a0a0a;border:1px solid #2a2a2a;border-radius:10px;font-family:\'SF Mono\',Monaco,Consolas,monospace;font-size:20px;color:#60a5fa;letter-spacing:0.05em;">' +
+            ? '<div style="display:flex;flex-direction:column;gap:10px;"><span style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:#6a6a6a;">Input</span><div style="padding:16px 20px;background:#0a0a0a;border:1px solid #2a2a2a;border-radius:10px;font-family:\'SF Mono\',Monaco,Consolas,monospace;font-size:20px;color:' + currentTheme.secondary + ';letter-spacing:0.05em;">' +
               escapeHtml(data.demoInput) +
               "</div></div>"
             : "") +
@@ -743,7 +812,7 @@ var structuredData = {
 
     return (
       "<div style=\"width:1200px;height:630px;background:#0a0a0a;position:relative;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;overflow:hidden;\">" +
-      '<div style="position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,rgba(59,130,246,0.08) 0%,transparent 50%);"></div>' +
+      '<div style="position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,' + currentTheme.bgSubtle + ' 0%,transparent 50%);"></div>' +
       '<div style="position:absolute;left:80px;top:100px;width:520px;">' +
       categoryHTML +
       '<h1 style="font-size:52px;font-weight:700;color:#f5f5f5;margin:0 0 20px 0;letter-spacing:-0.025em;line-height:1.1;">' +
@@ -759,7 +828,7 @@ var structuredData = {
       demoCardHTML +
       '<div style="position:absolute;left:80px;right:80px;bottom:50px;display:flex;align-items:center;gap:32px;">' +
       '<div style="display:flex;align-items:center;gap:10px;">' +
-      '<svg width="36" height="36" viewBox="0 0 200 200"><circle cx="100" cy="100" r="70" fill="none" stroke="url(#sg1)" stroke-width="3"/><text x="100" y="135" font-family="-apple-system,BlinkMacSystemFont,\'Segoe UI\',sans-serif" font-size="110" font-weight="700" fill="url(#sg1)" text-anchor="middle">M</text><defs><linearGradient id="sg1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#3b82f6"/><stop offset="100%" style="stop-color:#60a5fa"/></linearGradient></defs></svg>' +
+      '<svg width="36" height="36" viewBox="0 0 200 200"><circle cx="100" cy="100" r="70" fill="none" stroke="url(#sg1)" stroke-width="3"/><text x="100" y="135" font-family="-apple-system,BlinkMacSystemFont,\'Segoe UI\',sans-serif" font-size="110" font-weight="700" fill="url(#sg1)" text-anchor="middle">M</text><defs><linearGradient id="sg1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:' + currentTheme.primary + '"/><stop offset="100%" style="stop-color:' + currentTheme.secondary + '"/></linearGradient></defs></svg>' +
       '<span style="font-size:18px;font-weight:600;color:#f5f5f5;">Meysam</span>' +
       "</div>" +
       '<div style="display:flex;gap:20px;">' +
@@ -1114,6 +1183,26 @@ var structuredData = {
   // Debounced platform mockup update
   var debouncedPlatformUpdate = debounce(updatePlatformMockups, 200);
 
+  // Handle theme button click
+  function handleThemeClick(event: Event) {
+    var target = event.currentTarget as HTMLElement;
+    var themeName = target.dataset.theme as keyof typeof THEMES;
+
+    if (themeName && THEMES[themeName]) {
+      currentTheme = THEMES[themeName];
+
+      // Update active button
+      themeButtons.forEach(function updateThemeBtn(btn) {
+        btn.classList.remove("active");
+      });
+      target.classList.add("active");
+
+      // Trigger update
+      updatePreviews();
+      updatePlatformMockups();
+    }
+  }
+
   // Initialize
   function init() {
     // Set up input listeners
@@ -1151,6 +1240,11 @@ var structuredData = {
           copyVariant(variant);
         }
       });
+    });
+
+    // Set up theme buttons
+    themeButtons.forEach(function addThemeBtnListener(btn) {
+      btn.addEventListener("click", handleThemeClick);
     });
 
     // Set up responsive scaling
@@ -1253,6 +1347,40 @@ var structuredData = {
 
   .demo-inputs input {
     width: 100%;
+  }
+
+  .theme-options {
+    display: flex;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+  }
+
+  .theme-btn {
+    width: 40px;
+    height: 40px;
+    padding: 4px;
+    background: var(--color-bg);
+    border: 2px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .theme-btn:hover {
+    border-color: var(--color-text-dim);
+    transform: scale(1.05);
+  }
+
+  .theme-btn.active {
+    border-color: var(--color-text);
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+  }
+
+  .theme-swatch {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 4px;
   }
 
   .previews-section h2 {
