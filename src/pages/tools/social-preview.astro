@@ -781,6 +781,19 @@ var structuredData = {
     debouncedUpdate();
   }
 
+  // Calculate and apply proper scale for preview canvases
+  function updatePreviewScales() {
+    var containers = document.querySelectorAll(".variant-preview");
+    containers.forEach(function updateScale(container) {
+      var canvas = container.querySelector(".preview-canvas") as HTMLElement;
+      if (canvas) {
+        var containerWidth = container.clientWidth;
+        var scale = containerWidth / 1200;
+        canvas.style.setProperty("--preview-scale", String(scale));
+      }
+    });
+  }
+
   // Initialize
   function init() {
     // Set up input listeners
@@ -809,6 +822,18 @@ var structuredData = {
         }
       });
     });
+
+    // Set up responsive scaling
+    updatePreviewScales();
+    window.addEventListener("resize", updatePreviewScales);
+
+    // Use ResizeObserver for more accurate container size tracking
+    if (typeof ResizeObserver !== "undefined") {
+      var resizeObserver = new ResizeObserver(updatePreviewScales);
+      document.querySelectorAll(".variant-preview").forEach(function observe(el) {
+        resizeObserver.observe(el);
+      });
+    }
 
     // Initial render
     updatePreviews();
@@ -968,19 +993,28 @@ var structuredData = {
     background: #0a0a0a;
     border-radius: var(--border-radius-sm);
     overflow: hidden;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1200 / 630;
   }
 
   .preview-scale-wrapper {
-    transform-origin: top left;
-    transform: scale(0.5);
-    width: 200%;
-    height: 0;
-    padding-bottom: 26.25%; /* (630/1200) * 50% */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .preview-canvas {
     width: 1200px;
     height: 630px;
+    transform: scale(var(--preview-scale, 0.5));
+    transform-origin: center center;
+    flex-shrink: 0;
   }
 
   .tips-section h2 {
@@ -1086,11 +1120,6 @@ var structuredData = {
 
     .form-group.full-width {
       grid-column: 1;
-    }
-
-    .preview-scale-wrapper {
-      transform: scale(0.3);
-      padding-bottom: 15.75%; /* (630/1200) * 30% */
     }
 
     .form-row {
