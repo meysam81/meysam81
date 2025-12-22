@@ -34,6 +34,14 @@ pageViews = await getBlogPostViews(hostname, postPath);
 log.info(`Page views for ${postPath}: ${pageViews}`);
 
 var seriesInfo = getSeriesInfo(publishedPosts, post);
+
+var relatedPosts = post.data.relatedPosts
+  .map(function findRelatedPost(slug) {
+    return publishedPosts.find(function matchSlug(p) {
+      return p.slug === slug;
+    });
+  })
+  .filter(Boolean);
 ---
 
 <BlogPostLayout
@@ -47,6 +55,7 @@ var seriesInfo = getSeriesInfo(publishedPosts, post);
   headings={headings}
   readingTime={readingTime}
   references={post.data.references}
+  relatedPosts={relatedPosts}
   pageViews={pageViews}
   seriesInfo={seriesInfo}
 >

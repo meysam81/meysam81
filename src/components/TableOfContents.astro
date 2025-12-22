@@ -6,14 +6,15 @@ interface Props {
     text: string;
   }>;
   hasReferences?: boolean;
+  hasRelatedPosts?: boolean;
 }
 
-var { headings, hasReferences } = Astro.props;
+var { headings, hasReferences, hasRelatedPosts } = Astro.props;
 var tocHeadings = headings.filter(function filterHeadings(h) {
   return h.depth > 1 && h.depth <= 3;
 });
 
-var showToc = tocHeadings.length > 0 || hasReferences;
+var showToc = tocHeadings.length > 0 || hasReferences || hasRelatedPosts;
 ---
 
 {
@@ -46,6 +47,25 @@ var showToc = tocHeadings.length > 0 || hasReferences;
                 <polyline points="13 2 13 9 20 9" />
               </svg>
               References & Further Reading
+            </a>
+          </li>
+        )}
+        {hasRelatedPosts && (
+          <li class={`toc-item toc-depth-2 ${!hasReferences ? "toc-special" : ""}`}>
+            <a href="#related-reading" class="toc-link toc-link-special">
+              <svg
+                class="toc-icon"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+              </svg>
+              Related Reading
             </a>
           </li>
         )}
