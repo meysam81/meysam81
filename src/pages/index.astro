@@ -89,18 +89,29 @@ import ContentCard from "@/components/ContentCard.astro";
 
       <div class="featured-project mb-xl">
         <ContentCard
-          title="Puppeteer MCP"
-          description="MCP server that gives Claude and ChatGPT browser automation tools. Scrape data, fill forms, take screenshots; all through natural language. No code required."
-          url="https://apify.com/meysamazing/puppeteer-mcp"
-          badge="🤖 AI Tools"
+          title="Parse DMARC"
+          description="Open-source DMARC report analyzer with beautiful dashboard. Monitor email authentication, catch spoofing attempts, and protect your domain. Self-hosted, single binary, no external dependencies. Built with Go and Vue.js."
+          url="https://github.com/meysam81/parse-dmarc"
+          badge="🔒 Security"
           featured={true}
-          linkText="Try AI Browser Automation"
+          linkText="View Parse DMARC on GitHub"
           target="_blank"
           rel="noopener noreferrer"
         />
       </div>
 
       <div class="grid grid-3">
+        <ContentCard
+          title="Puppeteer MCP"
+          description="MCP server that gives Claude and ChatGPT browser automation tools. Scrape data, fill forms, take screenshots; all through natural language. No code required."
+          url="https://apify.com/meysamazing/puppeteer-mcp"
+          badge="🤖 AI Tools"
+          featured={false}
+          linkText="Try AI Browser Automation"
+          target="_blank"
+          rel="noopener noreferrer"
+        />
+
         <ContentCard
           title="Awesome Directories"
           description="Curated directory aggregator for indie hackers and bootstrappers — 100+ verified launch directories, advanced filtering (DR, category, pricing), weekly updates, and export tools. Built with Astro, Vue islands, and Supabase."
