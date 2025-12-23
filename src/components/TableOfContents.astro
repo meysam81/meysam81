@@ -51,7 +51,9 @@ var showToc = tocHeadings.length > 0 || hasReferences || hasRelatedPosts;
           </li>
         )}
         {hasRelatedPosts && (
-          <li class={`toc-item toc-depth-2 ${!hasReferences ? "toc-special" : ""}`}>
+          <li
+            class={`toc-item toc-depth-2 ${!hasReferences ? "toc-special" : ""}`}
+          >
             <a href="#related-reading" class="toc-link toc-link-special">
               <svg
                 class="toc-icon"
