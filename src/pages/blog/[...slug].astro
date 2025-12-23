@@ -34,6 +34,22 @@ pageViews = await getBlogPostViews(hostname, postPath);
 log.info(`Page views for ${postPath}: ${pageViews}`);
 
 var seriesInfo = getSeriesInfo(publishedPosts, post);
+
+var relatedPosts = post.data.relatedPosts
+  .map(function findRelatedPost(slug) {
+    var post = publishedPosts.find(function matchSlug(p) {
+      return p.slug === slug;
+    });
+    if (!post) {
+      log.warn(`Related post with slug "${slug}" not found.`);
+      return null;
+    }
+    return {
+      slug: post.slug,
+      data: { title: post.data.title, description: post.data.description },
+    };
+  })
+  .filter(Boolean);
 ---
 
 <BlogPostLayout
@@ -47,6 +63,7 @@ var seriesInfo = getSeriesInfo(publishedPosts, post);
   headings={headings}
   readingTime={readingTime}
   references={post.data.references}
+  relatedPosts={relatedPosts}
   pageViews={pageViews}
   seriesInfo={seriesInfo}
 >

@@ -24,6 +24,7 @@ var blogCollection = defineCollection({
         }),
       )
       .default([]),
+    relatedPosts: z.array(z.string()).default([]),
   }),
 });
 
