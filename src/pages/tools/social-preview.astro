@@ -1541,9 +1541,11 @@ var structuredData = {
         .filter(Boolean);
     }
     if (params.has("icon")) {
-      var icon = params.get("icon") || "none";
-      iconSelect.value = icon;
-      currentData.icon = icon;
+      var iconName = params.get("icon") as keyof typeof ICONS;
+      if (iconName && ICONS[iconName]) {
+        iconSelect.value = iconName;
+        currentData.icon = iconName;
+      }
     }
     if (params.has("theme")) {
       var themeName = params.get("theme") as keyof typeof THEMES;
@@ -2075,6 +2077,15 @@ var structuredData = {
     }
     to {
       transform: rotate(360deg);
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
     }
   }
 
