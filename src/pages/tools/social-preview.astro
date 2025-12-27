@@ -45,15 +45,28 @@ var structuredData = {
   <div class="tool-header">
     <h1>Social Preview Generator</h1>
     <p class="subtitle">
-      Create beautiful Open Graph images for your pages. Three variants, instant
-      download.
+      Create beautiful Open Graph images (og-image) for your pages. Three
+      variants, instant download.
     </p>
   </div>
 
   <div class="tool-content">
     <!-- Input Form -->
     <div class="tool-card input-section">
-      <h2>Content</h2>
+      <div class="section-header input-header">
+        <h2>Create Your Preview</h2>
+        <div class="template-selector">
+          <span class="template-label">Quick start:</span>
+          <select id="template-select" class="template-dropdown">
+            <option value="">Choose a template...</option>
+            <option value="devtool">Developer Tool</option>
+            <option value="blog">Blog Post</option>
+            <option value="saas">SaaS Product</option>
+            <option value="opensource">Open Source Project</option>
+            <option value="course">Online Course</option>
+          </select>
+        </div>
+      </div>
 
       <div class="form-grid">
         <div class="form-group full-width">
@@ -61,7 +74,7 @@ var structuredData = {
           <input
             type="text"
             id="title-input"
-            placeholder="e.g., Cron Expression Generator"
+            placeholder="e.g., AI-Powered Code Reviews"
             maxlength="60"
           />
           <span class="char-count"><span id="title-count">0</span>/60</span>
@@ -72,7 +85,7 @@ var structuredData = {
           <input
             type="text"
             id="subtitle-input"
-            placeholder="e.g., Build and decode cron schedules with plain English"
+            placeholder="e.g., Ship 10x faster with intelligent PR analysis and suggestions"
             maxlength="120"
           />
           <span class="char-count"><span id="subtitle-count">0</span>/120</span>
@@ -83,7 +96,7 @@ var structuredData = {
           <input
             type="text"
             id="category-input"
-            placeholder="e.g., DevOps, Free Tools"
+            placeholder="e.g., Developer Tool"
             maxlength="20"
           />
         </div>
@@ -93,8 +106,8 @@ var structuredData = {
           <input
             type="text"
             id="url-input"
-            placeholder="meysam.io/tools/cron"
-            value="meysam.io"
+            placeholder="your-site.com"
+            value=""
             maxlength="40"
           />
         </div>
@@ -104,7 +117,7 @@ var structuredData = {
           <input
             type="text"
             id="features-input"
-            placeholder="e.g., Free, No Signup, No Ads"
+            placeholder="e.g., Free Trial, GitHub Integration, Slack Alerts"
           />
         </div>
 
@@ -122,18 +135,79 @@ var structuredData = {
         </div>
 
         <div class="form-group">
+          <label for="theme-select">Color Theme</label>
+          <div class="theme-options">
+            <button
+              type="button"
+              class="theme-btn active"
+              data-theme="blue"
+              title="Blue"
+            >
+              <span
+                class="theme-swatch"
+                style="background: linear-gradient(135deg, #3b82f6, #60a5fa);"
+              ></span>
+            </button>
+            <button
+              type="button"
+              class="theme-btn"
+              data-theme="green"
+              title="Green"
+            >
+              <span
+                class="theme-swatch"
+                style="background: linear-gradient(135deg, #10b981, #34d399);"
+              ></span>
+            </button>
+            <button
+              type="button"
+              class="theme-btn"
+              data-theme="purple"
+              title="Purple"
+            >
+              <span
+                class="theme-swatch"
+                style="background: linear-gradient(135deg, #8b5cf6, #a78bfa);"
+              ></span>
+            </button>
+            <button
+              type="button"
+              class="theme-btn"
+              data-theme="orange"
+              title="Orange"
+            >
+              <span
+                class="theme-swatch"
+                style="background: linear-gradient(135deg, #f97316, #fb923c);"
+              ></span>
+            </button>
+            <button
+              type="button"
+              class="theme-btn"
+              data-theme="pink"
+              title="Pink"
+            >
+              <span
+                class="theme-swatch"
+                style="background: linear-gradient(135deg, #ec4899, #f472b6);"
+              ></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group full-width">
           <label>Demo (Split variant)</label>
           <div class="demo-inputs">
             <input
               type="text"
               id="demo-input"
-              placeholder="Input: * * * * *"
+              placeholder="Input: PR #1247"
               maxlength="30"
             />
             <input
               type="text"
               id="demo-output"
-              placeholder="Output: Every minute"
+              placeholder="Output: 3 issues found, 12 improvements suggested"
               maxlength="40"
             />
           </div>
@@ -143,31 +217,81 @@ var structuredData = {
 
     <!-- Previews Section -->
     <div class="tool-card previews-section">
-      <h2>Preview & Download</h2>
-      <p class="section-note">
-        Click any variant to download as PNG (1200x630)
-      </p>
+      <div class="section-header">
+        <div>
+          <h2>Preview & Download</h2>
+          <p class="section-note">
+            Click any variant to download as PNG (1200x630)
+          </p>
+        </div>
+        <button
+          type="button"
+          class="share-link-btn"
+          id="share-link-btn"
+          title="Copy shareable link"
+        >
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"
+            ></path>
+            <path
+              d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"
+            ></path>
+          </svg>
+          <span class="btn-text">Share Link</span>
+        </button>
+      </div>
 
       <div class="variants-grid">
         <!-- Minimal Variant -->
         <div class="variant-wrapper">
           <div class="variant-header">
             <h3>Minimal Pro</h3>
-            <button type="button" class="download-btn" data-variant="minimal">
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
+            <div class="variant-actions">
+              <button
+                type="button"
+                class="copy-btn"
+                data-variant="minimal"
+                title="Copy to clipboard"
               >
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="7 10 12 15 17 10"></polyline>
-                <line x1="12" y1="15" x2="12" y2="3"></line>
-              </svg>
-              Download
-            </button>
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path
+                    d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+                  ></path>
+                </svg>
+                <span class="btn-text">Copy</span>
+              </button>
+              <button type="button" class="download-btn" data-variant="minimal">
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span class="btn-text">Download</span>
+              </button>
+            </div>
           </div>
           <div class="variant-preview" id="minimal-preview-container">
             <div class="preview-scale-wrapper">
@@ -180,21 +304,48 @@ var structuredData = {
         <div class="variant-wrapper">
           <div class="variant-header">
             <h3>Gradient Glow</h3>
-            <button type="button" class="download-btn" data-variant="gradient">
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
+            <div class="variant-actions">
+              <button
+                type="button"
+                class="copy-btn"
+                data-variant="gradient"
+                title="Copy to clipboard"
               >
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="7 10 12 15 17 10"></polyline>
-                <line x1="12" y1="15" x2="12" y2="3"></line>
-              </svg>
-              Download
-            </button>
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path
+                    d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+                  ></path>
+                </svg>
+                <span class="btn-text">Copy</span>
+              </button>
+              <button
+                type="button"
+                class="download-btn"
+                data-variant="gradient"
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span class="btn-text">Download</span>
+              </button>
+            </div>
           </div>
           <div class="variant-preview" id="gradient-preview-container">
             <div class="preview-scale-wrapper">
@@ -207,25 +358,189 @@ var structuredData = {
         <div class="variant-wrapper">
           <div class="variant-header">
             <h3>Split Card</h3>
-            <button type="button" class="download-btn" data-variant="split">
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
+            <div class="variant-actions">
+              <button
+                type="button"
+                class="copy-btn"
+                data-variant="split"
+                title="Copy to clipboard"
               >
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="7 10 12 15 17 10"></polyline>
-                <line x1="12" y1="15" x2="12" y2="3"></line>
-              </svg>
-              Download
-            </button>
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path
+                    d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+                  ></path>
+                </svg>
+                <span class="btn-text">Copy</span>
+              </button>
+              <button type="button" class="download-btn" data-variant="split">
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span class="btn-text">Download</span>
+              </button>
+            </div>
           </div>
           <div class="variant-preview" id="split-preview-container">
             <div class="preview-scale-wrapper">
               <div id="split-canvas" class="preview-canvas"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Platform Mockups Section -->
+    <div class="tool-card platform-section">
+      <h2>See How It Looks</h2>
+      <p class="section-note">Preview your image on popular platforms</p>
+
+      <div class="platform-tabs">
+        <button
+          type="button"
+          class="platform-tab active"
+          data-platform="twitter"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
+            ></path>
+          </svg>
+          X / Twitter
+        </button>
+        <button type="button" class="platform-tab" data-platform="linkedin">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"
+            ></path>
+          </svg>
+          LinkedIn
+        </button>
+        <button type="button" class="platform-tab" data-platform="slack">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zM6.313 15.165a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zM8.834 6.313a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zM18.956 8.834a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zM17.688 8.834a2.528 2.528 0 0 1-2.523 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.165 0a2.528 2.528 0 0 1 2.523 2.522v6.312zM15.165 18.956a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.165 24a2.527 2.527 0 0 1-2.52-2.522v-2.522h2.52zM15.165 17.688a2.527 2.527 0 0 1-2.52-2.523 2.526 2.526 0 0 1 2.52-2.52h6.313A2.527 2.527 0 0 1 24 15.165a2.528 2.528 0 0 1-2.522 2.523h-6.313z"
+            ></path>
+          </svg>
+          Slack
+        </button>
+      </div>
+
+      <div class="platform-mockups">
+        <!-- Twitter/X Mockup -->
+        <div
+          class="platform-mockup twitter-mockup active"
+          data-platform="twitter"
+        >
+          <div class="tweet-container">
+            <div class="tweet-header">
+              <div class="tweet-avatar"></div>
+              <div class="tweet-user">
+                <span class="tweet-name">Your Name</span>
+                <span class="tweet-handle">@yourhandle</span>
+              </div>
+            </div>
+            <p class="tweet-text">
+              Check out this awesome tool I just found! 🚀
+            </p>
+            <div class="tweet-card">
+              <div class="tweet-card-image" id="twitter-preview"></div>
+              <div class="tweet-card-content">
+                <span class="tweet-card-url" id="twitter-url">meysam.io</span>
+                <span class="tweet-card-title" id="twitter-title"
+                  >Your Title Here</span
+                >
+                <span class="tweet-card-desc" id="twitter-desc"
+                  >Add a compelling description</span
+                >
+              </div>
+            </div>
+            <div class="tweet-actions">
+              <span>💬 12</span>
+              <span>🔄 48</span>
+              <span>❤️ 256</span>
+              <span>📊 1.2K</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- LinkedIn Mockup -->
+        <div class="platform-mockup linkedin-mockup" data-platform="linkedin">
+          <div class="linkedin-post">
+            <div class="linkedin-header">
+              <div class="linkedin-avatar"></div>
+              <div class="linkedin-user">
+                <span class="linkedin-name">Your Name</span>
+                <span class="linkedin-meta">Developer • 2h</span>
+              </div>
+            </div>
+            <p class="linkedin-text">
+              Excited to share this tool with my network! Perfect for anyone
+              building a personal brand online.
+            </p>
+            <div class="linkedin-card">
+              <div class="linkedin-card-image" id="linkedin-preview"></div>
+              <div class="linkedin-card-content">
+                <span class="linkedin-card-title" id="linkedin-title"
+                  >Your Title Here</span
+                >
+                <span class="linkedin-card-url" id="linkedin-url"
+                  >meysam.io</span
+                >
+              </div>
+            </div>
+            <div class="linkedin-actions">
+              <span>👍 Like</span>
+              <span>💬 Comment</span>
+              <span>↗️ Repost</span>
+              <span>📨 Send</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slack Mockup -->
+        <div class="platform-mockup slack-mockup" data-platform="slack">
+          <div class="slack-message">
+            <div class="slack-avatar"></div>
+            <div class="slack-content">
+              <div class="slack-header">
+                <span class="slack-name">You</span>
+                <span class="slack-time">2:34 PM</span>
+              </div>
+              <p class="slack-text">
+                Hey team, found this great tool for creating OG images!
+              </p>
+              <div class="slack-unfurl">
+                <div class="slack-unfurl-bar"></div>
+                <div class="slack-unfurl-content">
+                  <div class="slack-unfurl-image" id="slack-preview"></div>
+                  <span class="slack-unfurl-site" id="slack-site"
+                    >meysam.io</span
+                  >
+                  <span class="slack-unfurl-title" id="slack-title"
+                    >Your Title Here</span
+                  >
+                  <span class="slack-unfurl-desc" id="slack-desc"
+                    >Add a compelling description</span
+                  >
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -355,7 +670,7 @@ var structuredData = {
 </ToolLayout>
 
 <script>
-  import { toPng } from "html-to-image";
+  import { toPng, toBlob } from "html-to-image";
   import log from "loglevel";
 
   // Icon SVG paths
@@ -371,6 +686,107 @@ var structuredData = {
       '<path d="M60 95 L60 70" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><path d="M42 95 L60 70 L78 95" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/><ellipse cx="60" cy="42" rx="18" ry="32" stroke="currentColor" stroke-width="4" fill="none"/><circle cx="60" cy="38" r="7" fill="currentColor"/>',
     tool: '<circle cx="60" cy="60" r="48" stroke="currentColor" stroke-width="4" fill="none"/><path d="M45 45 L55 55 M75 75 L55 55 M55 55 L55 75 L75 75" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>',
     none: "",
+  };
+
+  // Color theme configurations
+  var THEMES = {
+    blue: {
+      primary: "#3b82f6",
+      secondary: "#60a5fa",
+      gradient: "linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%)",
+      bgGlow: "rgba(59, 130, 246, 0.15)",
+      bgSubtle: "rgba(59, 130, 246, 0.03)",
+      borderSubtle: "rgba(59, 130, 246, 0.3)",
+    },
+    green: {
+      primary: "#10b981",
+      secondary: "#34d399",
+      gradient: "linear-gradient(135deg, #10b981 0%, #34d399 100%)",
+      bgGlow: "rgba(16, 185, 129, 0.15)",
+      bgSubtle: "rgba(16, 185, 129, 0.03)",
+      borderSubtle: "rgba(16, 185, 129, 0.3)",
+    },
+    purple: {
+      primary: "#8b5cf6",
+      secondary: "#a78bfa",
+      gradient: "linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%)",
+      bgGlow: "rgba(139, 92, 246, 0.15)",
+      bgSubtle: "rgba(139, 92, 246, 0.03)",
+      borderSubtle: "rgba(139, 92, 246, 0.3)",
+    },
+    orange: {
+      primary: "#f97316",
+      secondary: "#fb923c",
+      gradient: "linear-gradient(135deg, #f97316 0%, #fb923c 100%)",
+      bgGlow: "rgba(249, 115, 22, 0.15)",
+      bgSubtle: "rgba(249, 115, 22, 0.03)",
+      borderSubtle: "rgba(249, 115, 22, 0.3)",
+    },
+    pink: {
+      primary: "#ec4899",
+      secondary: "#f472b6",
+      gradient: "linear-gradient(135deg, #ec4899 0%, #f472b6 100%)",
+      bgGlow: "rgba(236, 72, 153, 0.15)",
+      bgSubtle: "rgba(236, 72, 153, 0.03)",
+      borderSubtle: "rgba(236, 72, 153, 0.3)",
+    },
+  };
+
+  // Current theme
+  var currentTheme = THEMES.blue;
+
+  // Template presets
+  var TEMPLATES = {
+    devtool: {
+      title: "AI-Powered Code Reviews",
+      subtitle: "Ship 10x faster with intelligent PR analysis and suggestions",
+      category: "Developer Tool",
+      features: ["Free Trial", "GitHub Integration", "Slack Alerts"],
+      icon: "tool",
+      theme: "blue",
+      demoInput: "PR #1247",
+      demoOutput: "3 issues found, 12 improvements suggested",
+    },
+    blog: {
+      title: "Why We Migrated to Edge Computing",
+      subtitle: "How we reduced latency by 73% and saved $40k monthly",
+      category: "Case Study",
+      features: ["8 min read", "Engineering", "Performance"],
+      icon: "lightbulb",
+      theme: "purple",
+      demoInput: "",
+      demoOutput: "",
+    },
+    saas: {
+      title: "DataSync Pro",
+      subtitle: "Real-time data synchronization across your entire stack",
+      category: "SaaS Platform",
+      features: ["14-day Trial", "SOC2 Type II", "99.99% Uptime"],
+      icon: "rocket",
+      theme: "green",
+      demoInput: "",
+      demoOutput: "",
+    },
+    opensource: {
+      title: "NextAuth v5",
+      subtitle: "Authentication for Next.js 14 with App Router support",
+      category: "Open Source",
+      features: ["MIT License", "TypeScript", "20+ Providers"],
+      icon: "code",
+      theme: "orange",
+      demoInput: "",
+      demoOutput: "",
+    },
+    course: {
+      title: "SaaS Metrics Masterclass",
+      subtitle: "Master ARR, churn, CAC, and LTV for product-led growth",
+      category: "Online Course",
+      features: ["6-week program", "Real examples", "Certificate"],
+      icon: "chart",
+      theme: "pink",
+      demoInput: "",
+      demoOutput: "",
+    },
   };
 
   // DOM Elements
@@ -396,17 +812,23 @@ var structuredData = {
   var splitCanvas = document.getElementById("split-canvas");
 
   var downloadButtons = document.querySelectorAll(".download-btn");
+  var copyButtons = document.querySelectorAll(".copy-btn");
+  var themeButtons = document.querySelectorAll(".theme-btn");
+  var shareLinkBtn = document.getElementById("share-link-btn");
+  var templateSelect = document.getElementById(
+    "template-select",
+  ) as HTMLSelectElement;
 
   // Current state
   var currentData = {
-    title: "Your Title Here",
-    subtitle: "Add a compelling description",
-    category: "",
-    url: "meysam.io",
-    features: [] as string[],
-    icon: "none",
-    demoInput: "",
-    demoOutput: "",
+    title: "CloudFlow Analytics",
+    subtitle: "Real-time insights for modern SaaS teams",
+    category: "SaaS Platform",
+    url: "cloudflow.io",
+    features: ["14-day trial", "No credit card", "Cancel anytime"] as string[],
+    icon: "chart",
+    demoInput: "Monthly ARR",
+    demoOutput: "$847K (+23% MoM)",
   };
 
   // Generate Minimal variant HTML
@@ -431,21 +853,35 @@ var structuredData = {
         : "";
 
     var categoryHTML = data.category
-      ? '<div style="display:inline-block;padding:8px 20px;background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.3);border-radius:6px;color:#60a5fa;font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:24px;">' +
+      ? '<div style="display:inline-block;padding:8px 20px;background:' +
+        currentTheme.bgSubtle +
+        ";border:1px solid " +
+        currentTheme.borderSubtle +
+        ";border-radius:6px;color:" +
+        currentTheme.secondary +
+        ';font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:24px;">' +
         escapeHtml(data.category) +
         "</div>"
       : "";
 
     return (
       "<div style=\"width:1200px;height:630px;background:#0a0a0a;position:relative;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;overflow:hidden;\">" +
-      '<div style="position:absolute;top:0;left:0;right:0;bottom:0;background-image:linear-gradient(rgba(59,130,246,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(59,130,246,0.03) 1px,transparent 1px);background-size:60px 60px;"></div>' +
-      '<div style="position:absolute;left:0;top:0;width:8px;height:100%;background:linear-gradient(180deg,#3b82f6 0%,#60a5fa 100%);"></div>' +
+      '<div style="position:absolute;top:0;left:0;right:0;bottom:0;background-image:linear-gradient(' +
+      currentTheme.bgSubtle +
+      " 1px,transparent 1px),linear-gradient(90deg," +
+      currentTheme.bgSubtle +
+      ' 1px,transparent 1px);background-size:60px 60px;"></div>' +
+      '<div style="position:absolute;left:0;top:0;width:8px;height:100%;background:' +
+      currentTheme.gradient +
+      ';"></div>' +
       '<div style="position:absolute;left:100px;top:140px;right:100px;">' +
       categoryHTML +
       '<h1 style="font-size:64px;font-weight:700;color:#f5f5f5;margin:0 0 16px 0;letter-spacing:-0.02em;line-height:1.1;max-width:900px;">' +
       escapeHtml(data.title) +
       "</h1>" +
-      '<div style="width:120px;height:4px;background:linear-gradient(90deg,#3b82f6 0%,#60a5fa 100%);border-radius:2px;margin-bottom:24px;"></div>' +
+      '<div style="width:120px;height:4px;background:' +
+      currentTheme.gradient +
+      ';border-radius:2px;margin-bottom:24px;"></div>' +
       (data.subtitle
         ? '<p style="font-size:26px;color:#a0a0a0;margin:0;max-width:700px;line-height:1.4;">' +
           escapeHtml(data.subtitle) +
@@ -454,7 +890,11 @@ var structuredData = {
       featuresHTML +
       "</div>" +
       '<div style="position:absolute;left:100px;right:100px;bottom:60px;display:flex;justify-content:space-between;align-items:center;">' +
-      '<svg width="40" height="40" viewBox="0 0 200 200"><circle cx="100" cy="100" r="70" fill="none" stroke="url(#mg1)" stroke-width="3"/><text x="100" y="135" font-family="-apple-system,BlinkMacSystemFont,\'Segoe UI\',sans-serif" font-size="110" font-weight="700" fill="url(#mg1)" text-anchor="middle">M</text><defs><linearGradient id="mg1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#3b82f6"/><stop offset="100%" style="stop-color:#60a5fa"/></linearGradient></defs></svg>' +
+      '<svg width="40" height="40" viewBox="0 0 200 200"><circle cx="100" cy="100" r="70" fill="none" stroke="url(#mg1)" stroke-width="3"/><text x="100" y="135" font-family="-apple-system,BlinkMacSystemFont,\'Segoe UI\',sans-serif" font-size="110" font-weight="700" fill="url(#mg1)" text-anchor="middle">M</text><defs><linearGradient id="mg1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:' +
+      currentTheme.primary +
+      '"/><stop offset="100%" style="stop-color:' +
+      currentTheme.secondary +
+      '"/></linearGradient></defs></svg>' +
       '<span style="font-size:20px;color:#6a6a6a;letter-spacing:0.02em;">' +
       escapeHtml(data.url) +
       "</span>" +
@@ -467,7 +907,9 @@ var structuredData = {
   function generateGradientHTML(data: typeof currentData) {
     var iconHTML =
       data.icon !== "none" && ICONS[data.icon]
-        ? '<div style="position:absolute;left:80px;top:120px;"><svg width="120" height="120" viewBox="0 0 120 120" style="color:#3b82f6;">' +
+        ? '<div style="position:absolute;left:80px;top:120px;"><svg width="120" height="120" viewBox="0 0 120 120" style="color:' +
+          currentTheme.primary +
+          ';">' +
           ICONS[data.icon] +
           "</svg></div>"
         : "";
@@ -482,7 +924,9 @@ var structuredData = {
             .map(function featuresHTML(f) {
               return (
                 '<div style="display:flex;align-items:center;gap:10px;padding:12px 20px;background:rgba(26,26,26,0.8);border:1px solid #2a2a2a;border-radius:8px;color:#f5f5f5;font-size:16px;font-weight:500;">' +
-                '<span style="color:#10b981;font-weight:bold;">&#10003;</span>' +
+                '<span style="color:' +
+                currentTheme.primary +
+                ';font-weight:bold;">&#10003;</span>' +
                 escapeHtml(f) +
                 "</div>"
               );
@@ -492,7 +936,13 @@ var structuredData = {
         : "";
 
     var categoryHTML = data.category
-      ? '<div style="display:inline-block;padding:6px 16px;background:linear-gradient(135deg,rgba(59,130,246,0.2) 0%,rgba(59,130,246,0.1) 100%);border:1px solid rgba(59,130,246,0.4);border-radius:20px;color:#60a5fa;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:20px;">' +
+      ? '<div style="display:inline-block;padding:6px 16px;background:' +
+        currentTheme.bgGlow +
+        ";border:1px solid " +
+        currentTheme.borderSubtle +
+        ";border-radius:20px;color:" +
+        currentTheme.secondary +
+        ';font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:20px;">' +
         escapeHtml(data.category) +
         "</div>"
       : "";
@@ -500,7 +950,9 @@ var structuredData = {
     return (
       "<div style=\"width:1200px;height:630px;background:#0a0a0a;position:relative;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;overflow:hidden;\">" +
       '<div style="position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,#0a0a0a 0%,#151515 50%,#0a0a0a 100%);"></div>' +
-      '<div style="position:absolute;top:-150px;right:-150px;width:500px;height:500px;background:radial-gradient(circle,rgba(59,130,246,0.15) 0%,transparent 70%);border-radius:50%;"></div>' +
+      '<div style="position:absolute;top:-150px;right:-150px;width:500px;height:500px;background:radial-gradient(circle,' +
+      currentTheme.bgGlow +
+      ' 0%,transparent 70%);border-radius:50%;"></div>' +
       '<div style="position:absolute;top:1px;left:1px;right:1px;bottom:1px;border:2px solid #2a2a2a;"></div>' +
       iconHTML +
       '<div style="position:absolute;left:' +
@@ -519,8 +971,11 @@ var structuredData = {
       "</div>" +
       '<div style="position:absolute;left:80px;right:80px;bottom:50px;display:flex;justify-content:space-between;align-items:center;">' +
       '<div style="display:flex;align-items:center;gap:12px;">' +
-      '<svg width="32" height="32" viewBox="0 0 200 200"><circle cx="100" cy="100" r="70" fill="none" stroke="#3b82f6" stroke-width="3"/><text x="100" y="135" font-family="-apple-system,BlinkMacSystemFont,\'Segoe UI\',sans-serif" font-size="110" font-weight="700" fill="#3b82f6" text-anchor="middle">M</text></svg>' +
-      '<span style="font-size:18px;font-weight:600;color:#f5f5f5;">Meysam Azad</span>' +
+      '<svg width="32" height="32" viewBox="0 0 200 200"><circle cx="100" cy="100" r="70" fill="none" stroke="' +
+      currentTheme.primary +
+      '" stroke-width="3"/><text x="100" y="135" font-family="-apple-system,BlinkMacSystemFont,\'Segoe UI\',sans-serif" font-size="110" font-weight="700" fill="' +
+      currentTheme.primary +
+      '" text-anchor="middle">M</text></svg>' +
       '<span style="color:#6a6a6a;">|</span>' +
       '<span style="font-size:18px;color:#6a6a6a;">' +
       escapeHtml(data.url) +
@@ -528,7 +983,13 @@ var structuredData = {
       "</div>" +
       '<div style="display:flex;gap:12px;">' +
       '<span style="padding:8px 16px;border-radius:6px;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);color:#10b981;">Free</span>' +
-      '<span style="padding:8px 16px;border-radius:6px;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.3);color:#60a5fa;">No Signup</span>' +
+      '<span style="padding:8px 16px;border-radius:6px;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;background:' +
+      currentTheme.bgGlow +
+      ";border:1px solid " +
+      currentTheme.borderSubtle +
+      ";color:" +
+      currentTheme.secondary +
+      ';">No Signup</span>' +
       "</div>" +
       "</div>" +
       "</div>"
@@ -545,7 +1006,13 @@ var structuredData = {
             .map(function featuresHTML(f) {
               return (
                 '<div style="display:flex;align-items:center;gap:12px;color:#d0d0d0;font-size:17px;">' +
-                '<span style="display:flex;align-items:center;justify-content:center;width:22px;height:22px;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);border-radius:50%;color:#10b981;font-size:12px;font-weight:bold;">&#10003;</span>' +
+                '<span style="display:flex;align-items:center;justify-content:center;width:22px;height:22px;background:' +
+                currentTheme.bgGlow +
+                ";border:1px solid " +
+                currentTheme.borderSubtle +
+                ";border-radius:50%;color:" +
+                currentTheme.primary +
+                ';font-size:12px;font-weight:bold;">&#10003;</span>' +
                 "<span>" +
                 escapeHtml(f) +
                 "</span>" +
@@ -557,7 +1024,13 @@ var structuredData = {
         : "";
 
     var categoryHTML = data.category
-      ? '<div style="display:inline-block;padding:8px 18px;background:rgba(59,130,246,0.12);border:1px solid rgba(59,130,246,0.25);border-radius:6px;color:#60a5fa;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:28px;">' +
+      ? '<div style="display:inline-block;padding:8px 18px;background:' +
+        currentTheme.bgSubtle +
+        ";border:1px solid " +
+        currentTheme.borderSubtle +
+        ";border-radius:6px;color:" +
+        currentTheme.secondary +
+        ';font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:28px;">' +
         escapeHtml(data.category) +
         "</div>"
       : "";
@@ -567,7 +1040,9 @@ var structuredData = {
         ? '<div style="position:absolute;right:80px;top:100px;width:420px;height:380px;background:#1a1a1a;border:2px solid #2a2a2a;border-radius:16px;padding:32px;display:flex;flex-direction:column;">' +
           '<div style="display:flex;flex-direction:column;gap:24px;height:100%;justify-content:center;">' +
           (data.demoInput
-            ? '<div style="display:flex;flex-direction:column;gap:10px;"><span style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:#6a6a6a;">Input</span><div style="padding:16px 20px;background:#0a0a0a;border:1px solid #2a2a2a;border-radius:10px;font-family:\'SF Mono\',Monaco,Consolas,monospace;font-size:20px;color:#60a5fa;letter-spacing:0.05em;">' +
+            ? '<div style="display:flex;flex-direction:column;gap:10px;"><span style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:#6a6a6a;">Input</span><div style="padding:16px 20px;background:#0a0a0a;border:1px solid #2a2a2a;border-radius:10px;font-family:\'SF Mono\',Monaco,Consolas,monospace;font-size:20px;color:' +
+              currentTheme.secondary +
+              ';letter-spacing:0.05em;">' +
               escapeHtml(data.demoInput) +
               "</div></div>"
             : "") +
@@ -585,7 +1060,9 @@ var structuredData = {
 
     return (
       "<div style=\"width:1200px;height:630px;background:#0a0a0a;position:relative;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;overflow:hidden;\">" +
-      '<div style="position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,rgba(59,130,246,0.08) 0%,transparent 50%);"></div>' +
+      '<div style="position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,' +
+      currentTheme.bgSubtle +
+      ' 0%,transparent 50%);"></div>' +
       '<div style="position:absolute;left:80px;top:100px;width:520px;">' +
       categoryHTML +
       '<h1 style="font-size:52px;font-weight:700;color:#f5f5f5;margin:0 0 20px 0;letter-spacing:-0.025em;line-height:1.1;">' +
@@ -601,16 +1078,26 @@ var structuredData = {
       demoCardHTML +
       '<div style="position:absolute;left:80px;right:80px;bottom:50px;display:flex;align-items:center;gap:32px;">' +
       '<div style="display:flex;align-items:center;gap:10px;">' +
-      '<svg width="36" height="36" viewBox="0 0 200 200"><circle cx="100" cy="100" r="70" fill="none" stroke="url(#sg1)" stroke-width="3"/><text x="100" y="135" font-family="-apple-system,BlinkMacSystemFont,\'Segoe UI\',sans-serif" font-size="110" font-weight="700" fill="url(#sg1)" text-anchor="middle">M</text><defs><linearGradient id="sg1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#3b82f6"/><stop offset="100%" style="stop-color:#60a5fa"/></linearGradient></defs></svg>' +
-      '<span style="font-size:18px;font-weight:600;color:#f5f5f5;">Meysam</span>' +
-      "</div>" +
-      '<div style="display:flex;gap:20px;">' +
-      '<span style="display:flex;align-items:center;gap:8px;color:#a0a0a0;font-size:15px;"><span style="width:8px;height:8px;background:#10b981;border-radius:50%;"></span>Free</span>' +
-      '<span style="display:flex;align-items:center;gap:8px;color:#a0a0a0;font-size:15px;"><span style="width:8px;height:8px;background:#10b981;border-radius:50%;"></span>No Signup</span>' +
-      "</div>" +
-      '<span style="margin-left:auto;font-size:18px;color:#6a6a6a;letter-spacing:0.01em;">' +
+      '<svg width="36" height="36" viewBox="0 0 200 200"><circle cx="100" cy="100" r="70" fill="none" stroke="url(#sg1)" stroke-width="3"/><text x="100" y="135" font-family="-apple-system,BlinkMacSystemFont,\'Segoe UI\',sans-serif" font-size="110" font-weight="700" fill="url(#sg1)" text-anchor="middle">M</text><defs><linearGradient id="sg1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:' +
+      currentTheme.primary +
+      '"/><stop offset="100%" style="stop-color:' +
+      currentTheme.secondary +
+      '"/></linearGradient></defs></svg>' +
+      '<span style="color:#6a6a6a;">|</span>' +
+      '<span style="font-size:18px;color:#6a6a6a;">' +
       escapeHtml(data.url) +
       "</span>" +
+      "</div>" +
+      '<div style="display:flex;gap:12px;">' +
+      '<span style="padding:8px 16px;border-radius:6px;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);color:#10b981;">Free</span>' +
+      '<span style="padding:8px 16px;border-radius:6px;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;background:' +
+      currentTheme.bgGlow +
+      ";border:1px solid " +
+      currentTheme.borderSubtle +
+      ";color:" +
+      currentTheme.secondary +
+      ';">No Signup</span>' +
+      "</div>" +
       "</div>" +
       "</div>"
     );
@@ -741,6 +1228,94 @@ var structuredData = {
     }
   }
 
+  // Copy a variant to clipboard
+  async function copyVariant(variant: string) {
+    var tempContainer = document.createElement("div");
+    tempContainer.style.cssText = "position:fixed;left:-9999px;top:-9999px;";
+
+    if (variant === "minimal") {
+      tempContainer.innerHTML = generateMinimalHTML(currentData);
+    } else if (variant === "gradient") {
+      tempContainer.innerHTML = generateGradientHTML(currentData);
+    } else if (variant === "split") {
+      tempContainer.innerHTML = generateSplitHTML(currentData);
+    }
+
+    document.body.appendChild(tempContainer);
+    var renderTarget = tempContainer.firstElementChild as HTMLElement;
+
+    // Find the copy button and show loading state
+    var button = document.querySelector(
+      '.copy-btn[data-variant="' + variant + '"]',
+    ) as HTMLButtonElement;
+    var btnText = button.querySelector(".btn-text");
+    var originalText = btnText ? btnText.textContent : "Copy";
+    if (btnText) btnText.textContent = "Copying...";
+    button.disabled = true;
+
+    try {
+      // Wait a frame for styles to apply
+      await new Promise(function waitFrame(resolve) {
+        requestAnimationFrame(resolve);
+      });
+
+      var blob = await toBlob(renderTarget, {
+        width: 1200,
+        height: 630,
+        pixelRatio: 2,
+        cacheBust: true,
+        backgroundColor: "#0a0a0a",
+      });
+
+      document.body.removeChild(tempContainer);
+
+      if (!blob) {
+        throw new Error("Failed to generate image blob");
+      }
+
+      // Copy to clipboard using ClipboardItem
+      await navigator.clipboard.write([
+        new ClipboardItem({
+          "image/png": blob,
+        }),
+      ]);
+
+      // Show success state
+      button.classList.add("success");
+      if (btnText) btnText.textContent = "Copied!";
+
+      // Reset after 2 seconds
+      setTimeout(function resetButton() {
+        button.classList.remove("success");
+        if (btnText) btnText.textContent = originalText;
+      }, 2000);
+    } catch (error) {
+      document.body.removeChild(tempContainer);
+      log.error("Failed to copy image:", error);
+
+      // Show error state
+      if (btnText) btnText.textContent = "Failed";
+      setTimeout(function resetButton() {
+        if (btnText) btnText.textContent = originalText;
+      }, 2000);
+
+      // Fallback: show alert with helpful message
+      var userMessage = "Failed to copy to clipboard. ";
+      if (error && typeof error === "object" && "name" in error) {
+        if (error.name === "NotAllowedError") {
+          userMessage +=
+            "Clipboard access was denied. Try using the Download button instead.";
+        } else {
+          userMessage +=
+            "Your browser may not support clipboard image copying. Try using the Download button instead.";
+        }
+      }
+      alert(userMessage);
+    } finally {
+      button.disabled = false;
+    }
+  }
+
   // Debounce function
   function debounce(func: Function, wait: number) {
     var timeout: ReturnType<typeof setTimeout>;
@@ -779,10 +1354,337 @@ var structuredData = {
     }
 
     debouncedUpdate();
+    debouncedPlatformUpdate();
   }
+
+  // Calculate and apply proper scale for preview canvases
+  function updatePreviewScales() {
+    var containers = document.querySelectorAll(".variant-preview");
+    containers.forEach(function updateScale(container) {
+      var canvas = container.querySelector(".preview-canvas") as HTMLElement;
+      if (canvas) {
+        var containerWidth = container.clientWidth;
+        var scale = containerWidth / 1200;
+        canvas.style.setProperty("--preview-scale", String(scale));
+      }
+    });
+  }
+
+  // Platform mockup elements
+  var platformTabs = document.querySelectorAll(".platform-tab");
+  var platformMockups = document.querySelectorAll(".platform-mockup");
+
+  // Platform preview containers
+  var twitterPreview = document.getElementById("twitter-preview");
+  var linkedinPreview = document.getElementById("linkedin-preview");
+  var slackPreview = document.getElementById("slack-preview");
+
+  // Platform text elements
+  var twitterTitle = document.getElementById("twitter-title");
+  var twitterDesc = document.getElementById("twitter-desc");
+  var twitterUrl = document.getElementById("twitter-url");
+  var linkedinTitle = document.getElementById("linkedin-title");
+  var linkedinUrl = document.getElementById("linkedin-url");
+  var slackTitle = document.getElementById("slack-title");
+  var slackDesc = document.getElementById("slack-desc");
+  var slackSite = document.getElementById("slack-site");
+
+  // Handle platform tab switching
+  function handlePlatformTabClick(event: Event) {
+    var target = event.currentTarget as HTMLElement;
+    var platform = target.dataset.platform;
+
+    // Update active tab
+    platformTabs.forEach(function updateTab(tab) {
+      tab.classList.remove("active");
+    });
+    target.classList.add("active");
+
+    // Update active mockup
+    platformMockups.forEach(function updateMockup(mockup) {
+      var mockupEl = mockup as HTMLElement;
+      if (mockupEl.dataset.platform === platform) {
+        mockupEl.classList.add("active");
+      } else {
+        mockupEl.classList.remove("active");
+      }
+    });
+  }
+
+  // Update platform mockups with current preview (use minimal variant)
+  function updatePlatformMockups() {
+    var previewHTML = generateMinimalHTML(currentData);
+
+    // Update platform preview containers with scaled preview
+    [twitterPreview, linkedinPreview, slackPreview].forEach(
+      function updateContainer(container) {
+        if (container) {
+          var containerWidth = container.clientWidth;
+          var scale = containerWidth / 1200;
+          container.innerHTML =
+            '<div class="platform-preview-canvas" style="transform: scale(' +
+            scale +
+            ');">' +
+            previewHTML +
+            "</div>";
+        }
+      },
+    );
+
+    // Update text elements
+    if (twitterTitle) twitterTitle.textContent = currentData.title;
+    if (twitterDesc)
+      twitterDesc.textContent =
+        currentData.subtitle || "Add a compelling description";
+    if (twitterUrl) twitterUrl.textContent = currentData.url;
+    if (linkedinTitle) linkedinTitle.textContent = currentData.title;
+    if (linkedinUrl) linkedinUrl.textContent = currentData.url;
+    if (slackTitle) slackTitle.textContent = currentData.title;
+    if (slackDesc)
+      slackDesc.textContent =
+        currentData.subtitle || "Add a compelling description";
+    if (slackSite) slackSite.textContent = currentData.url;
+  }
+
+  // Debounced platform mockup update
+  var debouncedPlatformUpdate = debounce(updatePlatformMockups, 200);
+
+  // Handle theme button click
+  function handleThemeClick(event: Event) {
+    var target = event.currentTarget as HTMLElement;
+    var themeName = target.dataset.theme as keyof typeof THEMES;
+
+    if (themeName && THEMES[themeName]) {
+      currentTheme = THEMES[themeName];
+      currentThemeName = themeName;
+
+      // Update active button
+      themeButtons.forEach(function updateThemeBtn(btn) {
+        btn.classList.remove("active");
+      });
+      target.classList.add("active");
+
+      // Trigger update
+      updatePreviews();
+      updatePlatformMockups();
+    }
+  }
+
+  // Current theme name for URL sharing
+  var currentThemeName = "blue";
+
+  // Generate shareable URL from current state
+  function generateShareableURL() {
+    var params = new URLSearchParams();
+
+    if (currentData.title !== "Your Title Here") {
+      params.set("title", currentData.title);
+    }
+    if (currentData.subtitle) {
+      params.set("subtitle", currentData.subtitle);
+    }
+    if (currentData.category) {
+      params.set("category", currentData.category);
+    }
+    if (currentData.url !== "meysam.io") {
+      params.set("url", currentData.url);
+    }
+    if (currentData.features.length > 0) {
+      params.set("features", currentData.features.join(","));
+    }
+    if (currentData.icon !== "none") {
+      params.set("icon", currentData.icon);
+    }
+    if (currentThemeName !== "blue") {
+      params.set("theme", currentThemeName);
+    }
+    if (currentData.demoInput) {
+      params.set("demoInput", currentData.demoInput);
+    }
+    if (currentData.demoOutput) {
+      params.set("demoOutput", currentData.demoOutput);
+    }
+
+    var baseURL = window.location.origin + window.location.pathname;
+    var paramString = params.toString();
+    return paramString ? baseURL + "?" + paramString : baseURL;
+  }
+
+  // Parse URL params and apply to form
+  function applyURLParams() {
+    var params = new URLSearchParams(window.location.search);
+
+    if (params.has("title")) {
+      var title = params.get("title") || "";
+      titleInput.value = title;
+      currentData.title = title || "Your Title Here";
+    }
+    if (params.has("subtitle")) {
+      subtitleInput.value = params.get("subtitle") || "";
+      currentData.subtitle = subtitleInput.value;
+    }
+    if (params.has("category")) {
+      categoryInput.value = params.get("category") || "";
+      currentData.category = categoryInput.value;
+    }
+    if (params.has("url")) {
+      urlInput.value = params.get("url") || "";
+      currentData.url = urlInput.value || "meysam.io";
+    }
+    if (params.has("features")) {
+      featuresInput.value = params.get("features") || "";
+      currentData.features = featuresInput.value
+        .split(",")
+        .map(function trim(f) {
+          return f.trim();
+        })
+        .filter(Boolean);
+    }
+    if (params.has("icon")) {
+      var iconName = params.get("icon") as keyof typeof ICONS;
+      if (iconName && ICONS[iconName]) {
+        iconSelect.value = iconName;
+        currentData.icon = iconName;
+      }
+    }
+    if (params.has("theme")) {
+      var themeName = params.get("theme") as keyof typeof THEMES;
+      if (themeName && THEMES[themeName]) {
+        currentTheme = THEMES[themeName];
+        currentThemeName = themeName;
+        // Update active theme button
+        themeButtons.forEach(function updateBtn(btn) {
+          var btnEl = btn as HTMLElement;
+          if (btnEl.dataset.theme === themeName) {
+            btn.classList.add("active");
+          } else {
+            btn.classList.remove("active");
+          }
+        });
+      }
+    }
+    if (params.has("demoInput")) {
+      demoInputEl.value = params.get("demoInput") || "";
+      currentData.demoInput = demoInputEl.value;
+    }
+    if (params.has("demoOutput")) {
+      demoOutputEl.value = params.get("demoOutput") || "";
+      currentData.demoOutput = demoOutputEl.value;
+    }
+
+    // Update character counts
+    if (titleCount) {
+      titleCount.textContent = String(titleInput.value.length);
+    }
+    if (subtitleCount) {
+      subtitleCount.textContent = String(subtitleInput.value.length);
+    }
+  }
+
+  // Handle share link button click
+  async function handleShareLinkClick() {
+    var url = generateShareableURL();
+
+    try {
+      await navigator.clipboard.writeText(url);
+
+      // Show success state
+      if (shareLinkBtn) {
+        shareLinkBtn.classList.add("success");
+        var btnText = shareLinkBtn.querySelector(".btn-text");
+        if (btnText) {
+          btnText.textContent = "Copied!";
+        }
+
+        // Reset after 2 seconds
+        setTimeout(function resetBtn() {
+          shareLinkBtn.classList.remove("success");
+          if (btnText) {
+            btnText.textContent = "Share Link";
+          }
+        }, 2000);
+      }
+    } catch (error) {
+      log.error("Failed to copy URL:", error);
+      // Fallback: show the URL
+      prompt("Copy this shareable link:", url);
+    }
+  }
+
+  // Handle template selection
+  function handleTemplateChange() {
+    var templateName = templateSelect.value as keyof typeof TEMPLATES;
+
+    if (!templateName || !TEMPLATES[templateName]) {
+      return;
+    }
+
+    var template = TEMPLATES[templateName];
+
+    // Apply template values to form
+    titleInput.value = template.title;
+    currentData.title = template.title;
+
+    subtitleInput.value = template.subtitle;
+    currentData.subtitle = template.subtitle;
+
+    categoryInput.value = template.category;
+    currentData.category = template.category;
+
+    featuresInput.value = template.features.join(", ");
+    currentData.features = template.features;
+
+    iconSelect.value = template.icon;
+    currentData.icon = template.icon;
+
+    if (!urlInput.value) {
+      urlInput.value = "meysam.io";
+    }
+    if (!currentData.url) {
+      currentData.url = "meysam.io";
+    }
+
+    demoInputEl.value = template.demoInput;
+    currentData.demoInput = template.demoInput;
+
+    demoOutputEl.value = template.demoOutput;
+    currentData.demoOutput = template.demoOutput;
+
+    // Apply theme
+    var themeName = template.theme as keyof typeof THEMES;
+    if (THEMES[themeName]) {
+      currentTheme = THEMES[themeName];
+      currentThemeName = themeName;
+      themeButtons.forEach(function updateBtn(btn) {
+        var btnEl = btn as HTMLElement;
+        if (btnEl.dataset.theme === themeName) {
+          btn.classList.add("active");
+        } else {
+          btn.classList.remove("active");
+        }
+      });
+    }
+
+    // Update character counts
+    if (titleCount) {
+      titleCount.textContent = String(titleInput.value.length);
+    }
+    if (subtitleCount) {
+      subtitleCount.textContent = String(subtitleInput.value.length);
+    }
+
+    // Trigger updates
+    updatePreviews();
+    updatePlatformMockups();
+  }
+
+  var resizeObserver;
 
   // Initialize
   function init() {
+    // Apply URL parameters first (before any updates)
+    applyURLParams();
+
     // Set up input listeners
     [
       titleInput,
@@ -810,12 +1712,76 @@ var structuredData = {
       });
     });
 
+    // Set up copy buttons
+    copyButtons.forEach(function addCopyBtnListener(btn) {
+      btn.addEventListener("click", function addCopyClickHandler() {
+        var variant = (btn as HTMLElement).dataset.variant;
+        if (variant) {
+          copyVariant(variant);
+        }
+      });
+    });
+
+    // Set up theme buttons
+    themeButtons.forEach(function addThemeBtnListener(btn) {
+      btn.addEventListener("click", handleThemeClick);
+    });
+
+    // Set up share link button
+    if (shareLinkBtn) {
+      shareLinkBtn.addEventListener("click", handleShareLinkClick);
+    }
+
+    // Set up template selector
+    if (templateSelect) {
+      templateSelect.addEventListener("change", handleTemplateChange);
+    }
+
+    // Set up responsive scaling
+    updatePreviewScales();
+    window.addEventListener("resize", updatePreviewScales);
+
+    // Use ResizeObserver for more accurate container size tracking
+    if (typeof ResizeObserver !== "undefined") {
+      resizeObserver = new ResizeObserver(function onResize() {
+        updatePreviewScales();
+        updatePlatformMockups();
+      });
+      document
+        .querySelectorAll(".variant-preview")
+        .forEach(function observe(el) {
+          resizeObserver.observe(el);
+        });
+      // Also observe platform mockup containers
+      document
+        .querySelectorAll(
+          ".tweet-card-image, .linkedin-card-image, .slack-unfurl-image",
+        )
+        .forEach(function observe(el) {
+          resizeObserver.observe(el);
+        });
+    }
+
+    // Set up platform tab switching
+    platformTabs.forEach(function addTabListener(tab) {
+      tab.addEventListener("click", handlePlatformTabClick);
+    });
+
     // Initial render
     updatePreviews();
+    updatePlatformMockups();
+  }
+
+  function cleanup() {
+    if (resizeObserver) {
+      resizeObserver.disconnect();
+      resizeObserver = null;
+    }
   }
 
   document.addEventListener("DOMContentLoaded", init);
   document.addEventListener("astro:page-load", init);
+  document.addEventListener("astro:page-unload", cleanup);
 </script>
 
 <style scoped>
@@ -879,12 +1845,55 @@ var structuredData = {
 
   .demo-inputs {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: var(--space-xs);
   }
 
   .demo-inputs input {
     width: 100%;
+  }
+
+  .theme-options {
+    display: flex;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+  }
+
+  .theme-btn {
+    width: 40px;
+    height: 40px;
+    padding: 4px;
+    background: var(--color-bg);
+    border: 2px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .theme-btn:hover {
+    border-color: var(--color-text-dim);
+    transform: scale(1.05);
+  }
+
+  .theme-btn.active {
+    border-color: var(--color-text);
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+  }
+
+  .theme-swatch {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 4px;
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
+    flex-wrap: wrap;
   }
 
   .previews-section h2 {
@@ -895,7 +1904,76 @@ var structuredData = {
   .section-note {
     font-size: 0.875rem;
     color: var(--color-text-dim);
-    margin-bottom: var(--space-lg);
+    margin: 0;
+  }
+
+  .share-link-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: 0.625rem 1rem;
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    font-family: inherit;
+  }
+
+  .share-link-btn:hover {
+    border-color: var(--color-text-dim);
+    color: var(--color-text);
+    background: var(--color-bg-elevated);
+  }
+
+  .share-link-btn.success {
+    border-color: var(--color-success);
+    color: var(--color-success);
+    background: rgba(16, 185, 129, 0.1);
+  }
+
+  .input-header {
+    margin-bottom: var(--space-md);
+  }
+
+  .input-header h2 {
+    margin: 0;
+  }
+
+  .template-selector {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+
+  .template-label {
+    font-size: 0.875rem;
+    color: var(--color-text-dim);
+  }
+
+  .template-dropdown {
+    padding: 0.5rem 0.875rem;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+    color: var(--color-text);
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    font-family: inherit;
+  }
+
+  .template-dropdown:hover {
+    border-color: var(--color-text-dim);
+  }
+
+  .template-dropdown:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
   }
 
   .variants-grid {
@@ -922,6 +2000,44 @@ var structuredData = {
     font-size: 1rem;
     margin: 0;
     color: var(--color-text-muted);
+  }
+
+  .variant-actions {
+    display: flex;
+    gap: var(--space-xs);
+  }
+
+  .copy-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: 0.5rem 1rem;
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    font-family: inherit;
+  }
+
+  .copy-btn:hover {
+    border-color: var(--color-text-dim);
+    color: var(--color-text);
+    background: var(--color-bg-elevated);
+  }
+
+  .copy-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+
+  .copy-btn.success {
+    border-color: var(--color-success);
+    color: var(--color-success);
+    background: rgba(16, 185, 129, 0.1);
   }
 
   .download-btn {
@@ -964,23 +2080,386 @@ var structuredData = {
     }
   }
 
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
   .variant-preview {
     background: #0a0a0a;
     border-radius: var(--border-radius-sm);
     overflow: hidden;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1200 / 630;
   }
 
   .preview-scale-wrapper {
-    transform-origin: top left;
-    transform: scale(0.5);
-    width: 200%;
-    height: 0;
-    padding-bottom: 26.25%; /* (630/1200) * 50% */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .preview-canvas {
     width: 1200px;
     height: 630px;
+    transform: scale(var(--preview-scale, 0.5));
+    transform-origin: center center;
+    flex-shrink: 0;
+  }
+
+  /* Platform Mockups */
+  .platform-section h2 {
+    font-size: 1.25rem;
+    margin-bottom: var(--space-xs);
+  }
+
+  .platform-tabs {
+    display: flex;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-lg);
+    flex-wrap: wrap;
+  }
+
+  .platform-tab {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: 0.625rem 1rem;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    font-family: inherit;
+  }
+
+  .platform-tab:hover {
+    border-color: var(--color-text-dim);
+    color: var(--color-text);
+  }
+
+  .platform-tab.active {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: white;
+  }
+
+  .platform-mockups {
+    position: relative;
+    min-height: 400px;
+  }
+
+  .platform-mockup {
+    display: none;
+  }
+
+  .platform-mockup.active {
+    display: block;
+    animation: fadeIn 0.3s ease;
+  }
+
+  /* Twitter/X Mockup */
+  .tweet-container {
+    background: #000;
+    border: 1px solid #2f3336;
+    border-radius: 16px;
+    padding: var(--space-md);
+    max-width: 550px;
+  }
+
+  .tweet-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
+  }
+
+  .tweet-avatar {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #3b82f6, #60a5fa);
+    border-radius: 50%;
+  }
+
+  .tweet-user {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .tweet-name {
+    color: #e7e9ea;
+    font-weight: 700;
+    font-size: 0.9375rem;
+  }
+
+  .tweet-handle {
+    color: #71767b;
+    font-size: 0.875rem;
+  }
+
+  .tweet-text {
+    color: #e7e9ea;
+    font-size: 0.9375rem;
+    margin-bottom: var(--space-sm);
+    line-height: 1.4;
+  }
+
+  .tweet-card {
+    border: 1px solid #2f3336;
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: var(--space-sm);
+  }
+
+  .tweet-card-image {
+    width: 100%;
+    aspect-ratio: 1200 / 630;
+    background: #0a0a0a;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .tweet-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .tweet-card-content {
+    padding: var(--space-sm);
+    background: #000;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .tweet-card-url {
+    color: #71767b;
+    font-size: 0.8125rem;
+  }
+
+  .tweet-card-title {
+    color: #e7e9ea;
+    font-size: 0.9375rem;
+    font-weight: 400;
+  }
+
+  .tweet-card-desc {
+    color: #71767b;
+    font-size: 0.8125rem;
+  }
+
+  .tweet-actions {
+    display: flex;
+    justify-content: space-between;
+    color: #71767b;
+    font-size: 0.8125rem;
+    max-width: 400px;
+  }
+
+  /* LinkedIn Mockup */
+  .linkedin-post {
+    background: #1b1f23;
+    border: 1px solid #38434f;
+    border-radius: 8px;
+    padding: var(--space-md);
+    max-width: 550px;
+  }
+
+  .linkedin-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
+  }
+
+  .linkedin-avatar {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #0a66c2, #378fe9);
+    border-radius: 50%;
+  }
+
+  .linkedin-user {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .linkedin-name {
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.875rem;
+  }
+
+  .linkedin-meta {
+    color: #b0b7bf;
+    font-size: 0.75rem;
+  }
+
+  .linkedin-text {
+    color: #fff;
+    font-size: 0.875rem;
+    margin-bottom: var(--space-sm);
+    line-height: 1.5;
+  }
+
+  .linkedin-card {
+    border: 1px solid #38434f;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: var(--space-sm);
+  }
+
+  .linkedin-card-image {
+    width: 100%;
+    aspect-ratio: 1200 / 630;
+    background: #0a0a0a;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .linkedin-card-content {
+    padding: var(--space-sm);
+    background: #1b1f23;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .linkedin-card-title {
+    color: #fff;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .linkedin-card-url {
+    color: #b0b7bf;
+    font-size: 0.75rem;
+  }
+
+  .linkedin-actions {
+    display: flex;
+    justify-content: space-around;
+    color: #b0b7bf;
+    font-size: 0.8125rem;
+    padding-top: var(--space-sm);
+    border-top: 1px solid #38434f;
+  }
+
+  /* Slack Mockup */
+  .slack-message {
+    background: #1a1d21;
+    border-radius: 8px;
+    padding: var(--space-md);
+    display: flex;
+    gap: var(--space-sm);
+    max-width: 600px;
+  }
+
+  .slack-avatar {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, #4a154b, #e01e5a);
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  .slack-content {
+    flex: 1;
+  }
+
+  .slack-header {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-sm);
+    margin-bottom: 4px;
+  }
+
+  .slack-name {
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.9375rem;
+  }
+
+  .slack-time {
+    color: #ababad;
+    font-size: 0.75rem;
+  }
+
+  .slack-text {
+    color: #d1d2d3;
+    font-size: 0.9375rem;
+    margin-bottom: var(--space-sm);
+  }
+
+  .slack-unfurl {
+    display: flex;
+    gap: var(--space-sm);
+    margin-top: var(--space-sm);
+  }
+
+  .slack-unfurl-bar {
+    width: 4px;
+    background: #1264a3;
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+
+  .slack-unfurl-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .slack-unfurl-image {
+    width: 360px;
+    max-width: 100%;
+    aspect-ratio: 1200 / 630;
+    background: #0a0a0a;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .slack-unfurl-site {
+    color: #ababad;
+    font-size: 0.75rem;
+  }
+
+  .slack-unfurl-title {
+    color: #1d9bd1;
+    font-size: 0.9375rem;
+    font-weight: 700;
+  }
+
+  .slack-unfurl-desc {
+    color: #d1d2d3;
+    font-size: 0.875rem;
+  }
+
+  /* Platform mockup preview canvas (scaled down version) */
+  .tweet-card-image .platform-preview-canvas,
+  .linkedin-card-image .platform-preview-canvas,
+  .slack-unfurl-image .platform-preview-canvas {
+    width: 1200px;
+    height: 630px;
+    transform-origin: top left;
+    position: absolute;
+    top: 0;
+    left: 0;
   }
 
   .tips-section h2 {
@@ -1086,11 +2565,6 @@ var structuredData = {
 
     .form-group.full-width {
       grid-column: 1;
-    }
-
-    .preview-scale-wrapper {
-      transform: scale(0.3);
-      padding-bottom: 15.75%; /* (630/1200) * 30% */
     }
 
     .form-row {
