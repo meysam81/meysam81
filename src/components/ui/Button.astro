@@ -1,0 +1,44 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"button"> {
+  variant?: "primary" | "secondary" | "ghost";
+  size?: "sm" | "md" | "lg";
+  href?: string;
+  external?: boolean;
+}
+
+var {
+  variant = "primary",
+  size = "md",
+  href,
+  external = false,
+  class: className,
+  ...attrs
+} = Astro.props;
+
+var baseClasses = "btn";
+var variantClasses = {
+  primary: "btn-primary",
+  secondary: "btn-secondary",
+  ghost:
+    "bg-transparent text-[var(--color-text-muted)] hover:text-[var(--color-text)] hover:bg-[var(--color-bg-elevated)] border-none",
+};
+var sizeClasses = {
+  sm: "px-4 py-2 text-sm",
+  md: "", // Default size from .btn
+  lg: "px-10 py-4 text-lg",
+};
+
+var classes = [baseClasses, variantClasses[variant], sizeClasses[size], className]
+  .filter(Boolean)
+  .join(" ");
+var Element = href ? "a" : "button";
+var linkProps = href
+  ? { href, ...(external && { target: "_blank", rel: "noopener noreferrer" }) }
+  : {};
+---
+
+<Element class={classes} {...linkProps} {...attrs}>
+  <slot />
+</Element>

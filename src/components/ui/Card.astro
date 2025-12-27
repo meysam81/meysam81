@@ -1,0 +1,39 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"div"> {
+  hover?: boolean;
+  padding?: "none" | "sm" | "md" | "lg" | "xl";
+  as?: "div" | "article" | "section";
+}
+
+var {
+  hover = true,
+  padding = "lg",
+  as: Element = "div",
+  class: className,
+  ...attrs
+} = Astro.props;
+
+var paddingClasses = {
+  none: "p-0",
+  sm: "p-[var(--space-sm)]",
+  md: "p-[var(--space-md)]",
+  lg: "p-[var(--space-lg)]",
+  xl: "p-[var(--space-xl)]",
+};
+
+var baseClasses =
+  "bg-[var(--color-bg-card)] border border-[var(--color-border)] rounded-[var(--radius)]";
+var hoverClasses = hover
+  ? "transition-all duration-[var(--duration-base)] hover:border-[var(--color-text-dim)] hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)]"
+  : "";
+
+var classes = [baseClasses, paddingClasses[padding], hoverClasses, className]
+  .filter(Boolean)
+  .join(" ");
+---
+
+<Element class={classes} {...attrs}>
+  <slot />
+</Element>

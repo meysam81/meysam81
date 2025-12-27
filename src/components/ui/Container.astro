@@ -1,0 +1,19 @@
+---
+interface Props {
+  variant?: "default" | "narrow";
+  class?: string;
+}
+
+var { variant = "default", class: className } = Astro.props;
+
+var variantClasses = {
+  default: "container",
+  narrow: "container-narrow",
+};
+
+var classes = [variantClasses[variant], className].filter(Boolean).join(" ");
+---
+
+<div class={classes}>
+  <slot />
+</div>

@@ -14,11 +14,13 @@
     "pagefind": "^1.4.0",
     "rehype-autolink-headings": "^7.1.0",
     "rehype-slug": "^6.0.0",
-    "sharp": "^0.34.5"
+    "sharp": "^0.34.5",
+    "vue": "^3.5.13"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.6",
     "@astrojs/mdx": "^4.3.13",
+    "@astrojs/vue": "^5.1.0",
     "@tailwindcss/vite": "^4.1.18",
     "@vitejs/plugin-vue": "^6.0.3",
     "ky": "^1.14.1",
