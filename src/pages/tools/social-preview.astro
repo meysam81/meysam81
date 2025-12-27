@@ -1676,6 +1676,8 @@ var structuredData = {
     updatePlatformMockups();
   }
 
+  var resizeObserver;
+
   // Initialize
   function init() {
     // Apply URL parameters first (before any updates)
@@ -1739,7 +1741,7 @@ var structuredData = {
 
     // Use ResizeObserver for more accurate container size tracking
     if (typeof ResizeObserver !== "undefined") {
-      var resizeObserver = new ResizeObserver(function onResize() {
+      resizeObserver = new ResizeObserver(function onResize() {
         updatePreviewScales();
         updatePlatformMockups();
       });
@@ -1768,8 +1770,16 @@ var structuredData = {
     updatePlatformMockups();
   }
 
+  function cleanup() {
+    if (resizeObserver) {
+      resizeObserver.disconnect();
+      resizeObserver = null;
+    }
+  }
+
   document.addEventListener("DOMContentLoaded", init);
   document.addEventListener("astro:page-load", init);
+  document.addEventListener("astro:page-unload", cleanup);
 </script>
 
 <style scoped>
