@@ -7,7 +7,7 @@ Astro v5 personal blog and landing page at `https://meysam.io`. MDX blog with se
 - **Package manager**: Use `bun` exclusively (not npm/pnpm/yarn)
 - **No console statements**: Use `loglevel` instead - oxlint denies `console.*`
 - **Path aliases**: Always use `@/` for src imports: `import X from "@/components/X.astro"`
-- **Styling**: Vanilla CSS with CSS variables in `src/styles/global.css` - no frameworks
+- **Styling**: Tailwind v4 with design tokens in `src/styles/theme.css`
 
 ## Commands
 
@@ -24,11 +24,15 @@ bunx prettier@latest -w .              # Format
 ```
 src/
 ├── components/          # Astro components (Header, Footer, Newsletter, ContentCard, etc.)
+│   ├── ui/              # Reusable UI components (Button, Card, Input, Badge, Section)
+│   └── vue/             # Vue components for interactivity
+│       └── tools/       # Vue tool page components
+├── composables/         # Vue composables (useScrollLock, useLogger, useScrollPercentage)
 ├── content/blog/*.mdx   # Blog posts with frontmatter
 ├── layouts/             # BaseLayout.astro, BlogPostLayout.astro
 ├── pages/               # index.astro, links.astro, 404.astro, blog/
 ├── utils/               # blog.ts, reading-time.ts, series.ts, slug.ts, pirsch.ts
-├── styles/global.css    # CSS variables and global styles
+├── styles/theme.css     # Tailwind v4 design tokens and global styles
 └── content.config.ts    # Content Collections schema
 public/                  # Static assets (SVGs, PNGs, robots.txt)
 scripts/convert-svgs.js  # Asset conversion utility
@@ -99,3 +103,53 @@ PIRSCH_HOSTNAME       # Analytics
 - **Pagefind**: Client-side search, index built during `bun run build`
 - **Webmention.io**: IndieWeb mentions (likes, reposts, replies)
 - **Pirsch**: Privacy-focused analytics
+- **Vue**: Islands architecture for interactive components
+
+## Design System
+
+Design tokens defined in `src/styles/theme.css`. Never use hardcoded values.
+
+### Colors
+
+- Background: `var(--color-bg)`, `var(--color-bg-elevated)`, `var(--color-bg-card)`
+- Text: `var(--color-text)`, `var(--color-text-muted)`, `var(--color-text-dim)`
+- Interactive: `var(--color-accent)`, `var(--color-accent-hover)`, `var(--color-accent-light)`
+- Borders: `var(--color-border)`, `var(--color-border-hover)`
+- Semantic: `var(--color-success)`, `var(--color-error)`, `var(--color-warning)`
+
+### Spacing
+
+Use `var(--space-xs)` through `var(--space-3xl)`:
+- xs: 0.5rem, sm: 1rem, md: 1.5rem, lg: 2rem, xl: 3rem, 2xl: 4rem, 3xl: 6rem
+
+### Typography
+
+- Font: `var(--font-sans)`, `var(--font-mono)`
+- Sizes: `var(--text-xs)` through `var(--text-5xl)` (fluid)
+
+### UI Components
+
+Import from `@/components/ui`:
+
+- `Button` - variant: primary/secondary/ghost, size: sm/md/lg
+- `Card` - hover, padding options (none/sm/md/lg/xl)
+- `Input` - with label, error, hint support
+- `Badge` - variant: default/success/warning/error/accent
+- `Section` - variant: default/hero/narrow
+- `Container` - variant: default/narrow
+
+## Vue Islands
+
+Interactive components in `src/components/vue/`:
+
+- `MobileMenu.vue` - client:media="(max-width: 768px)"
+
+Tool pages use `client:only="vue"` for full client-side rendering.
+
+### Composables
+
+Located in `src/composables/`:
+
+- `useScrollLock()` - body scroll locking for modals/menus
+- `useLogger(prefix)` - loglevel wrapper (no console.\*)
+- `useScrollPercentage()` - reactive scroll percentage tracking

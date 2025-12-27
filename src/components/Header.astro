@@ -1,67 +1,32 @@
 ---
+import MobileMenu from "@/components/vue/MobileMenu.vue";
 
+var navItems = [
+  { label: "Projects", href: "/#projects" },
+  { label: "Tools", href: "/tools" },
+  { label: "Blog", href: "/blog" },
+  { label: "Links", href: "/links" },
+  { label: "Newsletter", href: "/#newsletter", isButton: true },
+];
 ---
 
 <header class="header">
   <nav class="nav container">
     <a href="/" class="logo"> Meysam </a>
 
-    <button class="hamburger" aria-label="Toggle menu" aria-expanded="false">
-      <span class="hamburger-line"></span>
-      <span class="hamburger-line"></span>
-      <span class="hamburger-line"></span>
-    </button>
-
-    <div class="nav-links">
+    <!-- Desktop nav (static) -->
+    <div class="nav-links desktop-nav">
       <a href="/#projects" class="nav-link">Projects</a>
       <a href="/tools" class="nav-link">Tools</a>
       <a href="/blog" class="nav-link">Blog</a>
       <a href="/links" class="nav-link">Links</a>
       <a href="/#newsletter" class="btn btn-primary btn-sm">Newsletter</a>
     </div>
+
+    <!-- Mobile nav (Vue island) -->
+    <MobileMenu items={navItems} client:media="(max-width: 768px)" />
   </nav>
 </header>
-
-<script>
-  function initHeaderMenu() {
-    const hamburger = document.querySelector(".hamburger");
-    const navLinks = document.querySelector(".nav-links");
-
-    if (!hamburger || !navLinks) {
-      return;
-    }
-
-    hamburger.addEventListener("click", (e) => {
-      e.stopPropagation();
-      const isExpanded = hamburger.getAttribute("aria-expanded") === "true";
-      hamburger.setAttribute("aria-expanded", String(!isExpanded));
-      hamburger.classList.toggle("active");
-      navLinks.classList.toggle("active");
-    });
-
-    // Close menu when clicking on a link
-    document.querySelectorAll(".nav-link, .nav-links .btn").forEach((link) => {
-      link.addEventListener("click", () => {
-        hamburger.classList.remove("active");
-        navLinks.classList.remove("active");
-        hamburger.setAttribute("aria-expanded", "false");
-      });
-    });
-
-    // Close menu when clicking outside
-    document.addEventListener("click", (e) => {
-      const target = e.target as HTMLElement;
-      if (!target.closest(".nav") && navLinks.classList.contains("active")) {
-        hamburger.classList.remove("active");
-        navLinks.classList.remove("active");
-        hamburger.setAttribute("aria-expanded", "false");
-      }
-    });
-  }
-
-  document.addEventListener("DOMContentLoaded", initHeaderMenu);
-  document.addEventListener("astro:page-load", initHeaderMenu);
-</script>
 
 <style scoped>
   .header {
@@ -96,51 +61,6 @@
     color: var(--color-accent-light);
   }
 
-  /* Hamburger Menu */
-  .hamburger {
-    --hamburger-gap: 5px;
-    --hamburger-line-height: 2px;
-    display: none;
-    flex-direction: column;
-    gap: var(--hamburger-gap);
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 0.5rem;
-    z-index: 101;
-    transition: all var(--transition-base);
-  }
-
-  .hamburger-line {
-    width: 24px;
-    height: var(--hamburger-line-height);
-    background: var(--color-text);
-    border-radius: 2px;
-    transition: all var(--transition-base);
-  }
-
-  .hamburger.active .hamburger-line:nth-child(1) {
-    transform: translateY(
-        calc(var(--hamburger-gap) + var(--hamburger-line-height))
-      )
-      rotate(45deg);
-  }
-
-  .hamburger.active .hamburger-line:nth-child(2) {
-    opacity: 0;
-  }
-
-  .hamburger.active .hamburger-line:nth-child(3) {
-    transform: translateY(
-        calc(-1 * (var(--hamburger-gap) + var(--hamburger-line-height)))
-      )
-      rotate(-45deg);
-  }
-
-  .hamburger:hover .hamburger-line {
-    background: var(--color-accent-light);
-  }
-
   /* Navigation Links */
   .nav-links {
     display: flex;
@@ -170,64 +90,8 @@
       padding: 1rem var(--space-md);
     }
 
-    .hamburger {
-      display: flex;
-    }
-
-    .nav-links {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      right: 0;
-      flex-direction: column;
-      align-items: stretch;
-      gap: 0;
-      background: rgba(10, 10, 10, 0.98);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--color-border);
-      padding: 0;
-      max-height: 0;
-      overflow: hidden;
-      opacity: 0;
-      transition:
-        max-height var(--transition-base),
-        opacity var(--transition-base),
-        padding var(--transition-base);
-    }
-
-    .nav-links.active {
-      max-height: 100vh;
-      opacity: 1;
-      padding: var(--space-md) 0;
-    }
-
-    .nav-link,
-    .btn {
-      display: block;
-      padding: var(--space-sm) var(--space-md);
-      text-align: left;
-      border-radius: 0;
-      transition: all var(--transition-fast);
-    }
-
-    .nav-link {
-      border-bottom: 1px solid var(--color-border);
-    }
-
-    .nav-link:hover {
-      background: var(--color-bg-elevated);
-      padding-left: calc(var(--space-md) + 0.5rem);
-    }
-
-    .btn-sm {
-      margin: var(--space-sm) var(--space-md) 0;
-      text-align: center;
-      border-radius: var(--border-radius-sm);
-    }
-
-    .btn-sm:hover {
-      transform: none;
-      box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+    .desktop-nav {
+      display: none;
     }
   }
 </style>

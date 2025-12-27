@@ -2,6 +2,7 @@
   "dependencies": {
     "@astrojs/rss": "^4.0.14",
     "@astrojs/sitemap": "^3.6.0",
+    "vue": "^3.5.13",
     "@expressive-code/plugin-line-numbers": "^0.41.4",
     "@playform/compress": "^0.2.0",
     "astro": "^5.16.5",
@@ -19,6 +20,7 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.6",
     "@astrojs/mdx": "^4.3.13",
+    "@astrojs/vue": "^5.1.0",
     "@tailwindcss/vite": "^4.1.18",
     "@vitejs/plugin-vue": "^6.0.3",
     "ky": "^1.14.1",

@@ -1,0 +1,24 @@
+---
+interface Props {
+  id?: string;
+  variant?: "default" | "hero" | "narrow";
+  class?: string;
+}
+
+var { id, variant = "default", class: className } = Astro.props;
+
+var variantClasses = {
+  default: "container",
+  hero: "section-hero container",
+  narrow: "container-narrow",
+};
+
+var baseClasses = "py-[var(--space-3xl)]";
+var classes = [baseClasses, variantClasses[variant], className]
+  .filter(Boolean)
+  .join(" ");
+---
+
+<section id={id} class={classes}>
+  <slot />
+</section>
