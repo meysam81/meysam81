@@ -45,7 +45,7 @@ var structuredData = {
   <div class="tool-header">
     <h1>Social Preview Generator</h1>
     <p class="subtitle">
-      Create beautiful Open Graph images for your pages. Three variants, instant
+      Create beautiful Open Graph images (og-image) for your pages. Three variants, instant
       download.
     </p>
   </div>
@@ -54,7 +54,7 @@ var structuredData = {
     <!-- Input Form -->
     <div class="tool-card input-section">
       <div class="section-header input-header">
-        <h2>Content</h2>
+        <h2>Create Your Preview</h2>
         <div class="template-selector">
           <span class="template-label">Quick start:</span>
           <select id="template-select" class="template-dropdown">
@@ -74,7 +74,7 @@ var structuredData = {
           <input
             type="text"
             id="title-input"
-            placeholder="e.g., Cron Expression Generator"
+            placeholder="e.g., AI-Powered Code Reviews"
             maxlength="60"
           />
           <span class="char-count"><span id="title-count">0</span>/60</span>
@@ -85,7 +85,7 @@ var structuredData = {
           <input
             type="text"
             id="subtitle-input"
-            placeholder="e.g., Build and decode cron schedules with plain English"
+            placeholder="e.g., Ship 10x faster with intelligent PR analysis and suggestions"
             maxlength="120"
           />
           <span class="char-count"><span id="subtitle-count">0</span>/120</span>
@@ -96,7 +96,7 @@ var structuredData = {
           <input
             type="text"
             id="category-input"
-            placeholder="e.g., DevOps, Free Tools"
+            placeholder="e.g., Developer Tool"
             maxlength="20"
           />
         </div>
@@ -106,8 +106,8 @@ var structuredData = {
           <input
             type="text"
             id="url-input"
-            placeholder="meysam.io/tools/cron"
-            value="meysam.io"
+            placeholder="your-site.com"
+            value=""
             maxlength="40"
           />
         </div>
@@ -117,7 +117,7 @@ var structuredData = {
           <input
             type="text"
             id="features-input"
-            placeholder="e.g., Free, No Signup, No Ads"
+            placeholder="e.g., Free Trial, GitHub Integration, Slack Alerts"
           />
         </div>
 
@@ -155,19 +155,19 @@ var structuredData = {
           </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group full-width">
           <label>Demo (Split variant)</label>
           <div class="demo-inputs">
             <input
               type="text"
               id="demo-input"
-              placeholder="Input: * * * * *"
+              placeholder="Input: PR #1247"
               maxlength="30"
             />
             <input
               type="text"
               id="demo-output"
-              placeholder="Output: Every minute"
+              placeholder="Output: 3 issues found, 12 improvements suggested"
               maxlength="40"
             />
           </div>
@@ -625,50 +625,50 @@ var structuredData = {
   // Template presets
   var TEMPLATES = {
     devtool: {
-      title: "Cron Expression Generator",
-      subtitle: "Build and decode cron schedules with plain English",
+      title: "AI-Powered Code Reviews",
+      subtitle: "Ship 10x faster with intelligent PR analysis and suggestions",
       category: "Developer Tool",
-      features: ["Free", "No Signup", "Open Source"],
+      features: ["Free Trial", "GitHub Integration", "Slack Alerts"],
       icon: "tool",
       theme: "blue",
-      demoInput: "0 9 * * 1-5",
-      demoOutput: "Every weekday at 9:00 AM",
+      demoInput: "PR #1247",
+      demoOutput: "3 issues found, 12 improvements suggested",
     },
     blog: {
-      title: "10 Tips for Better Code Reviews",
-      subtitle: "Practical advice to improve your team's code review process",
-      category: "Blog Post",
-      features: ["5 min read", "Engineering", "Best Practices"],
+      title: "Why We Migrated to Edge Computing",
+      subtitle: "How we reduced latency by 73% and saved $40k monthly",
+      category: "Case Study",
+      features: ["8 min read", "Engineering", "Performance"],
       icon: "lightbulb",
       theme: "purple",
       demoInput: "",
       demoOutput: "",
     },
     saas: {
-      title: "Ship faster with AutoDeploy",
-      subtitle: "Automated deployment pipelines that just work",
-      category: "SaaS",
-      features: ["Free Trial", "No Credit Card", "SOC2 Compliant"],
+      title: "DataSync Pro",
+      subtitle: "Real-time data synchronization across your entire stack",
+      category: "SaaS Platform",
+      features: ["14-day Trial", "SOC2 Type II", "99.99% Uptime"],
       icon: "rocket",
       theme: "green",
       demoInput: "",
       demoOutput: "",
     },
     opensource: {
-      title: "FastCache",
-      subtitle: "Lightning-fast in-memory caching for Node.js",
+      title: "NextAuth v5",
+      subtitle: "Authentication for Next.js 14 with App Router support",
       category: "Open Source",
-      features: ["MIT License", "TypeScript", "Zero Dependencies"],
+      features: ["MIT License", "TypeScript", "20+ Providers"],
       icon: "code",
       theme: "orange",
       demoInput: "",
       demoOutput: "",
     },
     course: {
-      title: "Master System Design",
-      subtitle: "Learn to design scalable systems like a senior engineer",
+      title: "SaaS Metrics Masterclass",
+      subtitle: "Master ARR, churn, CAC, and LTV for product-led growth",
       category: "Online Course",
-      features: ["20+ Hours", "Projects Included", "Certificate"],
+      features: ["6-week program", "Real examples", "Certificate"],
       icon: "chart",
       theme: "pink",
       demoInput: "",
@@ -706,14 +706,14 @@ var structuredData = {
 
   // Current state
   var currentData = {
-    title: "Your Title Here",
-    subtitle: "Add a compelling description",
-    category: "",
-    url: "meysam.io",
-    features: [] as string[],
-    icon: "none",
-    demoInput: "",
-    demoOutput: "",
+    title: "CloudFlow Analytics",
+    subtitle: "Real-time insights for modern SaaS teams",
+    category: "SaaS Platform",
+    url: "cloudflow.io",
+    features: ["14-day trial", "No credit card", "Cancel anytime"] as string[],
+    icon: "chart",
+    demoInput: "Monthly ARR",
+    demoOutput: "$847K (+23% MoM)",
   };
 
   // Generate Minimal variant HTML
@@ -909,15 +909,16 @@ var structuredData = {
       '<div style="position:absolute;left:80px;right:80px;bottom:50px;display:flex;align-items:center;gap:32px;">' +
       '<div style="display:flex;align-items:center;gap:10px;">' +
       '<svg width="36" height="36" viewBox="0 0 200 200"><circle cx="100" cy="100" r="70" fill="none" stroke="url(#sg1)" stroke-width="3"/><text x="100" y="135" font-family="-apple-system,BlinkMacSystemFont,\'Segoe UI\',sans-serif" font-size="110" font-weight="700" fill="url(#sg1)" text-anchor="middle">M</text><defs><linearGradient id="sg1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:' + currentTheme.primary + '"/><stop offset="100%" style="stop-color:' + currentTheme.secondary + '"/></linearGradient></defs></svg>' +
-      '<span style="font-size:18px;font-weight:600;color:#f5f5f5;">Meysam</span>' +
-      "</div>" +
-      '<div style="display:flex;gap:20px;">' +
-      '<span style="display:flex;align-items:center;gap:8px;color:#a0a0a0;font-size:15px;"><span style="width:8px;height:8px;background:#10b981;border-radius:50%;"></span>Free</span>' +
-      '<span style="display:flex;align-items:center;gap:8px;color:#a0a0a0;font-size:15px;"><span style="width:8px;height:8px;background:#10b981;border-radius:50%;"></span>No Signup</span>' +
-      "</div>" +
-      '<span style="margin-left:auto;font-size:18px;color:#6a6a6a;letter-spacing:0.01em;">' +
+      '<span style="font-size:18px;font-weight:600;color:#f5f5f5;">Meysam Azad</span>' +
+      '<span style="color:#6a6a6a;">|</span>' +
+      '<span style="font-size:18px;color:#6a6a6a;">' +
       escapeHtml(data.url) +
       "</span>" +
+      "</div>" +
+      '<div style="display:flex;gap:12px;">' +
+      '<span style="padding:8px 16px;border-radius:6px;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);color:#10b981;">Free</span>' +
+      '<span style="padding:8px 16px;border-radius:6px;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;background:' + currentTheme.bgGlow + ';border:1px solid ' + currentTheme.borderSubtle + ';color:' + currentTheme.secondary + ';">No Signup</span>' +
+      "</div>" +
       "</div>" +
       "</div>"
     );
@@ -1637,7 +1638,7 @@ var structuredData = {
 
   .demo-inputs {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: var(--space-xs);
   }
 
