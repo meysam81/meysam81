@@ -2,7 +2,6 @@
   "dependencies": {
     "@astrojs/rss": "^4.0.14",
     "@astrojs/sitemap": "^3.6.0",
-    "vue": "^3.5.13",
     "@expressive-code/plugin-line-numbers": "^0.41.4",
     "@playform/compress": "^0.2.0",
     "astro": "^5.16.5",
@@ -15,7 +14,8 @@
     "pagefind": "^1.4.0",
     "rehype-autolink-headings": "^7.1.0",
     "rehype-slug": "^6.0.0",
-    "sharp": "^0.34.5"
+    "sharp": "^0.34.5",
+    "vue": "^3.5.13"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.6",
