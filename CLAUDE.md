@@ -159,11 +159,12 @@ Blog posts use Astro Content Collections with the following schema (`src/content
   slug?: string;          // Custom URL slug
   series?: string;        // Series name (e.g., "Customer Discovery Journey")
   seriesOrder?: number;   // Order within series (1, 2, 3...)
-  references?: Array<{    // Further reading/citations
+  references?: Array<{    // Further reading/citations (external links)
     title: string;
     url: string;
     description?: string;
   }>;
+  relatedPosts?: string[];  // Slugs of related blog posts (internal links)
 }
 ```
 
@@ -201,7 +202,8 @@ Specialized layout for blog posts. Features:
 - Image zoom on click (medium-zoom)
 - Giscus comments integration
 - Webmentions display (likes, reposts, replies)
-- References/Further Reading section
+- References/Further Reading section (external links)
+- Related Reading section (internal links to other blog posts)
 - Pirsch page view counts
 - Series banner and navigation (when post is part of a series)
 

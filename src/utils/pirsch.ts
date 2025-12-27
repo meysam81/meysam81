@@ -111,7 +111,6 @@ export async function getBlogPostViews(hostname, path) {
         pathViewsMap[stats[i].path] = views;
         totalViews += views;
       }
-      log.debug("Pirsch statistics for " + path + ":", pathViewsMap);
       return totalViews;
     }
 

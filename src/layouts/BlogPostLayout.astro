@@ -27,6 +27,13 @@ interface Props {
     url?: string;
     description?: string;
   }>;
+  relatedPosts?: Array<{
+    slug: string;
+    data: {
+      title: string;
+      description: string;
+    };
+  }>;
   seriesInfo?: SeriesInfo | null;
 }
 
@@ -42,6 +49,7 @@ var {
   readingTime,
   pageViews,
   references,
+  relatedPosts,
   seriesInfo,
 } = Astro.props;
 
@@ -318,6 +326,7 @@ var fullURL = canonicalURL.toString();
       <TableOfContents
         headings={headings}
         hasReferences={references && references.length > 0}
+        hasRelatedPosts={relatedPosts && relatedPosts.length > 0}
       />
 
       <div class="post-content">
@@ -376,6 +385,55 @@ var fullURL = canonicalURL.toString();
                     {ref.description && (
                       <p class="reference-description">{ref.description}</p>
                     )}
+                  </li>
+                );
+              })}
+            </ul>
+          </aside>
+        )
+      }
+
+      {
+        relatedPosts && relatedPosts.length > 0 && (
+          <aside class="related-section" id="related-reading">
+            <h2 class="related-title">
+              <svg
+                class="related-icon"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+              </svg>
+              Related Reading
+            </h2>
+            <p class="related-intro">
+              Explore more articles on similar topics from this blog.
+            </p>
+            <ul class="related-list">
+              {relatedPosts.map(function mapRelatedPosts(post) {
+                return (
+                  <li class="related-item">
+                    <a href={`/blog/${post.slug}`} class="related-link">
+                      <span class="related-post-title">{post.data.title}</span>
+                      <svg
+                        class="arrow-icon"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                        <polyline points="12 5 19 12 12 19" />
+                      </svg>
+                    </a>
+                    <p class="related-description">{post.data.description}</p>
                   </li>
                 );
               })}
@@ -794,6 +852,100 @@ var fullURL = canonicalURL.toString();
   }
 
   .reference-description {
+    margin-top: var(--space-xs);
+    margin-bottom: 0;
+    font-size: 0.9375rem;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+  }
+
+  .related-section {
+    margin-top: var(--space-2xl);
+    padding: var(--space-xl);
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+  }
+
+  .related-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: 1.5rem;
+    margin-bottom: var(--space-md);
+    color: var(--color-text);
+    border: none;
+    padding: 0;
+    margin-top: 0;
+  }
+
+  .related-icon {
+    color: var(--color-accent);
+    flex-shrink: 0;
+  }
+
+  .related-intro {
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-lg);
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .related-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .related-item {
+    padding: var(--space-md);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+    transition: all var(--transition-fast);
+    margin: 0;
+  }
+
+  .related-item:hover {
+    border-color: var(--color-accent);
+    background: rgba(59, 130, 246, 0.05);
+  }
+
+  .related-link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    text-decoration: none;
+    color: var(--color-text);
+    font-weight: 500;
+    border: none;
+    transition: color var(--transition-fast);
+  }
+
+  .related-link:hover {
+    color: var(--color-accent-light);
+    border: none;
+  }
+
+  .related-post-title {
+    flex: 1;
+  }
+
+  .arrow-icon {
+    color: var(--color-text-dim);
+    flex-shrink: 0;
+    transition: transform var(--transition-fast);
+  }
+
+  .related-link:hover .arrow-icon {
+    transform: translateX(4px);
+    color: var(--color-accent);
+  }
+
+  .related-description {
     margin-top: var(--space-xs);
     margin-bottom: 0;
     font-size: 0.9375rem;
