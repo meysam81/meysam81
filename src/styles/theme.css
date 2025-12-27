@@ -88,9 +88,9 @@
   --radius: 12px;
   --radius-sm: 8px;
   --radius-md: 12px;
-  --border-radius: 12px;
-  --border-radius-sm: 8px;
-  --border-radius-md: 12px;
+  --border-radius: var(--radius);
+  --border-radius-sm: var(--radius-sm);
+  --border-radius-md: var(--radius-md);
 
   /* -----------------------------
      Motion
