@@ -31,7 +31,7 @@ jobs:
         with:
           bun-version: latest
       - name: Run prettier
-        run: bunx prettier@v3 -w .
+        run: bunx -p prettier-plugin-astro@v0 -p prettier@v3 prettier -w .
       - name: Commit if changed
         if: github.event_name == 'pull_request'
         run: |

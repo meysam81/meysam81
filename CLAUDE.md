@@ -37,19 +37,19 @@ scripts/convert-svgs.js  # Asset conversion utility
 ## Blog Post Frontmatter
 
 ```yaml
-title: string           # Required
-description: string     # Required
-pubDate: Date           # Required
+title: string # Required
+description: string # Required
+pubDate: Date # Required
 updatedDate?: Date
-author?: string         # Default: "Meysam Azad"
+author?: string # Default: "Meysam Azad"
 tags?: string[]
-draft?: boolean         # Excluded from production if true
-featured?: boolean      # Shows in featured section
+draft?: boolean # Excluded from production if true
+featured?: boolean # Shows in featured section
 ogImage?: string
-slug?: string           # Custom URL slug
-series?: string         # Series name for grouping
-seriesOrder?: number    # Position in series (1, 2, 3...)
-references?: Array<{title, url, description?}>  # External links
+slug?: string # Custom URL slug
+series?: string # Series name for grouping
+seriesOrder?: number # Position in series (1, 2, 3...)
+references?: Array<{title, url, description?}> # External links
 relatedPosts?: string[] # Slugs of related internal posts
 ```
 
@@ -77,6 +77,7 @@ relatedPosts?: string[] # Slugs of related internal posts
 ## Linting
 
 Oxlint is strict (330+ rules). Key restrictions:
+
 - Import cycles denied
 - Console statements denied
 - Type checking via `astro check` at build time

@@ -1,4 +1,4 @@
-import log from "./logging";
+import log from "./logger";
 import httpClient from "./httpclient";
 
 function getAccessToken() {
