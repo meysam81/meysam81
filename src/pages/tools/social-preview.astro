@@ -1637,6 +1637,13 @@ var structuredData = {
     iconSelect.value = template.icon;
     currentData.icon = template.icon;
 
+    if (!urlInput.value) {
+      urlInput.value = "meysam.io";
+    }
+    if (!currentData.url) {
+      currentData.url = "meysam.io";
+    }
+
     demoInputEl.value = template.demoInput;
     currentData.demoInput = template.demoInput;
 
@@ -1665,9 +1672,6 @@ var structuredData = {
     if (subtitleCount) {
       subtitleCount.textContent = String(subtitleInput.value.length);
     }
-
-    // Reset dropdown to placeholder
-    templateSelect.value = "";
 
     // Trigger updates
     updatePreviews();
