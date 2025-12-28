@@ -34,9 +34,10 @@ export function useDownload() {
 
   function downloadYaml(content: string, filename: string): void {
     download(content, {
-      filename: filename.endsWith(".yaml") || filename.endsWith(".yml")
-        ? filename
-        : filename + ".yaml",
+      filename:
+        filename.endsWith(".yaml") || filename.endsWith(".yml")
+          ? filename
+          : filename + ".yaml",
       mimeType: "text/yaml",
     });
   }

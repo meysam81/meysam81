@@ -26,7 +26,12 @@ var sizeClasses = {
 };
 
 var baseClasses = "inline-flex items-center rounded-full border font-medium";
-var classes = [baseClasses, variantClasses[variant], sizeClasses[size], className]
+var classes = [
+  baseClasses,
+  variantClasses[variant],
+  sizeClasses[size],
+  className,
+]
   .filter(Boolean)
   .join(" ");
 ---

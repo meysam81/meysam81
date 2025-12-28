@@ -64,7 +64,9 @@ var ERROR_SUGGESTIONS: Record<string, string> = {
 
 var { copied, copy } = useClipboard();
 var { download } = useDownload();
-var { error, setError, clearMessages, logger } = useToolState({ name: "YamlJsonTool" });
+var { error, setError, clearMessages, logger } = useToolState({
+  name: "YamlJsonTool",
+});
 
 var inputText = ref("");
 var outputText = ref("");
@@ -83,12 +85,16 @@ var stats = computed<DocumentStats | null>(function computeStats() {
 
 var inputLineNumbers = computed(function computeInputLines() {
   var count = inputText.value.split("\n").length || 1;
-  return Array.from({ length: count }, function (_, i) { return i + 1; });
+  return Array.from({ length: count }, function (_, i) {
+    return i + 1;
+  });
 });
 
 var outputLineNumbers = computed(function computeOutputLines() {
   var count = outputText.value.split("\n").length || 1;
-  return Array.from({ length: count }, function (_, i) { return i + 1; });
+  return Array.from({ length: count }, function (_, i) {
+    return i + 1;
+  });
 });
 
 var convertButtonText = computed(function computeConvertText() {
@@ -134,13 +140,20 @@ function hasYamlIndicators(text: string): boolean {
   return false;
 }
 
-function parseYaml(text: string): { valid: boolean; data?: unknown; error?: ParseError } {
+function parseYaml(text: string): {
+  valid: boolean;
+  data?: unknown;
+  error?: ParseError;
+} {
   var trimmed = text.trim();
   if (!trimmed) return { valid: false, error: { message: "Input is empty" } };
 
   try {
     if (text.includes("\t")) {
-      var tabLine = text.split("\n").findIndex(function (line) { return line.includes("\t"); }) + 1;
+      var tabLine =
+        text.split("\n").findIndex(function (line) {
+          return line.includes("\t");
+        }) + 1;
       return {
         valid: false,
         error: {
@@ -154,8 +167,13 @@ function parseYaml(text: string): { valid: boolean; data?: unknown; error?: Pars
     var data = jsyaml.load(text, { schema: jsyaml.DEFAULT_SCHEMA });
     return { valid: true, data: data };
   } catch (e: unknown) {
-    var err = e as Error & { mark?: { line?: number; column?: number }; reason?: string };
-    var parseError: ParseError = { message: err.message || "Invalid YAML syntax" };
+    var err = e as Error & {
+      mark?: { line?: number; column?: number };
+      reason?: string;
+    };
+    var parseError: ParseError = {
+      message: err.message || "Invalid YAML syntax",
+    };
 
     if (err.mark) {
       parseError.line = (err.mark.line ?? 0) + 1;
@@ -167,7 +185,11 @@ function parseYaml(text: string): { valid: boolean; data?: unknown; error?: Pars
   }
 }
 
-function parseJson(text: string): { valid: boolean; data?: unknown; error?: ParseError } {
+function parseJson(text: string): {
+  valid: boolean;
+  data?: unknown;
+  error?: ParseError;
+} {
   var trimmed = text.trim();
   if (!trimmed) return { valid: false, error: { message: "Input is empty" } };
 
@@ -176,7 +198,9 @@ function parseJson(text: string): { valid: boolean; data?: unknown; error?: Pars
     return { valid: true, data: data };
   } catch (e: unknown) {
     var err = e as SyntaxError;
-    var parseError: ParseError = { message: err.message || "Invalid JSON syntax" };
+    var parseError: ParseError = {
+      message: err.message || "Invalid JSON syntax",
+    };
 
     var posMatch = err.message.match(/position\s+(\d+)/i);
     if (posMatch) {
@@ -191,7 +215,10 @@ function parseJson(text: string): { valid: boolean; data?: unknown; error?: Pars
   }
 }
 
-function getLineFromPosition(text: string, position: number): { line: number; column: number } {
+function getLineFromPosition(
+  text: string,
+  position: number,
+): { line: number; column: number } {
   var lines = text.substring(0, position).split("\n");
   return { line: lines.length, column: lines[lines.length - 1].length + 1 };
 }
@@ -205,15 +232,21 @@ function getSuggestionForError(message: string): string {
 }
 
 function getSuggestionForJsonError(text: string): string {
-  if (text.includes("'")) return "JSON requires double quotes (\") for strings, not single quotes (').";
+  if (text.includes("'"))
+    return "JSON requires double quotes (\") for strings, not single quotes (').";
   if (/,\s*[}\]]/.test(text)) return "Trailing commas are not allowed in JSON.";
-  if (text.includes("//") || text.includes("/*")) return "JSON does not support comments.";
+  if (text.includes("//") || text.includes("/*"))
+    return "JSON does not support comments.";
   return "Check for missing commas, quotes, or brackets.";
 }
 
 function toYaml(data: unknown): string {
   if (optionMinify.value) {
-    return jsyaml.dump(data, { flowLevel: 0, sortKeys: optionSortKeys.value, lineWidth: -1 });
+    return jsyaml.dump(data, {
+      flowLevel: 0,
+      sortKeys: optionSortKeys.value,
+      lineWidth: -1,
+    });
   }
   return jsyaml.dump(data, {
     indent: optionIndent.value,
@@ -260,21 +293,32 @@ function countKeys(data: unknown): number {
   } else {
     var keys = Object.keys(data);
     count = keys.length;
-    for (var key of keys) count += countKeys((data as Record<string, unknown>)[key]);
+    for (var key of keys)
+      count += countKeys((data as Record<string, unknown>)[key]);
   }
   return count;
 }
 
 function calculateMaxDepth(data: unknown, currentDepth: number = 0): number {
-  if (data === null || data === undefined || typeof data !== "object") return currentDepth;
+  if (data === null || data === undefined || typeof data !== "object")
+    return currentDepth;
   var maxChildDepth = currentDepth;
   if (Array.isArray(data)) {
     for (var item of data) {
-      maxChildDepth = Math.max(maxChildDepth, calculateMaxDepth(item, currentDepth + 1));
+      maxChildDepth = Math.max(
+        maxChildDepth,
+        calculateMaxDepth(item, currentDepth + 1),
+      );
     }
   } else {
     for (var key of Object.keys(data)) {
-      maxChildDepth = Math.max(maxChildDepth, calculateMaxDepth((data as Record<string, unknown>)[key], currentDepth + 1));
+      maxChildDepth = Math.max(
+        maxChildDepth,
+        calculateMaxDepth(
+          (data as Record<string, unknown>)[key],
+          currentDepth + 1,
+        ),
+      );
     }
   }
   return maxChildDepth;
@@ -309,7 +353,10 @@ var handleInputChange = useDebounceFn(function processInput(): void {
   } else {
     currentData.value = null;
     if (result.error) {
-      setError(result.error.message + (result.error.suggestion ? " " + result.error.suggestion : ""));
+      setError(
+        result.error.message +
+          (result.error.suggestion ? " " + result.error.suggestion : ""),
+      );
       errorLine.value = result.error.line || null;
     }
   }
@@ -347,8 +394,12 @@ async function handleCopy(): Promise<void> {
 function handleDownload(): void {
   if (!outputText.value || !outputFormat.value) return;
   var extension = outputFormat.value === "yaml" ? "yaml" : "json";
-  var mimeType = outputFormat.value === "yaml" ? "text/yaml" : "application/json";
-  download(outputText.value, { filename: "converted." + extension, mimeType: mimeType });
+  var mimeType =
+    outputFormat.value === "yaml" ? "text/yaml" : "application/json";
+  download(outputText.value, {
+    filename: "converted." + extension,
+    mimeType: mimeType,
+  });
 }
 
 function handleClear(): void {
@@ -382,11 +433,14 @@ function loadSampleJson(): void {
 }
 
 watch(inputText, handleInputChange);
-watch([optionMinify, optionIndent, optionSortKeys], function handleOptionChange() {
-  if (outputText.value && currentData.value) {
-    handleConvert();
-  }
-});
+watch(
+  [optionMinify, optionIndent, optionSortKeys],
+  function handleOptionChange() {
+    if (outputText.value && currentData.value) {
+      handleConvert();
+    }
+  },
+);
 
 onMounted(function handleMount() {
   var params = new URLSearchParams(window.location.search);
@@ -408,10 +462,20 @@ onMounted(function handleMount() {
     <div class="format-banner">
       <span class="format-indicator" :class="currentFormat || ''">
         <span class="format-icon" :class="currentFormat || ''">
-          {{ currentFormat === 'yaml' ? 'Y' : currentFormat === 'json' ? 'J' : '?' }}
+          {{
+            currentFormat === "yaml"
+              ? "Y"
+              : currentFormat === "json"
+                ? "J"
+                : "?"
+          }}
         </span>
         <span class="format-text">
-          {{ currentFormat ? 'Detected: ' + currentFormat.toUpperCase() : 'Paste content to detect format' }}
+          {{
+            currentFormat
+              ? "Detected: " + currentFormat.toUpperCase()
+              : "Paste content to detect format"
+          }}
         </span>
       </span>
     </div>
@@ -422,33 +486,87 @@ onMounted(function handleMount() {
       <div class="editor-pane input-pane">
         <div class="editor-header">
           <label class="editor-label">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+              />
               <polyline points="14 2 14 8 20 8" />
             </svg>
             Input
           </label>
           <div class="editor-actions">
-            <button type="button" class="icon-btn" title="Paste from clipboard" @click="handlePaste">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+            <button
+              type="button"
+              class="icon-btn"
+              title="Paste from clipboard"
+              @click="handlePaste"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"
+                />
                 <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
               </svg>
             </button>
-            <button type="button" class="icon-btn" title="Clear input" @click="handleClear">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <button
+              type="button"
+              class="icon-btn"
+              title="Clear input"
+              @click="handleClear"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
                 <line x1="18" y1="6" x2="6" y2="18" />
                 <line x1="6" y1="6" x2="18" y2="18" />
               </svg>
             </button>
             <div class="btn-divider"></div>
-            <button type="button" class="icon-btn text-btn" title="Load sample YAML" @click="loadSampleYaml">YAML</button>
-            <button type="button" class="icon-btn text-btn" title="Load sample JSON" @click="loadSampleJson">JSON</button>
+            <button
+              type="button"
+              class="icon-btn text-btn"
+              title="Load sample YAML"
+              @click="loadSampleYaml"
+            >
+              YAML
+            </button>
+            <button
+              type="button"
+              class="icon-btn text-btn"
+              title="Load sample JSON"
+              @click="loadSampleJson"
+            >
+              JSON
+            </button>
           </div>
         </div>
         <div class="editor-wrapper">
           <div class="line-numbers">
-            <span v-for="num in inputLineNumbers" :key="num" :class="{ 'error-line': num === errorLine }">{{ num }}</span>
+            <span
+              v-for="num in inputLineNumbers"
+              :key="num"
+              :class="{ 'error-line': num === errorLine }"
+              >{{ num }}</span
+            >
           </div>
           <textarea
             v-model="inputText"
@@ -460,7 +578,14 @@ onMounted(function handleMount() {
         </div>
         <!-- Error/Success Messages -->
         <div v-if="error" class="error-message">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
             <circle cx="12" cy="12" r="10" />
             <line x1="12" y1="8" x2="12" y2="12" />
             <line x1="12" y1="16" x2="12.01" y2="16" />
@@ -468,7 +593,14 @@ onMounted(function handleMount() {
           <span>{{ error.message }}</span>
         </div>
         <div v-else-if="currentData" class="success-message">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
             <polyline points="22 4 12 14.01 9 11.01" />
           </svg>
@@ -480,13 +612,26 @@ onMounted(function handleMount() {
       <div class="editor-pane output-pane">
         <div class="editor-header">
           <label class="editor-label">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+              />
               <polyline points="14 2 14 8 20 8" />
               <line x1="9" y1="15" x2="15" y2="15" />
             </svg>
             Output
-            <span v-if="outputFormat" class="output-format-badge" :class="outputFormat">
+            <span
+              v-if="outputFormat"
+              class="output-format-badge"
+              :class="outputFormat"
+            >
               {{ outputFormat.toUpperCase() }}
             </span>
           </label>
@@ -499,11 +644,29 @@ onMounted(function handleMount() {
               :disabled="!outputText"
               @click="handleCopy"
             >
-              <svg v-if="!copied" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <svg
+                v-if="!copied"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
                 <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                <path
+                  d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+                />
               </svg>
-              <svg v-else width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <svg
+                v-else
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
                 <polyline points="20 6 9 17 4 12" />
               </svg>
             </button>
@@ -514,7 +677,14 @@ onMounted(function handleMount() {
               :disabled="!outputText"
               @click="handleDownload"
             >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                 <polyline points="7 10 12 15 17 10" />
                 <line x1="12" y1="15" x2="12" y2="3" />
@@ -545,7 +715,14 @@ onMounted(function handleMount() {
         :disabled="!currentData"
         @click="handleFormatYaml"
       >
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
           <polyline points="4 7 4 4 20 4 20 7" />
           <line x1="9" y1="20" x2="15" y2="20" />
           <line x1="12" y1="4" x2="12" y2="20" />
@@ -558,7 +735,14 @@ onMounted(function handleMount() {
         :disabled="!currentData"
         @click="handleConvert"
       >
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
           <polyline points="17 1 21 5 17 9" />
           <path d="M3 11V9a4 4 0 0 1 4-4h14" />
           <polyline points="7 23 3 19 7 15" />
@@ -572,9 +756,20 @@ onMounted(function handleMount() {
         :disabled="!currentData"
         @click="handleFormatJson"
       >
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5c0 1.1.9 2 2 2h1" />
-          <path d="M16 21h1a2 2 0 0 0 2-2v-5c0-1.1.9-2 2-2a2 2 0 0 1-2-2V5a2 2 0 0 0-2-2h-1" />
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5c0 1.1.9 2 2 2h1"
+          />
+          <path
+            d="M16 21h1a2 2 0 0 0 2-2v-5c0-1.1.9-2 2-2a2 2 0 0 1-2-2V5a2 2 0 0 0-2-2h-1"
+          />
         </svg>
         {{ formatJsonButtonText }}
       </button>

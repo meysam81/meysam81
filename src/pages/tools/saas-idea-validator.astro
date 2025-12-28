@@ -179,9 +179,7 @@ var faqData = {
               defer></script>
             <button type="submit" class="btn btn-primary">Get Insights</button>
           </div>
-          <p class="form-note">
-            Join 1,500+ founders. Weekly tips, zero spam.
-          </p>
+          <p class="form-note">Join 1,500+ founders. Weekly tips, zero spam.</p>
         </form>
 
         <div class="success-message hidden" id="newsletter-success">
@@ -229,7 +227,8 @@ var faqData = {
       </details>
 
       <details class="faq-item">
-        <summary>What are the most important startup validation criteria?</summary
+        <summary
+          >What are the most important startup validation criteria?</summary
         >
         <p>The most critical validation criteria are:</p>
         <ul>
@@ -271,7 +270,9 @@ var faqData = {
   import log from "loglevel";
 
   function initNewsletterForm() {
-    var form = document.querySelector(".newsletter-form") as HTMLFormElement | null;
+    var form = document.querySelector(
+      ".newsletter-form",
+    ) as HTMLFormElement | null;
     var successMessage = document.getElementById("newsletter-success");
 
     if (!form || !successMessage) return;
@@ -280,7 +281,9 @@ var faqData = {
       e.preventDefault();
       var formData = new FormData(form);
 
-      var honeypotFields = form.querySelectorAll(".honeypot-field") as NodeListOf<HTMLInputElement>;
+      var honeypotFields = form.querySelectorAll(
+        ".honeypot-field",
+      ) as NodeListOf<HTMLInputElement>;
       var isBot = false;
       honeypotFields.forEach(function checkField(field) {
         if (field.value !== "") {

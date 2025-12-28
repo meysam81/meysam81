@@ -209,8 +209,17 @@ onMounted(function handleMount() {
         :class="{ active: mode === 'english' }"
         @click="setMode('english')"
       >
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+          />
         </svg>
         Plain English
       </button>
@@ -220,7 +229,14 @@ onMounted(function handleMount() {
         :class="{ active: mode === 'expression' }"
         @click="setMode('expression')"
       >
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
           <polyline points="16 18 22 12 16 6" />
           <polyline points="8 6 2 12 8 18" />
         </svg>
@@ -230,7 +246,9 @@ onMounted(function handleMount() {
 
     <!-- English Input Mode -->
     <div v-if="mode === 'english'" class="input-section">
-      <label for="english-input" class="input-label">Describe your schedule</label>
+      <label for="english-input" class="input-label"
+        >Describe your schedule</label
+      >
       <input
         id="english-input"
         v-model="englishInput"
@@ -241,13 +259,16 @@ onMounted(function handleMount() {
         spellcheck="false"
       />
       <div class="input-hint">
-        Try: "every 5 minutes", "daily at 9am", "every friday at 5pm", "first monday of month"
+        Try: "every 5 minutes", "daily at 9am", "every friday at 5pm", "first
+        monday of month"
       </div>
     </div>
 
     <!-- Expression Input Mode -->
     <div v-else class="input-section">
-      <label for="expression-input" class="input-label">Enter cron expression</label>
+      <label for="expression-input" class="input-label"
+        >Enter cron expression</label
+      >
       <input
         id="expression-input"
         v-model="expressionInput"
@@ -284,11 +305,31 @@ onMounted(function handleMount() {
             aria-label="Copy expression"
             @click="copyExpression"
           >
-            <svg v-if="!copied" class="copy-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg
+              v-if="!copied"
+              class="copy-icon"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
               <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+              <path
+                d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+              />
             </svg>
-            <svg v-else class="check-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg
+              v-else
+              class="check-icon"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
               <polyline points="20 6 9 17 4 12" />
             </svg>
           </button>
@@ -313,15 +354,28 @@ onMounted(function handleMount() {
             :aria-expanded="runsExpanded"
             @click="toggleRuns"
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
               <polyline points="6 9 12 15 18 9" />
             </svg>
           </button>
         </div>
         <div v-if="runsExpanded" class="next-runs-list">
-          <div v-for="(run, index) in nextRuns" :key="index" class="next-run-item">
+          <div
+            v-for="(run, index) in nextRuns"
+            :key="index"
+            class="next-run-item"
+          >
             <span class="run-date">{{ run.date }}</span>
-            <span v-if="run.relative" class="run-relative">{{ run.relative }}</span>
+            <span v-if="run.relative" class="run-relative">{{
+              run.relative
+            }}</span>
           </div>
         </div>
       </div>
@@ -330,7 +384,14 @@ onMounted(function handleMount() {
     <!-- Share Button -->
     <div class="share-section">
       <button type="button" class="btn btn-secondary" @click="shareLink">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
           <circle cx="18" cy="5" r="3" />
           <circle cx="6" cy="12" r="3" />
           <circle cx="18" cy="19" r="3" />

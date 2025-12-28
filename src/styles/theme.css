@@ -54,8 +54,9 @@
   /* -----------------------------
      Typography
      ----------------------------- */
-  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
-    "Oxygen", "Ubuntu", sans-serif;
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
+    sans-serif;
   --font-mono: "SF Mono", "Monaco", "Cascadia Code", "Courier New", monospace;
 
   /* Font Sizes (fluid) */
@@ -335,7 +336,7 @@
   }
 
   /* Grid utilities */
-  .grid {
+  /* .grid {
     display: grid;
     gap: var(--space-lg);
   }
@@ -347,7 +348,7 @@
   .grid-3 {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: var(--space-xl);
-  }
+  } */
 }
 
 /* ============================================

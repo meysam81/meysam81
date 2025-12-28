@@ -18,7 +18,7 @@ export function useDebounce<T>(value: Ref<T>, delay: number = 300): Ref<T> {
 
 export function useDebounceFn<T extends (...args: unknown[]) => unknown>(
   fn: T,
-  delay: number = 300
+  delay: number = 300,
 ): T {
   var timeout: ReturnType<typeof setTimeout> | null = null;
 

@@ -30,7 +30,12 @@ var sizeClasses = {
   lg: "px-10 py-4 text-lg",
 };
 
-var classes = [baseClasses, variantClasses[variant], sizeClasses[size], className]
+var classes = [
+  baseClasses,
+  variantClasses[variant],
+  sizeClasses[size],
+  className,
+]
   .filter(Boolean)
   .join(" ");
 var Element = href ? "a" : "button";

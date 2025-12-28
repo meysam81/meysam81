@@ -326,7 +326,9 @@ var faqData = {
 
   // Newsletter form handling (static - doesn't need Vue)
   function initNewsletterForm() {
-    var form = document.querySelector(".newsletter-form") as HTMLFormElement | null;
+    var form = document.querySelector(
+      ".newsletter-form",
+    ) as HTMLFormElement | null;
     var successMessage = document.getElementById("newsletter-success");
 
     if (!form || !successMessage) return;
@@ -336,7 +338,9 @@ var faqData = {
       var formData = new FormData(form);
 
       // Check honeypot
-      var honeypotFields = form.querySelectorAll(".honeypot-field") as NodeListOf<HTMLInputElement>;
+      var honeypotFields = form.querySelectorAll(
+        ".honeypot-field",
+      ) as NodeListOf<HTMLInputElement>;
       var isBot = false;
       honeypotFields.forEach(function checkField(field) {
         if (field.value !== "") {

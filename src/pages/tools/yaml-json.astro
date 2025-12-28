@@ -465,7 +465,9 @@ var yamlSyntax = [
   import log from "loglevel";
 
   function initNewsletterForm() {
-    var form = document.querySelector(".newsletter-form") as HTMLFormElement | null;
+    var form = document.querySelector(
+      ".newsletter-form",
+    ) as HTMLFormElement | null;
     var successMessage = document.getElementById("newsletter-success");
 
     if (!form || !successMessage) return;
@@ -474,7 +476,9 @@ var yamlSyntax = [
       e.preventDefault();
       var formData = new FormData(form);
 
-      var honeypotFields = form.querySelectorAll(".honeypot-field") as NodeListOf<HTMLInputElement>;
+      var honeypotFields = form.querySelectorAll(
+        ".honeypot-field",
+      ) as NodeListOf<HTMLInputElement>;
       var isBot = false;
       honeypotFields.forEach(function checkField(field) {
         if (field.value !== "") {

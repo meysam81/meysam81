@@ -115,7 +115,9 @@ onUnmounted(function handleUnmount() {
 }
 
 .hamburger.active .hamburger-line:nth-child(1) {
-  transform: translateY(calc(var(--hamburger-gap) + var(--hamburger-line-height)))
+  transform: translateY(
+      calc(var(--hamburger-gap) + var(--hamburger-line-height))
+    )
     rotate(45deg);
 }
 

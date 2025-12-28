@@ -41,19 +41,19 @@ scripts/convert-svgs.js  # Asset conversion utility
 ## Blog Post Frontmatter
 
 ```yaml
-title: string           # Required
-description: string     # Required
-pubDate: Date           # Required
+title: string # Required
+description: string # Required
+pubDate: Date # Required
 updatedDate?: Date
-author?: string         # Default: "Meysam Azad"
+author?: string # Default: "Meysam Azad"
 tags?: string[]
-draft?: boolean         # Excluded from production if true
-featured?: boolean      # Shows in featured section
+draft?: boolean # Excluded from production if true
+featured?: boolean # Shows in featured section
 ogImage?: string
-slug?: string           # Custom URL slug
-series?: string         # Series name for grouping
-seriesOrder?: number    # Position in series (1, 2, 3...)
-references?: Array<{title, url, description?}>  # External links
+slug?: string # Custom URL slug
+series?: string # Series name for grouping
+seriesOrder?: number # Position in series (1, 2, 3...)
+references?: Array<{title, url, description?}> # External links
 relatedPosts?: string[] # Slugs of related internal posts
 ```
 
@@ -81,6 +81,7 @@ relatedPosts?: string[] # Slugs of related internal posts
 ## Linting
 
 Oxlint is strict (330+ rules). Key restrictions:
+
 - Import cycles denied
 - Console statements denied
 - Type checking via `astro check` at build time
@@ -120,6 +121,7 @@ Design tokens defined in `src/styles/theme.css`. Never use hardcoded values.
 ### Spacing
 
 Use `var(--space-xs)` through `var(--space-3xl)`:
+
 - xs: 0.5rem, sm: 1rem, md: 1.5rem, lg: 2rem, xl: 3rem, 2xl: 4rem, 3xl: 6rem
 
 ### Typography
