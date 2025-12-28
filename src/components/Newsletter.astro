@@ -198,14 +198,22 @@ var { variant = "section" } = Astro.props;
 
 <script>
   import log from "loglevel";
-  import {
-    getScrollPercentage,
-    updateScrollPercentage,
-    subscribe,
-  } from "@/stores/scrollStore";
+
+  function calculateScrollPercentage() {
+    var windowHeight = window.innerHeight;
+    var documentHeight = document.documentElement.scrollHeight;
+    var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    var scrollableHeight = documentHeight - windowHeight;
+
+    if (scrollableHeight <= 0) {
+      return 0;
+    }
+
+    return Math.round((scrollTop / scrollableHeight) * 100);
+  }
 
   function updateFormScroll() {
-    var scrollPercentage = getScrollPercentage();
+    var scrollPercentage = calculateScrollPercentage();
     var forms = document.querySelectorAll(".newsletter-form");
     forms.forEach(function handleForm(form) {
       form.setAttribute("data-pirsch-meta-scroll", String(scrollPercentage));
@@ -213,7 +221,6 @@ var { variant = "section" } = Astro.props;
   }
 
   function handleScroll() {
-    updateScrollPercentage();
     updateFormScroll();
   }
 
@@ -345,13 +352,8 @@ var { variant = "section" } = Astro.props;
   }
 
   document.addEventListener("DOMContentLoaded", function initialize() {
-    updateScrollPercentage();
     updateFormScroll();
     handleReset();
-
-    subscribe(function onScrollChange(percentage) {
-      log.debug("Scroll percentage changed to", percentage);
-    });
 
     window.addEventListener("scroll", handleScroll);
 
