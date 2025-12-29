@@ -23,6 +23,7 @@
     "@astrojs/vue": "^5.1.0",
     "@tailwindcss/vite": "^4.1.18",
     "@vitejs/plugin-vue": "^6.0.3",
+    "convert-svgs": "^1.0.4",
     "ky": "^1.14.1",
     "oxlint": "^1.32.0",
     "prettier": "^3.7.4",
