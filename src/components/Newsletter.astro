@@ -1,4 +1,7 @@
 ---
+import { Button } from "@/components/ui";
+import CheckmarkIcon from "@/components/icons/CheckmarkIcon.astro";
+
 interface Props {
   variant?: "hero" | "section";
 }
@@ -21,63 +24,19 @@ var { variant = "section" } = Astro.props;
 
   <div class="newsletter-benefits">
     <div class="benefit">
-      <svg
-        class="benefit-icon"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-      >
-        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-        <polyline points="22 4 12 14.01 9 11.01"></polyline>
-      </svg>
+      <CheckmarkIcon />
       <span>Customer discovery insights as I interview potential users</span>
     </div>
     <div class="benefit">
-      <svg
-        class="benefit-icon"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-      >
-        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-        <polyline points="22 4 12 14.01 9 11.01"></polyline>
-      </svg>
+      <CheckmarkIcon />
       <span>Production DevOps lessons applied to product development</span>
     </div>
     <div class="benefit">
-      <svg
-        class="benefit-icon"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-      >
-        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-        <polyline points="22 4 12 14.01 9 11.01"></polyline>
-      </svg>
+      <CheckmarkIcon />
       <span>Honest updates—experiments, failures, and what I'm learning</span>
     </div>
     <div class="benefit">
-      <svg
-        class="benefit-icon"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-      >
-        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-        <polyline points="22 4 12 14.01 9 11.01"></polyline>
-      </svg>
+      <CheckmarkIcon />
       <span>Early access to new tools and experiments</span>
     </div>
   </div>
@@ -148,7 +107,7 @@ var { variant = "section" } = Astro.props;
       async
       defer></script>
 
-    <button type="submit" class="btn btn-primary submit-button">
+    <Button variant="primary" class="submit-button" type="submit">
       <span class="button-text">Join 1,500+ Engineers</span>
       <span class="button-loader hidden">
         <svg
@@ -164,7 +123,7 @@ var { variant = "section" } = Astro.props;
         </svg>
         Subscribing...
       </span>
-    </button>
+    </Button>
 
     <p class="form-note">No spam. Unsubscribe anytime. Privacy respected.</p>
   </form>
@@ -404,12 +363,6 @@ var { variant = "section" } = Astro.props;
     display: flex;
     align-items: flex-start;
     gap: var(--space-sm);
-  }
-
-  .benefit-icon {
-    flex-shrink: 0;
-    color: var(--color-success);
-    margin-top: 2px;
   }
 
   .benefit span {

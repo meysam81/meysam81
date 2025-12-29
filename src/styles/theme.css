@@ -73,6 +73,8 @@
   /* -----------------------------
      Spacing Scale
      ----------------------------- */
+  --space-xxxs: 0.125rem;
+  --space-xxs: 0.25rem;
   --space-xs: 0.5rem;
   --space-sm: 1rem;
   --space-md: 1.5rem;

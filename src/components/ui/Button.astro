@@ -4,6 +4,7 @@ import type { HTMLAttributes } from "astro/types";
 interface Props extends HTMLAttributes<"button"> {
   variant?: "primary" | "secondary" | "ghost";
   size?: "sm" | "md" | "lg";
+  type?: "button" | "submit" | "reset";
   href?: string;
   external?: boolean;
 }
@@ -11,6 +12,7 @@ interface Props extends HTMLAttributes<"button"> {
 var {
   variant = "primary",
   size = "md",
+  type = "button",
   href,
   external = false,
   class: className,
@@ -38,12 +40,21 @@ var classes = [
 ]
   .filter(Boolean)
   .join(" ");
-var Element = href ? "a" : "button";
-var linkProps = href
-  ? { href, ...(external && { target: "_blank", rel: "noopener noreferrer" }) }
-  : {};
 ---
 
-<Element :class={classes} {...linkProps} {...attrs}>
-  <slot />
-</Element>
+{
+  href ? (
+    <a
+      class={classes}
+      href={href}
+      {...(external && { target: "_blank", rel: "noopener noreferrer" })}
+      {...attrs}
+    >
+      <slot />
+    </a>
+  ) : (
+    <button class={classes} type={type} {...attrs}>
+      <slot />
+    </button>
+  )
+}
