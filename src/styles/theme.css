@@ -247,8 +247,8 @@
     min-height: 90vh;
     display: flex;
     align-items: center;
-    padding-top: var(--space-2xl);
-    padding-bottom: var(--space-2xl);
+    padding-top: var(--space-3xl);
+    padding-bottom: var(--space-3xl);
   }
 
   /* Button base */

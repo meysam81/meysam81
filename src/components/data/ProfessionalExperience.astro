@@ -1,0 +1,13 @@
+---
+interface Props {
+  plus?: boolean;
+}
+
+const currentYear = new Date().getFullYear();
+const startingYear = 2017; // started with Erlang, coding in Emacs :)
+const YearsOfExperience = currentYear - startingYear;
+
+var { plus = false } = Astro.props;
+---
+
+{(plus && `${YearsOfExperience}+ years`) || `${YearsOfExperience} years`}

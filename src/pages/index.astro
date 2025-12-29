@@ -3,6 +3,9 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Newsletter from "@/components/Newsletter.astro";
 import ContentCard from "@/components/ContentCard.astro";
+
+import ProfessionalExperience from "@/components/data/ProfessionalExperience.astro";
+import BlogUniqueVisitors from "@/components/data/BlogUniqueVisitors.astro";
 ---
 
 <BaseLayout>
@@ -12,17 +15,16 @@ import ContentCard from "@/components/ContentCard.astro";
       <div class="hero-content fade-in">
         <h1 class="hero-title">Shipping SaaS with DevOps Discipline</h1>
         <p class="hero-subtitle">
-          Technical engineer with 8 years managing production systems. Now
-          finding problems worth solving through customer discovery, building in
-          public, and applying production-grade discipline to product
-          development.
+          Technical engineer with <ProfessionalExperience /> managing production systems.
+          Now finding problems worth solving through customer discovery, building
+          in public, and applying production-grade discipline to product development.
         </p>
 
         <Newsletter variant="hero" />
 
         <p class="hero-trust text-center mt-md">
           <span class="trust-signal"
-            >Read by 1,500+ engineers monthly on <a
+            >Read by <BlogUniqueVisitors plus={true} /> engineers monthly on <a
               href="https://developer-friendly.blog"
               target="_blank"
               rel="noopener noreferrer">developer-friendly.blog</a
@@ -37,11 +39,11 @@ import ContentCard from "@/components/ContentCard.astro";
   <section id="about">
     <div class="container-narrow">
       <div class="about-content">
-        <h2 class="text-center">From DevOps Engineer to Indie Hacker</h2>
+        <h2 class="text-center">From DevOps Engineer<br />to Indie Hacker</h2>
         <p class="text-center" style="font-size: 1.125rem;">
-          I've spent 8 years keeping production systems running at scale. Built
-          infrastructure for successful startups. Managed on-call rotations.
-          Optimized costs. Prevented outages.
+          I've spent <ProfessionalExperience /> keeping production systems running
+          at scale. Built infrastructure for successful startups. Managed on-call
+          rotations. Optimized costs. Prevented outages.
         </p>
         <p class="text-center" style="font-size: 1.125rem;">
           Now I'm exploring what problems are worth solving with software. This
@@ -51,11 +53,11 @@ import ContentCard from "@/components/ContentCard.astro";
 
         <div class="trust-signals mt-xl">
           <div class="trust-item">
-            <h3>8+ Years</h3>
+            <h3><ProfessionalExperience plus={true} /></h3>
             <p>Production systems experience</p>
           </div>
           <div class="trust-item">
-            <h3>1.5k/mo</h3>
+            <h3><BlogUniqueVisitors variant="short" />/mo</h3>
             <p>Engineers reading my technical content</p>
           </div>
           <div class="trust-item">
@@ -100,7 +102,7 @@ import ContentCard from "@/components/ContentCard.astro";
         />
       </div>
 
-      <div class="grid grid-cols-3 gap-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <ContentCard
           title="Puppeteer MCP"
           description="MCP server that gives Claude and ChatGPT browser automation tools. Scrape data, fill forms, take screenshots; all through natural language. No code required."
@@ -129,7 +131,7 @@ import ContentCard from "@/components/ContentCard.astro";
           url="https://findforce.io"
           badge="🚀 Shipped"
           featured={false}
-          linkText="Try FindForce Email Finder Extension"
+          linkText="Try FindForce Extension"
           target="_blank"
           rel="noopener noreferrer"
         />

@@ -2,6 +2,8 @@
 import { Button } from "@/components/ui";
 import CheckmarkIcon from "@/components/icons/CheckmarkIcon.astro";
 
+import BlogUniqueVisitors from "@/components/data/BlogUniqueVisitors.astro";
+
 interface Props {
   variant?: "hero" | "section";
 }
@@ -108,7 +110,9 @@ var { variant = "section" } = Astro.props;
       defer></script>
 
     <Button variant="primary" class="submit-button" type="submit">
-      <span class="button-text">Join 1,500+ Engineers</span>
+      <span class="button-text"
+        >Join <BlogUniqueVisitors plus={true} /> Engineers</span
+      >
       <span class="button-loader hidden">
         <svg
           class="spinner"
