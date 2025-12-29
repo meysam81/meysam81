@@ -35,8 +35,8 @@
   "name": "meysam-io",
   "scripts": {
     "build": "astro check && astro build",
-    "convert:images": "bun ./scripts/convert-svgs.js",
     "lint": "prettier -w . && oxlint --fix --fix-suggestions .",
+    "prebuild": "convert-svgs ./public",
     "start": "astro dev"
   },
   "type": "module",
