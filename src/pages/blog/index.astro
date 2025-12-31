@@ -86,7 +86,7 @@ function calculateReadingTime(content: string) {
         featuredPosts.length > 0 && (
           <div class="featured-section mb-xl">
             <h2 class="section-label">Featured Posts</h2>
-            <div class="grid grid-2">
+            <div class="grid grid-cols-1">
               {featuredPosts.map(function mapFeatured(post) {
                 var postSlug = post.slug || slugify(post.data.title);
                 return (
@@ -110,7 +110,7 @@ function calculateReadingTime(content: string) {
 
       <div class="posts-section">
         <h2 class="section-label">All Posts</h2>
-        <div class="grid grid-3" id="posts-grid">
+        <div class="grid grid-cols-3 gap-8" id="posts-grid">
           {
             regularPosts.map(function mapRegular(post) {
               var postSlug = post.slug || slugify(post.data.title);
