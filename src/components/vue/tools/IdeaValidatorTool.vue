@@ -363,6 +363,7 @@ onUnmounted(function () {
       <div class="start-content">
         <div class="start-icon">
           <svg
+            class="text-center mx-auto"
             width="64"
             height="64"
             viewBox="0 0 24 24"
@@ -398,11 +399,12 @@ onUnmounted(function () {
 
         <button
           type="button"
-          class="btn btn-primary btn-large"
+          class="btn btn-primary w-56"
           @click="startValidation"
         >
           <span>Start Validation</span>
           <svg
+            class="inline mb-0.5"
             width="20"
             height="20"
             viewBox="0 0 24 24"
@@ -799,6 +801,7 @@ onUnmounted(function () {
       <div class="results-actions">
         <button type="button" class="btn btn-primary" @click="shareResults">
           <svg
+            class="inline"
             width="20"
             height="20"
             viewBox="0 0 24 24"
@@ -817,6 +820,7 @@ onUnmounted(function () {
         <button type="button" class="btn btn-secondary" @click="copyShareLink">
           <svg
             v-if="!copied"
+            class="inline mr-1"
             width="20"
             height="20"
             viewBox="0 0 24 24"
@@ -831,6 +835,7 @@ onUnmounted(function () {
           </svg>
           <svg
             v-else
+            class="inline"
             width="20"
             height="20"
             viewBox="0 0 24 24"
@@ -844,6 +849,7 @@ onUnmounted(function () {
         </button>
         <button type="button" class="btn btn-secondary" @click="restart">
           <svg
+            class="inline"
             width="20"
             height="20"
             viewBox="0 0 24 24"

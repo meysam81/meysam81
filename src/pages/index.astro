@@ -20,7 +20,7 @@ import BlogUniqueVisitors from "@/components/data/BlogUniqueVisitors.astro";
           in public, and applying production-grade discipline to product development.
         </p>
 
-        <Newsletter variant="hero" />
+        <Newsletter class="text-center mt-(--space-xl)" />
 
         <p class="hero-trust text-center mt-md">
           <span class="trust-signal"
@@ -169,7 +169,18 @@ import BlogUniqueVisitors from "@/components/data/BlogUniqueVisitors.astro";
   <!-- Newsletter Section -->
   <section id="newsletter">
     <div class="container">
-      <Newsletter variant="section" />
+      <Newsletter class="mx-auto my-0 w-narrow text-center">
+        <Fragment slot="title">
+          <div>
+            <h2>Build Alongside Me</h2>
+            <p class="newsletter-description">
+              Join technical founders getting weekly insights on customer
+              discovery, product validation, and building with production-grade
+              discipline.
+            </p>
+          </div>
+        </Fragment>
+      </Newsletter>
     </div>
   </section>
 
