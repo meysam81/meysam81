@@ -124,6 +124,8 @@ jobs:
           bun-version: latest
       - name: Setup Pages
         uses: actions/configure-pages@v5
+      - name: Install latest node
+        run: bun install -g npm@latest
       - name: Install bun deps
         run: bun install --frozen-lockfile
       - name: Build

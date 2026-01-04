@@ -31,9 +31,6 @@
     "vite-plugin-pwa": "^1.2.0"
   },
   "name": "meysam-io",
-  "overrides": {
-    "estree-walker": "^3.0.3"
-  },
   "scripts": {
     "build": "astro check && astro build",
     "convert:images": "bun ./scripts/convert-svgs.js",
