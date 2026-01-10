@@ -1,10 +1,11 @@
 ---
-interface Props {
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"div"> {
   variant?: "default" | "narrow";
-  class?: string;
 }
 
-var { variant = "default", class: className } = Astro.props;
+var { variant = "default", class: className, ...attrs } = Astro.props;
 
 var variantClasses = {
   default: "container",
@@ -14,6 +15,6 @@ var variantClasses = {
 var classes = [variantClasses[variant], className].filter(Boolean).join(" ");
 ---
 
-<div class={classes}>
+<div class={classes} {...attrs}>
   <slot />
 </div>

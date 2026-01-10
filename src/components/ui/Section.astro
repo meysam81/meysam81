@@ -1,11 +1,11 @@
 ---
-interface Props {
-  id?: string;
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"section"> {
   variant?: "default" | "hero" | "narrow";
-  class?: string;
 }
 
-var { id, variant = "default", class: className } = Astro.props;
+var { variant = "default", class: className, ...attrs } = Astro.props;
 
 var variantClasses = {
   default: "container",
@@ -19,6 +19,6 @@ var classes = [baseClasses, variantClasses[variant], className]
   .join(" ");
 ---
 
-<section id={id} class={classes}>
+<section class={classes} {...attrs}>
   <slot />
 </section>

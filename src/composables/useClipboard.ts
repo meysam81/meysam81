@@ -21,7 +21,7 @@ export function useClipboard() {
 
       logger.debug("Copied to clipboard");
       return true;
-    } catch (err) {
+    } catch {
       // Fallback for older browsers
       var textarea = document.createElement("textarea");
       textarea.value = text;

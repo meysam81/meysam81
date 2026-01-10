@@ -1,11 +1,17 @@
 ---
-interface Props {
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"span"> {
   variant?: "default" | "success" | "warning" | "error" | "accent";
   size?: "sm" | "md";
-  class?: string;
 }
 
-var { variant = "default", size = "md", class: className } = Astro.props;
+var {
+  variant = "default",
+  size = "md",
+  class: className,
+  ...attrs
+} = Astro.props;
 
 var variantClasses = {
   default:
@@ -36,6 +42,6 @@ var classes = [
   .join(" ");
 ---
 
-<span class={classes}>
+<span class={classes} {...attrs}>
   <slot />
 </span>

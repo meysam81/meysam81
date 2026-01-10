@@ -1,89 +1,17 @@
 ---
 import ToolLayout from "@/layouts/ToolLayout.astro";
 import YamlJsonTool from "@/components/vue/tools/YamlJsonTool.vue";
+import FAQAccordion from "@/components/FAQAccordion.astro";
+import ToolNewsletterCTA from "@/components/ToolNewsletterCTA.astro";
+import {
+  getToolBySlugOrThrow,
+  generateToolStructuredData,
+  generateFAQStructuredData,
+} from "@/data/tools";
 
-var yamlJsonKeywords =
-  "yaml validator, json validator, yaml to json converter, json to yaml converter, yaml formatter, json formatter, yaml syntax checker, json syntax checker, yaml online, json online, kubernetes yaml validator, docker compose validator, github actions yaml, yaml lint, json lint, yaml beautifier, json beautifier, yaml parser, json parser, yaml 1.2, RFC 8259, free yaml tool, online json tool, yaml error checker, json error checker";
-
-var structuredData = {
-  "@context": "https://schema.org",
-  "@type": "WebApplication",
-  name: "YAML/JSON Validator & Converter",
-  description:
-    "Validate, format, and convert between YAML and JSON instantly. Free online tool with detailed error messages, line numbers, and RFC compliance. No signup required.",
-  url: "https://meysam.io/tools/yaml-json",
-  applicationCategory: "DeveloperApplication",
-  operatingSystem: "Any",
-  browserRequirements: "Requires JavaScript",
-  offers: {
-    "@type": "Offer",
-    price: "0",
-    priceCurrency: "USD",
-  },
-  featureList: [
-    "YAML 1.2 specification compliance",
-    "JSON RFC 8259 compliance",
-    "Bidirectional YAML/JSON conversion",
-    "Detailed error messages with line numbers",
-    "Auto-format detection",
-    "Pretty-print formatting",
-    "Copy to clipboard",
-    "Download as file",
-    "Client-side processing (data never leaves your browser)",
-  ],
-  author: {
-    "@type": "Person",
-    name: "Meysam Azad",
-    url: "https://meysam.io",
-  },
-};
-
-var faqData = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: [
-    {
-      "@type": "Question",
-      name: "How do I validate YAML online?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Paste your YAML content into the input editor. The validator automatically detects YAML format and validates it against the YAML 1.2 specification. Any syntax errors will be displayed with line numbers and helpful suggestions for fixing them.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "How do I convert YAML to JSON?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Paste your YAML content and click the 'Convert to JSON' button. The tool parses your YAML according to the YAML 1.2 spec and outputs valid JSON following RFC 8259. You can then copy or download the result.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "How do I convert JSON to YAML?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Paste your JSON content and click the 'Convert to YAML' button. The tool validates your JSON against RFC 8259 and converts it to clean, properly indented YAML 1.2 format.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "What causes YAML syntax errors?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Common YAML errors include: incorrect indentation (YAML uses spaces, not tabs), missing colons after keys, unquoted special characters, improper list formatting, and duplicate keys. Our validator shows the exact line and column where errors occur.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Is my data secure when using this validator?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Yes, absolutely. All validation and conversion happens entirely in your browser using JavaScript. Your data never leaves your device and is never sent to any server. This is a 100% client-side tool.",
-      },
-    },
-  ],
-};
+var tool = getToolBySlugOrThrow("yaml-json");
+var structuredData = generateToolStructuredData(tool);
+var faqData = generateFAQStructuredData(tool.faqs);
 
 var commonErrors = [
   {
@@ -185,20 +113,24 @@ var yamlSyntax = [
 ---
 
 <ToolLayout
-  title="YAML/JSON Validator & Converter"
-  description="Validate, format, and convert between YAML and JSON instantly. Free online tool with detailed error messages and line numbers. No signup required."
-  ogImage="https://meysam.io/og/yaml-json.png"
-  canonicalPath="/tools/yaml-json"
+  title={tool.title}
+  description={tool.description}
+  ogImage={tool.ogImage}
+  canonicalPath={"/tools/" + tool.slug}
   structuredData={structuredData}
-  keywords={yamlJsonKeywords}
+  keywords={tool.keywords}
 >
-  <Fragment slot="head">
-    <script type="application/ld+json" set:html={JSON.stringify(faqData)} />
-  </Fragment>
+  {
+    faqData && (
+      <Fragment slot="head">
+        <script type="application/ld+json" set:html={JSON.stringify(faqData)} />
+      </Fragment>
+    )
+  }
 
   <!-- Tool Header -->
   <div class="tool-header">
-    <h1>YAML/JSON Validator & Converter</h1>
+    <h1>{tool.title}</h1>
     <p class="subtitle">
       Validate, format, and convert between YAML and JSON. Client-side
       processing — your data never leaves your browser.
@@ -229,17 +161,19 @@ var yamlSyntax = [
           </thead>
           <tbody>
             {
-              yamlSyntax.map((item) => (
-                <tr>
-                  <td>
-                    <code>{item.syntax}</code>
-                  </td>
-                  <td>{item.description}</td>
-                  <td>
-                    <code class="example-code">{item.example}</code>
-                  </td>
-                </tr>
-              ))
+              yamlSyntax.map(function renderSyntax(item) {
+                return (
+                  <tr>
+                    <td>
+                      <code>{item.syntax}</code>
+                    </td>
+                    <td>{item.description}</td>
+                    <td>
+                      <code class="example-code">{item.example}</code>
+                    </td>
+                  </tr>
+                );
+              })
             }
           </tbody>
         </table>
@@ -251,470 +185,38 @@ var yamlSyntax = [
       <h2>Common YAML Errors & How to Fix Them</h2>
       <div class="errors-grid">
         {
-          commonErrors.map((error) => (
-            <div class="error-card">
-              <h3>{error.title}</h3>
-              <p class="error-description">{error.description}</p>
-              <p class="error-fix">
-                <strong>Fix:</strong> {error.suggestion}
-              </p>
-            </div>
-          ))
+          commonErrors.map(function renderError(error) {
+            return (
+              <div class="error-card">
+                <h3>{error.title}</h3>
+                <p class="error-description">{error.description}</p>
+                <p class="error-fix">
+                  <strong>Fix:</strong> {error.suggestion}
+                </p>
+              </div>
+            );
+          })
         }
       </div>
     </div>
 
     <!-- FAQ Section -->
-    <div class="tool-card faq-section">
-      <h2>Frequently Asked Questions</h2>
-
-      <details class="faq-item">
-        <summary>How do I validate YAML online?</summary>
-        <p>
-          Paste your YAML content into the input editor. The validator
-          automatically detects YAML format and validates it against the YAML
-          1.2 specification. Any syntax errors will be displayed with line
-          numbers and helpful suggestions for fixing them.
-        </p>
-      </details>
-
-      <details class="faq-item">
-        <summary>How do I convert YAML to JSON?</summary>
-        <p>
-          Paste your YAML content and click the "Convert to JSON" button. The
-          tool parses your YAML according to the YAML 1.2 spec and outputs valid
-          JSON following RFC 8259. You can then copy or download the result.
-        </p>
-      </details>
-
-      <details class="faq-item">
-        <summary>How do I convert JSON to YAML?</summary>
-        <p>
-          Paste your JSON content and click the "Convert to YAML" button. The
-          tool validates your JSON against RFC 8259 and converts it to clean,
-          properly indented YAML 1.2 format.
-        </p>
-      </details>
-
-      <details class="faq-item">
-        <summary>What causes YAML syntax errors?</summary>
-        <p>
-          Common YAML errors include: incorrect indentation (YAML uses spaces,
-          not tabs), missing colons after keys, unquoted special characters,
-          improper list formatting, and duplicate keys. Our validator shows the
-          exact line and column where errors occur.
-        </p>
-      </details>
-
-      <details class="faq-item">
-        <summary>Is my data secure when using this validator?</summary>
-        <p>
-          Yes, absolutely. All validation and conversion happens entirely in
-          your browser using JavaScript. Your data never leaves your device and
-          is never sent to any server. This is a 100% client-side tool. You can
-          verify this by checking your browser's network tab — no data is
-          transmitted.
-        </p>
-      </details>
-
-      <details class="faq-item">
-        <summary>What YAML version does this validator support?</summary>
-        <p>
-          This validator supports YAML 1.2, the latest stable version of the
-          YAML specification. It handles all standard YAML features including
-          anchors, aliases, multi-line strings, block scalars, and complex
-          nested structures.
-        </p>
-      </details>
-
-      <details class="faq-item">
-        <summary>Can I validate Kubernetes YAML files?</summary>
-        <p>
-          Yes! This tool validates the YAML syntax of Kubernetes manifests, Helm
-          charts, Docker Compose files, GitHub Actions workflows, Ansible
-          playbooks, and any other YAML-based configuration files. It checks for
-          valid YAML structure (syntax validation) but not Kubernetes-specific
-          schema validation.
-        </p>
-      </details>
-
-      <details class="faq-item">
-        <summary>What is the difference between YAML and JSON?</summary>
-        <p>
-          YAML and JSON are both data serialization formats. Key differences:
-        </p>
-        <ul>
-          <li>
-            <strong>Readability:</strong> YAML uses indentation and is more human-readable;
-            JSON uses braces/brackets
-          </li>
-          <li>
-            <strong>Comments:</strong> YAML supports comments (#); JSON does not
-          </li>
-          <li>
-            <strong>Data types:</strong> YAML supports more types (dates, timestamps,
-            etc.)
-          </li>
-          <li>
-            <strong>Compatibility:</strong> Valid JSON is valid YAML (YAML is a superset)
-          </li>
-          <li>
-            <strong>Use cases:</strong> YAML for config files; JSON for APIs and data
-            exchange
-          </li>
-        </ul>
-      </details>
+    <div class="tool-card">
+      <FAQAccordion faqs={tool.faqs} />
     </div>
 
     <!-- Newsletter CTA -->
-    <div class="tool-card newsletter-section">
-      <h2>Like This Tool?</h2>
-      <p>
-        Get weekly DevOps tips and production insights from 8+ years of YAML
-        debugging in the trenches.
-      </p>
-
-      <form
-        class="newsletter-form listmonk-form"
-        data-pirsch-event="subscribe"
-        data-pirsch-meta-page_url="/tools/yaml-json"
-        data-pirsch-meta-variant="yaml-json-tool"
-        data-pirsch-non-interactive
-        action="https://newsletter.meysam.io/subscription/form"
-        method="post"
-      >
-        <input type="hidden" name="nonce" />
-        <input
-          id="00a2c"
-          type="hidden"
-          name="l"
-          value="00a2c2b8-467a-4d74-9c76-9c6472c91d06"
-        />
-        <input
-          type="text"
-          name="name"
-          value=""
-          class="honeypot-field"
-          tabindex="-1"
-          autocomplete="off"
-          aria-hidden="true"
-        />
-        <input
-          type="text"
-          name="company"
-          value=""
-          class="honeypot-field"
-          tabindex="-1"
-          autocomplete="off"
-          aria-hidden="true"
-        />
-        <input
-          type="text"
-          name="website"
-          value=""
-          class="honeypot-field"
-          tabindex="-1"
-          autocomplete="off"
-          aria-hidden="true"
-        />
-        <div class="form-row">
-          <input
-            type="email"
-            name="email"
-            placeholder="your@email.com"
-            required
-            aria-label="Email address"
-            class="email-input"
-          />
-          <altcha-widget
-            class="altcha-widget"
-            challengeurl="https://newsletter.meysam.io/api/public/captcha/altcha"
-            auto="onfocus"></altcha-widget>
-          <button type="submit" class="btn btn-primary">Get Weekly Tips</button>
-        </div>
-        <p class="form-note">
-          Join 1,500+ engineers. No spam, unsubscribe anytime.
-        </p>
-      </form>
-
-      <div class="success-message-newsletter hidden" id="newsletter-success">
-        <svg
-          width="48"
-          height="48"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-        >
-          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-          <polyline points="22 4 12 14.01 9 11.01"></polyline>
-        </svg>
-        <h3>Check Your Email!</h3>
-        <p>Click the confirmation link to complete your subscription.</p>
-      </div>
+    <div class="tool-card">
+      <ToolNewsletterCTA
+        pageUrl="/tools/yaml-json"
+        variant="yaml-json-tool"
+        title="Like This Tool?"
+        description="Get weekly DevOps tips and production insights from 8+ years of YAML debugging in the trenches."
+      />
     </div>
   </div>
 </ToolLayout>
 
-<script>
-  import log from "loglevel";
-
-  function initNewsletterForm() {
-    var form = document.querySelector(
-      ".newsletter-form",
-    ) as HTMLFormElement | null;
-    var successMessage = document.getElementById("newsletter-success");
-
-    if (!form || !successMessage) return;
-
-    form.addEventListener("submit", function handleSubmit(e) {
-      e.preventDefault();
-      var formData = new FormData(form);
-
-      var honeypotFields = form.querySelectorAll(
-        ".honeypot-field",
-      ) as NodeListOf<HTMLInputElement>;
-      var isBot = false;
-      honeypotFields.forEach(function checkField(field) {
-        if (field.value !== "") {
-          isBot = true;
-        }
-      });
-
-      if (isBot) return;
-
-      fetch(form.action, {
-        method: "POST",
-        body: formData,
-      })
-        .then(function handleResponse(response) {
-          if (response.ok) {
-            form.classList.add("hidden");
-            successMessage.classList.remove("hidden");
-          }
-        })
-        .catch(function handleError(err) {
-          log.error("Newsletter error:", err);
-        });
-    });
-  }
-
-  document.addEventListener("DOMContentLoaded", initNewsletterForm);
-  document.addEventListener("astro:page-load", initNewsletterForm);
-</script>
-
 <style>
-  /* Reference Section */
-  .reference-section h2 {
-    font-size: 1.25rem;
-    margin-bottom: var(--space-sm);
-  }
-
-  .section-intro {
-    color: var(--color-text-muted);
-    font-size: 0.9375rem;
-    margin-bottom: var(--space-lg);
-  }
-
-  .reference-table-wrapper {
-    overflow-x: auto;
-  }
-
-  .reference-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.875rem;
-  }
-
-  .reference-table th,
-  .reference-table td {
-    padding: var(--space-sm);
-    text-align: left;
-    border-bottom: 1px solid var(--color-border);
-  }
-
-  .reference-table th {
-    color: var(--color-text-dim);
-    font-weight: 500;
-    font-size: 0.8125rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  .reference-table td {
-    color: var(--color-text-muted);
-  }
-
-  .reference-table code {
-    font-family: var(--font-mono);
-    color: var(--color-accent-light);
-    background: var(--color-bg);
-    padding: 0.125rem 0.375rem;
-    border-radius: 4px;
-  }
-
-  .example-code {
-    white-space: pre;
-    font-size: 0.75rem;
-  }
-
-  /* Errors Section */
-  .errors-section h2 {
-    font-size: 1.25rem;
-    margin-bottom: var(--space-lg);
-  }
-
-  .errors-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: var(--space-md);
-  }
-
-  .error-card {
-    padding: var(--space-md);
-    background: var(--color-bg);
-    border-radius: var(--border-radius-sm);
-    border: 1px solid var(--color-border);
-  }
-
-  .error-card h3 {
-    font-size: 1rem;
-    margin-bottom: var(--space-xs);
-    color: var(--color-text);
-  }
-
-  .error-description {
-    font-size: 0.875rem;
-    color: var(--color-text-muted);
-    margin-bottom: var(--space-sm);
-  }
-
-  .error-fix {
-    font-size: 0.8125rem;
-    color: var(--color-text-dim);
-    margin: 0;
-  }
-
-  .error-fix strong {
-    color: var(--color-success);
-  }
-
-  /* FAQ Section */
-  .faq-section h2 {
-    font-size: 1.25rem;
-    margin-bottom: var(--space-lg);
-  }
-
-  .faq-item {
-    border-bottom: 1px solid var(--color-border);
-  }
-
-  .faq-item summary {
-    padding: var(--space-md) 0;
-    font-weight: 500;
-    color: var(--color-text);
-    cursor: pointer;
-    list-style: none;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .faq-item summary::after {
-    content: "+";
-    font-size: 1.25rem;
-    color: var(--color-text-muted);
-    transition: transform var(--transition-fast);
-  }
-
-  .faq-item[open] summary::after {
-    content: "-";
-  }
-
-  .faq-item p,
-  .faq-item ul {
-    padding-bottom: var(--space-md);
-    color: var(--color-text-muted);
-    font-size: 0.9375rem;
-    line-height: 1.6;
-  }
-
-  .faq-item ul {
-    padding-left: var(--space-lg);
-    margin: 0;
-  }
-
-  .faq-item li {
-    margin-bottom: var(--space-xs);
-  }
-
-  /* Newsletter Section */
-  .newsletter-section {
-    text-align: center;
-  }
-
-  .newsletter-section h2 {
-    font-size: 1.5rem;
-    margin-bottom: var(--space-sm);
-  }
-
-  .newsletter-section > p {
-    color: var(--color-text-muted);
-    margin-bottom: var(--space-lg);
-  }
-
-  .form-row {
-    display: flex;
-    gap: var(--space-sm);
-    max-width: 500px;
-    margin: 0 auto var(--space-sm);
-  }
-
-  .email-input {
-    flex: 1;
-  }
-
-  .altcha-widget {
-    display: none;
-  }
-
-  .form-note {
-    font-size: 0.875rem;
-    color: var(--color-text-dim);
-    margin: 0;
-  }
-
-  .honeypot-field {
-    position: absolute;
-    left: -9999px;
-    width: 1px;
-    height: 1px;
-    opacity: 0;
-  }
-
-  .success-message-newsletter {
-    padding: var(--space-xl);
-    color: var(--color-success);
-  }
-
-  .success-message-newsletter h3 {
-    margin: var(--space-md) 0 var(--space-sm);
-    font-size: 1.25rem;
-  }
-
-  .success-message-newsletter p {
-    color: var(--color-text-muted);
-    margin: 0;
-  }
-
-  /* Responsive */
-  @media (max-width: 768px) {
-    .form-row {
-      flex-direction: column;
-    }
-  }
-
-  .hidden {
-    display: none !important;
-  }
+  @import "@/styles/tools.css";
 </style>

@@ -1,107 +1,42 @@
 ---
 import ToolLayout from "@/layouts/ToolLayout.astro";
 import CronTool from "@/components/vue/tools/CronTool.vue";
-import Newsletter from "@/components/Newsletter.astro";
-import { getPresets, getExamplePhrases } from "@/utils/cron.js";
+import FAQAccordion from "@/components/FAQAccordion.astro";
+import ToolNewsletterCTA from "@/components/ToolNewsletterCTA.astro";
+import { getPresets, getExamplePhrases } from "@/utils/cron";
+import {
+  getToolBySlugOrThrow,
+  generateToolStructuredData,
+  generateFAQStructuredData,
+} from "@/data/tools";
 
+var tool = getToolBySlugOrThrow("cron");
 var presets = getPresets();
 var examplePhrases = getExamplePhrases();
 
-var cronKeywords =
-  "cron expression generator, cron job scheduler, crontab generator, cron syntax, cron expression validator, cron to english, english to cron, cron calculator, next cron run time, cron expression examples, kubernetes cronjob, linux cron, unix cron, schedule task, recurring job scheduler, cron expression builder, crontab syntax, cron job examples, free cron generator, online cron tool";
-
-var structuredData = {
-  "@context": "https://schema.org",
-  "@type": "WebApplication",
-  name: "Cron Expression Generator",
-  description:
-    "Build and decode cron expressions with plain English. Instant validation, next 10 run times, and copy-ready output. Free, no ads.",
-  url: "https://meysam.io/tools/cron",
-  applicationCategory: "DeveloperApplication",
-  operatingSystem: "Any",
-  offers: {
-    "@type": "Offer",
-    price: "0",
-    priceCurrency: "USD",
-  },
-  featureList: [
-    "Natural language to cron conversion",
-    "Cron expression to English translation",
-    "Next 10 run times calculation",
-    "Copy to clipboard",
-    "Shareable URLs",
-    "Common presets",
-  ],
-  author: {
-    "@type": "Person",
-    name: "Meysam Azad",
-    url: "https://meysam.io",
-  },
-};
-
-var faqData = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: [
-    {
-      "@type": "Question",
-      name: "What is a cron expression?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "A cron expression is a string format used to schedule recurring tasks in Unix-like systems. It consists of 5 fields: minute (0-59), hour (0-23), day of month (1-31), month (1-12), and day of week (0-7).",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "How do I run a cron job every 5 minutes?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Use the expression */5 * * * * to run every 5 minutes. The */5 in the minute field means 'every 5 minutes' starting from 0.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "What does * mean in cron?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "The asterisk (*) in cron means 'every' or 'all values'. For example, * in the hour field means 'every hour', and * in the day field means 'every day'.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "How do I schedule a cron job for weekdays only?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Use 1-5 or MON-FRI in the day of week field. For example, 0 9 * * 1-5 runs at 9:00 AM Monday through Friday.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "What is the difference between / and - in cron?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "The slash (/) specifies step values like 'every N units'. The hyphen (-) specifies ranges. For example, */15 means 'every 15 minutes' while 9-17 means 'hours 9 through 17'.",
-      },
-    },
-  ],
-};
+var structuredData = generateToolStructuredData(tool);
+var faqData = generateFAQStructuredData(tool.faqs);
 ---
 
 <ToolLayout
-  title="Cron Expression Generator"
-  description="Build and decode cron expressions with plain English. Instant validation, next 10 run times, and copy-ready output. Free, no ads."
-  ogImage="https://meysam.io/og/cron.png"
-  canonicalPath="/tools/cron"
+  title={tool.title}
+  description={tool.description}
+  ogImage={tool.ogImage}
+  canonicalPath={"/tools/" + tool.slug}
   structuredData={structuredData}
-  keywords={cronKeywords}
+  keywords={tool.keywords}
 >
-  <Fragment slot="head">
-    <script type="application/ld+json" set:html={JSON.stringify(faqData)} />
-  </Fragment>
+  {
+    faqData && (
+      <Fragment slot="head">
+        <script type="application/ld+json" set:html={JSON.stringify(faqData)} />
+      </Fragment>
+    )
+  }
 
   <!-- Tool Header -->
   <div class="tool-header">
-    <h1>Cron Expression Generator</h1>
+    <h1>{tool.title}</h1>
     <p class="subtitle">
       Build and decode cron schedules with plain English. No signup, no ads.
     </p>
@@ -163,302 +98,23 @@ var faqData = {
       </div>
     </div>
 
-    <!-- FAQ Section (Static) -->
-    <div class="tool-card faq-section">
-      <h2>Frequently Asked Questions</h2>
-
-      <details class="faq-item">
-        <summary>What is a cron expression?</summary>
-        <p>
-          A cron expression is a string format used to schedule recurring tasks
-          in Unix-like systems. It consists of 5 fields: minute (0-59), hour
-          (0-23), day of month (1-31), month (1-12), and day of week (0-7). For
-          example, <code>0 9 * * 1-5</code> means "at 9:00 AM, Monday through Friday".
-        </p>
-      </details>
-
-      <details class="faq-item">
-        <summary>How do I run a cron job every 5 minutes?</summary>
-        <p>
-          Use the expression <code>*/5 * * * *</code>. The <code>*/5</code> in the
-          minute field means "every 5 minutes" starting from minute 0 (0, 5, 10, 15,
-          etc.).
-        </p>
-      </details>
-
-      <details class="faq-item">
-        <summary>What does * mean in cron?</summary>
-        <p>
-          The asterisk (*) means "every" or "all values" for that field. For
-          example, <code>*</code> in the hour field means "every hour", and <code
-            >*</code
-          > in the day of month field means "every day".
-        </p>
-      </details>
-
-      <details class="faq-item">
-        <summary>How do I schedule a cron job for weekdays only?</summary>
-        <p>
-          Use <code>1-5</code> or <code>MON-FRI</code> in the day of week field (the
-          5th field). For example, <code>0 9 * * 1-5</code> runs at 9:00 AM Monday
-          through Friday.
-        </p>
-      </details>
-
-      <details class="faq-item">
-        <summary>What's the difference between / and - in cron?</summary>
-        <p>
-          The slash (<code>/</code>) specifies step values, like "every N
-          units". For example, <code>*/15</code> means "every 15 minutes". The hyphen
-          (<code>-</code>) specifies ranges. For example, <code>9-17</code> means
-          "hours 9 through 17".
-        </p>
-      </details>
-
-      <details class="faq-item">
-        <summary>How do I run something on the last day of every month?</summary
-        >
-        <p>
-          Some cron implementations support <code>L</code> for "last". Use <code
-            >0 0 L * *</code
-          > for midnight on the last day of every month. Note: Standard cron doesn't
-          support L, but many modern schedulers (like Kubernetes CronJobs) do.
-        </p>
-      </details>
+    <!-- FAQ Section -->
+    <div class="tool-card">
+      <FAQAccordion faqs={tool.faqs} />
     </div>
 
-    <!-- Newsletter CTA (Static) -->
-    <Newsletter class="my-0 text-center newsletter-section w-full px-0 mx-12">
-      <Fragment slot="title">
-        <div>
-          <h2>Like This Tool?</h2>
-          <p>
-            Get weekly DevOps tips and production insights from 8+ years in the
-            trenches.
-          </p>
-        </div>
-      </Fragment>
-    </Newsletter>
+    <!-- Newsletter CTA -->
+    <div class="tool-card">
+      <ToolNewsletterCTA
+        pageUrl="/tools/cron"
+        variant="cron-tool"
+        title="Like This Tool?"
+        description="Get weekly DevOps tips and production insights from 8+ years in the trenches."
+      />
+    </div>
   </div>
 </ToolLayout>
 
-<script>
-  import log from "loglevel";
-
-  // Newsletter form handling (static - doesn't need Vue)
-  function initNewsletterForm() {
-    var form = document.querySelector(
-      ".newsletter-form",
-    ) as HTMLFormElement | null;
-    var successMessage = document.getElementById("newsletter-success");
-
-    if (!form || !successMessage) {
-      return;
-    }
-
-    form.addEventListener("submit", function handleSubmit(e) {
-      e.preventDefault();
-      var formData = new FormData(form);
-
-      // Check honeypot
-      var honeypotFields = form.querySelectorAll(
-        ".honeypot-field",
-      ) as NodeListOf<HTMLInputElement>;
-      var isBot = false;
-      honeypotFields.forEach(function checkField(field) {
-        if (field.value !== "") {
-          isBot = true;
-        }
-      });
-
-      if (isBot) {
-        return;
-      }
-
-      fetch(form.action, {
-        method: "POST",
-        body: formData,
-      })
-        .then(function handleResponse(response) {
-          if (response.ok) {
-            form.classList.add("hidden");
-            successMessage.classList.remove("hidden");
-          }
-        })
-        .catch(function handleError(err) {
-          log.error("Newsletter error:", err);
-        });
-    });
-  }
-
-  document.addEventListener("DOMContentLoaded", initNewsletterForm);
-  document.addEventListener("astro:page-load", initNewsletterForm);
-</script>
-
 <style>
-  /* Reference Section */
-  .reference-section h2 {
-    font-size: 1.25rem;
-    margin-bottom: var(--space-lg);
-  }
-
-  .reference-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: var(--space-xl);
-  }
-
-  .reference-item h3 {
-    font-size: 1rem;
-    margin-bottom: var(--space-sm);
-    color: var(--color-text-muted);
-  }
-
-  .reference-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.875rem;
-  }
-
-  .reference-table th,
-  .reference-table td {
-    padding: var(--space-xs) var(--space-sm);
-    text-align: left;
-    border-bottom: 1px solid var(--color-border);
-  }
-
-  .reference-table th {
-    color: var(--color-text-dim);
-    font-weight: 500;
-  }
-
-  .reference-table td {
-    color: var(--color-text-muted);
-  }
-
-  .reference-table code {
-    font-family: var(--font-mono);
-    color: var(--color-accent-light);
-  }
-
-  /* FAQ Section */
-  .faq-section h2 {
-    font-size: 1.25rem;
-    margin-bottom: var(--space-lg);
-  }
-
-  .faq-item {
-    border-bottom: 1px solid var(--color-border);
-  }
-
-  .faq-item summary {
-    padding: var(--space-md) 0;
-    font-weight: 500;
-    color: var(--color-text);
-    cursor: pointer;
-    list-style: none;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .faq-item summary::after {
-    content: "+";
-    font-size: 1.25rem;
-    color: var(--color-text-muted);
-    transition: transform var(--transition-fast);
-  }
-
-  .faq-item[open] summary::after {
-    content: "-";
-  }
-
-  .faq-item p {
-    padding-bottom: var(--space-md);
-    color: var(--color-text-muted);
-    font-size: 0.9375rem;
-    line-height: 1.6;
-  }
-
-  .faq-item code {
-    font-family: var(--font-mono);
-    background: var(--color-bg);
-    padding: 0.125rem 0.375rem;
-    border-radius: 4px;
-    color: var(--color-accent-light);
-  }
-
-  /* Newsletter Section */
-  .newsletter-section {
-    text-align: center;
-  }
-
-  .newsletter-section h2 {
-    font-size: 1.5rem;
-    margin-bottom: var(--space-sm);
-  }
-
-  .newsletter-section > p {
-    color: var(--color-text-muted);
-    margin-bottom: var(--space-lg);
-  }
-
-  .form-row {
-    display: flex;
-    gap: var(--space-sm);
-    max-width: 500px;
-    margin: 0 auto var(--space-sm);
-  }
-
-  .email-input {
-    flex: 1;
-  }
-
-  .altcha-widget {
-    display: none;
-  }
-
-  .form-note {
-    font-size: 0.875rem;
-    color: var(--color-text-dim);
-    margin: 0;
-  }
-
-  .honeypot-field {
-    position: absolute;
-    left: -9999px;
-    width: 1px;
-    height: 1px;
-    opacity: 0;
-  }
-
-  .success-message {
-    padding: var(--space-xl);
-    color: var(--color-success);
-  }
-
-  .success-message h3 {
-    margin: var(--space-md) 0 var(--space-sm);
-    font-size: 1.25rem;
-  }
-
-  .success-message p {
-    color: var(--color-text-muted);
-    margin: 0;
-  }
-
-  /* Responsive */
-  @media (max-width: 768px) {
-    .reference-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .form-row {
-      flex-direction: column;
-    }
-  }
-
-  .hidden {
-    display: none !important;
-  }
+  @import "@/styles/tools.css";
 </style>

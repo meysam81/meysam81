@@ -2,7 +2,7 @@
 import { ref, computed, onMounted, watch } from "vue";
 import cronstrue from "cronstrue";
 import { CronExpressionParser } from "cron-parser";
-import { englishToCron, validateCron } from "@/utils/cron.js";
+import { englishToCron, validateCron } from "@/utils/cron";
 import { useClipboard } from "@/composables/useClipboard";
 import { useToolState } from "@/composables/useToolState";
 import { useDebounceFn } from "@/composables/useDebounce";

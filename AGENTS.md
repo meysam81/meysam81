@@ -190,3 +190,76 @@ Conventional commits (commitlint enforced):
 - `docs:` documentation
 - `chore:` maintenance
 - `refactor:` code restructure
+
+## Refactoring Progress (DRY & Modularity)
+
+### Phase 1: Tool Pages - COMPLETED
+
+Created centralized tools infrastructure:
+
+- `src/data/tools.ts` - Single source of truth for tool metadata, keywords, structured data
+- `src/components/ToolNewsletterCTA.astro` - Reusable newsletter CTA with form handling
+- `src/components/FAQAccordion.astro` - Reusable FAQ accordion component
+- `src/styles/tools.css` - Shared styles for reference tables, error cards
+
+Refactored tool pages to use new components:
+
+- `src/pages/tools/index.astro` - Uses centralized tools config
+- `src/pages/tools/cron.astro` - Uses FAQAccordion, ToolNewsletterCTA
+- `src/pages/tools/yaml-json.astro` - Uses FAQAccordion, ToolNewsletterCTA
+- `src/pages/tools/saas-idea-validator.astro` - Uses FAQAccordion, ToolNewsletterCTA
+- `src/pages/tools/social-preview.astro` - Uses ToolNewsletterCTA
+
+### Phase 2: Blog Utilities - COMPLETED
+
+Created shared blog utilities:
+
+- `src/utils/blog.ts` - Added `formatDate()`, `getAllTags()`, `getPostsByTag()`, `splitByFeatured()`
+- `src/utils/reading-time.ts` - Added `formatReadingTime()`, `calculateTotalReadingTime()`
+- `src/components/TagsFilter.astro` - Reusable tags filter with active state
+- `src/components/BackLink.astro` - Reusable back link with arrow icon
+
+Refactored blog pages to use shared utilities:
+
+- `src/pages/blog/index.astro` - Uses TagsFilter, formatDate, formatReadingTime, splitByFeatured
+- `src/pages/blog/tags/[tag].astro` - Uses TagsFilter, BackLink, formatDate, filterPublishedPosts
+- `src/pages/blog/series/[slug].astro` - Uses BackLink, formatDate, formatReadingTime
+
+### Phase 3: Vue Components - PARTIALLY COMPLETED
+
+Files created:
+
+- `src/composables/useToast.ts` - Toast visibility state management with auto-timeout
+- `src/composables/useUrlParams.ts` - URL parameter handling (get, set, encode/decode)
+- `src/styles/tool-components.css` - Shared Vue tool styles
+
+Optional (not implemented):
+
+- `src/components/vue/ui/CopyButton.vue` - Reusable copy button
+- `src/components/vue/ui/Toast.vue` - Toast notification component
+
+### Phase 4: Utilities Cleanup - COMPLETED
+
+- Removed `src/utils/logger.ts` and updated all imports to use `useLogger` composable:
+  - `src/pages/blog/[...slug].astro`
+  - `src/utils/idea-validator.ts`
+  - `src/utils/pirsch.ts`
+- Converted `src/utils/cron.js` to TypeScript (`src/utils/cron.ts`) with proper interfaces:
+  - Added types: `TimeResult`, `IntervalResult`, `PatternMatch`, `ValidationResult`, `CronPreset`, `ExamplePhrase`, `Pattern`
+  - Updated imports in `src/pages/tools/cron.astro` and `src/components/vue/tools/CronTool.vue`
+
+### Phase 5: Layout Refactoring - COMPLETED
+
+- Created `src/components/ui/Icon.astro` - Centralized icon component with 24 icon types:
+  - Navigation: arrow-left, arrow-right, external-link, link
+  - Actions: checkmark, checkmark-circle, copy
+  - Info: clock, book, document, search, spinner, eye
+  - Page: home, user, briefcase, envelope, open-book
+  - Social: x-twitter, linkedin, github, youtube, rss, email
+- Created `src/components/AsideSection.astro` - Reusable aside section for blog post sidebars
+- Standardized UI component props (HTMLAttributes extension):
+  - `src/components/ui/Badge.astro` - extends `HTMLAttributes<"span">`
+  - `src/components/ui/Container.astro` - extends `HTMLAttributes<"div">`
+  - `src/components/ui/Section.astro` - extends `HTMLAttributes<"section">`
+- Added `.gradient-text` utility class to `src/styles/theme.css`
+- Updated `src/components/BackLink.astro` to use centralized Icon component
