@@ -10,6 +10,7 @@ import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeSlug from "rehype-slug";
 import { fileURLToPath } from "url";
 import compression from "vite-plugin-compression2";
+import { VitePWA } from "vite-plugin-pwa";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -75,6 +76,7 @@ export default defineConfig({
   vite: {
     plugins: [
       tailwindcss(),
+      VitePWA(),
       compression({
         algorithm: "brotliCompress",
         exclude: [/\.(br)$/, /\.(gz)$/],
