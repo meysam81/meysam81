@@ -1,6 +1,7 @@
 ---
 import ToolLayout from "@/layouts/ToolLayout.astro";
 import CronTool from "@/components/vue/tools/CronTool.vue";
+import Newsletter from "@/components/Newsletter.astro";
 import { getPresets, getExamplePhrases } from "@/utils/cron.js";
 
 var presets = getPresets();
@@ -227,92 +228,17 @@ var faqData = {
     </div>
 
     <!-- Newsletter CTA (Static) -->
-    <div class="tool-card newsletter-section">
-      <h2>Like This Tool?</h2>
-      <p>
-        Get weekly DevOps tips and production insights from 8+ years in the
-        trenches.
-      </p>
-
-      <form
-        class="newsletter-form listmonk-form"
-        data-pirsch-event="subscribe"
-        data-pirsch-meta-page_url="/tools/cron"
-        data-pirsch-meta-variant="cron-tool"
-        data-pirsch-non-interactive
-        action="https://newsletter.meysam.io/subscription/form"
-        method="post"
-      >
-        <input type="hidden" name="nonce" />
-        <input
-          id="00a2c"
-          type="hidden"
-          name="l"
-          value="00a2c2b8-467a-4d74-9c76-9c6472c91d06"
-        />
-        <input
-          type="text"
-          name="name"
-          value=""
-          class="honeypot-field"
-          tabindex="-1"
-          autocomplete="off"
-          aria-hidden="true"
-        />
-        <input
-          type="text"
-          name="company"
-          value=""
-          class="honeypot-field"
-          tabindex="-1"
-          autocomplete="off"
-          aria-hidden="true"
-        />
-        <input
-          type="text"
-          name="website"
-          value=""
-          class="honeypot-field"
-          tabindex="-1"
-          autocomplete="off"
-          aria-hidden="true"
-        />
-        <div class="form-row">
-          <input
-            type="email"
-            name="email"
-            placeholder="your@email.com"
-            required
-            aria-label="Email address"
-            class="email-input"
-          />
-          <altcha-widget
-            class="altcha-widget"
-            challengeurl="https://newsletter.meysam.io/api/public/captcha/altcha"
-            auto="onfocus"></altcha-widget>
-          <button type="submit" class="btn btn-primary">Get Weekly Tips</button>
+    <Newsletter class="my-0 text-center newsletter-section w-full px-0 mx-12">
+      <Fragment slot="title">
+        <div>
+          <h2>Like This Tool?</h2>
+          <p>
+            Get weekly DevOps tips and production insights from 8+ years in the
+            trenches.
+          </p>
         </div>
-        <p class="form-note">
-          Join 1,500+ engineers. No spam, unsubscribe anytime.
-        </p>
-      </form>
-
-      <div class="success-message hidden" id="newsletter-success">
-        <svg
-          width="48"
-          height="48"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-        >
-          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-          <polyline points="22 4 12 14.01 9 11.01"></polyline>
-        </svg>
-        <h3>Check Your Email!</h3>
-        <p>Click the confirmation link to complete your subscription.</p>
-      </div>
-    </div>
+      </Fragment>
+    </Newsletter>
   </div>
 </ToolLayout>
 
@@ -326,7 +252,9 @@ var faqData = {
     ) as HTMLFormElement | null;
     var successMessage = document.getElementById("newsletter-success");
 
-    if (!form || !successMessage) return;
+    if (!form || !successMessage) {
+      return;
+    }
 
     form.addEventListener("submit", function handleSubmit(e) {
       e.preventDefault();
@@ -343,7 +271,9 @@ var faqData = {
         }
       });
 
-      if (isBot) return;
+      if (isBot) {
+        return;
+      }
 
       fetch(form.action, {
         method: "POST",

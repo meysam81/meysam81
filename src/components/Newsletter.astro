@@ -7,15 +7,20 @@ import BlogUniqueVisitors from "@/components/data/BlogUniqueVisitors.astro";
 interface Props {
   variant?: "hero" | "section";
   class?: string;
+  benefitsClass?: string;
 }
 
-var { variant = "section", class: className = "" } = Astro.props;
+var {
+  variant = "section",
+  class: className = "",
+  benefitsClass = "",
+} = Astro.props;
 ---
 
 <div class:list={["newsletter", className]}>
   <slot name="title" />
 
-  <div class="newsletter-benefits">
+  <div class:list={["newsletter-benefits", benefitsClass]}>
     <div class="benefit">
       <CheckmarkIcon />
       <span>Customer discovery insights as I interview potential users</span>
@@ -321,7 +326,6 @@ var { variant = "section", class: className = "" } = Astro.props;
   }
 
   .newsletter-section {
-    max-width: 800px;
     margin: 0 auto;
   }
 
@@ -332,7 +336,7 @@ var { variant = "section", class: className = "" } = Astro.props;
 
   .newsletter-description {
     text-align: center;
-    font-size: 1.125rem;
+    font-size: var(--text-lg);
     color: var(--color-text-muted);
     margin-bottom: var(--space-xl);
   }
@@ -351,7 +355,7 @@ var { variant = "section", class: className = "" } = Astro.props;
 
   .benefit span {
     color: var(--color-text-muted);
-    font-size: 1rem;
+    font-size: var(--text-base);
     line-height: 1.6;
   }
 
@@ -373,7 +377,7 @@ var { variant = "section", class: className = "" } = Astro.props;
 
   .email-input {
     flex: 1;
-    font-size: 1rem;
+    font-size: var(--text-base);
     text-align: center;
   }
 
@@ -421,7 +425,7 @@ var { variant = "section", class: className = "" } = Astro.props;
 
   .form-note {
     text-align: center;
-    font-size: 0.875rem;
+    font-size: var(--text-sm);
     color: var(--color-text-dim);
     margin: 0;
   }
@@ -446,21 +450,21 @@ var { variant = "section", class: className = "" } = Astro.props;
   }
 
   .success-title {
-    font-size: 1.75rem;
+    font-size: var(--text-3xl);
     font-weight: 600;
     color: var(--color-text);
     margin-bottom: var(--space-sm);
   }
 
   .success-description {
-    font-size: 1.125rem;
+    font-size: var(--text-lg);
     color: var(--color-text-muted);
     margin-bottom: var(--space-md);
     line-height: 1.6;
   }
 
   .success-note {
-    font-size: 0.875rem;
+    font-size: var(--text-sm);
     color: var(--color-text-dim);
     margin: 0;
   }
@@ -476,14 +480,14 @@ var { variant = "section", class: className = "" } = Astro.props;
   }
 
   .error-message {
-    background: rgba(239, 68, 68, 0.1);
-    border: 1px solid rgba(239, 68, 68, 0.3);
-    color: #fca5a5;
+    background: var(--color-error-bg-subtle);
+    border: 1px solid var(--color-error-border);
+    color: var(--color-error-light);
     padding: var(--space-sm);
     border-radius: var(--border-radius-sm);
     margin-bottom: var(--space-md);
     text-align: center;
-    font-size: 0.875rem;
+    font-size: var(--text-sm);
   }
 
   .hidden {
@@ -518,11 +522,11 @@ var { variant = "section", class: className = "" } = Astro.props;
     }
 
     .success-title {
-      font-size: 1.5rem;
+      font-size: var(--text-2xl);
     }
 
     .success-description {
-      font-size: 1rem;
+      font-size: var(--text-base);
     }
   }
 </style>

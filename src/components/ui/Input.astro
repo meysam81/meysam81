@@ -11,7 +11,7 @@ var { label, error, hint, id, class: className, ...attrs } = Astro.props;
 
 var inputId = id || `input-${Math.random().toString(36).slice(2, 9)}`;
 var baseClasses =
-  "w-full px-4 py-3.5 text-base font-[var(--font-sans)] bg-[var(--color-bg-card)] border border-[var(--color-border)] rounded-[var(--radius-sm)] text-[var(--color-text)] transition-all duration-[var(--duration-fast)] placeholder:text-[var(--color-text-dim)] focus:outline-none focus:border-[var(--color-accent)] focus:shadow-[0_0_0_3px_rgba(59,130,246,0.1)]";
+  "w-full px-4 py-3.5 text-base font-[var(--font-sans)] bg-[var(--color-bg-card)] border border-[var(--color-border)] rounded-[var(--radius-sm)] text-[var(--color-text)] transition-all duration-[var(--duration-fast)] placeholder:text-[var(--color-text-dim)] focus:outline-none focus:border-[var(--color-accent)] focus:shadow-[var(--shadow-focus)]";
 var errorClasses = error
   ? "border-[var(--color-error)] focus:border-[var(--color-error)]"
   : "";

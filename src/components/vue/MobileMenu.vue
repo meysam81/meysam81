@@ -101,16 +101,16 @@ onUnmounted(function handleUnmount() {
   background: transparent;
   border: none;
   cursor: pointer;
-  padding: 0.5rem;
+  padding: var(--space-xs);
   z-index: 101;
   transition: all var(--transition-base);
 }
 
 .hamburger-line {
-  width: 24px;
+  width: var(--size-icon);
   height: var(--hamburger-line-height);
   background: var(--color-text);
-  border-radius: 2px;
+  border-radius: var(--radius-xs);
   transition: all var(--transition-base);
 }
 
@@ -145,7 +145,7 @@ onUnmounted(function handleUnmount() {
   flex-direction: column;
   align-items: stretch;
   gap: 0;
-  background: rgba(10, 10, 10, 0.98);
+  background: var(--color-bg-glass-solid);
   backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--color-border);
   padding: var(--space-md) 0;
@@ -155,7 +155,7 @@ onUnmounted(function handleUnmount() {
   display: block;
   padding: var(--space-sm) var(--space-md);
   color: var(--color-text-muted);
-  font-size: 0.9375rem;
+  font-size: var(--text-md);
   font-weight: 500;
   text-align: left;
   text-decoration: none;
@@ -177,7 +177,7 @@ onUnmounted(function handleUnmount() {
 
 .btn-sm:hover {
   transform: none;
-  box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+  box-shadow: var(--shadow-accent);
 }
 
 /* Transitions */

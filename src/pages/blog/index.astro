@@ -172,7 +172,7 @@ function calculateReadingTime(content: string) {
   }
 
   .hero-subtitle {
-    font-size: 1.25rem;
+    font-size: var(--text-xl);
     color: var(--color-text-muted);
     line-height: 1.7;
   }
@@ -189,7 +189,7 @@ function calculateReadingTime(content: string) {
   }
 
   .filter-label {
-    font-size: 0.9375rem;
+    font-size: var(--text-md);
     font-weight: 600;
     color: var(--color-text-muted);
     margin-bottom: var(--space-md);
@@ -204,8 +204,8 @@ function calculateReadingTime(content: string) {
   }
 
   .tag-button {
-    padding: 0.5rem 1rem;
-    font-size: 0.875rem;
+    padding: var(--space-xs) var(--space-sm);
+    font-size: var(--text-sm);
     font-weight: 500;
     background: transparent;
     border: 1px solid var(--color-border);
@@ -229,13 +229,12 @@ function calculateReadingTime(content: string) {
   }
 
   .section-label {
-    font-size: 1.25rem;
+    font-size: var(--text-xl);
     color: var(--color-text-muted);
     font-weight: 600;
     margin-bottom: var(--space-lg);
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    font-size: 0.875rem;
   }
 
   .featured-section {

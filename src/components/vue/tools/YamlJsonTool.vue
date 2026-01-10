@@ -79,27 +79,33 @@ var optionSortKeys = ref(false);
 var errorLine = ref<number | null>(null);
 
 var stats = computed<DocumentStats | null>(function computeStats() {
-  if (!currentData.value || !inputText.value) return null;
+  if (!currentData.value || !inputText.value) {
+    return null;
+  }
   return calculateStats(inputText.value, currentData.value);
 });
 
 var inputLineNumbers = computed(function computeInputLines() {
   var count = inputText.value.split("\n").length || 1;
-  return Array.from({ length: count }, function (_, i) {
+  return Array.from({ length: count }, function inputLineNumbers(_, i) {
     return i + 1;
   });
 });
 
 var outputLineNumbers = computed(function computeOutputLines() {
   var count = outputText.value.split("\n").length || 1;
-  return Array.from({ length: count }, function (_, i) {
+  return Array.from({ length: count }, function outputLineNumbers(_, i) {
     return i + 1;
   });
 });
 
 var convertButtonText = computed(function computeConvertText() {
-  if (currentFormat.value === "yaml") return "Convert to JSON";
-  if (currentFormat.value === "json") return "Convert to YAML";
+  if (currentFormat.value === "yaml") {
+    return "Convert to JSON";
+  }
+  if (currentFormat.value === "json") {
+    return "Convert to YAML";
+  }
   return "Convert";
 });
 
@@ -113,30 +119,48 @@ var formatJsonButtonText = computed(function computeFormatJsonText() {
 
 function detectFormat(text: string): "yaml" | "json" | null {
   var trimmed = text.trim();
-  if (!trimmed) return null;
+  if (!trimmed) {
+    return null;
+  }
 
   if (trimmed.startsWith("{") || trimmed.startsWith("[")) {
     try {
       JSON.parse(trimmed);
       return "json";
     } catch {
-      if (hasYamlIndicators(trimmed)) return "yaml";
+      if (hasYamlIndicators(trimmed)) {
+        return "yaml";
+      }
       return "json";
     }
   }
 
-  if (hasYamlIndicators(trimmed)) return "yaml";
-  if (trimmed.startsWith("---") || trimmed.startsWith("%YAML")) return "yaml";
-  if (/^[a-zA-Z_][a-zA-Z0-9_]*\s*:/.test(trimmed)) return "yaml";
+  if (hasYamlIndicators(trimmed)) {
+    return "yaml";
+  }
+  if (trimmed.startsWith("---") || trimmed.startsWith("%YAML")) {
+    return "yaml";
+  }
+  if (/^[a-zA-Z_][a-zA-Z0-9_]*\s*:/.test(trimmed)) {
+    return "yaml";
+  }
 
   return "yaml";
 }
 
 function hasYamlIndicators(text: string): boolean {
-  if (text.includes("#")) return true;
-  if (/[|>][-+]?\s*$/m.test(text)) return true;
-  if (/[&*][a-zA-Z]/.test(text)) return true;
-  if (text.includes("---") || text.includes("...")) return true;
+  if (text.includes("#")) {
+    return true;
+  }
+  if (/[|>][-+]?\s*$/m.test(text)) {
+    return true;
+  }
+  if (/[&*][a-zA-Z]/.test(text)) {
+    return true;
+  }
+  if (text.includes("---") || text.includes("...")) {
+    return true;
+  }
   return false;
 }
 
@@ -146,12 +170,14 @@ function parseYaml(text: string): {
   error?: ParseError;
 } {
   var trimmed = text.trim();
-  if (!trimmed) return { valid: false, error: { message: "Input is empty" } };
+  if (!trimmed) {
+    return { valid: false, error: { message: "Input is empty" } };
+  }
 
   try {
     if (text.includes("\t")) {
       var tabLine =
-        text.split("\n").findIndex(function (line) {
+        text.split("\n").findIndex(function tabLine(line) {
           return line.includes("\t");
         }) + 1;
       return {
@@ -191,7 +217,9 @@ function parseJson(text: string): {
   error?: ParseError;
 } {
   var trimmed = text.trim();
-  if (!trimmed) return { valid: false, error: { message: "Input is empty" } };
+  if (!trimmed) {
+    return { valid: false, error: { message: "Input is empty" } };
+  }
 
   try {
     var data = JSON.parse(trimmed);
@@ -226,17 +254,23 @@ function getLineFromPosition(
 function getSuggestionForError(message: string): string {
   var lowerMessage = message.toLowerCase();
   for (var [pattern, suggestion] of Object.entries(ERROR_SUGGESTIONS)) {
-    if (lowerMessage.includes(pattern)) return suggestion;
+    if (lowerMessage.includes(pattern)) {
+      return suggestion;
+    }
   }
   return "Check the YAML syntax reference for correct formatting.";
 }
 
 function getSuggestionForJsonError(text: string): string {
-  if (text.includes("'"))
+  if (text.includes("'")) {
     return "JSON requires double quotes (\") for strings, not single quotes (').";
-  if (/,\s*[}\]]/.test(text)) return "Trailing commas are not allowed in JSON.";
-  if (text.includes("//") || text.includes("/*"))
+  }
+  if (/,\s*[}\]]/.test(text)) {
+    return "Trailing commas are not allowed in JSON.";
+  }
+  if (text.includes("//") || text.includes("/*")) {
     return "JSON does not support comments.";
+  }
   return "Check for missing commas, quotes, or brackets.";
 }
 
@@ -264,7 +298,9 @@ function toJson(data: unknown): string {
 }
 
 function sortObjectKeys(obj: unknown): unknown {
-  if (Array.isArray(obj)) return obj.map(sortObjectKeys);
+  if (Array.isArray(obj)) {
+    return obj.map(sortObjectKeys);
+  }
   if (obj && typeof obj === "object" && obj !== null) {
     var sorted: Record<string, unknown> = {};
     var keys = Object.keys(obj as Record<string, unknown>).sort();
@@ -286,22 +322,28 @@ function calculateStats(text: string, data: unknown): DocumentStats {
 }
 
 function countKeys(data: unknown): number {
-  if (data === null || data === undefined || typeof data !== "object") return 0;
+  if (data === null || data === undefined || typeof data !== "object") {
+    return 0;
+  }
   var count = 0;
   if (Array.isArray(data)) {
-    for (var item of data) count += countKeys(item);
+    for (var item of data) {
+      count += countKeys(item);
+    }
   } else {
     var keys = Object.keys(data);
     count = keys.length;
-    for (var key of keys)
+    for (var key of keys) {
       count += countKeys((data as Record<string, unknown>)[key]);
+    }
   }
   return count;
 }
 
 function calculateMaxDepth(data: unknown, currentDepth: number = 0): number {
-  if (data === null || data === undefined || typeof data !== "object")
+  if (data === null || data === undefined || typeof data !== "object") {
     return currentDepth;
+  }
   var maxChildDepth = currentDepth;
   if (Array.isArray(data)) {
     for (var item of data) {
@@ -363,7 +405,9 @@ var handleInputChange = useDebounceFn(function processInput(): void {
 }, 300);
 
 function handleConvert(): void {
-  if (!currentData.value || !currentFormat.value) return;
+  if (!currentData.value || !currentFormat.value) {
+    return;
+  }
 
   if (currentFormat.value === "yaml") {
     outputText.value = toJson(currentData.value);
@@ -375,24 +419,32 @@ function handleConvert(): void {
 }
 
 function handleFormatYaml(): void {
-  if (!currentData.value) return;
+  if (!currentData.value) {
+    return;
+  }
   outputText.value = toYaml(currentData.value);
   outputFormat.value = "yaml";
 }
 
 function handleFormatJson(): void {
-  if (!currentData.value) return;
+  if (!currentData.value) {
+    return;
+  }
   outputText.value = toJson(currentData.value);
   outputFormat.value = "json";
 }
 
 async function handleCopy(): Promise<void> {
-  if (!outputText.value) return;
+  if (!outputText.value) {
+    return;
+  }
   await copy(outputText.value);
 }
 
 function handleDownload(): void {
-  if (!outputText.value || !outputFormat.value) return;
+  if (!outputText.value || !outputFormat.value) {
+    return;
+  }
   var extension = outputFormat.value === "yaml" ? "yaml" : "json";
   var mimeType =
     outputFormat.value === "yaml" ? "text/yaml" : "application/json";

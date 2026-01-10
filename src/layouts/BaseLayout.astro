@@ -177,7 +177,13 @@ var defaultPersonStructuredData = {
               e.preventDefault();
               var target = document.querySelector(href);
               if (target) {
-                var headerOffset = 80;
+                var headerOffset =
+                  parseInt(
+                    getComputedStyle(document.documentElement).getPropertyValue(
+                      "--size-header",
+                    ),
+                    10,
+                  ) || 80;
                 var elementPosition = target.getBoundingClientRect().top;
                 var offsetPosition =
                   elementPosition + window.pageYOffset - headerOffset;
@@ -209,7 +215,7 @@ var defaultPersonStructuredData = {
 
 <style is:global>
   main {
-    padding-top: 80px;
-    min-height: calc(100vh - 80px);
+    padding-top: var(--size-header);
+    min-height: calc(100vh - var(--size-header));
   }
 </style>

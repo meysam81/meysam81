@@ -25,7 +25,9 @@
 
   /* Semantic Colors */
   --color-success: #10b981;
+  --color-success-light: #86efac;
   --color-error: #ef4444;
+  --color-error-light: #fca5a5;
   --color-warning: #f59e0b;
 
   /* -----------------------------
@@ -34,6 +36,9 @@
 
   /* Backgrounds */
   --color-bg: var(--color-neutral-950);
+  --color-bg-glass: rgba(10, 10, 10, 0.8);
+  --color-bg-glass-solid: rgba(10, 10, 10, 0.98);
+  --color-overlay: rgba(0, 0, 0, 0.87);
   --color-bg-elevated: var(--color-neutral-900);
   --color-bg-card: var(--color-neutral-850);
 
@@ -51,6 +56,28 @@
   --color-border: var(--color-neutral-800);
   --color-border-hover: var(--color-neutral-600);
 
+  /* Accent Background Variants */
+  --color-accent-bg-subtle: rgba(59, 130, 246, 0.05);
+  --color-accent-bg: rgba(59, 130, 246, 0.1);
+  --color-accent-bg-emphasis: rgba(59, 130, 246, 0.15);
+  --color-accent-border-subtle: rgba(59, 130, 246, 0.2);
+  --color-accent-border: rgba(59, 130, 246, 0.3);
+
+  /* Success Background Variants */
+  --color-success-bg-subtle: rgba(16, 185, 129, 0.1);
+  --color-success-bg: rgba(16, 185, 129, 0.15);
+  --color-success-border: rgba(16, 185, 129, 0.3);
+
+  /* Error Background Variants */
+  --color-error-bg-subtle: rgba(239, 68, 68, 0.1);
+  --color-error-bg: rgba(239, 68, 68, 0.2);
+  --color-error-border: rgba(239, 68, 68, 0.3);
+
+  /* Warning Background Variants */
+  --color-warning-bg-subtle: rgba(245, 158, 11, 0.1);
+  --color-warning-bg: rgba(245, 158, 11, 0.15);
+  --color-warning-border: rgba(245, 158, 11, 0.2);
+
   /* -----------------------------
      Typography
      ----------------------------- */
@@ -62,6 +89,7 @@
   /* Font Sizes (fluid) */
   --text-xs: 0.75rem;
   --text-sm: 0.875rem;
+  --text-md: 0.9375rem;
   --text-base: 1rem;
   --text-lg: 1.125rem;
   --text-xl: 1.25rem;
@@ -69,6 +97,7 @@
   --text-3xl: clamp(1.5rem, 3vw, 2rem);
   --text-4xl: clamp(2rem, 4vw, 3rem);
   --text-5xl: clamp(2.5rem, 5vw, 4rem);
+  --text-6xl: 3rem;
 
   /* -----------------------------
      Spacing Scale
@@ -88,12 +117,40 @@
      ----------------------------- */
   --container-max: 1200px;
   --container-narrow: 800px;
-  --radius: 12px;
+  --radius-xs: 2px;
   --radius-sm: 8px;
+  --radius: 12px;
   --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-full: 999px;
   --border-radius: var(--radius);
   --border-radius-sm: var(--radius-sm);
   --border-radius-md: var(--radius-md);
+
+  /* Sizing */
+  --size-header: 80px;
+  --size-icon-xs: 16px;
+  --size-icon-sm: 20px;
+  --size-icon: 24px;
+  --size-icon-lg: 28px;
+  --size-button-icon-sm: 28px;
+  --size-button-icon: 36px;
+  --size-button-icon-lg: 40px;
+  --size-avatar-sm: 32px;
+  --size-avatar: 48px;
+  --size-avatar-lg: 64px;
+
+  /* Shadows */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.1);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.3);
+  --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.4);
+  --shadow-dropdown: 0 10px 40px rgba(0, 0, 0, 0.5);
+  --shadow-accent: 0 10px 25px rgba(59, 130, 246, 0.3);
+  --shadow-accent-lg: 0 20px 40px rgba(59, 130, 246, 0.3);
+  --shadow-focus: 0 0 0 3px var(--color-accent-bg);
+  --shadow-focus-lg: 0 0 0 4px var(--color-accent-bg-emphasis);
 
   /* -----------------------------
      Motion
@@ -273,7 +330,7 @@
   .btn-primary:hover {
     background: var(--color-accent-hover);
     transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+    box-shadow: var(--shadow-accent);
   }
 
   .btn-secondary {
@@ -299,7 +356,7 @@
   .card:hover {
     border-color: var(--color-text-dim);
     transform: translateY(-4px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    box-shadow: var(--shadow-xl);
   }
 
   /* Tool card (specific for tools pages) */
@@ -329,7 +386,7 @@
   textarea:focus {
     outline: none;
     border-color: var(--color-accent);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    box-shadow: var(--shadow-focus);
   }
 
   input::placeholder,

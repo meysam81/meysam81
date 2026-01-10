@@ -41,7 +41,7 @@ var currentQuestion = computed(function getCurrentQuestion() {
 });
 
 var progressPercentage = computed(function getProgressPercentage() {
-  var answered = Object.values(answers.value).filter(function (a) {
+  var answered = Object.values(answers.value).filter(function answered(a) {
     return a !== null;
   }).length;
   return Math.round((answered / questions.length) * 100);
@@ -51,10 +51,10 @@ var categoryProgress = computed(function getCategoryProgress() {
   var progress: Record<CategoryId, { answered: number; total: number }> =
     {} as Record<CategoryId, { answered: number; total: number }>;
   for (var cat of categories) {
-    var catQuestions = questions.filter(function (q) {
+    var catQuestions = questions.filter(function catQuestions(q) {
       return q.category === cat.id;
     });
-    var answeredCount = catQuestions.filter(function (q) {
+    var answeredCount = catQuestions.filter(function answeredCount(q) {
       return answers.value[q.id] !== undefined && answers.value[q.id] !== null;
     }).length;
     progress[cat.id] = { answered: answeredCount, total: catQuestions.length };
@@ -63,16 +63,16 @@ var categoryProgress = computed(function getCategoryProgress() {
 });
 
 var currentCategory = computed(function getCurrentCategory() {
-  return categories.find(function (c) {
+  return categories.find(function currentCategory(c) {
     return c.id === currentQuestion.value?.category;
   });
 });
 
-var canGoBack = computed(function () {
+var canGoBack = computed(function canGoBack() {
   return currentQuestionIndex.value > 0;
 });
 
-var isLastQuestion = computed(function () {
+var isLastQuestion = computed(function isLastQuestion() {
   return currentQuestionIndex.value === questions.length - 1;
 });
 
@@ -90,7 +90,7 @@ function resumeProgress(): void {
     ideaName.value = saved.ideaName;
     answers.value = saved.answers;
     currentScreen.value = "questions";
-    var firstUnanswered = questions.findIndex(function (q) {
+    var firstUnanswered = questions.findIndex(function firstUnanswered(q) {
       return !answers.value[q.id];
     });
     currentQuestionIndex.value = firstUnanswered >= 0 ? firstUnanswered : 0;
@@ -142,7 +142,7 @@ function goToPrevious(): void {
 }
 
 function goToCategory(categoryId: CategoryId): void {
-  var index = questions.findIndex(function (q) {
+  var index = questions.findIndex(function index(q) {
     return q.category === categoryId;
   });
   if (index >= 0) {
@@ -175,7 +175,9 @@ function restart(): void {
 }
 
 async function shareResults(): Promise<void> {
-  if (!result.value) return;
+  if (!result.value) {
+    return;
+  }
   var shareText = generateShareText(ideaName.value, result.value);
 
   if (navigator.share) {
@@ -205,8 +207,12 @@ function showToast(): void {
 }
 
 function handleKeydown(e: KeyboardEvent): void {
-  if (currentScreen.value !== "questions") return;
-  if (showFeedback.value) return;
+  if (currentScreen.value !== "questions") {
+    return;
+  }
+  if (showFeedback.value) {
+    return;
+  }
 
   var key = e.key.toLowerCase();
   if (key === "y") {
@@ -223,15 +229,21 @@ function handleKeydown(e: KeyboardEvent): void {
     goToPrevious();
   } else if (key === "arrowright") {
     e.preventDefault();
-    if (!isLastQuestion.value) goToNext();
+    if (!isLastQuestion.value) {
+      goToNext();
+    }
   }
 }
 
 function triggerConfetti(): void {
-  if (!confettiCanvas.value) return;
+  if (!confettiCanvas.value) {
+    return;
+  }
   var canvas = confettiCanvas.value;
   var ctx = canvas.getContext("2d");
-  if (!ctx) return;
+  if (!ctx) {
+    return;
+  }
 
   canvas.width = canvas.offsetWidth;
   canvas.height = canvas.offsetHeight;
@@ -260,11 +272,15 @@ function triggerConfetti(): void {
   }
 
   function animate() {
-    if (!ctx || !canvas) return;
+    if (!ctx || !canvas) {
+      return;
+    }
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     var alive = false;
     for (var p of particles) {
-      if (p.life <= 0) continue;
+      if (p.life <= 0) {
+        continue;
+      }
       alive = true;
       p.x += p.vx;
       p.y += p.vy;
@@ -274,13 +290,17 @@ function triggerConfetti(): void {
       ctx.fillStyle = p.color;
       ctx.fillRect(p.x, p.y, p.size, p.size);
     }
-    if (alive) requestAnimationFrame(animate);
+    if (alive) {
+      requestAnimationFrame(animate);
+    }
   }
   animate();
 }
 
 function animateScore(): void {
-  if (!result.value) return;
+  if (!result.value) {
+    return;
+  }
   var target = result.value.percentage;
   var current = 0;
   var duration = 1500;
@@ -292,7 +312,9 @@ function animateScore(): void {
     var eased = 1 - Math.pow(1 - progress, 3);
     current = Math.round(eased * target);
     var scoreEl = document.getElementById("score-number");
-    if (scoreEl) scoreEl.textContent = String(current);
+    if (scoreEl) {
+      scoreEl.textContent = String(current);
+    }
     var ringEl = document.getElementById(
       "score-ring-progress",
     ) as SVGCircleElement | null;
@@ -302,16 +324,21 @@ function animateScore(): void {
       ringEl.style.strokeDasharray = String(circumference);
       ringEl.style.strokeDashoffset = String(offset);
     }
-    if (progress < 1) requestAnimationFrame(update);
+    if (progress < 1) {
+      requestAnimationFrame(update);
+    }
   }
   update();
 }
 
 function getFeedbackText(): string {
   var answer = answers.value[currentQuestion.value.id];
-  if (answer === "yes") return currentQuestion.value.yesFollowUp || "Great!";
-  if (answer === "no")
+  if (answer === "yes") {
+    return currentQuestion.value.yesFollowUp || "Great!";
+  }
+  if (answer === "no") {
     return currentQuestion.value.noFollowUp || "Something to work on.";
+  }
   return "Skipped — we'll give partial credit.";
 }
 

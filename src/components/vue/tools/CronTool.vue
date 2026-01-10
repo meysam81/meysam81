@@ -98,10 +98,18 @@ function getRelativeTime(date: Date): string {
   var hours = Math.floor(diff / 3600000);
   var days = Math.floor(diff / 86400000);
 
-  if (minutes < 1) return "now";
-  if (minutes < 60) return "in " + minutes + " min";
-  if (hours < 24) return "in " + hours + " hour" + (hours > 1 ? "s" : "");
-  if (days === 1) return "tomorrow";
+  if (minutes < 1) {
+    return "now";
+  }
+  if (minutes < 60) {
+    return "in " + minutes + " min";
+  }
+  if (hours < 24) {
+    return "in " + hours + " hour" + (hours > 1 ? "s" : "");
+  }
+  if (days === 1) {
+    return "tomorrow";
+  }
   return "in " + days + " days";
 }
 

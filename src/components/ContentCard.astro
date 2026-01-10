@@ -102,13 +102,13 @@ var {
   .content-card:hover {
     border-color: var(--color-text-dim);
     transform: translateY(-4px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    box-shadow: var(--shadow-xl);
   }
 
   .content-featured {
     background: linear-gradient(
       135deg,
-      rgba(59, 130, 246, 0.1) 0%,
+      var(--color-accent-bg) 0%,
       rgba(0, 0, 0, 0) 100%
     );
     border-color: var(--color-accent);
@@ -116,7 +116,7 @@ var {
 
   .content-featured:hover {
     border-color: var(--color-accent-light);
-    box-shadow: 0 20px 40px rgba(59, 130, 246, 0.3);
+    box-shadow: var(--shadow-accent-lg);
   }
 
   .content-blog {
@@ -152,25 +152,25 @@ var {
   }
 
   .content-blog:hover .card-tag {
-    background: rgba(59, 130, 246, 0.15);
-    border-color: rgba(59, 130, 246, 0.3);
+    background: var(--color-accent-bg-emphasis);
+    border-color: var(--color-accent-border);
   }
 
   .content-badge {
     text-transform: uppercase;
     letter-spacing: 0.075em;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-sm);
     white-space: nowrap;
   }
 
   .content-title {
-    font-size: 1.5rem;
+    font-size: var(--text-2xl);
     margin-bottom: var(--space-sm);
     color: var(--color-text);
   }
 
   .content-blog .content-title {
-    font-size: 1.375rem;
+    font-size: var(--text-xl);
     line-height: 1.3;
     margin-bottom: var(--space-md);
     background: linear-gradient(
@@ -197,13 +197,13 @@ var {
 
   .content-description {
     color: var(--color-text-muted);
-    font-size: 1rem;
+    font-size: var(--text-base);
     margin-bottom: var(--space-md);
     flex-grow: 1;
   }
 
   .content-blog .content-description {
-    font-size: 0.9375rem;
+    font-size: var(--text-md);
     line-height: 1.6;
     color: var(--color-text-dim);
   }
@@ -227,9 +227,9 @@ var {
   .reading-time {
     display: inline-flex;
     align-items: center;
-    gap: 0.25rem;
-    padding: 0.25rem 0.625rem;
-    font-size: 0.75rem;
+    gap: var(--space-xxs);
+    padding: var(--space-xxs) var(--space-xs);
+    font-size: var(--text-xs);
     color: var(--color-text-dim);
     background: rgba(255, 255, 255, 0.02);
     border: 1px solid var(--color-border);
@@ -239,13 +239,13 @@ var {
 
   .reading-time::before {
     content: "📖";
-    font-size: 0.875rem;
+    font-size: var(--text-sm);
   }
 
   .content-link {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: var(--space-xs);
     color: var(--color-accent-light);
     font-weight: 500;
     transition: all var(--transition-fast);
@@ -253,7 +253,7 @@ var {
 
   .content-link:hover {
     color: var(--color-accent);
-    gap: 0.75rem;
+    gap: var(--space-sm);
   }
 
   .content-link svg {
@@ -266,7 +266,7 @@ var {
 
   @media (max-width: 768px) {
     .content-blog .content-title {
-      font-size: 1.25rem;
+      font-size: var(--text-xl);
     }
 
     .card-tags {

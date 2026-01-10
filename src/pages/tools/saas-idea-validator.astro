@@ -270,7 +270,9 @@ var faqData = {
     ) as HTMLFormElement | null;
     var successMessage = document.getElementById("newsletter-success");
 
-    if (!form || !successMessage) return;
+    if (!form || !successMessage) {
+      return;
+    }
 
     form.addEventListener("submit", function handleSubmit(e) {
       e.preventDefault();
@@ -286,7 +288,9 @@ var faqData = {
         }
       });
 
-      if (isBot) return;
+      if (isBot) {
+        return;
+      }
 
       fetch(form.action, {
         method: "POST",

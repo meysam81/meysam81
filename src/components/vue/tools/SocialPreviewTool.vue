@@ -181,7 +181,7 @@ var currentData = computed(function getData(): PreviewData {
     url: urlInput.value || "meysam.io",
     features: featuresInput.value
       .split(",")
-      .map(function (f) {
+      .map(function features(f) {
         return f.trim();
       })
       .filter(Boolean),
@@ -202,7 +202,7 @@ function generateMinimalHTML(data: PreviewData, theme: ThemeColors): string {
     data.features.length > 0
       ? '<div style="display:flex;flex-wrap:wrap;gap:24px;margin-top:48px;">' +
         data.features
-          .map(function (f, i) {
+          .map(function featuresHTML(f, i) {
             return (
               '<span style="display:flex;align-items:center;gap:8px;color:#a0a0a0;font-size:18px;"><span style="width:8px;height:8px;background:#10b981;border-radius:50%;"></span>' +
               escapeHtml(f) +
@@ -282,7 +282,7 @@ function generateGradientHTML(data: PreviewData, theme: ThemeColors): string {
       ? '<div style="display:flex;gap:16px;flex-wrap:wrap;">' +
         data.features
           .slice(0, 3)
-          .map(function (f) {
+          .map(function featuresHTML(f) {
             return (
               '<div style="display:flex;align-items:center;gap:10px;padding:12px 20px;background:rgba(26,26,26,0.8);border:1px solid #2a2a2a;border-radius:8px;color:#f5f5f5;font-size:16px;font-weight:500;"><span style="color:' +
               theme.primary +
@@ -357,7 +357,7 @@ function generateSplitHTML(data: PreviewData, theme: ThemeColors): string {
       ? '<div style="display:flex;flex-direction:column;gap:14px;">' +
         data.features
           .slice(0, 3)
-          .map(function (f) {
+          .map(function featuresHTML(f) {
             return (
               '<div style="display:flex;align-items:center;gap:12px;color:#d0d0d0;font-size:17px;"><span style="display:flex;align-items:center;justify-content:center;width:22px;height:22px;background:' +
               theme.bgGlow +
@@ -460,7 +460,9 @@ var splitPreviewHtml = computed(function getSplit() {
 });
 
 function selectTemplate(templateId: string): void {
-  if (!templateId || !TEMPLATES[templateId]) return;
+  if (!templateId || !TEMPLATES[templateId]) {
+    return;
+  }
   var template = TEMPLATES[templateId];
   titleInput.value = template.title;
   subtitleInput.value = template.subtitle;
@@ -546,7 +548,9 @@ async function copyVariantToClipboard(variant: string): Promise<void> {
       backgroundColor: "#0a0a0a",
     });
     document.body.removeChild(tempContainer);
-    if (!blob) throw new Error("Failed to generate image blob");
+    if (!blob) {
+      throw new Error("Failed to generate image blob");
+    }
     await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
   } catch (err) {
     logger.error("Failed to copy image:", err);
@@ -581,24 +585,40 @@ async function copyShareLink(): Promise<void> {
 }
 
 watch(selectedTemplate, function onTemplateChange(newTemplate) {
-  if (newTemplate) selectTemplate(newTemplate);
+  if (newTemplate) {
+    selectTemplate(newTemplate);
+  }
 });
 
 onMounted(function () {
   var params = new URLSearchParams(window.location.search);
-  if (params.has("title")) titleInput.value = params.get("title") || "";
-  if (params.has("subtitle"))
+  if (params.has("title")) {
+    titleInput.value = params.get("title") || "";
+  }
+  if (params.has("subtitle")) {
     subtitleInput.value = params.get("subtitle") || "";
-  if (params.has("category"))
+  }
+  if (params.has("category")) {
     categoryInput.value = params.get("category") || "";
-  if (params.has("url")) urlInput.value = params.get("url") || "";
-  if (params.has("features"))
+  }
+  if (params.has("url")) {
+    urlInput.value = params.get("url") || "";
+  }
+  if (params.has("features")) {
     featuresInput.value = params.get("features") || "";
-  if (params.has("icon")) iconSelect.value = params.get("icon") || "none";
-  if (params.has("theme")) selectedTheme.value = params.get("theme") || "blue";
-  if (params.has("demoInput")) demoInput.value = params.get("demoInput") || "";
-  if (params.has("demoOutput"))
+  }
+  if (params.has("icon")) {
+    iconSelect.value = params.get("icon") || "none";
+  }
+  if (params.has("theme")) {
+    selectedTheme.value = params.get("theme") || "blue";
+  }
+  if (params.has("demoInput")) {
+    demoInput.value = params.get("demoInput") || "";
+  }
+  if (params.has("demoOutput")) {
     demoOutput.value = params.get("demoOutput") || "";
+  }
 });
 </script>
 

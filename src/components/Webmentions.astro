@@ -166,7 +166,7 @@ function formatDate(dateString) {
   }
 
   .webmentions-title {
-    font-size: 1.5rem;
+    font-size: var(--text-2xl);
     font-weight: 600;
     color: var(--color-text);
     margin-bottom: var(--space-lg);
@@ -190,11 +190,11 @@ function formatDate(dateString) {
   }
 
   .interaction-icon {
-    font-size: 1.25rem;
+    font-size: var(--text-xl);
   }
 
   .interaction-count {
-    font-size: 0.9375rem;
+    font-size: var(--text-md);
     font-weight: 500;
     color: var(--color-text-muted);
   }
@@ -205,8 +205,8 @@ function formatDate(dateString) {
   }
 
   .avatar {
-    width: 32px;
-    height: 32px;
+    width: var(--size-avatar-sm);
+    height: var(--size-avatar-sm);
     border-radius: 50%;
     border: 2px solid var(--color-bg);
     margin-left: -8px;
@@ -220,7 +220,7 @@ function formatDate(dateString) {
   .avatar:hover {
     transform: translateY(-2px) scale(1.1);
     z-index: 10;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    box-shadow: var(--shadow-md);
   }
 
   .webmentions-list {
@@ -248,8 +248,8 @@ function formatDate(dateString) {
   }
 
   .webmention-avatar {
-    width: 48px;
-    height: 48px;
+    width: var(--size-avatar);
+    height: var(--size-avatar);
     border-radius: 50%;
     border: 2px solid var(--color-border);
   }
@@ -258,7 +258,7 @@ function formatDate(dateString) {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: var(--space-xxs);
   }
 
   .webmention-author {
@@ -276,7 +276,7 @@ function formatDate(dateString) {
   }
 
   .webmention-date {
-    font-size: 0.875rem;
+    font-size: var(--text-sm);
     color: var(--color-text-dim);
   }
 
@@ -292,7 +292,7 @@ function formatDate(dateString) {
   .webmention-content {
     color: var(--color-text-muted);
     line-height: 1.7;
-    font-size: 1rem;
+    font-size: var(--text-base);
   }
 
   @media (max-width: 768px) {

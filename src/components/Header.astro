@@ -35,7 +35,7 @@ var navItems = [
     left: 0;
     right: 0;
     z-index: 100;
-    background: rgba(10, 10, 10, 0.8);
+    background: var(--color-bg-glass);
     backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--color-border);
   }
@@ -44,13 +44,13 @@ var navItems = [
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 1rem var(--space-lg);
+    padding: var(--space-sm) var(--space-lg);
     max-width: var(--container-max);
     position: relative;
   }
 
   .logo {
-    font-size: 1.25rem;
+    font-size: var(--text-xl);
     font-weight: 700;
     color: var(--color-text);
     letter-spacing: -0.02em;
@@ -70,7 +70,7 @@ var navItems = [
 
   .nav-link {
     color: var(--color-text-muted);
-    font-size: 0.9375rem;
+    font-size: var(--text-md);
     font-weight: 500;
     transition: color var(--transition-fast);
   }
@@ -80,14 +80,14 @@ var navItems = [
   }
 
   .btn-sm {
-    padding: 0.625rem 1.25rem;
-    font-size: 0.9375rem;
+    padding: var(--space-xs) var(--space-sm);
+    font-size: var(--text-md);
   }
 
   /* Mobile Styles */
   @media (max-width: 768px) {
     .nav {
-      padding: 1rem var(--space-md);
+      padding: var(--space-sm) var(--space-md);
     }
 
     .desktop-nav {
