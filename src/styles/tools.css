@@ -1,0 +1,128 @@
+/**
+ * Shared styles for tool pages.
+ * These styles are used across all tool pages for consistency.
+ * Import this file in tool pages that need these common styles.
+ */
+
+/* ============================================
+   Reference Tables
+   ============================================ */
+
+.reference-section h2 {
+  font-size: var(--text-xl);
+  margin-bottom: var(--space-lg);
+}
+
+.reference-section h3 {
+  font-size: var(--text-base);
+  margin-bottom: var(--space-sm);
+  color: var(--color-text-muted);
+}
+
+.section-intro {
+  color: var(--color-text-muted);
+  font-size: var(--text-md);
+  margin-bottom: var(--space-lg);
+}
+
+.reference-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--space-xl);
+}
+
+.reference-table-wrapper {
+  overflow-x: auto;
+}
+
+.reference-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+}
+
+.reference-table th,
+.reference-table td {
+  padding: var(--space-xs) var(--space-sm);
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.reference-table th {
+  color: var(--color-text-dim);
+  font-weight: 500;
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.reference-table td {
+  color: var(--color-text-muted);
+}
+
+.reference-table code {
+  font-family: var(--font-mono);
+  color: var(--color-accent-light);
+  background: var(--color-bg);
+  padding: 0.125rem 0.375rem;
+  border-radius: var(--radius-xs);
+}
+
+.example-code {
+  white-space: pre;
+  font-size: var(--text-xs);
+}
+
+/* ============================================
+   Error Cards (for common errors section)
+   ============================================ */
+
+.errors-section h2 {
+  font-size: var(--text-xl);
+  margin-bottom: var(--space-lg);
+}
+
+.errors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-md);
+}
+
+.error-card {
+  padding: var(--space-md);
+  background: var(--color-bg);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+}
+
+.error-card h3 {
+  font-size: var(--text-base);
+  margin-bottom: var(--space-xs);
+  color: var(--color-text);
+}
+
+.error-description {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-sm);
+}
+
+.error-fix {
+  font-size: var(--text-xs);
+  color: var(--color-text-dim);
+  margin: 0;
+}
+
+.error-fix strong {
+  color: var(--color-success);
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+
+@media (max-width: 768px) {
+  .reference-grid {
+    grid-template-columns: 1fr;
+  }
+}

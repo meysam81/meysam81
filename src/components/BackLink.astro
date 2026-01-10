@@ -1,0 +1,49 @@
+---
+import Icon from "@/components/ui/Icon.astro";
+
+/**
+ * Reusable back link component with arrow icon and hover animation.
+ */
+interface Props {
+  /** The URL to navigate back to */
+  href: string;
+  /** The text to display (default: "Back") */
+  text?: string;
+  /** Additional CSS class */
+  class?: string;
+}
+
+var { href, text = "Back", class: className } = Astro.props;
+---
+
+<a href={href} class:list={["back-link", className]}>
+  <Icon name="arrow-left" size={20} />
+  {text}
+</a>
+
+<style>
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    color: var(--color-text-muted);
+    font-size: var(--text-md);
+    font-weight: 500;
+    margin-bottom: var(--space-lg);
+    transition: all var(--transition-fast);
+    text-decoration: none;
+  }
+
+  .back-link:hover {
+    color: var(--color-text);
+    gap: var(--space-sm);
+  }
+
+  .back-link svg {
+    transition: transform var(--transition-fast);
+  }
+
+  .back-link:hover svg {
+    transform: translateX(-4px);
+  }
+</style>

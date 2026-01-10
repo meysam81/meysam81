@@ -5,7 +5,9 @@ import { calculateReadingTime } from "@/utils/reading-time";
 import { filterPublishedPosts } from "@/utils/blog";
 import { getBlogPostViews } from "@/utils/pirsch";
 import { getSeriesInfo } from "@/utils/series";
-import log from "@/utils/logger";
+import { useLogger } from "@/composables/useLogger";
+
+var log = useLogger("blog-post");
 
 var allPosts = await getCollection("blog");
 var publishedPosts = filterPublishedPosts(allPosts);

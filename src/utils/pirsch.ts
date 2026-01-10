@@ -1,5 +1,7 @@
-import log from "./logger";
+import { useLogger } from "@/composables/useLogger";
 import httpClient from "./httpclient";
+
+var log = useLogger("pirsch");
 
 function getAccessToken() {
   var clientId = import.meta.env.PIRSCH_CLIENT_ID;

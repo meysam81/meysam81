@@ -9,7 +9,9 @@
 // TYPES
 // ============================================================================
 
-import log from "@/utils/logger";
+import { useLogger } from "@/composables/useLogger";
+
+var log = useLogger("idea-validator");
 
 export interface Question {
   id: string;

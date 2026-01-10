@@ -1,0 +1,47 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"span"> {
+  variant?: "default" | "success" | "warning" | "error" | "accent";
+  size?: "sm" | "md";
+}
+
+var {
+  variant = "default",
+  size = "md",
+  class: className,
+  ...attrs
+} = Astro.props;
+
+var variantClasses = {
+  default:
+    "bg-[var(--color-bg-elevated)] text-[var(--color-text-muted)] border-[var(--color-border)]",
+  success:
+    "bg-[var(--color-success-bg-subtle)] text-[var(--color-success)] border-[var(--color-success-border)]",
+  warning:
+    "bg-[var(--color-warning-bg-subtle)] text-[var(--color-warning)] border-[var(--color-warning-border)]",
+  error:
+    "bg-[var(--color-error-bg-subtle)] text-[var(--color-error)] border-[var(--color-error-border)]",
+  accent:
+    "bg-[var(--color-accent-bg)] text-[var(--color-accent-light)] border-[var(--color-accent-border-subtle)]",
+};
+
+var sizeClasses = {
+  sm: "px-2 py-0.5 text-xs",
+  md: "px-3 py-1 text-sm",
+};
+
+var baseClasses = "inline-flex items-center rounded-full border font-medium";
+var classes = [
+  baseClasses,
+  variantClasses[variant],
+  sizeClasses[size],
+  className,
+]
+  .filter(Boolean)
+  .join(" ");
+---
+
+<span class={classes} {...attrs}>
+  <slot />
+</span>

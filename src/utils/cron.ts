@@ -3,8 +3,53 @@
  * Handles bidirectional conversion between natural language and cron expressions
  */
 
+// ============================================================================
+// TYPES
+// ============================================================================
+
+interface TimeResult {
+  hour: number;
+  minute: number;
+}
+
+interface IntervalResult {
+  type: "minute" | "hour" | "day" | "week" | "month";
+  value: number;
+}
+
+interface PatternMatch {
+  expression: string;
+  matched: boolean;
+  original: string;
+}
+
+interface ValidationResult {
+  valid: boolean;
+  error: string | null;
+}
+
+interface CronPreset {
+  label: string;
+  expression: string;
+  category: "frequent" | "hourly" | "daily" | "weekly" | "monthly" | "yearly";
+}
+
+interface ExamplePhrase {
+  phrase: string;
+  expression: string;
+}
+
+interface Pattern {
+  regex: RegExp;
+  handler: (match: RegExpMatchArray) => string | null;
+}
+
+// ============================================================================
+// CONSTANTS
+// ============================================================================
+
 // Day name mappings
-var DAYS = {
+var DAYS: Record<string, number> = {
   sunday: 0,
   sun: 0,
   monday: 1,
@@ -25,7 +70,7 @@ var DAYS = {
 };
 
 // Month name mappings
-var MONTHS = {
+var MONTHS: Record<string, number> = {
   january: 1,
   jan: 1,
   february: 2,
@@ -53,7 +98,7 @@ var MONTHS = {
 };
 
 // Ordinal mappings
-var ORDINALS = {
+var ORDINALS: Record<string, number | string> = {
   first: 1,
   "1st": 1,
   second: 2,
@@ -67,11 +112,15 @@ var ORDINALS = {
   last: "L",
 };
 
+// ============================================================================
+// PARSING UTILITIES
+// ============================================================================
+
 /**
  * Parse time string to hour and minute
  * Supports: 9am, 9:30am, 9:30 am, 21:30, 9 am, noon, midnight
  */
-function parseTime(timeStr) {
+function parseTime(timeStr: string): TimeResult | null {
   if (!timeStr) {
     return null;
   }
@@ -132,7 +181,7 @@ function parseTime(timeStr) {
 /**
  * Extract day of week from text
  */
-function parseDayOfWeek(text) {
+function parseDayOfWeek(text: string): string | null {
   var lower = text.toLowerCase();
 
   // Check for weekday/weekend patterns first
@@ -148,7 +197,7 @@ function parseDayOfWeek(text) {
   }
 
   // Check for multiple days
-  var foundDays = [];
+  var foundDays: number[] = [];
   Object.keys(DAYS).forEach(function handleMultiDays(dayName) {
     var regex = new RegExp("\\b" + dayName + "\\b", "i");
     if (regex.test(lower) && foundDays.indexOf(DAYS[dayName]) === -1) {
@@ -157,7 +206,7 @@ function parseDayOfWeek(text) {
   });
 
   if (foundDays.length > 0) {
-    foundDays.sort(function softEntries(a, b) {
+    foundDays.sort(function sortEntries(a, b) {
       return a - b;
     });
     return foundDays.join(",");
@@ -169,10 +218,10 @@ function parseDayOfWeek(text) {
 /**
  * Extract month from text
  */
-function parseMonth(text) {
+function parseMonth(text: string): string | null {
   var lower = text.toLowerCase();
 
-  var foundMonths = [];
+  var foundMonths: number[] = [];
   Object.keys(MONTHS).forEach(function handleMonths(monthName) {
     var regex = new RegExp("\\b" + monthName + "\\b", "i");
     if (regex.test(lower) && foundMonths.indexOf(MONTHS[monthName]) === -1) {
@@ -193,7 +242,7 @@ function parseMonth(text) {
 /**
  * Extract day of month from text
  */
-function parseDayOfMonth(text) {
+function parseDayOfMonth(text: string): string | null {
   var lower = text.toLowerCase();
 
   // Last day of month
@@ -205,10 +254,10 @@ function parseDayOfMonth(text) {
   var dayMatches = lower.match(/(\d{1,2})(st|nd|rd|th)/g);
   if (dayMatches) {
     var days = dayMatches
-      .map(function days(d) {
+      .map(function mapDays(d) {
         return parseInt(d, 10);
       })
-      .filter(function days(d) {
+      .filter(function filterDays(d) {
         return d >= 1 && d <= 31;
       });
     if (days.length > 0) {
@@ -229,7 +278,7 @@ function parseDayOfMonth(text) {
  * Extract interval from text
  * e.g., "every 5 minutes", "every 2 hours"
  */
-function parseInterval(text) {
+function parseInterval(text: string): IntervalResult | null {
   var lower = text.toLowerCase();
 
   // Every X minutes
@@ -265,11 +314,15 @@ function parseInterval(text) {
   return null;
 }
 
+// ============================================================================
+// PATTERN DEFINITIONS
+// ============================================================================
+
 /**
  * Comprehensive natural language patterns
  * Returns { expression, confidence, description } or null
  */
-var PATTERNS = [
+var PATTERNS: Pattern[] = [
   // === MINUTE PATTERNS ===
   {
     regex: /^every\s*minute$/i,
@@ -546,7 +599,7 @@ var PATTERNS = [
       if (day1 === undefined || day2 === undefined || !time) {
         return null;
       }
-      var days = [day1, day2].sort(function days(a, b) {
+      var days = [day1, day2].sort(function sortDays(a, b) {
         return a - b;
       });
       return time.minute + " " + time.hour + " * * " + days.join(",");
@@ -858,12 +911,14 @@ var PATTERNS = [
   },
 ];
 
+// ============================================================================
+// MAIN FUNCTIONS
+// ============================================================================
+
 /**
  * Convert natural language to cron expression
- * @param {string} text - Natural language input
- * @returns {object|null} - { expression, matched } or null
  */
-function englishToCron(text) {
+function englishToCron(text: string): PatternMatch | null {
   if (!text || typeof text !== "string") {
     return null;
   }
@@ -894,10 +949,8 @@ function englishToCron(text) {
 
 /**
  * Validate a cron expression
- * @param {string} expression - Cron expression to validate
- * @returns {object} - { valid, error }
  */
-function validateCron(expression) {
+function validateCron(expression: string): ValidationResult {
   if (!expression || typeof expression !== "string") {
     return { valid: false, error: "Expression is required" };
   }
@@ -1045,7 +1098,7 @@ function validateCron(expression) {
 /**
  * Get preset cron expressions
  */
-function getPresets() {
+function getPresets(): CronPreset[] {
   return [
     { label: "Every minute", expression: "* * * * *", category: "frequent" },
     {
@@ -1116,7 +1169,7 @@ function getPresets() {
 /**
  * Get example English phrases for reference
  */
-function getExamplePhrases() {
+function getExamplePhrases(): ExamplePhrase[] {
   return [
     // Minutes
     { phrase: "every minute", expression: "* * * * *" },
@@ -1227,6 +1280,10 @@ function getExamplePhrases() {
   ];
 }
 
+// ============================================================================
+// EXPORTS
+// ============================================================================
+
 export {
   englishToCron,
   validateCron,
@@ -1240,4 +1297,14 @@ export {
   DAYS,
   MONTHS,
   ORDINALS,
+};
+
+export type {
+  TimeResult,
+  IntervalResult,
+  PatternMatch,
+  ValidationResult,
+  CronPreset,
+  ExamplePhrase,
+  Pattern,
 };

@@ -6,3 +6,4 @@ sitemap_links-*.csv
 ignore
 .envrc*
 .secrets
+files.txt

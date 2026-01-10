@@ -1,0 +1,97 @@
+---
+/**
+ * Reusable tags filter component for blog pages.
+ * Displays a list of tag buttons with an "All Posts" option.
+ */
+interface Props {
+  /** All available tags */
+  tags: string[];
+  /** Currently active tag (if on a tag page) */
+  activeTag?: string;
+  /** Additional CSS class */
+  class?: string;
+}
+
+var { tags, activeTag, class: className } = Astro.props;
+
+// Don't render if no tags
+if (tags.length === 0) {
+  return;
+}
+---
+
+<div class:list={["tags-filter", className]}>
+  <h3 class="filter-label">Filter by Tag:</h3>
+  <div class="tags-list">
+    <a href="/blog" class:list={["tag-button", { active: !activeTag }]}>
+      All Posts
+    </a>
+    {
+      tags.map(function mapTags(tag) {
+        return (
+          <a
+            href={"/blog/tags/" + tag}
+            class:list={["tag-button", { active: tag === activeTag }]}
+          >
+            {tag}
+          </a>
+        );
+      })
+    }
+  </div>
+</div>
+
+<style>
+  .tags-filter {
+    padding: var(--space-lg);
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+  }
+
+  .filter-label {
+    font-size: var(--text-md);
+    font-weight: 600;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-md);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .tags-list {
+    display: flex;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+  }
+
+  .tag-button {
+    padding: var(--space-xs) var(--space-sm);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-muted);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .tag-button:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent-light);
+  }
+
+  .tag-button.active {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: white;
+  }
+
+  @media (max-width: 768px) {
+    .tags-filter {
+      padding: var(--space-md);
+    }
+  }
+</style>

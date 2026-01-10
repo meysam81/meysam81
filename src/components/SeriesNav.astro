@@ -108,7 +108,7 @@ var nextTitle = seriesInfo.nextPost?.data.title;
     display: flex;
     align-items: center;
     gap: var(--space-xs);
-    font-size: 0.9375rem;
+    font-size: var(--text-md);
     font-weight: 600;
     color: var(--color-accent-light);
     transition: color var(--transition-fast);
@@ -119,11 +119,11 @@ var nextTitle = seriesInfo.nextPost?.data.title;
   }
 
   .series-nav-position {
-    font-size: 0.875rem;
+    font-size: var(--text-sm);
     font-weight: 500;
     color: var(--color-text-dim);
     background: var(--color-bg-elevated);
-    padding: 0.25rem 0.625rem;
+    padding: var(--space-xxs) var(--space-xs);
     border-radius: var(--border-radius-sm);
   }
 
@@ -136,7 +136,7 @@ var nextTitle = seriesInfo.nextPost?.data.title;
   .series-nav-link {
     display: flex;
     flex-direction: column;
-    gap: 0.375rem;
+    gap: var(--space-xxs);
     padding: var(--space-md);
     background: var(--color-bg);
     border: 1px solid var(--color-border);
@@ -147,7 +147,7 @@ var nextTitle = seriesInfo.nextPost?.data.title;
 
   .series-nav-link:not(.series-nav-placeholder):hover {
     border-color: var(--color-accent);
-    background: rgba(59, 130, 246, 0.05);
+    background: var(--color-accent-bg-subtle);
   }
 
   .series-nav-placeholder {
@@ -162,8 +162,8 @@ var nextTitle = seriesInfo.nextPost?.data.title;
   .nav-direction {
     display: flex;
     align-items: center;
-    gap: 0.375rem;
-    font-size: 0.75rem;
+    gap: var(--space-xxs);
+    font-size: var(--text-xs);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -175,7 +175,7 @@ var nextTitle = seriesInfo.nextPost?.data.title;
   }
 
   .nav-title {
-    font-size: 0.9375rem;
+    font-size: var(--text-md);
     font-weight: 500;
     color: var(--color-text-muted);
     line-height: 1.4;

@@ -1,83 +1,40 @@
 ---
+import { Button } from "@/components/ui";
+import CheckmarkIcon from "@/components/icons/CheckmarkIcon.astro";
+
+import BlogUniqueVisitors from "@/components/data/BlogUniqueVisitors.astro";
+
 interface Props {
   variant?: "hero" | "section";
+  class?: string;
+  benefitsClass?: string;
 }
 
-var { variant = "section" } = Astro.props;
+var {
+  variant = "section",
+  class: className = "",
+  benefitsClass = "",
+} = Astro.props;
 ---
 
-<div class:list={["newsletter", `newsletter-${variant}`]}>
-  {
-    variant === "section" && (
-      <div>
-        <h2>Build Alongside Me</h2>
-        <p class="newsletter-description">
-          Join technical founders getting weekly insights on customer discovery,
-          product validation, and building with production-grade discipline.
-        </p>
-      </div>
-    )
-  }
+<div class:list={["newsletter", className]}>
+  <slot name="title" />
 
-  <div class="newsletter-benefits">
+  <div class:list={["newsletter-benefits", benefitsClass]}>
     <div class="benefit">
-      <svg
-        class="benefit-icon"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-      >
-        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-        <polyline points="22 4 12 14.01 9 11.01"></polyline>
-      </svg>
+      <CheckmarkIcon />
       <span>Customer discovery insights as I interview potential users</span>
     </div>
     <div class="benefit">
-      <svg
-        class="benefit-icon"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-      >
-        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-        <polyline points="22 4 12 14.01 9 11.01"></polyline>
-      </svg>
+      <CheckmarkIcon />
       <span>Production DevOps lessons applied to product development</span>
     </div>
     <div class="benefit">
-      <svg
-        class="benefit-icon"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-      >
-        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-        <polyline points="22 4 12 14.01 9 11.01"></polyline>
-      </svg>
+      <CheckmarkIcon />
       <span>Honest updates—experiments, failures, and what I'm learning</span>
     </div>
     <div class="benefit">
-      <svg
-        class="benefit-icon"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-      >
-        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-        <polyline points="22 4 12 14.01 9 11.01"></polyline>
-      </svg>
+      <CheckmarkIcon />
       <span>Early access to new tools and experiments</span>
     </div>
   </div>
@@ -127,7 +84,7 @@ var { variant = "section" } = Astro.props;
       aria-hidden="true"
     />
 
-    <div class="form-group">
+    <div class="form-group max-h-12">
       <input
         type="email"
         name="email"
@@ -142,14 +99,11 @@ var { variant = "section" } = Astro.props;
       class="altcha-widget"
       challengeurl="https://newsletter.meysam.io/api/public/captcha/altcha"
       auto="onfocus"></altcha-widget>
-    <script
-      type="module"
-      src="https://newsletter.meysam.io/public/static/altcha.umd.js"
-      async
-      defer></script>
 
-    <button type="submit" class="btn btn-primary submit-button">
-      <span class="button-text">Join 1,500+ Engineers</span>
+    <Button variant="primary" class="submit-button max-h-12" type="submit">
+      <span class="button-text"
+        >Join <BlogUniqueVisitors plus={true} /> Engineers</span
+      >
       <span class="button-loader hidden">
         <svg
           class="spinner"
@@ -164,7 +118,7 @@ var { variant = "section" } = Astro.props;
         </svg>
         Subscribing...
       </span>
-    </button>
+    </Button>
 
     <p class="form-note">No spam. Unsubscribe anytime. Privacy respected.</p>
   </form>
@@ -183,29 +137,31 @@ var { variant = "section" } = Astro.props;
         <polyline points="22 4 12 14.01 9 11.01"></polyline>
       </svg>
     </div>
-    <h3 class="success-title">Check Your Email!</h3>
+    <h3 class="success-title">You are in!</h3>
     <p class="success-description">
-      We've sent a confirmation link to your inbox. Click it to complete your
-      subscription and start receiving weekly insights.
-    </p>
-    <p class="success-note">
-      Don't see it? Check your spam folder or <a href="#" class="resend-link"
-        >click here to resend</a
-      >.
+      You will now receive weekly emails from me.
     </p>
   </div>
 </div>
 
 <script>
   import log from "loglevel";
-  import {
-    getScrollPercentage,
-    updateScrollPercentage,
-    subscribe,
-  } from "@/stores/scrollStore";
+
+  function calculateScrollPercentage() {
+    var windowHeight = window.innerHeight;
+    var documentHeight = document.documentElement.scrollHeight;
+    var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    var scrollableHeight = documentHeight - windowHeight;
+
+    if (scrollableHeight <= 0) {
+      return 0;
+    }
+
+    return Math.round((scrollTop / scrollableHeight) * 100);
+  }
 
   function updateFormScroll() {
-    var scrollPercentage = getScrollPercentage();
+    var scrollPercentage = calculateScrollPercentage();
     var forms = document.querySelectorAll(".newsletter-form");
     forms.forEach(function handleForm(form) {
       form.setAttribute("data-pirsch-meta-scroll", String(scrollPercentage));
@@ -213,7 +169,6 @@ var { variant = "section" } = Astro.props;
   }
 
   function handleScroll() {
-    updateScrollPercentage();
     updateFormScroll();
   }
 
@@ -345,13 +300,8 @@ var { variant = "section" } = Astro.props;
   }
 
   document.addEventListener("DOMContentLoaded", function initialize() {
-    updateScrollPercentage();
     updateFormScroll();
     handleReset();
-
-    subscribe(function onScrollChange(percentage) {
-      log.debug("Scroll percentage changed to", percentage);
-    });
 
     window.addEventListener("scroll", handleScroll);
 
@@ -376,7 +326,6 @@ var { variant = "section" } = Astro.props;
   }
 
   .newsletter-section {
-    max-width: 800px;
     margin: 0 auto;
   }
 
@@ -387,7 +336,7 @@ var { variant = "section" } = Astro.props;
 
   .newsletter-description {
     text-align: center;
-    font-size: 1.125rem;
+    font-size: var(--text-lg);
     color: var(--color-text-muted);
     margin-bottom: var(--space-xl);
   }
@@ -404,15 +353,9 @@ var { variant = "section" } = Astro.props;
     gap: var(--space-sm);
   }
 
-  .benefit-icon {
-    flex-shrink: 0;
-    color: var(--color-success);
-    margin-top: 2px;
-  }
-
   .benefit span {
     color: var(--color-text-muted);
-    font-size: 1rem;
+    font-size: var(--text-base);
     line-height: 1.6;
   }
 
@@ -434,7 +377,7 @@ var { variant = "section" } = Astro.props;
 
   .email-input {
     flex: 1;
-    font-size: 1rem;
+    font-size: var(--text-base);
     text-align: center;
   }
 
@@ -482,7 +425,7 @@ var { variant = "section" } = Astro.props;
 
   .form-note {
     text-align: center;
-    font-size: 0.875rem;
+    font-size: var(--text-sm);
     color: var(--color-text-dim);
     margin: 0;
   }
@@ -507,21 +450,21 @@ var { variant = "section" } = Astro.props;
   }
 
   .success-title {
-    font-size: 1.75rem;
+    font-size: var(--text-3xl);
     font-weight: 600;
     color: var(--color-text);
     margin-bottom: var(--space-sm);
   }
 
   .success-description {
-    font-size: 1.125rem;
+    font-size: var(--text-lg);
     color: var(--color-text-muted);
     margin-bottom: var(--space-md);
     line-height: 1.6;
   }
 
   .success-note {
-    font-size: 0.875rem;
+    font-size: var(--text-sm);
     color: var(--color-text-dim);
     margin: 0;
   }
@@ -537,14 +480,14 @@ var { variant = "section" } = Astro.props;
   }
 
   .error-message {
-    background: rgba(239, 68, 68, 0.1);
-    border: 1px solid rgba(239, 68, 68, 0.3);
-    color: #fca5a5;
+    background: var(--color-error-bg-subtle);
+    border: 1px solid var(--color-error-border);
+    color: var(--color-error-light);
     padding: var(--space-sm);
     border-radius: var(--border-radius-sm);
     margin-bottom: var(--space-md);
     text-align: center;
-    font-size: 0.875rem;
+    font-size: var(--text-sm);
   }
 
   .hidden {
@@ -579,11 +522,11 @@ var { variant = "section" } = Astro.props;
     }
 
     .success-title {
-      font-size: 1.5rem;
+      font-size: var(--text-2xl);
     }
 
     .success-description {
-      font-size: 1rem;
+      font-size: var(--text-base);
     }
   }
 </style>
