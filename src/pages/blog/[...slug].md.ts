@@ -29,12 +29,11 @@ export var GET: APIRoute = async function GET({ props }) {
       : null,
     `url: https://meysam.io/blog/${post.slug}/`,
     "---",
-    "",
   ]
     .filter(Boolean)
     .join("\n");
 
-  var markdown = frontmatter + post.body;
+  var markdown = frontmatter + "\n" + post.body;
 
   return new Response(markdown, {
     headers: {
