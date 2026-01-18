@@ -35,6 +35,8 @@ log.info(`Page views for ${postPath}: ${pageViews}`);
 
 var seriesInfo = getSeriesInfo(publishedPosts, post);
 
+var markdownUrl = `/blog/${post.slug}.md`;
+
 var relatedPosts = post.data.relatedPosts
   .map(function findRelatedPost(slug) {
     var post = publishedPosts.find(function matchSlug(p) {
@@ -66,6 +68,7 @@ var relatedPosts = post.data.relatedPosts
   relatedPosts={relatedPosts}
   pageViews={pageViews}
   seriesInfo={seriesInfo}
+  markdownUrl={markdownUrl}
 >
   <Content />
 </BlogPostLayout>
