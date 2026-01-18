@@ -35,6 +35,7 @@ interface Props {
     };
   }>;
   seriesInfo?: SeriesInfo | null;
+  markdownUrl?: string;
 }
 
 var {
@@ -51,6 +52,7 @@ var {
   references,
   relatedPosts,
   seriesInfo,
+  markdownUrl,
 } = Astro.props;
 
 var formattedPubDate = new Intl.DateTimeFormat("en-US", {
@@ -71,7 +73,7 @@ var canonicalURL = new URL(Astro.url.pathname, Astro.site);
 var fullURL = canonicalURL.toString();
 ---
 
-<BaseLayout title={title} description={description} ogImage={ogImage}>
+<BaseLayout title={title} description={description} ogImage={ogImage} markdownUrl={markdownUrl}>
   <script
     slot="head"
     src="https://giscus.app/client.js"
