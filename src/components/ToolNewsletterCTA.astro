@@ -1,7 +1,9 @@
 ---
+import NewsletterForm from "@/components/vue/NewsletterForm.vue";
+
 /**
  * Reusable newsletter CTA component for tool pages.
- * Includes form, honeypot fields, success message, and client-side submission handling.
+ * Uses the shared NewsletterForm Vue component with tool-specific defaults.
  */
 interface Props {
   /** Page URL for analytics tracking (e.g., "/tools/cron") */
@@ -29,253 +31,47 @@ var {
   formNote = "Join 1,500+ engineers. No spam, unsubscribe anytime.",
   class: className,
 } = Astro.props;
-
-var uniqueId = "newsletter-" + variant.replace(/[^a-z0-9]/gi, "-");
 ---
 
 <div class:list={["tool-newsletter-cta", className]}>
-  <h2>{title}</h2>
-  <p class="newsletter-description">{description}</p>
-
-  <form
-    class="newsletter-form listmonk-form"
-    data-pirsch-event="subscribe"
-    data-pirsch-meta-page_url={pageUrl}
-    data-pirsch-meta-variant={variant}
-    data-pirsch-non-interactive
-    action="https://newsletter.meysam.io/subscription/form"
-    method="post"
-  >
-    <input type="hidden" name="nonce" />
-    <input
-      id="00a2c"
-      type="hidden"
-      name="l"
-      value="00a2c2b8-467a-4d74-9c76-9c6472c91d06"
-    />
-    <!-- Honeypot fields for bot detection -->
-    <input
-      type="text"
-      name="name"
-      value=""
-      class="honeypot-field"
-      tabindex="-1"
-      autocomplete="off"
-      aria-hidden="true"
-    />
-    <input
-      type="text"
-      name="company"
-      value=""
-      class="honeypot-field"
-      tabindex="-1"
-      autocomplete="off"
-      aria-hidden="true"
-    />
-    <input
-      type="text"
-      name="website"
-      value=""
-      class="honeypot-field"
-      tabindex="-1"
-      autocomplete="off"
-      aria-hidden="true"
-    />
-
-    <div class="form-row">
-      <input
-        type="email"
-        name="email"
-        placeholder="your@email.com"
-        required
-        aria-label="Email address"
-        class="email-input"
-      />
-      <altcha-widget
-        class="altcha-widget"
-        challengeurl="https://newsletter.meysam.io/api/public/captcha/altcha"
-        auto="onfocus"></altcha-widget>
-      <button type="submit" class="btn btn-primary">{buttonText}</button>
-    </div>
-    <p class="form-note">{formNote}</p>
-  </form>
-
-  <div class="success-message hidden" id={uniqueId + "-success"}>
-    <svg
-      width="48"
-      height="48"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-    >
-      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-      <polyline points="22 4 12 14.01 9 11.01"></polyline>
-    </svg>
-    <h3>Check Your Email!</h3>
-    <p>Click the confirmation link to complete your subscription.</p>
-  </div>
+  <NewsletterForm
+    client:idle
+    variant={variant}
+    pageUrl={pageUrl}
+    title={title}
+    description={description}
+    buttonText={buttonText}
+    formNote={formNote}
+    successTitle="Check Your Email!"
+    successMessage="Click the confirmation link to complete your subscription."
+    showBenefits={false}
+    containerClass="tool-newsletter-form"
+  />
 </div>
-
-<script>
-  import { useLogger } from "@/composables/useLogger";
-
-  var logger = useLogger("ToolNewsletterCTA");
-
-  function initNewsletterForms() {
-    var forms = document.querySelectorAll(
-      ".tool-newsletter-cta .newsletter-form",
-    ) as NodeListOf<HTMLFormElement>;
-
-    forms.forEach(function initForm(form) {
-      // Skip if already initialized
-      if (form.dataset.initialized === "true") {
-        return;
-      }
-      form.dataset.initialized = "true";
-
-      var container = form.closest(".tool-newsletter-cta");
-      var successMessage = container?.querySelector(
-        ".success-message",
-      ) as HTMLElement | null;
-
-      form.addEventListener("submit", function handleSubmit(e) {
-        e.preventDefault();
-        var formData = new FormData(form);
-
-        // Check honeypot fields
-        var honeypotFields = form.querySelectorAll(
-          ".honeypot-field",
-        ) as NodeListOf<HTMLInputElement>;
-        var isBot = false;
-        honeypotFields.forEach(function checkField(field) {
-          if (field.value !== "") {
-            isBot = true;
-          }
-        });
-
-        if (isBot) {
-          logger.warn("Bot detected, ignoring submission");
-          return;
-        }
-
-        var submitBtn = form.querySelector(
-          'button[type="submit"]',
-        ) as HTMLButtonElement | null;
-        var originalBtnText = submitBtn?.textContent || "Submit";
-
-        // Show loading state
-        if (submitBtn) {
-          submitBtn.disabled = true;
-          submitBtn.textContent = "Sending...";
-        }
-
-        fetch(form.action, {
-          method: "POST",
-          body: formData,
-        })
-          .then(function handleResponse(response) {
-            if (response.ok && successMessage) {
-              form.classList.add("hidden");
-              successMessage.classList.remove("hidden");
-            } else {
-              // Show error feedback
-              logger.warn("Newsletter subscription failed:", response.status);
-              if (submitBtn) {
-                submitBtn.textContent = "Failed - Try Again";
-                submitBtn.disabled = false;
-                setTimeout(function resetButton() {
-                  submitBtn.textContent = originalBtnText;
-                }, 3000);
-              }
-            }
-          })
-          .catch(function handleError(err) {
-            logger.error("Newsletter subscription error:", err);
-            // Show error feedback
-            if (submitBtn) {
-              submitBtn.textContent = "Error - Try Again";
-              submitBtn.disabled = false;
-              setTimeout(function resetButton() {
-                submitBtn.textContent = originalBtnText;
-              }, 3000);
-            }
-          });
-      });
-    });
-  }
-
-  // Initialize on DOM ready and Astro page navigation
-  document.addEventListener("DOMContentLoaded", initNewsletterForms);
-  document.addEventListener("astro:page-load", initNewsletterForms);
-</script>
 
 <style>
   .tool-newsletter-cta {
     text-align: center;
   }
 
-  .tool-newsletter-cta h2 {
-    font-size: var(--text-2xl);
-    margin-bottom: var(--space-sm);
+  .tool-newsletter-cta :global(.form-title) {
+    text-align: center;
   }
 
-  .newsletter-description {
-    color: var(--color-text-muted);
-    margin-bottom: var(--space-lg);
+  .tool-newsletter-cta :global(.form-description) {
+    text-align: center;
   }
 
-  .form-row {
-    display: flex;
-    gap: var(--space-sm);
+  .tool-newsletter-cta :global(.newsletter-form) {
+    margin: 0 auto;
     max-width: 500px;
-    margin: 0 auto var(--space-sm);
   }
 
-  .email-input {
-    flex: 1;
+  .tool-newsletter-cta :global(.form-note) {
+    text-align: center;
   }
 
-  .altcha-widget {
-    display: none;
-  }
-
-  .form-note {
-    font-size: var(--text-sm);
-    color: var(--color-text-dim);
-    margin: 0;
-  }
-
-  .honeypot-field {
-    position: absolute;
-    left: -9999px;
-    width: 1px;
-    height: 1px;
-    opacity: 0;
-  }
-
-  .success-message {
-    padding: var(--space-xl);
+  .tool-newsletter-cta :global(.success-message) {
     color: var(--color-success);
-  }
-
-  .success-message h3 {
-    margin: var(--space-md) 0 var(--space-sm);
-    font-size: var(--text-xl);
-  }
-
-  .success-message p {
-    color: var(--color-text-muted);
-    margin: 0;
-  }
-
-  .hidden {
-    display: none !important;
-  }
-
-  @media (max-width: 768px) {
-    .form-row {
-      flex-direction: column;
-    }
   }
 </style>

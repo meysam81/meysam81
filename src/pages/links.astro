@@ -2,6 +2,7 @@
 // links.astro - Links page with sponsorships and referrals
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import CopyButton from "@/components/CopyButton.astro";
+import NewsletterForm from "@/components/vue/NewsletterForm.vue";
 
 const links = {
   support: [
@@ -365,14 +366,19 @@ const links = {
         </div>
       </div>
 
-      <!-- Newsletter CTA -->
-      <div class="newsletter-cta">
-        <h2>Or Subscribe to My Newsletter</h2>
-        <p>
-          Get weekly insights on customer discovery, product validation, and
-          building with DevOps discipline.
-        </p>
-        <a href="/#newsletter" class="btn btn-primary">Join 1,500+ Engineers</a>
+      <!-- Newsletter -->
+      <div class="newsletter-section">
+        <NewsletterForm
+          client:idle
+          variant="links-page"
+          pageUrl="/links"
+          title="Or Subscribe to My Newsletter"
+          description="Get weekly insights on customer discovery, product validation, and building with DevOps discipline."
+          buttonText="Join 1,500+ Engineers"
+          :showBenefits="false"
+          formNote=""
+          containerClass="newsletter-embedded"
+        />
       </div>
     </div>
   </section>
@@ -484,22 +490,15 @@ const links = {
     background: rgba(16, 185, 129, 0.1);
   }
 
-  .newsletter-cta {
-    text-align: center;
-    padding: var(--space-2xl);
-    background: var(--color-bg-card);
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius);
+  .newsletter-section {
     margin-top: var(--space-2xl);
   }
 
-  .newsletter-cta h2 {
-    margin-bottom: var(--space-sm);
-  }
-
-  .newsletter-cta p {
-    color: var(--color-text-muted);
-    margin-bottom: var(--space-lg);
+  .newsletter-section :global(.newsletter-embedded) {
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: var(--space-2xl);
   }
 
   @media (max-width: 768px) {
