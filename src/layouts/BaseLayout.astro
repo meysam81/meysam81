@@ -11,6 +11,7 @@ interface Props {
   structuredData?: object | object[];
   noDefaultStructuredData?: boolean;
   keywords?: string;
+  markdownUrl?: string;
 }
 
 var {
@@ -21,6 +22,7 @@ var {
   structuredData,
   noDefaultStructuredData = false,
   keywords = "indie hacker, solopreneur, SaaS, bootstrapped startup, DevOps, SRE, technical founder, customer discovery, product validation, building in public",
+  markdownUrl,
 } = Astro.props;
 
 var fullTitle = title.includes("Meysam") ? title : title + " | Meysam";
@@ -142,6 +144,16 @@ var defaultPersonStructuredData = {
       title="Meysam Azad - Shipping SaaS with DevOps Discipline"
       href="/rss.xml"
     />
+    {
+      markdownUrl && (
+        <link
+          rel="alternate"
+          type="text/markdown"
+          title="Markdown"
+          href={markdownUrl}
+        />
+      )
+    }
 
     <!-- 14. Favicon & Icons -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
