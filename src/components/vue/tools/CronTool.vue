@@ -461,7 +461,7 @@ onMounted(function handleMount() {
   margin-bottom: var(--space-lg);
   background: var(--color-bg);
   padding: 4px;
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--radius-sm);
   border: 1px solid var(--color-border);
 }
 
@@ -512,7 +512,7 @@ onMounted(function handleMount() {
   font-size: 1.125rem;
   background: var(--color-bg);
   border: 2px solid var(--color-border);
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--radius-sm);
   color: var(--color-text);
   transition: all var(--transition-fast);
 }
@@ -548,7 +548,7 @@ onMounted(function handleMount() {
   padding: var(--space-sm) var(--space-md);
   background: rgba(239, 68, 68, 0.1);
   border: 1px solid rgba(239, 68, 68, 0.3);
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--radius-sm);
   color: #fca5a5;
   font-size: 0.875rem;
   margin-bottom: var(--space-lg);
@@ -588,7 +588,7 @@ onMounted(function handleMount() {
   color: var(--color-accent-light);
   background: var(--color-bg);
   padding: 0.5rem 1rem;
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--radius-sm);
   letter-spacing: 0.05em;
 }
 
@@ -605,7 +605,7 @@ onMounted(function handleMount() {
   height: 36px;
   background: transparent;
   border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--radius-sm);
   color: var(--color-text-muted);
   cursor: pointer;
   transition: all var(--transition-fast);
@@ -666,7 +666,7 @@ onMounted(function handleMount() {
   align-items: center;
   padding: var(--space-sm) var(--space-md);
   background: var(--color-bg);
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--radius-sm);
   font-size: 0.875rem;
 }
 
@@ -715,7 +715,7 @@ onMounted(function handleMount() {
   padding: var(--space-sm) var(--space-md);
   background: var(--color-bg);
   border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--radius-sm);
   cursor: pointer;
   transition: all var(--transition-fast);
   text-align: left;
@@ -774,13 +774,7 @@ onMounted(function handleMount() {
   background: rgba(59, 130, 246, 0.05);
 }
 
-.tool-card {
-  background: var(--color-bg-card);
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius);
-  padding: var(--space-xl);
-  margin-top: var(--space-lg);
-}
+/* NOTE: .tool-card is defined in theme.css as the single source of truth */
 
 .mt-lg {
   margin-top: var(--space-lg);

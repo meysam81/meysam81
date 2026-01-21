@@ -172,7 +172,7 @@ onUnmounted(function handleUnmount() {
 .btn-sm {
   margin: var(--space-sm) var(--space-md) 0;
   text-align: center;
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--radius-sm);
 }
 
 .btn-sm:hover {

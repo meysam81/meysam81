@@ -228,39 +228,7 @@
   animation: fadeIn 0.2s ease-out;
 }
 
-/* ============================================
-   Animations
-   ============================================ */
-
-@keyframes slideUp {
-  from {
-    transform: translateX(-50%) translateY(20px);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(-50%) translateY(0);
-    opacity: 1;
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.spin {
-  animation: spin 1s linear infinite;
-}
+/* NOTE: Keyframe animations (fadeIn, slideUp, spin) are defined in theme.css */
 
 /* ============================================
    Mode Toggle Buttons

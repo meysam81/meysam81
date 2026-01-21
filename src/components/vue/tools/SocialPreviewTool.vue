@@ -1041,7 +1041,7 @@ onMounted(function () {
   padding: 0.5rem 1rem;
   background: var(--color-bg);
   border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--radius-sm);
   color: var(--color-text);
   font-size: 0.875rem;
   cursor: pointer;
@@ -1072,7 +1072,7 @@ onMounted(function () {
   padding: 0.75rem 1rem;
   background: var(--color-bg);
   border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--radius-sm);
   color: var(--color-text);
   font-size: 0.9375rem;
 }
@@ -1133,7 +1133,7 @@ onMounted(function () {
   padding: 0.5rem 1rem;
   background: var(--color-bg);
   border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--radius-sm);
   color: var(--color-text-muted);
   font-size: 0.875rem;
   cursor: pointer;
@@ -1177,7 +1177,7 @@ onMounted(function () {
   padding: 0.5rem 0.75rem;
   background: var(--color-bg);
   border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--radius-sm);
   color: var(--color-text-muted);
   font-size: 0.8125rem;
   cursor: pointer;
@@ -1197,7 +1197,7 @@ onMounted(function () {
   width: 100%;
   aspect-ratio: 1200 / 630;
   background: #0a0a0a;
-  border-radius: var(--border-radius-md);
+  border-radius: var(--radius-md);
   overflow: hidden;
 }
 .preview-scale-wrapper {
@@ -1244,7 +1244,7 @@ onMounted(function () {
   padding: 0.75rem 1rem;
   background: var(--color-bg);
   border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--radius-sm);
   color: var(--color-text-muted);
   font-size: 0.875rem;
   cursor: pointer;
@@ -1261,7 +1261,7 @@ onMounted(function () {
 .platform-mockup {
   padding: var(--space-lg);
   background: var(--color-bg);
-  border-radius: var(--border-radius-md);
+  border-radius: var(--radius-md);
 }
 
 /* Twitter Mockup */
@@ -1298,7 +1298,7 @@ onMounted(function () {
 }
 .tweet-card {
   border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-md);
+  border-radius: var(--radius-md);
   overflow: hidden;
   margin-bottom: var(--space-md);
 }
@@ -1375,7 +1375,7 @@ onMounted(function () {
 }
 .linkedin-card {
   border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--radius-sm);
   overflow: hidden;
   margin-bottom: var(--space-md);
 }
@@ -1476,7 +1476,7 @@ onMounted(function () {
 .slack-image {
   width: 360px;
   aspect-ratio: 1200 / 630;
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--radius-sm);
   overflow: hidden;
   margin-top: var(--space-sm);
 }

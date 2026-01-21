@@ -881,7 +881,7 @@ onMounted(function handleMount() {
   margin-bottom: var(--space-lg);
   padding: var(--space-sm) var(--space-md);
   background: var(--color-bg);
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--radius-sm);
   border: 1px solid var(--color-border);
 }
 
@@ -998,7 +998,7 @@ onMounted(function handleMount() {
   padding: 0 var(--space-sm);
   background: transparent;
   border: 1px solid transparent;
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--radius-sm);
   color: var(--color-text-dim);
   cursor: pointer;
   transition: all var(--transition-fast);
@@ -1027,7 +1027,7 @@ onMounted(function handleMount() {
   position: relative;
   background: var(--color-bg);
   border: 2px solid var(--color-border);
-  border-radius: var(--border-radius-md);
+  border-radius: var(--radius-md);
   overflow: hidden;
   flex: 1;
   min-height: 0;
@@ -1111,7 +1111,7 @@ onMounted(function handleMount() {
   align-items: center;
   gap: var(--space-sm);
   padding: var(--space-sm) var(--space-md);
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--radius-sm);
   font-size: 0.875rem;
   margin-top: var(--space-sm);
 }
@@ -1172,7 +1172,7 @@ onMounted(function handleMount() {
 .options-section {
   padding: var(--space-md);
   background: var(--color-bg);
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--radius-sm);
   border: 1px solid var(--color-border);
 }
 
@@ -1206,18 +1206,11 @@ onMounted(function handleMount() {
   text-align: center;
   background: var(--color-bg-elevated);
   border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--radius-sm);
   color: var(--color-text);
 }
 
-/* Stats Card */
-.tool-card {
-  background: var(--color-bg-card);
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius);
-  padding: var(--space-xl);
-  margin-top: var(--space-lg);
-}
+/* NOTE: .tool-card is defined in theme.css as the single source of truth */
 
 .stats-card h2 {
   font-size: 1.125rem;
@@ -1243,7 +1236,7 @@ onMounted(function handleMount() {
   gap: 4px;
   padding: var(--space-sm);
   background: var(--color-bg);
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--radius-sm);
 }
 
 .stat-value {
