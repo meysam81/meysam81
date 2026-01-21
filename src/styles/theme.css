@@ -123,9 +123,13 @@
   --radius-md: 12px;
   --radius-lg: 16px;
   --radius-full: 999px;
-  --border-radius: var(--radius);
-  --border-radius-sm: var(--radius-sm);
-  --border-radius-md: var(--radius-md);
+
+  /* Z-Index Scale */
+  --z-dropdown: 50;
+  --z-sticky: 75;
+  --z-header: 100;
+  --z-modal: 200;
+  --z-toast: 300;
 
   /* Sizing */
   --size-header: 80px;
@@ -292,12 +296,6 @@
     margin-right: auto;
     padding-left: var(--space-lg);
     padding-right: var(--space-lg);
-  }
-
-  /* Section spacing */
-  section {
-    padding-top: var(--space-3xl);
-    padding-bottom: var(--space-3xl);
   }
 
   .section-hero {
@@ -479,6 +477,12 @@
     animation: fadeIn 0.6s ease-out;
   }
 
+  /* Section spacing utility (opt-in instead of global) */
+  .section-spaced {
+    padding-top: var(--space-3xl);
+    padding-bottom: var(--space-3xl);
+  }
+
   /* Gradient text utility */
   .gradient-text {
     background: linear-gradient(
@@ -502,15 +506,15 @@
     padding-right: var(--space-md);
   }
 
-  section {
-    padding-top: var(--space-2xl);
-    padding-bottom: var(--space-2xl);
-  }
-
   .section-hero {
     min-height: auto;
     padding-top: var(--space-xl);
     padding-bottom: var(--space-xl);
+  }
+
+  .section-spaced {
+    padding-top: var(--space-2xl);
+    padding-bottom: var(--space-2xl);
   }
 }
 

@@ -17,6 +17,7 @@ import {
 } from "@/utils/idea-validator";
 import { useClipboard } from "@/composables/useClipboard";
 import { useToolState } from "@/composables/useToolState";
+import { useToast } from "@/composables/useToast";
 
 type Screen = "start" | "questions" | "results";
 
@@ -32,7 +33,7 @@ var showTooltip = ref(false);
 var showFeedback = ref(false);
 var result = ref<ValidationResult | null>(null);
 var hasSavedProgress = ref(false);
-var showShareToast = ref(false);
+var { visible: showShareToast, show: triggerShareToast } = useToast(3000);
 var confettiCanvas = ref<HTMLCanvasElement | null>(null);
 
 // Computed
@@ -185,25 +186,18 @@ async function shareResults(): Promise<void> {
       await navigator.share({ text: shareText });
     } catch {
       await copy(shareText);
-      showToast();
+      triggerShareToast("Copied!");
     }
   } else {
     await copy(shareText);
-    showToast();
+    triggerShareToast("Copied!");
   }
 }
 
 async function copyShareLink(): Promise<void> {
   var shareUrl = generateShareUrl(answers.value, ideaName.value);
   await copy(shareUrl);
-  showToast();
-}
-
-function showToast(): void {
-  showShareToast.value = true;
-  setTimeout(function () {
-    showShareToast.value = false;
-  }, 3000);
+  triggerShareToast("Copied!");
 }
 
 function handleKeydown(e: KeyboardEvent): void {

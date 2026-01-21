@@ -42,7 +42,7 @@ var allTags = getAllTags(publishedPosts);
       <div class="header">
         <BackLink href="/blog" text="Back to Blog" />
 
-        <h1>Posts tagged "{tag}"</h1>
+        <h1 class="gradient-text">Posts tagged "{tag}"</h1>
         <p class="subtitle">
           {posts.length} post{posts.length !== 1 ? "s" : ""} found
         </p>
@@ -81,14 +81,6 @@ var allTags = getAllTags(publishedPosts);
 
   .header h1 {
     margin-bottom: var(--space-sm);
-    background: linear-gradient(
-      135deg,
-      var(--color-text) 0%,
-      var(--color-accent-light) 100%
-    );
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
   }
 
   .subtitle {

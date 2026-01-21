@@ -73,7 +73,12 @@ var canonicalURL = new URL(Astro.url.pathname, Astro.site);
 var fullURL = canonicalURL.toString();
 ---
 
-<BaseLayout title={title} description={description} ogImage={ogImage} markdownUrl={markdownUrl}>
+<BaseLayout
+  title={title}
+  description={description}
+  ogImage={ogImage}
+  markdownUrl={markdownUrl}
+>
   <script
     slot="head"
     src="https://giscus.app/client.js"
@@ -237,7 +242,7 @@ var fullURL = canonicalURL.toString();
 
         {seriesInfo && <SeriesBanner seriesInfo={seriesInfo} />}
 
-        <h1 class="post-title">{title}</h1>
+        <h1 class="post-title gradient-text">{title}</h1>
         <p class="post-description">{description}</p>
 
         <div class="post-meta">
@@ -495,14 +500,6 @@ var fullURL = canonicalURL.toString();
 
   .post-title {
     margin-bottom: var(--space-md);
-    background: linear-gradient(
-      135deg,
-      var(--color-text) 0%,
-      var(--color-accent-light) 100%
-    );
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
   }
 
   .post-description {

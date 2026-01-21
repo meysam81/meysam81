@@ -64,7 +64,7 @@ var totalReadingTime = calculateTotalReadingTime(
         Series
       </div>
 
-      <h1 class="series-title">{series.name}</h1>
+      <h1 class="series-title gradient-text">{series.name}</h1>
 
       <div class="series-meta">
         <span class="meta-item">
@@ -154,14 +154,6 @@ var totalReadingTime = calculateTotalReadingTime(
   }
 
   .series-title {
-    background: linear-gradient(
-      135deg,
-      var(--color-text) 0%,
-      var(--color-accent-light) 100%
-    );
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
     margin-bottom: var(--space-md);
     max-width: 800px;
   }

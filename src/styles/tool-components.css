@@ -2,19 +2,9 @@
  * Shared styles for Vue tool components.
  * These styles define common patterns used across tool components.
  * Import this file in Vue tool components that need these shared styles.
+ *
+ * NOTE: .tool-card is defined in theme.css as the single source of truth.
  */
-
-/* ============================================
-   Tool Card Container
-   ============================================ */
-
-.tool-card {
-  background: var(--color-bg-card);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: var(--space-xl);
-  margin-top: var(--space-lg);
-}
 
 /* ============================================
    Error and Success Messages
@@ -32,15 +22,15 @@
 }
 
 .error-message {
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  color: #fca5a5;
+  background: var(--color-error-bg-subtle);
+  border: 1px solid var(--color-error-border);
+  color: var(--color-error-light);
 }
 
 .success-message {
-  background: rgba(34, 197, 94, 0.1);
-  border: 1px solid rgba(34, 197, 94, 0.3);
-  color: #86efac;
+  background: var(--color-success-bg-subtle);
+  border: 1px solid var(--color-success-border);
+  color: var(--color-success-light);
 }
 
 .error-message svg,
@@ -69,7 +59,7 @@
 .icon-btn:hover:not(:disabled) {
   border-color: var(--color-accent);
   color: var(--color-text);
-  background: rgba(59, 130, 246, 0.1);
+  background: var(--color-accent-bg);
 }
 
 .icon-btn:disabled {
@@ -100,7 +90,7 @@
 .copy-btn:hover {
   border-color: var(--color-accent);
   color: var(--color-accent);
-  background: rgba(59, 130, 246, 0.1);
+  background: var(--color-accent-bg);
 }
 
 .copy-btn.copied {
@@ -175,7 +165,7 @@
 .form-group textarea:focus {
   outline: none;
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  box-shadow: var(--shadow-focus);
 }
 
 .input-hint {
@@ -204,7 +194,7 @@
 .main-input:focus {
   outline: none;
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+  box-shadow: var(--shadow-focus-lg);
 }
 
 /* ============================================
@@ -224,7 +214,7 @@
   color: white;
   border-radius: var(--radius-sm);
   font-size: var(--text-md);
-  z-index: 100;
+  z-index: var(--z-toast);
   animation: slideUp 0.3s ease;
 }
 

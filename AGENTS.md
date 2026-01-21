@@ -2,6 +2,30 @@
 
 Guidelines for AI coding agents working on meysam.io - an Astro v5 personal blog with Tailwind v4.
 
+## Plan Mode
+
+- Make the plan extremely concise. Sacrifice grammar for the sake of concision.
+- At the end of each plan, give me a list of unresolved questions to answer, if any.
+
+## Tailwind v4 Design Tokens
+
+**Base layer (global):** Only style `body`, `h1-h6`, `p`, `a`, list elements, and form resets.
+
+**Never globally style:** `nav`, `header`, `footer`, `section`, `article`, `div`, or any layout-oriented semantic elements—these are too context-dependent.
+
+**Consistency via tokens, not element styles:**
+
+```css
+@theme {
+  --color-primary: ...;
+  --color-surface: ...;
+  --spacing-section: ...;
+  --radius-default: ...;
+}
+```
+
+**Rule:** If repeating a pattern, extract a component—not a global element style. Keeps coupling explicit and reversible.
+
 ## Build & Development Commands
 
 ```bash

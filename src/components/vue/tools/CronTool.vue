@@ -6,6 +6,7 @@ import { englishToCron, validateCron } from "@/utils/cron";
 import { useClipboard } from "@/composables/useClipboard";
 import { useToolState } from "@/composables/useToolState";
 import { useDebounceFn } from "@/composables/useDebounce";
+import { useToast } from "@/composables/useToast";
 
 interface Props {
   presets: Array<{ label: string; expression: string }>;
@@ -23,7 +24,7 @@ var expressionInput = ref("");
 var currentExpression = ref("* * * * *");
 var showAllExamples = ref(false);
 var runsExpanded = ref(true);
-var shareToastVisible = ref(false);
+var { visible: shareToastVisible, show: showShareToast } = useToast();
 
 var humanReadable = computed(function computeHumanReadable() {
   try {
@@ -177,10 +178,7 @@ async function shareLink(): Promise<void> {
   url.search = "";
   url.searchParams.set("expr", btoa(currentExpression.value));
   await copy(url.toString());
-  shareToastVisible.value = true;
-  setTimeout(function hideToast() {
-    shareToastVisible.value = false;
-  }, 2000);
+  showShareToast("Link copied!");
 }
 
 function toggleRuns(): void {
