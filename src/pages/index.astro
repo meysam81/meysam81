@@ -38,16 +38,16 @@ import BlogUniqueVisitors from "@/components/data/BlogUniqueVisitors.astro";
   </section>
 
   <!-- About Section -->
-  <section id="about">
+  <section id="about" class="section-spaced">
     <div class="container-narrow">
       <div class="about-content">
         <h2 class="text-center">From DevOps Engineer<br />to Indie Hacker</h2>
-        <p class="text-center" style="font-size: 1.125rem;">
+        <p class="text-center">
           I've spent <ProfessionalExperience /> keeping production systems running
           at scale. Built infrastructure for successful startups. Managed on-call
           rotations. Optimized costs. Prevented outages.
         </p>
-        <p class="text-center" style="font-size: 1.125rem;">
+        <p class="text-center">
           Now I'm exploring what problems are worth solving with software. This
           site documents the journey; customer interviews, failed experiments,
           technical decisions, and (hopefully) eventual product-market fit.
@@ -76,7 +76,7 @@ import BlogUniqueVisitors from "@/components/data/BlogUniqueVisitors.astro";
   </section>
 
   <!-- Projects Section -->
-  <section id="projects">
+  <section id="projects" class="section-spaced">
     <div class="container">
       <h2 class="text-center mb-xl">What I'm Building</h2>
 
@@ -104,7 +104,7 @@ import BlogUniqueVisitors from "@/components/data/BlogUniqueVisitors.astro";
         />
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-(--space-lg)">
         <ContentCard
           title="Puppeteer MCP"
           description="MCP server that gives Claude and ChatGPT browser automation tools. Scrape data, fill forms, take screenshots; all through natural language. No code required."
@@ -169,11 +169,11 @@ import BlogUniqueVisitors from "@/components/data/BlogUniqueVisitors.astro";
   </section>
 
   <!-- Newsletter Section -->
-  <section id="newsletter">
+  <section id="newsletter" class="section-spaced">
     <div class="container">
-      <Newsletter class="mx-auto my-0 w-narrow text-center">
+      <Newsletter class="mx-auto my-0 max-w-(--container-narrow) text-center">
         <Fragment slot="title">
-          <div class="mb-16">
+          <div class="mb-(--space-2xl)">
             <h2>Build Alongside Me</h2>
             <p class="newsletter-description">
               Join technical founders getting weekly insights on customer
@@ -187,10 +187,10 @@ import BlogUniqueVisitors from "@/components/data/BlogUniqueVisitors.astro";
   </section>
 
   <!-- Connect Section -->
-  <section id="connect">
+  <section id="connect" class="section-spaced">
     <div class="container-narrow text-center">
       <h2>Follow the Journey</h2>
-      <p style="font-size: 1.125rem; color: var(--color-text-muted);">
+      <p>
         Daily updates on X. Weekly deep dives in the newsletter. Code on GitHub.
       </p>
 

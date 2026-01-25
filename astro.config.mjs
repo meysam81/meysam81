@@ -27,7 +27,15 @@ export default defineConfig({
       },
     }),
     mdx(),
-    vue(),
+    vue({
+      template: {
+        compilerOptions: {
+          isCustomElement: function isCustomElement(tag) {
+            return tag === "altcha-widget";
+          },
+        },
+      },
+    }),
     {
       name: "pagefind-integration",
       hooks: {
