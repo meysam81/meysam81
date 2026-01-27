@@ -1,0 +1,136 @@
+---
+import Icon from "@/components/ui/Icon.astro";
+import type { IconName } from "@/types/icons";
+
+/**
+ * Reusable aside section component for blog post sidebars.
+ * Used for References, Related Reading, and similar sections.
+ */
+interface Props {
+  /** Section title */
+  title: string;
+  /** Introductory text below the title */
+  intro?: string;
+  /** Icon name to display next to the title */
+  icon?: IconName;
+  /** HTML id for anchor links */
+  id?: string;
+  /** Additional CSS class */
+  class?: string;
+}
+
+var { title, intro, icon, id, class: className } = Astro.props;
+---
+
+<aside class:list={["aside-section", className]} id={id}>
+  <h2 class="aside-title">
+    {icon && <Icon name={icon} size={24} class="aside-icon" />}
+    {title}
+  </h2>
+  {intro && <p class="aside-intro">{intro}</p>}
+  <slot />
+</aside>
+
+<style>
+  .aside-section {
+    margin-top: var(--space-2xl);
+    padding: var(--space-xl);
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+  }
+
+  .aside-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: var(--text-2xl);
+    margin-bottom: var(--space-md);
+    color: var(--color-text);
+    border: none;
+    padding: 0;
+    margin-top: 0;
+  }
+
+  .aside-title :global(.aside-icon) {
+    color: var(--color-accent);
+    flex-shrink: 0;
+  }
+
+  .aside-intro {
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-lg);
+    font-size: var(--text-base);
+    line-height: 1.6;
+  }
+
+  /* List styles for children */
+  .aside-section :global(.aside-list) {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .aside-section :global(.aside-item) {
+    padding: var(--space-md);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
+    margin: 0;
+  }
+
+  .aside-section :global(.aside-item:hover) {
+    border-color: var(--color-accent);
+    background: var(--color-accent-bg-subtle);
+  }
+
+  .aside-section :global(.aside-link) {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    text-decoration: none;
+    color: var(--color-text);
+    font-weight: 500;
+    border: none;
+    transition: color var(--transition-fast);
+  }
+
+  .aside-section :global(.aside-link:hover) {
+    color: var(--color-accent-light);
+    border: none;
+  }
+
+  .aside-section :global(.aside-link-title) {
+    flex: 1;
+  }
+
+  .aside-section :global(.aside-link-icon) {
+    color: var(--color-text-dim);
+    flex-shrink: 0;
+    transition: transform var(--transition-fast);
+  }
+
+  /* External link icon animation */
+  .aside-section :global(.aside-link:hover .aside-link-icon--external) {
+    transform: translate(2px, -2px);
+    color: var(--color-accent);
+  }
+
+  /* Arrow icon animation */
+  .aside-section :global(.aside-link:hover .aside-link-icon--arrow) {
+    transform: translateX(4px);
+    color: var(--color-accent);
+  }
+
+  .aside-section :global(.aside-description) {
+    margin-top: var(--space-xs);
+    margin-bottom: 0;
+    font-size: var(--text-md);
+    color: var(--color-text-muted);
+    line-height: 1.6;
+  }
+</style>

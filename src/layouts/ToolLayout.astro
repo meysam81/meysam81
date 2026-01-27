@@ -102,7 +102,7 @@ var allStructuredData = structuredData
     list-style: none;
     padding: 0;
     margin: 0;
-    font-size: 0.875rem;
+    font-size: var(--text-sm);
   }
 
   .breadcrumb li {
@@ -141,7 +141,7 @@ var allStructuredData = structuredData
   }
 
   .tool-header .subtitle {
-    font-size: 1.125rem;
+    font-size: var(--text-lg);
     color: var(--color-text-muted);
     max-width: 600px;
     margin: 0 auto;
@@ -152,17 +152,5 @@ var allStructuredData = structuredData
     margin: 0 auto;
   }
 
-  .tool-card {
-    background: var(--color-bg-card);
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius);
-    padding: var(--space-xl);
-    margin-bottom: var(--space-xl);
-  }
-
-  @media (max-width: 768px) {
-    .tool-card {
-      padding: var(--space-lg);
-    }
-  }
+  /* NOTE: .tool-card is defined in theme.css as the single source of truth */
 </style>

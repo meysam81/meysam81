@@ -1,8 +1,7 @@
 ---
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
-import "@/styles/global.css";
-import "@/main.js";
+import "@/styles/theme.css";
 
 interface Props {
   title?: string;
@@ -190,7 +189,13 @@ var defaultPersonStructuredData = {
               e.preventDefault();
               var target = document.querySelector(href);
               if (target) {
-                var headerOffset = 80;
+                var headerOffset =
+                  parseInt(
+                    getComputedStyle(document.documentElement).getPropertyValue(
+                      "--size-header",
+                    ),
+                    10,
+                  ) || 80;
                 var elementPosition = target.getBoundingClientRect().top;
                 var offsetPosition =
                   elementPosition + window.pageYOffset - headerOffset;
@@ -209,6 +214,7 @@ var defaultPersonStructuredData = {
     </script>
 
     <script
+      async
       defer
       src="https://analytics.meysam.io/pa.js"
       id="pianjs"
@@ -221,7 +227,7 @@ var defaultPersonStructuredData = {
 
 <style is:global>
   main {
-    padding-top: 80px;
-    min-height: calc(100vh - 80px);
+    padding-top: var(--size-header);
+    min-height: calc(100vh - var(--size-header));
   }
 </style>

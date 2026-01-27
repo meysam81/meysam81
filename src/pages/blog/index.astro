@@ -2,44 +2,22 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import ContentCard from "@/components/ContentCard.astro";
 import SearchBox from "@/components/SearchBox.astro";
+import TagsFilter from "@/components/TagsFilter.astro";
 import { getCollection } from "astro:content";
 import { slugify } from "@/utils/slug";
-import { filterPublishedPosts } from "@/utils/blog";
+import {
+  filterPublishedPosts,
+  formatDate,
+  getAllTags,
+  splitByFeatured,
+} from "@/utils/blog";
+import { formatReadingTime } from "@/utils/reading-time";
 
 var allPosts = await getCollection("blog");
-
 var publishedPosts = filterPublishedPosts(allPosts);
-
-var featuredPosts = publishedPosts.filter(function filterFeatured(post) {
-  return post.data.featured;
-});
-
-var regularPosts = publishedPosts.filter(function filterRegular(post) {
-  return !post.data.featured;
-});
-
-var allTags = [
-  ...new Set(
-    publishedPosts.flatMap(function flatMapTags(post) {
-      return post.data.tags;
-    }),
-  ),
-].sort();
-
-function formatDate(date: Date) {
-  return new Intl.DateTimeFormat("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  }).format(date);
-}
-
-function calculateReadingTime(content: string) {
-  var wordsPerMinute = 200;
-  var wordCount = content.split(/\s+/).length;
-  var minutes = Math.ceil(wordCount / wordsPerMinute);
-  return `${minutes} min read`;
-}
+var { featured: featuredPosts, regular: regularPosts } =
+  splitByFeatured(publishedPosts);
+var allTags = getAllTags(publishedPosts);
 ---
 
 <BaseLayout
@@ -49,7 +27,7 @@ function calculateReadingTime(content: string) {
   <section class="blog-hero">
     <div class="container">
       <div class="hero-content">
-        <h1 class="hero-title">Building in Public</h1>
+        <h1 class="hero-title gradient-text">Building in Public</h1>
         <p class="hero-subtitle">
           Customer discovery insights, production DevOps lessons, and honest
           updates from the journey of finding problems worth solving.
@@ -62,44 +40,26 @@ function calculateReadingTime(content: string) {
     <div class="container">
       <SearchBox />
 
-      {
-        allTags.length > 0 && (
-          <div class="tags-filter mb-xl">
-            <h3 class="filter-label">Filter by Tag:</h3>
-            <div class="tags-list">
-              <a href="/blog" class="tag-button active">
-                All Posts
-              </a>
-              {allTags.map(function mapTags(tag) {
-                return (
-                  <a href={`/blog/tags/${tag}`} class="tag-button">
-                    {tag}
-                  </a>
-                );
-              })}
-            </div>
-          </div>
-        )
-      }
+      <TagsFilter tags={allTags} class="mb-xl" />
 
       {
         featuredPosts.length > 0 && (
           <div class="featured-section mb-xl">
             <h2 class="section-label">Featured Posts</h2>
-            <div class="grid grid-2">
+            <div class="grid grid-cols-1">
               {featuredPosts.map(function mapFeatured(post) {
                 var postSlug = post.slug || slugify(post.data.title);
                 return (
                   <ContentCard
                     title={post.data.title}
                     description={post.data.description}
-                    url={`/blog/${postSlug}`}
+                    url={"/blog/" + postSlug}
                     badge={formatDate(post.data.pubDate)}
                     featured={true}
                     linkText="Read Article"
                     variant="blog"
                     tags={post.data.tags}
-                    readingTime={calculateReadingTime(post.body)}
+                    readingTime={formatReadingTime(post.body)}
                   />
                 );
               })}
@@ -110,7 +70,7 @@ function calculateReadingTime(content: string) {
 
       <div class="posts-section">
         <h2 class="section-label">All Posts</h2>
-        <div class="grid grid-3" id="posts-grid">
+        <div class="grid grid-cols-3 gap-8" id="posts-grid">
           {
             regularPosts.map(function mapRegular(post) {
               var postSlug = post.slug || slugify(post.data.title);
@@ -119,12 +79,12 @@ function calculateReadingTime(content: string) {
                   <ContentCard
                     title={post.data.title}
                     description={post.data.description}
-                    url={`/blog/${postSlug}`}
+                    url={"/blog/" + postSlug}
                     badge={formatDate(post.data.pubDate)}
                     linkText="Read Article"
                     variant="blog"
                     tags={post.data.tags}
-                    readingTime={calculateReadingTime(post.body)}
+                    readingTime={formatReadingTime(post.body)}
                   />
                 </div>
               );
@@ -160,19 +120,11 @@ function calculateReadingTime(content: string) {
   }
 
   .hero-title {
-    background: linear-gradient(
-      135deg,
-      var(--color-text) 0%,
-      var(--color-accent-light) 100%
-    );
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
     margin-bottom: var(--space-md);
   }
 
   .hero-subtitle {
-    font-size: 1.25rem;
+    font-size: var(--text-xl);
     color: var(--color-text-muted);
     line-height: 1.7;
   }
@@ -181,61 +133,13 @@ function calculateReadingTime(content: string) {
     padding-bottom: var(--space-3xl);
   }
 
-  .tags-filter {
-    padding: var(--space-lg);
-    background: var(--color-bg-card);
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius);
-  }
-
-  .filter-label {
-    font-size: 0.9375rem;
-    font-weight: 600;
-    color: var(--color-text-muted);
-    margin-bottom: var(--space-md);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  .tags-list {
-    display: flex;
-    gap: var(--space-sm);
-    flex-wrap: wrap;
-  }
-
-  .tag-button {
-    padding: 0.5rem 1rem;
-    font-size: 0.875rem;
-    font-weight: 500;
-    background: transparent;
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius-sm);
-    color: var(--color-text-muted);
-    cursor: pointer;
-    transition: all var(--transition-fast);
-    text-decoration: none;
-    display: inline-block;
-  }
-
-  .tag-button:hover {
-    border-color: var(--color-accent);
-    color: var(--color-accent-light);
-  }
-
-  .tag-button.active {
-    background: var(--color-accent);
-    border-color: var(--color-accent);
-    color: white;
-  }
-
   .section-label {
-    font-size: 1.25rem;
+    font-size: var(--text-xl);
     color: var(--color-text-muted);
     font-weight: 600;
     margin-bottom: var(--space-lg);
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    font-size: 0.875rem;
   }
 
   .featured-section {
@@ -267,10 +171,6 @@ function calculateReadingTime(content: string) {
   @media (max-width: 768px) {
     .blog-hero {
       padding: var(--space-2xl) 0 var(--space-xl);
-    }
-
-    .tags-filter {
-      padding: var(--space-md);
     }
   }
 </style>

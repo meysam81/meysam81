@@ -1,0 +1,313 @@
+/**
+ * Shared styles for Vue tool components.
+ * These styles define common patterns used across tool components.
+ * Import this file in Vue tool components that need these shared styles.
+ *
+ * NOTE: .tool-card is defined in theme.css as the single source of truth.
+ */
+
+/* ============================================
+   Error and Success Messages
+   ============================================ */
+
+.error-message,
+.success-message {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  margin-top: var(--space-sm);
+}
+
+.error-message {
+  background: var(--color-error-bg-subtle);
+  border: 1px solid var(--color-error-border);
+  color: var(--color-error-light);
+}
+
+.success-message {
+  background: var(--color-success-bg-subtle);
+  border: 1px solid var(--color-success-border);
+  color: var(--color-success-light);
+}
+
+.error-message svg,
+.success-message svg {
+  flex-shrink: 0;
+}
+
+/* ============================================
+   Icon Buttons (Copy, Download, etc.)
+   ============================================ */
+
+.icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 36px;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.icon-btn:hover:not(:disabled) {
+  border-color: var(--color-accent);
+  color: var(--color-text);
+  background: var(--color-accent-bg);
+}
+
+.icon-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.icon-btn.copied {
+  border-color: var(--color-success);
+  color: var(--color-success);
+}
+
+/* Copy button variant */
+.copy-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.copy-btn:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  background: var(--color-accent-bg);
+}
+
+.copy-btn.copied {
+  border-color: var(--color-success);
+  color: var(--color-success);
+}
+
+/* Download button variant */
+.download-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.download-btn:hover:not(:disabled) {
+  border-color: var(--color-accent);
+  color: var(--color-text);
+}
+
+.download-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   Form Inputs
+   ============================================ */
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.form-group label {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-text-muted);
+}
+
+.form-group .required {
+  color: var(--color-error);
+}
+
+.form-group .optional {
+  color: var(--color-text-dim);
+  font-weight: 400;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  font-size: var(--text-md);
+  transition: border-color var(--transition-fast);
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-focus);
+}
+
+.input-hint {
+  font-size: var(--text-xs);
+  color: var(--color-text-dim);
+}
+
+.char-count {
+  font-size: var(--text-xs);
+  color: var(--color-text-dim);
+  text-align: right;
+}
+
+/* Main input (larger, prominent) */
+.main-input {
+  width: 100%;
+  padding: var(--space-md) var(--space-lg);
+  font-size: var(--text-lg);
+  background: var(--color-bg);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  transition: all var(--transition-fast);
+}
+
+.main-input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-focus-lg);
+}
+
+/* ============================================
+   Toast Notifications
+   ============================================ */
+
+.toast {
+  position: fixed;
+  bottom: var(--space-xl);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-lg);
+  background: var(--color-success);
+  color: white;
+  border-radius: var(--radius-sm);
+  font-size: var(--text-md);
+  z-index: var(--z-toast);
+  animation: slideUp 0.3s ease;
+}
+
+.toast.error {
+  background: var(--color-error);
+}
+
+.share-toast {
+  color: var(--color-success);
+  font-size: var(--text-sm);
+  animation: fadeIn 0.2s ease-out;
+}
+
+/* NOTE: Keyframe animations (fadeIn, slideUp, spin) are defined in theme.css */
+
+/* ============================================
+   Mode Toggle Buttons
+   ============================================ */
+
+.mode-toggle {
+  display: flex;
+  gap: var(--space-xs);
+  padding: var(--space-xs);
+  background: var(--color-bg);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-lg);
+}
+
+.mode-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-md);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.mode-btn:hover {
+  color: var(--color-text);
+  background: var(--color-bg-elevated);
+}
+
+.mode-btn.active {
+  background: var(--color-accent);
+  color: white;
+}
+
+/* ============================================
+   Action Buttons Row
+   ============================================ */
+
+.action-buttons {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+/* ============================================
+   Output Display
+   ============================================ */
+
+.output-display {
+  padding: var(--space-md);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+
+@media (max-width: 768px) {
+  .action-buttons {
+    flex-direction: column;
+  }
+
+  .mode-toggle {
+    width: 100%;
+  }
+
+  .mode-btn {
+    flex: 1;
+    justify-content: center;
+  }
+}

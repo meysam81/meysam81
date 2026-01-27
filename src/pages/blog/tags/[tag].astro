@@ -2,31 +2,22 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import ContentCard from "@/components/ContentCard.astro";
+import TagsFilter from "@/components/TagsFilter.astro";
+import BackLink from "@/components/BackLink.astro";
+import {
+  filterPublishedPosts,
+  formatDate,
+  getAllTags,
+  getPostsByTag,
+} from "@/utils/blog";
 
 export async function getStaticPaths() {
-  var posts = await getCollection("blog", function filterPosts(post) {
-    return import.meta.env.PROD ? !post.data.draft : true;
-  });
+  var allPosts = await getCollection("blog");
+  var publishedPosts = filterPublishedPosts(allPosts);
+  var allTags = getAllTags(publishedPosts);
 
-  var allTags = new Set();
-  posts.forEach(function collectTags(post) {
-    if (post.data.tags) {
-      post.data.tags.forEach(function addTag(tag) {
-        allTags.add(tag);
-      });
-    }
-  });
-
-  return Array.from(allTags).map(function createPath(tag) {
-    var tagPosts = posts.filter(function filterByTag(post) {
-      // @ts-ignore
-      return post.data.tags && post.data.tags.includes(tag);
-    });
-
-    tagPosts.sort(function sortPosts(a, b) {
-      return b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
-    });
-
+  return allTags.map(function createPath(tag) {
+    var tagPosts = getPostsByTag(publishedPosts, tag);
     return {
       params: { tag },
       props: { tag, posts: tagPosts },
@@ -36,25 +27,10 @@ export async function getStaticPaths() {
 
 var { tag, posts } = Astro.props;
 
-var allPosts = await getCollection("blog", function filterPosts(post) {
-  return import.meta.env.PROD ? !post.data.draft : true;
-});
-
-var allTags = [
-  ...new Set(
-    allPosts.flatMap(function flatMapTags(post) {
-      return post.data.tags || [];
-    }),
-  ),
-].sort();
-
-function formatDate(date: Date) {
-  return new Intl.DateTimeFormat("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  }).format(date);
-}
+// Get all tags for the filter (need all published posts)
+var allPosts = await getCollection("blog");
+var publishedPosts = filterPublishedPosts(allPosts);
+var allTags = getAllTags(publishedPosts);
 ---
 
 <BaseLayout
@@ -64,49 +40,15 @@ function formatDate(date: Date) {
   <section class="tag-page">
     <div class="container">
       <div class="header">
-        <a href="/blog" class="back-link">
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <line x1="19" y1="12" x2="5" y2="12"></line>
-            <polyline points="12 19 5 12 12 5"></polyline>
-          </svg>
-          Back to Blog
-        </a>
+        <BackLink href="/blog" text="Back to Blog" />
 
-        <h1>Posts tagged "{tag}"</h1>
+        <h1 class="gradient-text">Posts tagged "{tag}"</h1>
         <p class="subtitle">
           {posts.length} post{posts.length !== 1 ? "s" : ""} found
         </p>
       </div>
 
-      {
-        allTags.length > 0 && (
-          <div class="tags-filter mb-xl">
-            <h3 class="filter-label">Filter by Tag:</h3>
-            <div class="tags-list">
-              <a href="/blog" class="tag-button">
-                All Posts
-              </a>
-              {allTags.map(function mapTags(tagItem) {
-                return (
-                  <a
-                    href={`/blog/tags/${tagItem}`}
-                    class={tagItem === tag ? "tag-button active" : "tag-button"}
-                  >
-                    {tagItem}
-                  </a>
-                );
-              })}
-            </div>
-          </div>
-        )
-      }
+      <TagsFilter tags={allTags} activeTag={tag} class="mb-xl" />
 
       <div class="grid grid-3">
         {
@@ -116,7 +58,7 @@ function formatDate(date: Date) {
               <ContentCard
                 title={post.data.title}
                 description={post.data.description}
-                url={`/blog/${postSlug}`}
+                url={"/blog/" + postSlug}
                 badge={formatDate(post.data.pubDate)}
                 linkText="Read Article"
               />
@@ -137,92 +79,13 @@ function formatDate(date: Date) {
     margin-bottom: var(--space-2xl);
   }
 
-  .back-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: var(--color-text-muted);
-    font-size: 0.9375rem;
-    font-weight: 500;
-    margin-bottom: var(--space-lg);
-    transition: all var(--transition-fast);
-  }
-
-  .back-link:hover {
-    color: var(--color-text);
-    gap: 0.75rem;
-  }
-
-  .back-link svg {
-    transition: transform var(--transition-fast);
-  }
-
-  .back-link:hover svg {
-    transform: translateX(-4px);
-  }
-
   .header h1 {
     margin-bottom: var(--space-sm);
-    background: linear-gradient(
-      135deg,
-      var(--color-text) 0%,
-      var(--color-accent-light) 100%
-    );
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
   }
 
   .subtitle {
     color: var(--color-text-muted);
-    font-size: 1.125rem;
+    font-size: var(--text-lg);
     margin: 0;
-  }
-
-  .tags-filter {
-    padding: var(--space-lg);
-    background: var(--color-bg-card);
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius);
-  }
-
-  .filter-label {
-    font-size: 0.9375rem;
-    font-weight: 600;
-    color: var(--color-text-muted);
-    margin-bottom: var(--space-md);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  .tags-list {
-    display: flex;
-    gap: var(--space-sm);
-    flex-wrap: wrap;
-  }
-
-  .tag-button {
-    padding: 0.5rem 1rem;
-    font-size: 0.875rem;
-    font-weight: 500;
-    background: transparent;
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius-sm);
-    color: var(--color-text-muted);
-    cursor: pointer;
-    transition: all var(--transition-fast);
-    text-decoration: none;
-    display: inline-block;
-  }
-
-  .tag-button:hover {
-    border-color: var(--color-accent);
-    color: var(--color-accent-light);
-  }
-
-  .tag-button.active {
-    background: var(--color-accent);
-    border-color: var(--color-accent);
-    color: white;
   }
 </style>

@@ -1,9 +1,14 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import ContentCard from "@/components/ContentCard.astro";
+import BackLink from "@/components/BackLink.astro";
 import { getCollection } from "astro:content";
-import { filterPublishedPosts } from "@/utils/blog";
-import { getAllSeries, getPostsBySeries } from "@/utils/series";
+import { filterPublishedPosts, formatDate } from "@/utils/blog";
+import {
+  formatReadingTime,
+  calculateTotalReadingTime,
+} from "@/utils/reading-time";
+import { getAllSeries } from "@/utils/series";
 import { slugify } from "@/utils/slug";
 
 export async function getStaticPaths() {
@@ -21,52 +26,26 @@ export async function getStaticPaths() {
 
 var { series } = Astro.props;
 
-function formatDate(date: Date) {
-  return new Intl.DateTimeFormat("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  }).format(date);
-}
-
-function calculateReadingTime(content: string) {
-  var wordsPerMinute = 200;
-  var wordCount = content.split(/\s+/).length;
-  var minutes = Math.ceil(wordCount / wordsPerMinute);
-  return `${minutes} min read`;
-}
-
-function calculateTotalReadingTime(posts: typeof series.posts) {
-  var totalWords = posts.reduce(function sumWords(acc, post) {
-    return acc + post.body.split(/\s+/).length;
-  }, 0);
-  var minutes = Math.ceil(totalWords / 200);
-  return minutes;
-}
-
-var totalReadingTime = calculateTotalReadingTime(series.posts);
+var totalReadingTime = calculateTotalReadingTime(
+  series.posts.map(function mapBody(post) {
+    return post.body;
+  }),
+);
 ---
 
 <BaseLayout
-  title={`${series.name} - Series`}
-  description={`A ${series.postCount}-part series: ${series.name}. Total reading time: ${totalReadingTime} minutes.`}
+  title={series.name + " - Series"}
+  description={"A " +
+    series.postCount +
+    "-part series: " +
+    series.name +
+    ". Total reading time: " +
+    totalReadingTime +
+    " minutes."}
 >
   <section class="series-hero">
     <div class="container">
-      <a href="/blog" class="back-link">
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-        >
-          <line x1="19" y1="12" x2="5" y2="12"></line>
-          <polyline points="12 19 5 12 12 5"></polyline>
-        </svg>
-        Back to Blog
-      </a>
+      <BackLink href="/blog" text="Back to Blog" />
 
       <div class="series-badge">
         <svg
@@ -85,7 +64,7 @@ var totalReadingTime = calculateTotalReadingTime(series.posts);
         Series
       </div>
 
-      <h1 class="series-title">{series.name}</h1>
+      <h1 class="series-title gradient-text">{series.name}</h1>
 
       <div class="series-meta">
         <span class="meta-item">
@@ -136,12 +115,12 @@ var totalReadingTime = calculateTotalReadingTime(series.posts);
                   <ContentCard
                     title={post.data.title}
                     description={post.data.description}
-                    url={`/blog/${postSlug}`}
+                    url={"/blog/" + postSlug}
                     badge={formatDate(post.data.pubDate)}
                     linkText="Read Article"
                     variant="blog"
                     tags={post.data.tags}
-                    readingTime={calculateReadingTime(post.body)}
+                    readingTime={formatReadingTime(post.body)}
                   />
                 </div>
               </div>
@@ -158,55 +137,23 @@ var totalReadingTime = calculateTotalReadingTime(series.posts);
     padding: var(--space-3xl) 0 var(--space-2xl);
   }
 
-  .back-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: var(--color-text-muted);
-    font-size: 0.9375rem;
-    font-weight: 500;
-    margin-bottom: var(--space-lg);
-    transition: all var(--transition-fast);
-  }
-
-  .back-link:hover {
-    color: var(--color-text);
-    gap: 0.75rem;
-  }
-
-  .back-link svg {
-    transition: transform var(--transition-fast);
-  }
-
-  .back-link:hover svg {
-    transform: translateX(-4px);
-  }
-
   .series-badge {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1rem;
-    font-size: 0.8125rem;
+    gap: var(--space-xs);
+    padding: var(--space-xs) var(--space-sm);
+    font-size: var(--text-xs);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     background: rgba(59, 130, 246, 0.1);
     color: var(--color-accent-light);
     border: 1px solid rgba(59, 130, 246, 0.2);
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--radius-sm);
     margin-bottom: var(--space-md);
   }
 
   .series-title {
-    background: linear-gradient(
-      135deg,
-      var(--color-text) 0%,
-      var(--color-accent-light) 100%
-    );
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
     margin-bottom: var(--space-md);
     max-width: 800px;
   }
@@ -221,8 +168,8 @@ var totalReadingTime = calculateTotalReadingTime(series.posts);
   .meta-item {
     display: flex;
     align-items: center;
-    gap: 0.375rem;
-    font-size: 0.9375rem;
+    gap: var(--space-xs);
+    font-size: var(--text-md);
     color: var(--color-text-muted);
   }
 
@@ -259,7 +206,7 @@ var totalReadingTime = calculateTotalReadingTime(series.posts);
     background: var(--color-bg-card);
     border: 2px solid var(--color-accent);
     border-radius: 50%;
-    font-size: 1.25rem;
+    font-size: var(--text-xl);
     font-weight: 700;
     color: var(--color-accent-light);
     flex-shrink: 0;
@@ -291,7 +238,7 @@ var totalReadingTime = calculateTotalReadingTime(series.posts);
     .post-number {
       width: 40px;
       height: 40px;
-      font-size: 1rem;
+      font-size: var(--text-base);
     }
   }
 </style>

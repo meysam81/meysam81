@@ -1,0 +1,106 @@
+---
+/**
+ * Reusable FAQ accordion component with expandable details.
+ * Supports both simple text answers and HTML content via slots.
+ */
+import type { FAQItem } from "@/data/tools";
+
+interface Props {
+  /** Array of FAQ items with question and answer */
+  faqs: FAQItem[];
+  /** Title displayed above the FAQ list */
+  title?: string;
+  /** Additional CSS class */
+  class?: string;
+}
+
+var {
+  faqs,
+  title = "Frequently Asked Questions",
+  class: className,
+} = Astro.props;
+
+// Don't render if no FAQs provided
+if (faqs.length === 0) {
+  return;
+}
+---
+
+<div class:list={["faq-accordion", className]}>
+  <h2>{title}</h2>
+
+  {
+    faqs.map(function renderFAQ(faq) {
+      return (
+        <details class="faq-item">
+          <summary>{faq.question}</summary>
+          <div class="faq-answer">
+            <p>{faq.answer}</p>
+          </div>
+        </details>
+      );
+    })
+  }
+</div>
+
+<style>
+  .faq-accordion h2 {
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-lg);
+  }
+
+  .faq-item {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .faq-item summary {
+    padding: var(--space-md) 0;
+    font-weight: 500;
+    color: var(--color-text);
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .faq-item summary::after {
+    content: "+";
+    font-size: var(--text-xl);
+    color: var(--color-text-muted);
+    transition: transform var(--transition-fast);
+  }
+
+  .faq-item[open] summary::after {
+    content: "-";
+  }
+
+  .faq-answer {
+    padding-bottom: var(--space-md);
+  }
+
+  .faq-answer p,
+  .faq-answer ul {
+    color: var(--color-text-muted);
+    font-size: var(--text-md);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .faq-answer ul {
+    padding-left: var(--space-lg);
+    margin: var(--space-sm) 0;
+  }
+
+  .faq-answer li {
+    margin-bottom: var(--space-xs);
+  }
+
+  .faq-answer code {
+    font-family: var(--font-mono);
+    background: var(--color-bg);
+    padding: 0.125rem 0.375rem;
+    border-radius: var(--radius-xs);
+    color: var(--color-accent-light);
+  }
+</style>

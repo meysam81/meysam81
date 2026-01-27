@@ -1,0 +1,22 @@
+---
+interface Props {
+  variant?: "long" | "short";
+  plus?: boolean;
+}
+
+const { variant = "long", plus = false } = Astro.props;
+
+var visitors;
+switch (variant) {
+  case "long":
+    visitors = plus ? "1,500+" : "1,500";
+    break;
+  case "short":
+    visitors = plus ? "1.5k+" : "1.5k";
+    break;
+  default:
+    visitors = plus ? "1,500+" : "1,500";
+}
+---
+
+{visitors}

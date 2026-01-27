@@ -13,7 +13,7 @@ export var getStaticPaths: GetStaticPaths = async function getStaticPaths() {
   });
 };
 
-export var GET: APIRoute = async function GET({ props }) {
+export var GET: APIRoute = function GET({ props }) {
   var { post } = props;
   var frontmatter = [
     "---",
@@ -25,7 +25,11 @@ export var GET: APIRoute = async function GET({ props }) {
       ? `updated: ${post.data.updatedDate.toISOString().split("T")[0]}`
       : null,
     post.data.tags.length > 0
-      ? `tags:\n${post.data.tags.map(function mapTag(tag) { return `  - ${tag}`; }).join("\n")}`
+      ? `tags:\n${post.data.tags
+          .map(function mapTag(tag) {
+            return `  - ${tag}`;
+          })
+          .join("\n")}`
       : null,
     `url: https://meysam.io/blog/${post.slug}/`,
     "---",

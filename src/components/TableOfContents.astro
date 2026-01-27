@@ -81,18 +81,17 @@ var showToc = tocHeadings.length > 0 || hasReferences || hasRelatedPosts;
     padding: var(--space-lg);
     background: var(--color-bg-card);
     border: 1px solid var(--color-border);
-    border-radius: var(--border-radius);
+    border-radius: var(--radius);
     margin-bottom: var(--space-xl);
   }
 
   .toc-title {
-    font-size: 1rem;
+    font-size: var(--text-sm);
     font-weight: 600;
     color: var(--color-text);
     margin-bottom: var(--space-md);
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    font-size: 0.875rem;
   }
 
   .toc-list {
@@ -116,8 +115,8 @@ var showToc = tocHeadings.length > 0 || hasReferences || hasRelatedPosts;
   .toc-link {
     display: block;
     color: var(--color-text-muted);
-    font-size: 0.9375rem;
-    padding: 0.375rem 0;
+    font-size: var(--text-md);
+    padding: var(--space-xxs) 0;
     transition: color var(--transition-fast);
   }
 
@@ -134,7 +133,7 @@ var showToc = tocHeadings.length > 0 || hasReferences || hasRelatedPosts;
   .toc-link-special {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: var(--space-xs);
     color: var(--color-accent-light);
     font-weight: 500;
   }

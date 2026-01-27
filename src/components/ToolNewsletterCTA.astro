@@ -1,0 +1,77 @@
+---
+import NewsletterForm from "@/components/vue/NewsletterForm.vue";
+
+/**
+ * Reusable newsletter CTA component for tool pages.
+ * Uses the shared NewsletterForm Vue component with tool-specific defaults.
+ */
+interface Props {
+  /** Page URL for analytics tracking (e.g., "/tools/cron") */
+  pageUrl: string;
+  /** Variant name for analytics tracking (e.g., "cron-tool") */
+  variant: string;
+  /** Title displayed above the form */
+  title?: string;
+  /** Description text below the title */
+  description?: string;
+  /** Submit button text */
+  buttonText?: string;
+  /** Note text below the form */
+  formNote?: string;
+  /** Additional CSS class */
+  class?: string;
+}
+
+var {
+  pageUrl,
+  variant,
+  title = "Like This Tool?",
+  description = "Get weekly DevOps tips and production insights from 8+ years in the trenches.",
+  buttonText = "Get Weekly Tips",
+  formNote = "Join 1,500+ engineers. No spam, unsubscribe anytime.",
+  class: className,
+} = Astro.props;
+---
+
+<div class:list={["tool-newsletter-cta", className]}>
+  <NewsletterForm
+    client:idle
+    variant={variant}
+    pageUrl={pageUrl}
+    title={title}
+    description={description}
+    buttonText={buttonText}
+    formNote={formNote}
+    successTitle="Check Your Email!"
+    successMessage="Click the confirmation link to complete your subscription."
+    showBenefits={false}
+    containerClass="tool-newsletter-form"
+  />
+</div>
+
+<style>
+  .tool-newsletter-cta {
+    text-align: center;
+  }
+
+  .tool-newsletter-cta :global(.form-title) {
+    text-align: center;
+  }
+
+  .tool-newsletter-cta :global(.form-description) {
+    text-align: center;
+  }
+
+  .tool-newsletter-cta :global(.newsletter-form) {
+    margin: 0 auto;
+    max-width: 500px;
+  }
+
+  .tool-newsletter-cta :global(.form-note) {
+    text-align: center;
+  }
+
+  .tool-newsletter-cta :global(.success-message) {
+    color: var(--color-success);
+  }
+</style>
