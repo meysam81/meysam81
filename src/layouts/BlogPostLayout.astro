@@ -6,6 +6,7 @@ import Webmentions from "@/components/Webmentions.astro";
 import SeriesBanner from "@/components/SeriesBanner.astro";
 import SeriesNav from "@/components/SeriesNav.astro";
 import type { SeriesInfo } from "@/utils/series";
+import SummarizeButton from "@/components/vue/SummarizeButton.vue";
 
 interface Props {
   title: string;
@@ -328,6 +329,8 @@ var fullURL = canonicalURL.toString();
             </div>
           )
         }
+
+        <SummarizeButton client:only="vue" />
       </header>
 
       <TableOfContents
