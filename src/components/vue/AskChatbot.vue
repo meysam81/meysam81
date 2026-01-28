@@ -27,6 +27,7 @@ interface PagefindResult {
 var {
   loadModel,
   generate,
+  checkBackendSupport,
   progress,
   status,
   isLoading,
@@ -42,6 +43,7 @@ var inputText = ref("");
 var isProcessing = ref(false);
 var error = ref<string | null>(null);
 var showDownloadPrompt = ref(false);
+var estimatedModelSize = ref(600);
 var pagefindLoaded = ref(false);
 var pagefindError = ref<string | null>(null);
 var messagesContainer = ref<HTMLElement | null>(null);
@@ -140,6 +142,8 @@ async function sendMessage() {
 
   // Check if model is ready
   if (status.value === "idle") {
+    var backendInfo = await checkBackendSupport();
+    estimatedModelSize.value = backendInfo.estimatedSizeMB;
     showDownloadPrompt.value = true;
     return;
   }
@@ -304,7 +308,7 @@ function handleKeyDown(event: KeyboardEvent) {
 
     <!-- Download prompt -->
     <div v-if="showDownloadPrompt" class="download-section">
-      <p>Download AI model (~300MB) to start chatting?</p>
+      <p>Download AI model (~{{ estimatedModelSize }}MB) to start chatting?</p>
       <p class="download-note">Runs 100% locally in your browser.</p>
       <button class="download-btn" @click="handleDownloadModel" type="button">
         Download Model

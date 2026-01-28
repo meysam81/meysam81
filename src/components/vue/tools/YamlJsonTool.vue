@@ -75,6 +75,7 @@ var { error, setError, clearMessages, logger } = useToolState({
 var {
   loadModel,
   generate,
+  checkBackendSupport,
   progress,
   status,
   isLoading,
@@ -92,6 +93,12 @@ var aiError = ref<string | null>(null);
 var aiExplanation = ref<string | null>(null);
 var aiFixSuggestion = ref<string | null>(null);
 var showAIDownloadPrompt = ref(false);
+var aiBackendInfo = ref<{
+  webgpu: boolean;
+  wasm: boolean;
+  recommended: string;
+  estimatedSizeMB: number;
+} | null>(null);
 
 var inputText = ref("");
 var outputText = ref("");
@@ -510,11 +517,12 @@ function loadSampleJson(): void {
 }
 
 // AI Functions
-function handleAIToggle(enabled: boolean) {
+async function handleAIToggle(enabled: boolean) {
   aiModeEnabled.value = enabled;
   if (enabled) {
     trackAIToggleOn("yaml-json");
     if (status.value === "idle") {
+      aiBackendInfo.value = await checkBackendSupport();
       showAIDownloadPrompt.value = true;
     }
   } else {
@@ -671,7 +679,10 @@ onMounted(function handleMount() {
       <AIPrivacyNotice v-if="aiModeEnabled" />
 
       <div v-if="showAIDownloadPrompt" class="ai-download-prompt">
-        <p>Download AI model (~300MB) for error explanations and auto-fix?</p>
+        <p>
+          Download AI model (~{{ aiBackendInfo?.estimatedSizeMB || 600 }}MB) for
+          error explanations and auto-fix?
+        </p>
         <button class="ai-download-btn" @click="handleDownloadAIModel">
           Download AI Model
         </button>

@@ -13,6 +13,7 @@ interface Message {
 var {
   loadModel,
   generate,
+  checkBackendSupport,
   progress,
   status,
   isLoading,
@@ -29,6 +30,7 @@ var messages = ref<Message[]>([]);
 var inputText = ref("");
 var error = ref<string | null>(null);
 var showDownloadPrompt = ref(false);
+var estimatedModelSize = ref(600);
 var postContent = ref("");
 var postTitle = ref("");
 var messagesContainer = ref<HTMLElement | null>(null);
@@ -47,9 +49,11 @@ onMounted(function extractContent() {
   }
 });
 
-function handleToggle() {
+async function handleToggle() {
   isOpen.value = !isOpen.value;
   if (isOpen.value && status.value === "idle" && messages.value.length === 0) {
+    var backendInfo = await checkBackendSupport();
+    estimatedModelSize.value = backendInfo.estimatedSizeMB;
     showDownloadPrompt.value = true;
   }
   trackEvent("blog_ask_opened");
@@ -197,7 +201,10 @@ function handleKeyDown(event: KeyboardEvent) {
 
       <!-- Download prompt -->
       <div v-if="showDownloadPrompt" class="download-prompt">
-        <p>Download AI model (~300MB) to chat about this post?</p>
+        <p>
+          Download AI model (~{{ estimatedModelSize }}MB) to chat about this
+          post?
+        </p>
         <p class="download-note">Runs 100% locally in your browser.</p>
         <button class="download-btn" @click="handleDownloadModel">
           Download Model

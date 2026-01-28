@@ -8,6 +8,7 @@ import AIPrivacyNotice from "@/components/vue/ui/AIPrivacyNotice.vue";
 var {
   loadModel,
   generate,
+  checkBackendSupport,
   progress,
   status,
   isLoading,
@@ -23,6 +24,7 @@ var isProcessing = ref(false);
 var summary = ref<string | null>(null);
 var error = ref<string | null>(null);
 var showDownloadPrompt = ref(false);
+var estimatedModelSize = ref(600);
 var postContent = ref("");
 
 onMounted(function extractContent() {
@@ -33,9 +35,11 @@ onMounted(function extractContent() {
   }
 });
 
-function handleClick() {
+async function handleClick() {
   isOpen.value = !isOpen.value;
   if (isOpen.value && status.value === "idle" && !summary.value) {
+    var backendInfo = await checkBackendSupport();
+    estimatedModelSize.value = backendInfo.estimatedSizeMB;
     showDownloadPrompt.value = true;
   }
   trackEvent("blog_summarize_clicked");
@@ -161,7 +165,9 @@ function formatSummary(text: string): string {
 
       <!-- Download prompt -->
       <div v-if="showDownloadPrompt" class="download-prompt">
-        <p>Download AI model (~300MB) to generate summary?</p>
+        <p>
+          Download AI model (~{{ estimatedModelSize }}MB) to generate summary?
+        </p>
         <p class="download-note">Runs 100% locally in your browser.</p>
         <button class="download-btn" @click="handleDownloadModel">
           Download &amp; Summarize

@@ -330,7 +330,8 @@ onMounted(function handleMount() {
       <!-- Download prompt -->
       <div v-if="showAIDownloadPrompt" class="ai-download-prompt">
         <p>
-          Download AI model (~400MB) for smarter natural language understanding?
+          Download AI model (~{{ aiBackendInfo?.estimatedSizeMB || 600 }}MB) for
+          smarter natural language understanding?
         </p>
         <div v-if="aiBackendInfo" class="ai-backend-info">
           <span v-if="aiBackendInfo.webgpu" class="backend-badge webgpu">

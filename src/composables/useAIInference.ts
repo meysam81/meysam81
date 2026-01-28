@@ -10,8 +10,23 @@ import { ref, computed } from "vue";
 import { useLogger } from "@/composables/useLogger";
 
 // Use onnx-community models - they have pre-converted ONNX files for Transformers.js
-// Options: onnx-community/Qwen3-0.6B-ONNX (~400MB q4), onnx-community/Qwen3-1.7B-ONNX (~1GB q4)
+// Model: onnx-community/Qwen3-0.6B-ONNX
+// - q4f16 (570MB): WebGPU only (uses MatMulNBits)
+// - q4 (919MB): WebGPU only (uses MatMulNBits)
+// - int8 (618MB): WASM compatible
+// - fp16 (1.2GB): Both backends
 var MODEL_ID = "onnx-community/Qwen3-0.6B-ONNX";
+
+// Quantization types by backend compatibility
+// WebGPU supports MatMulNBits (q4, q4f16), WASM does not
+var WEBGPU_DTYPE = "q4f16" as const; // Smallest WebGPU-compatible (570MB)
+var WASM_DTYPE = "int8" as const; // WASM-compatible, no MatMulNBits (618MB)
+
+// Model sizes in MB for UI display
+export var MODEL_SIZES = {
+  webgpu: 570, // q4f16
+  wasm: 618, // int8
+} as const;
 var modelInstance: any = null;
 var loadingPromise: Promise<any> | null = null;
 var webgpuChecked = false;
@@ -127,18 +142,21 @@ export function useAIInference() {
 
       try {
         if (hasWebGPU) {
-          logger.debug("Loading with WebGPU backend");
+          // WebGPU: Use q4f16 (570MB) - optimized for WebGPU with MatMulNBits
+          logger.debug("Loading with WebGPU backend, dtype:", WEBGPU_DTYPE);
           backend.value = "webgpu";
           modelInstance = await pipeline("text-generation", MODEL_ID, {
-            dtype: "q4",
+            dtype: WEBGPU_DTYPE,
             device: "webgpu",
             progress_callback: handleProgress,
           });
         } else {
-          logger.debug("Loading with WASM backend (WebGPU not available)");
+          // WASM: Use fp16 (1.2GB) - compatible with WASM backend
+          // Note: q4/q4f16 use MatMulNBits which is WebGPU-only
+          logger.debug("Loading with WASM backend, dtype:", WASM_DTYPE);
           backend.value = "wasm";
           modelInstance = await pipeline("text-generation", MODEL_ID, {
-            dtype: "q4",
+            dtype: WASM_DTYPE,
             device: "wasm",
             progress_callback: handleProgress,
           });
@@ -151,11 +169,14 @@ export function useAIInference() {
       } catch (loadError) {
         // If WebGPU was attempted but failed, try WASM fallback
         if (hasWebGPU && backend.value === "webgpu") {
-          logger.warn("WebGPU load failed, trying WASM fallback");
+          logger.warn(
+            "WebGPU load failed, trying WASM fallback with",
+            WASM_DTYPE,
+          );
           try {
             backend.value = "wasm";
             modelInstance = await pipeline("text-generation", MODEL_ID, {
-              dtype: "q4",
+              dtype: WASM_DTYPE,
               device: "wasm",
               progress_callback: handleProgress,
             });
@@ -220,12 +241,15 @@ export function useAIInference() {
       webgpuReason = "WebGPU not supported by browser";
     }
 
+    var recommendedBackend = hasWebGPU ? "webgpu" : "wasm";
     return {
       webgpu: hasWebGPU,
       wasm: true, // WASM is always available in modern browsers
-      recommended: hasWebGPU ? "webgpu" : "wasm",
+      recommended: recommendedBackend,
       crossOriginIsolated: crossOriginIsolated,
       webgpuReason: webgpuReason,
+      estimatedSizeMB:
+        MODEL_SIZES[recommendedBackend as keyof typeof MODEL_SIZES],
     };
   }
 
