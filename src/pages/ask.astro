@@ -1,0 +1,31 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import AskChatbot from "@/components/vue/AskChatbot.vue";
+
+var title = "Ask AI - Search the Blog";
+var description =
+  "AI-powered search and Q&A across all blog posts. Runs locally in your browser.";
+var keywords =
+  "AI chatbot, blog search, indie hacker, solopreneur, DevOps, local AI, privacy-first search";
+---
+
+<BaseLayout title={title} description={description} keywords={keywords}>
+  <div class="ask-page">
+    <AskChatbot client:only="vue" />
+  </div>
+</BaseLayout>
+
+<style>
+  .ask-page {
+    min-height: calc(100vh - var(--size-header) - 100px);
+    max-width: 800px;
+    margin: 0 auto;
+    padding: var(--space-lg);
+  }
+
+  @media (max-width: 640px) {
+    .ask-page {
+      padding: var(--space-md);
+    }
+  }
+</style>
