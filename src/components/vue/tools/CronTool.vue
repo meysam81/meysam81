@@ -36,16 +36,23 @@ var aiModeEnabled = ref(false);
 var aiIsProcessing = ref(false);
 var aiError = ref<string | null>(null);
 var showAIDownloadPrompt = ref(false);
+var aiBackendInfo = ref<{
+  webgpu: boolean;
+  wasm: boolean;
+  recommended: string;
+} | null>(null);
 
 var {
   loadModel,
   generate,
+  checkBackendSupport,
   progress,
   status,
   isLoading,
   isReady,
   downloadedMB,
   totalMB,
+  backend,
 } = useAIInference();
 var { trackAIToggleOn, trackAIModelLoaded, trackAIQuery, trackAIError } =
   usePirsch();
@@ -172,12 +179,14 @@ var handleEnglishInput = useDebounceFn(function handleEnglish(): void {
   }
 }, 300);
 
-function handleAIToggle(enabled: boolean) {
+async function handleAIToggle(enabled: boolean) {
   aiModeEnabled.value = enabled;
   aiError.value = null;
   if (enabled) {
     trackAIToggleOn("cron");
     if (status.value === "idle") {
+      // Check backend support before showing download prompt
+      aiBackendInfo.value = await checkBackendSupport();
       showAIDownloadPrompt.value = true;
     }
   } else {
@@ -321,8 +330,16 @@ onMounted(function handleMount() {
       <!-- Download prompt -->
       <div v-if="showAIDownloadPrompt" class="ai-download-prompt">
         <p>
-          Download AI model (~300MB) for smarter natural language understanding?
+          Download AI model (~400MB) for smarter natural language understanding?
         </p>
+        <div v-if="aiBackendInfo" class="ai-backend-info">
+          <span v-if="aiBackendInfo.webgpu" class="backend-badge webgpu">
+            ⚡ WebGPU available (fast)
+          </span>
+          <span v-else class="backend-badge wasm">
+            🔧 Using WASM (slower but works everywhere)
+          </span>
+        </div>
         <button class="ai-download-btn" @click="handleDownloadAIModel">
           Download AI Model
         </button>
@@ -631,6 +648,27 @@ onMounted(function handleMount() {
 
 .ai-download-btn:hover {
   opacity: 0.9;
+}
+
+.ai-backend-info {
+  margin-bottom: var(--space-sm);
+}
+
+.backend-badge {
+  display: inline-block;
+  padding: var(--space-xxs) var(--space-xs);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-xs);
+}
+
+.backend-badge.webgpu {
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+}
+
+.backend-badge.wasm {
+  background: rgba(234, 179, 8, 0.15);
+  color: #eab308;
 }
 
 .ai-error {

@@ -1,8 +1,9 @@
 // Browser-based LLM inference using Transformers.js + Qwen3
 // Features:
+// - WebGPU detection BEFORE download
 // - Lazy model loading (on-demand)
 // - Progress tracking for download UI
-// - WebGPU with WASM fallback
+// - WASM fallback for browsers without WebGPU
 // - Singleton pattern (one model instance)
 
 import { ref, computed } from "vue";
@@ -13,6 +14,31 @@ import { useLogger } from "@/composables/useLogger";
 var MODEL_ID = "onnx-community/Qwen3-0.6B-ONNX";
 var modelInstance: any = null;
 var loadingPromise: Promise<any> | null = null;
+var webgpuChecked = false;
+var webgpuAvailable = false;
+
+// Check WebGPU availability once, cache result
+async function checkWebGPU(): Promise<boolean> {
+  if (webgpuChecked) {
+    return webgpuAvailable;
+  }
+
+  webgpuChecked = true;
+
+  if (typeof navigator === "undefined" || !("gpu" in navigator)) {
+    webgpuAvailable = false;
+    return false;
+  }
+
+  try {
+    var adapter = await (navigator as any).gpu.requestAdapter();
+    webgpuAvailable = adapter !== null;
+    return webgpuAvailable;
+  } catch {
+    webgpuAvailable = false;
+    return false;
+  }
+}
 
 export function useAIInference() {
   var logger = useLogger("AIInference");
@@ -21,6 +47,7 @@ export function useAIInference() {
   var error = ref<string | null>(null);
   var downloadedMB = ref(0);
   var totalMB = ref(0);
+  var backend = ref<"webgpu" | "wasm" | null>(null);
 
   var isLoading = computed(function computeIsLoading() {
     return status.value === "loading";
@@ -38,31 +65,14 @@ export function useAIInference() {
     }
   }
 
-  async function loadModelWithWebGPU() {
-    var { pipeline } = await import("@huggingface/transformers");
-    return pipeline("text-generation", MODEL_ID, {
-      dtype: "q4",
-      device: "webgpu",
-      progress_callback: handleProgress,
-    });
-  }
-
-  async function loadModelWithWasm() {
-    var { pipeline } = await import("@huggingface/transformers");
-    return pipeline("text-generation", MODEL_ID, {
-      dtype: "q4",
-      progress_callback: handleProgress,
-    });
-  }
-
-  async function loadModel() {
+  function loadModel() {
     if (modelInstance) {
       status.value = "ready";
-      return await Promise.resolve(modelInstance);
+      return Promise.resolve(modelInstance);
     }
 
     if (loadingPromise) {
-      return await loadingPromise;
+      return loadingPromise;
     }
 
     status.value = "loading";
@@ -70,36 +80,70 @@ export function useAIInference() {
     logger.info("Starting model load");
 
     loadingPromise = (async function doLoadModel() {
+      var { pipeline } = await import("@huggingface/transformers");
+
+      // Check WebGPU availability BEFORE downloading
+      var hasWebGPU = await checkWebGPU();
+      logger.info("WebGPU available:", hasWebGPU);
+
       try {
-        logger.debug("Attempting WebGPU inference");
-        modelInstance = await loadModelWithWebGPU();
+        if (hasWebGPU) {
+          logger.debug("Loading with WebGPU backend");
+          backend.value = "webgpu";
+          modelInstance = await pipeline("text-generation", MODEL_ID, {
+            dtype: "q4",
+            device: "webgpu",
+            progress_callback: handleProgress,
+          });
+        } else {
+          logger.debug("Loading with WASM backend (WebGPU not available)");
+          backend.value = "wasm";
+          modelInstance = await pipeline("text-generation", MODEL_ID, {
+            dtype: "q4",
+            device: "wasm",
+            progress_callback: handleProgress,
+          });
+        }
+
         status.value = "ready";
         progress.value = 100;
-        logger.info("Model loaded successfully with WebGPU");
+        logger.info("Model loaded successfully with", backend.value);
         return modelInstance;
-      } catch (webgpuError) {
-        logger.warn(
-          "WebGPU failed, falling back to WASM",
-          webgpuError instanceof Error ? webgpuError.message : webgpuError,
-        );
-
-        // Fallback to WASM if WebGPU fails
-        try {
-          modelInstance = await loadModelWithWasm();
-          status.value = "ready";
-          progress.value = 100;
-          logger.info("Model loaded successfully with WASM fallback");
-          return modelInstance;
-        } catch (fallbackError) {
-          status.value = "error";
-          error.value =
-            fallbackError instanceof Error
-              ? fallbackError.message
-              : "Failed to load AI model";
-          loadingPromise = null;
-          logger.error("Model load failed", error.value);
-          throw fallbackError;
+      } catch (loadError) {
+        // If WebGPU was attempted but failed, try WASM fallback
+        if (hasWebGPU && backend.value === "webgpu") {
+          logger.warn("WebGPU load failed, trying WASM fallback");
+          try {
+            backend.value = "wasm";
+            modelInstance = await pipeline("text-generation", MODEL_ID, {
+              dtype: "q4",
+              device: "wasm",
+              progress_callback: handleProgress,
+            });
+            status.value = "ready";
+            progress.value = 100;
+            logger.info("Model loaded with WASM fallback");
+            return modelInstance;
+          } catch (wasmError) {
+            status.value = "error";
+            error.value =
+              wasmError instanceof Error
+                ? wasmError.message
+                : "Failed to load AI model";
+            loadingPromise = null;
+            logger.error("WASM fallback also failed", error.value);
+            throw wasmError;
+          }
         }
+
+        status.value = "error";
+        error.value =
+          loadError instanceof Error
+            ? loadError.message
+            : "Failed to load AI model";
+        loadingPromise = null;
+        logger.error("Model load failed", error.value);
+        throw loadError;
       }
     })();
 
@@ -125,9 +169,20 @@ export function useAIInference() {
     return output[0]?.generated_text ?? "";
   }
 
+  // Check WebGPU without loading model - useful for UI hints
+  async function checkBackendSupport() {
+    var hasWebGPU = await checkWebGPU();
+    return {
+      webgpu: hasWebGPU,
+      wasm: true, // WASM is always available in modern browsers
+      recommended: hasWebGPU ? "webgpu" : "wasm",
+    };
+  }
+
   return {
     loadModel,
     generate,
+    checkBackendSupport,
     progress,
     status,
     error,
@@ -135,5 +190,6 @@ export function useAIInference() {
     isReady,
     downloadedMB,
     totalMB,
+    backend,
   };
 }
