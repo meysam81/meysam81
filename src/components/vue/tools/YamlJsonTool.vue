@@ -6,7 +6,8 @@ import { useClipboard } from "@/composables/useClipboard";
 import { useDownload } from "@/composables/useDownload";
 import { useToolState } from "@/composables/useToolState";
 import { useDebounceFn } from "@/composables/useDebounce";
-import { useAIInference } from "@/composables/useAIInference";
+import { useAIInference, MODEL_SIZES } from "@/composables/useAIInference";
+import { useRemoteAI } from "@/composables/useRemoteAI";
 import { usePirsch } from "@/composables/usePirsch";
 import AIToggle from "@/components/vue/ui/AIToggle.vue";
 import AILoadingBar from "@/components/vue/ui/AILoadingBar.vue";
@@ -83,6 +84,7 @@ var {
   downloadedMB,
   totalMB,
 } = useAIInference();
+var remoteAI = useRemoteAI();
 var { trackAIToggleOn, trackAIModelLoaded, trackAIQuery, trackAIError } =
   usePirsch();
 
@@ -99,6 +101,7 @@ var aiBackendInfo = ref<{
   recommended: string;
   estimatedSizeMB: number;
 } | null>(null);
+var currentAITier = ref<"local" | "remote" | null>(null);
 
 var inputText = ref("");
 var outputText = ref("");
@@ -543,14 +546,31 @@ async function handleDownloadAIModel() {
   }
 }
 
+function handleRemoteAIOnce() {
+  remoteAI.setConsent("once");
+  showAIDownloadPrompt.value = false;
+}
+
+function handleRemoteAIAlways() {
+  remoteAI.setConsent("always");
+  showAIDownloadPrompt.value = false;
+}
+
 async function explainError() {
-  if (!isReady.value || !error.value) {
+  if (!error.value) {
+    return;
+  }
+
+  // Must have either local AI ready or remote consent
+  if (!isReady.value && !remoteAI.hasConsent()) {
+    showAIDownloadPrompt.value = true;
     return;
   }
 
   aiIsProcessing.value = true;
   aiExplanation.value = null;
   aiError.value = null;
+  currentAITier.value = null;
 
   try {
     var format = currentFormat.value?.toUpperCase() || "YAML/JSON";
@@ -563,7 +583,24 @@ ${inputText.value.slice(0, 500)}
 
 Explanation:`;
 
-    var result = await generate(prompt, { maxTokens: 100, temperature: 0.3 });
+    var result: string;
+
+    // Tier 1: Try local AI first
+    if (isReady.value) {
+      currentAITier.value = "local";
+      result = await generate(prompt, { maxTokens: 100, temperature: 0.3 });
+      trackAIQuery("yaml-json-explain-local");
+    }
+    // Tier 2: Fall back to remote AI
+    else if (remoteAI.hasConsent()) {
+      currentAITier.value = "remote";
+      result = await remoteAI.generate(prompt, { maxTokens: 100 });
+      trackAIQuery("yaml-json-explain-remote");
+    } else {
+      aiError.value = "Please select an AI option to continue.";
+      showAIDownloadPrompt.value = true;
+      return;
+    }
 
     // Extract explanation (remove the prompt echo if present)
     var explanation = result.replace(prompt, "").trim();
@@ -572,7 +609,6 @@ Explanation:`;
     }
 
     aiExplanation.value = explanation || "Could not generate explanation.";
-    trackAIQuery("yaml-json-explain");
   } catch (e) {
     aiError.value = "Failed to explain error. Please try again.";
     trackAIError("yaml-json", e instanceof Error ? e.message : "unknown");
@@ -582,13 +618,20 @@ Explanation:`;
 }
 
 async function suggestFix() {
-  if (!isReady.value || !error.value) {
+  if (!error.value) {
+    return;
+  }
+
+  // Must have either local AI ready or remote consent
+  if (!isReady.value && !remoteAI.hasConsent()) {
+    showAIDownloadPrompt.value = true;
     return;
   }
 
   aiIsProcessing.value = true;
   aiFixSuggestion.value = null;
   aiError.value = null;
+  currentAITier.value = null;
 
   try {
     var format = currentFormat.value?.toUpperCase() || "YAML";
@@ -601,7 +644,22 @@ Error: ${error.value.message}
 
 Fixed ${format}:`;
 
-    var result = await generate(prompt, { maxTokens: 500, temperature: 0.1 });
+    var result: string;
+
+    // Tier 1: Try local AI first
+    if (isReady.value) {
+      currentAITier.value = "local";
+      result = await generate(prompt, { maxTokens: 500, temperature: 0.1 });
+    }
+    // Tier 2: Fall back to remote AI
+    else if (remoteAI.hasConsent()) {
+      currentAITier.value = "remote";
+      result = await remoteAI.generate(prompt, { maxTokens: 500 });
+    } else {
+      aiError.value = "Please select an AI option to continue.";
+      showAIDownloadPrompt.value = true;
+      return;
+    }
 
     // Extract fix (remove prompt echo)
     var fix = result.replace(prompt, "").trim();
@@ -618,7 +676,11 @@ Fixed ${format}:`;
         jsyaml.load(fix);
       }
       aiFixSuggestion.value = fix;
-      trackAIQuery("yaml-json-fix");
+      var trackKey =
+        currentAITier.value === "local"
+          ? "yaml-json-fix-local"
+          : "yaml-json-fix-remote";
+      trackAIQuery(trackKey);
     } catch {
       aiError.value = "AI suggestion was not valid. Try manual fixes.";
     }
@@ -679,12 +741,45 @@ onMounted(function handleMount() {
       <AIPrivacyNotice v-if="aiModeEnabled" />
 
       <div v-if="showAIDownloadPrompt" class="ai-download-prompt">
-        <p>
-          Download AI model (~{{ aiBackendInfo?.estimatedSizeMB || 600 }}MB) for
-          error explanations and auto-fix?
+        <p class="ai-prompt-heading">
+          Choose AI option for error explanations and auto-fix:
         </p>
-        <button class="ai-download-btn" @click="handleDownloadAIModel">
-          Download AI Model
+
+        <!-- Tier 1: Download Local AI -->
+        <button
+          class="ai-tier-btn ai-tier-local"
+          @click="handleDownloadAIModel"
+        >
+          <span class="ai-tier-icon">💻</span>
+          <span class="ai-tier-info">
+            <strong
+              >Download Local AI (~{{
+                aiBackendInfo?.estimatedSizeMB || 75
+              }}MB)</strong
+            >
+            <small>Runs 100% in your browser, no data sent</small>
+          </span>
+        </button>
+
+        <!-- Tier 2: Remote AI (once) -->
+        <button class="ai-tier-btn ai-tier-remote" @click="handleRemoteAIOnce">
+          <span class="ai-tier-icon">☁️</span>
+          <span class="ai-tier-info">
+            <strong>Use Remote AI (once)</strong>
+            <small>Sends text to HuggingFace API</small>
+          </span>
+        </button>
+
+        <!-- Tier 2: Remote AI (always) -->
+        <button
+          class="ai-tier-btn ai-tier-remote-always"
+          @click="handleRemoteAIAlways"
+        >
+          <span class="ai-tier-icon">🔄</span>
+          <span class="ai-tier-info">
+            <strong>Enable Remote AI (always)</strong>
+            <small>Remember my preference</small>
+          </span>
         </button>
       </div>
 
@@ -831,8 +926,11 @@ onMounted(function handleMount() {
           <span>{{ error.message }}</span>
         </div>
 
-        <!-- AI Actions - show when there's an error and AI is ready -->
-        <div v-if="aiModeEnabled && isReady && error" class="ai-actions">
+        <!-- AI Actions - show when there's an error and AI is available (local or remote) -->
+        <div
+          v-if="aiModeEnabled && (isReady || remoteAI.hasConsent()) && error"
+          class="ai-actions"
+        >
           <button
             class="ai-action-btn"
             :disabled="aiIsProcessing"
@@ -847,6 +945,13 @@ onMounted(function handleMount() {
           >
             <span class="sparkles-icon">✨</span> Auto-Fix
           </button>
+          <span
+            v-if="currentAITier"
+            class="ai-tier-badge"
+            :class="'tier-' + currentAITier"
+          >
+            {{ currentAITier === "local" ? "Local AI" : "Remote AI" }}
+          </span>
         </div>
 
         <!-- AI Processing -->
@@ -1502,13 +1607,78 @@ onMounted(function handleMount() {
   padding: var(--space-md);
   background: var(--color-surface);
   border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.ai-prompt-heading {
+  margin: 0 0 var(--space-xs) 0;
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
   text-align: center;
 }
 
-.ai-download-prompt p {
-  margin-bottom: var(--space-sm);
-  color: var(--color-text-muted);
+.ai-tier-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  text-align: left;
+  transition:
+    border-color 0.2s,
+    background 0.2s;
+}
+
+.ai-tier-btn:hover {
+  border-color: var(--color-accent);
+  background: var(--color-bg-elevated);
+}
+
+.ai-tier-icon {
+  font-size: var(--text-lg);
+}
+
+.ai-tier-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ai-tier-info strong {
   font-size: var(--text-sm);
+  color: var(--color-text);
+}
+
+.ai-tier-info small {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.ai-tier-local {
+  border-color: rgba(16, 185, 129, 0.3);
+  background: rgba(16, 185, 129, 0.05);
+}
+
+.ai-tier-local:hover {
+  border-color: #10b981;
+}
+
+.ai-tier-remote {
+  border-color: rgba(245, 158, 11, 0.3);
+  background: rgba(245, 158, 11, 0.05);
+}
+
+.ai-tier-remote:hover {
+  border-color: #f59e0b;
+}
+
+.ai-tier-remote-always {
+  opacity: 0.8;
 }
 
 .ai-download-btn {
@@ -1519,6 +1689,25 @@ onMounted(function handleMount() {
   border: none;
   cursor: pointer;
   font-weight: 500;
+}
+
+/* AI Tier Badge */
+.ai-tier-badge {
+  display: inline-block;
+  padding: 2px var(--space-xs);
+  font-size: var(--text-xs);
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+}
+
+.ai-tier-badge.tier-local {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+}
+
+.ai-tier-badge.tier-remote {
+  background: rgba(245, 158, 11, 0.2);
+  color: #f59e0b;
 }
 
 .ai-actions {
