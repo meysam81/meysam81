@@ -7,6 +7,7 @@ import SeriesBanner from "@/components/SeriesBanner.astro";
 import SeriesNav from "@/components/SeriesNav.astro";
 import type { SeriesInfo } from "@/utils/series";
 import SummarizeButton from "@/components/vue/SummarizeButton.vue";
+import PostChat from "@/components/vue/PostChat.vue";
 
 interface Props {
   title: string;
@@ -342,6 +343,8 @@ var fullURL = canonicalURL.toString();
       <div class="post-content">
         <slot />
       </div>
+
+      <PostChat client:only="vue" />
 
       {seriesInfo && <SeriesNav seriesInfo={seriesInfo} />}
 
