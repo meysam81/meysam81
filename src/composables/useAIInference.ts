@@ -80,7 +80,11 @@ export function useAIInference() {
     logger.info("Starting model load");
 
     loadingPromise = (async function doLoadModel() {
-      var { pipeline } = await import("@huggingface/transformers");
+      var { pipeline, env } = await import("@huggingface/transformers");
+
+      // Disable multi-threading to avoid SharedArrayBuffer requirement
+      // (SharedArrayBuffer requires Cross-Origin-Isolation headers)
+      env.backends.onnx.wasm.numThreads = 1;
 
       // Check WebGPU availability BEFORE downloading
       var hasWebGPU = await checkWebGPU();
