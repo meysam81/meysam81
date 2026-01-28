@@ -1,4 +1,4 @@
-// Browser-based LLM inference using Transformers.js + Qwen 2.5 0.5B
+// Browser-based LLM inference using Transformers.js + Qwen3
 // Features:
 // - Lazy model loading (on-demand)
 // - Progress tracking for download UI
@@ -8,7 +8,9 @@
 import { ref, computed } from "vue";
 import { useLogger } from "@/composables/useLogger";
 
-var MODEL_ID = "Qwen/Qwen2.5-0.5B-Instruct";
+// Use onnx-community models - they have pre-converted ONNX files for Transformers.js
+// Options: onnx-community/Qwen3-0.6B-ONNX (~400MB q4), onnx-community/Qwen3-1.7B-ONNX (~1GB q4)
+var MODEL_ID = "onnx-community/Qwen3-0.6B-ONNX";
 var modelInstance: any = null;
 var loadingPromise: Promise<any> | null = null;
 
