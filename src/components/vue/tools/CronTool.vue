@@ -7,7 +7,8 @@ import { useClipboard } from "@/composables/useClipboard";
 import { useToolState } from "@/composables/useToolState";
 import { useDebounceFn } from "@/composables/useDebounce";
 import { useToast } from "@/composables/useToast";
-import { useAIInference } from "@/composables/useAIInference";
+import { useAIInference, MODEL_SIZES } from "@/composables/useAIInference";
+import { useRemoteAI } from "@/composables/useRemoteAI";
 import { usePirsch } from "@/composables/usePirsch";
 import AIToggle from "@/components/vue/ui/AIToggle.vue";
 import AILoadingBar from "@/components/vue/ui/AILoadingBar.vue";
@@ -54,6 +55,7 @@ var {
   totalMB,
   backend,
 } = useAIInference();
+var remoteAI = useRemoteAI();
 var { trackAIToggleOn, trackAIModelLoaded, trackAIQuery, trackAIError } =
   usePirsch();
 
@@ -165,8 +167,8 @@ var handleEnglishInput = useDebounceFn(function handleEnglish(): void {
     return;
   }
 
-  // Use AI if enabled and ready
-  if (aiModeEnabled.value && isReady.value) {
+  // Use AI if enabled (local or remote)
+  if (aiModeEnabled.value && (isReady.value || remoteAI.hasConsent())) {
     generateWithAI(text);
     return;
   }
@@ -205,46 +207,75 @@ async function handleDownloadAIModel() {
   }
 }
 
-async function generateWithAI(input: string) {
-  if (!isReady.value) {
-    return;
+function handleRemoteConsent(level: "once" | "always") {
+  showAIDownloadPrompt.value = false;
+  remoteAI.setConsent(level);
+
+  // Process any pending input
+  var text = englishInput.value.trim();
+  if (text) {
+    generateWithAI(text);
+  }
+}
+
+function parseAndValidateCronResult(result: string): boolean {
+  // Extract cron expression from result (handle model output format)
+  var cronMatch = result.match(
+    /(\*|[0-9,\-\/]+)\s+(\*|[0-9,\-\/]+)\s+(\*|[0-9,\-\/]+)\s+(\*|[0-9,\-\/]+)\s+(\*|[0-9,\-\/]+)/,
+  );
+
+  if (cronMatch) {
+    var extractedCron = cronMatch[0].trim();
+
+    // Validate with cron-parser before using
+    var validation = validateCron(extractedCron);
+    if (validation.valid) {
+      currentExpression.value = extractedCron;
+      trackAIQuery("cron");
+      return true;
+    }
+    aiError.value =
+      "AI generated an invalid cron expression. Try being more specific.";
+    return false;
   }
 
+  aiError.value = "Could not parse AI response. Try rephrasing your schedule.";
+  return false;
+}
+
+async function generateWithAI(input: string) {
   aiIsProcessing.value = true;
   aiError.value = null;
   clearMessages();
 
-  try {
-    var prompt = `Convert this natural language schedule to a cron expression. Only output the cron expression, nothing else.
+  var prompt = `Convert this natural language schedule to a cron expression. Only output the cron expression, nothing else.
 
 Input: "${input}"
 Cron expression:`;
 
-    var result = await generate(prompt, { maxTokens: 50, temperature: 0.1 });
-
-    // Extract cron expression from result (handle model output format)
-    var cronMatch = result.match(
-      /(\*|[0-9,\-\/]+)\s+(\*|[0-9,\-\/]+)\s+(\*|[0-9,\-\/]+)\s+(\*|[0-9,\-\/]+)\s+(\*|[0-9,\-\/]+)/,
-    );
-
-    if (cronMatch) {
-      var extractedCron = cronMatch[0].trim();
-
-      // Validate with cron-parser before using
-      var validation = validateCron(extractedCron);
-      if (validation.valid) {
-        currentExpression.value = extractedCron;
-        trackAIQuery("cron");
-      } else {
-        aiError.value =
-          "AI generated an invalid cron expression. Try being more specific.";
-      }
-    } else {
-      aiError.value =
-        "Could not parse AI response. Try rephrasing your schedule.";
+  try {
+    // Tier 1: Try local AI first
+    if (isReady.value) {
+      var localResult = await generate(prompt, {
+        maxTokens: 50,
+        temperature: 0.1,
+      });
+      parseAndValidateCronResult(localResult);
+      return;
     }
+
+    // Tier 2: Try remote AI if consent given
+    if (remoteAI.hasConsent()) {
+      var remoteResult = await remoteAI.generate(prompt, { maxTokens: 50 });
+      parseAndValidateCronResult(remoteResult);
+      return;
+    }
+
+    // Neither available - should not reach here if UI is correct
+    aiError.value =
+      "AI not available. Download local model or enable remote AI.";
   } catch (e) {
-    aiError.value = "AI generation failed. Please try again.";
+    aiError.value = e instanceof Error ? e.message : "AI processing failed";
     trackAIError("cron", e instanceof Error ? e.message : "unknown");
   } finally {
     aiIsProcessing.value = false;
@@ -329,21 +360,55 @@ onMounted(function handleMount() {
 
       <!-- Download prompt -->
       <div v-if="showAIDownloadPrompt" class="ai-download-prompt">
-        <p>
-          Download AI model (~{{ aiBackendInfo?.estimatedSizeMB || 600 }}MB) for
-          smarter natural language understanding?
+        <p class="ai-prompt-title">
+          Choose AI mode for smarter natural language understanding:
         </p>
-        <div v-if="aiBackendInfo" class="ai-backend-info">
-          <span v-if="aiBackendInfo.webgpu" class="backend-badge webgpu">
-            ⚡ WebGPU available (fast)
-          </span>
-          <span v-else class="backend-badge wasm">
-            🔧 Using WASM (slower but works everywhere)
-          </span>
+
+        <!-- Local AI Option -->
+        <div class="ai-option ai-option-local">
+          <div class="ai-option-header">
+            <span class="ai-option-icon">💻</span>
+            <span class="ai-option-title">Local AI (Recommended)</span>
+          </div>
+          <p class="ai-option-desc">
+            Download ~{{ aiBackendInfo?.estimatedSizeMB || MODEL_SIZES.wasm }}MB
+            model. Runs entirely on your device, no data sent anywhere.
+          </p>
+          <div v-if="aiBackendInfo" class="ai-backend-info">
+            <span v-if="aiBackendInfo.webgpu" class="backend-badge webgpu">
+              ⚡ WebGPU (~{{ MODEL_SIZES.webgpu }}MB, fast)
+            </span>
+            <span v-else class="backend-badge wasm">
+              🔧 WASM (~{{ MODEL_SIZES.wasm }}MB, compatible)
+            </span>
+          </div>
+          <button class="ai-download-btn" @click="handleDownloadAIModel">
+            Download AI Model
+          </button>
         </div>
-        <button class="ai-download-btn" @click="handleDownloadAIModel">
-          Download AI Model
-        </button>
+
+        <!-- Remote AI Option -->
+        <div class="ai-option ai-option-remote">
+          <div class="ai-option-header">
+            <span class="ai-option-icon">☁️</span>
+            <span class="ai-option-title">Remote AI</span>
+          </div>
+          <p class="ai-option-desc">
+            Use cloud API. Your input is sent to HuggingFace/Cloudflare for
+            processing.
+          </p>
+          <div class="ai-remote-buttons">
+            <button class="ai-remote-btn" @click="handleRemoteConsent('once')">
+              Use Once
+            </button>
+            <button
+              class="ai-remote-btn ai-remote-btn-always"
+              @click="handleRemoteConsent('always')"
+            >
+              Enable Always
+            </button>
+          </div>
+        </div>
       </div>
 
       <!-- Loading bar -->
@@ -626,13 +691,59 @@ onMounted(function handleMount() {
   padding: var(--space-md);
   background: var(--color-surface);
   border-radius: var(--radius-md);
-  text-align: center;
 }
 
-.ai-download-prompt p {
-  margin-bottom: var(--space-sm);
-  color: var(--color-text-muted);
+.ai-prompt-title {
+  text-align: center;
+  margin-bottom: var(--space-md);
+  color: var(--color-text);
   font-size: var(--text-sm);
+  font-weight: 500;
+}
+
+.ai-option {
+  padding: var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-sm);
+}
+
+.ai-option:last-child {
+  margin-bottom: 0;
+}
+
+.ai-option-local {
+  background: rgba(34, 197, 94, 0.05);
+  border-color: rgba(34, 197, 94, 0.2);
+}
+
+.ai-option-remote {
+  background: rgba(59, 130, 246, 0.05);
+  border-color: rgba(59, 130, 246, 0.2);
+}
+
+.ai-option-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-xs);
+}
+
+.ai-option-icon {
+  font-size: var(--text-lg);
+}
+
+.ai-option-title {
+  font-weight: 600;
+  color: var(--color-text);
+  font-size: var(--text-sm);
+}
+
+.ai-option-desc {
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+  margin-bottom: var(--space-sm);
+  line-height: 1.4;
 }
 
 .ai-download-btn {
@@ -645,10 +756,45 @@ onMounted(function handleMount() {
   font-weight: 500;
   transition: opacity 0.2s;
   font-family: inherit;
+  width: 100%;
 }
 
 .ai-download-btn:hover {
   opacity: 0.9;
+}
+
+.ai-remote-buttons {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.ai-remote-btn {
+  flex: 1;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  font-weight: 500;
+  font-size: var(--text-xs);
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.ai-remote-btn:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.ai-remote-btn-always {
+  background: rgba(59, 130, 246, 0.1);
+  border-color: rgba(59, 130, 246, 0.3);
+  color: var(--color-accent);
+}
+
+.ai-remote-btn-always:hover {
+  background: rgba(59, 130, 246, 0.2);
 }
 
 .ai-backend-info {
