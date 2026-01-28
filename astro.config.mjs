@@ -88,7 +88,13 @@ export default defineConfig({
   vite: {
     plugins: [
       tailwindcss(),
-      VitePWA(),
+      VitePWA({
+        workbox: {
+          // Exclude large WASM files from service worker precaching
+          // AI model files are loaded on-demand, not precached
+          globIgnores: ["**/*.wasm", "**/ort-*.js"],
+        },
+      }),
       compression({
         algorithm: "brotliCompress",
         exclude: [/\.(br)$/, /\.(gz)$/],

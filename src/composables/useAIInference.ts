@@ -16,14 +16,49 @@ var modelInstance: any = null;
 var loadingPromise: Promise<any> | null = null;
 var webgpuChecked = false;
 var webgpuAvailable = false;
+var envConfigured = false;
+
+// Configure ONNX environment for single-threaded WASM (no SharedArrayBuffer required)
+async function configureOnnxEnv() {
+  if (envConfigured) {
+    return;
+  }
+
+  var { env } = await import("@huggingface/transformers");
+
+  // Critical: Disable multi-threading to avoid SharedArrayBuffer requirement
+  // SharedArrayBuffer requires Cross-Origin-Isolation headers (COOP/COEP)
+  env.backends.onnx.wasm.numThreads = 1;
+
+  // Disable web worker proxy - this prevents loading the threaded WASM
+  env.backends.onnx.wasm.proxy = false;
+
+  envConfigured = true;
+}
+
+// Check if Cross-Origin-Isolation is enabled (required for SharedArrayBuffer)
+function isCrossOriginIsolated(): boolean {
+  if (typeof self === "undefined") {
+    return false;
+  }
+  return (self as any).crossOriginIsolated === true;
+}
 
 // Check WebGPU availability once, cache result
+// Note: WebGPU requires Cross-Origin-Isolation for the threaded WASM backend
 async function checkWebGPU(): Promise<boolean> {
   if (webgpuChecked) {
     return webgpuAvailable;
   }
 
   webgpuChecked = true;
+
+  // WebGPU with onnxruntime requires SharedArrayBuffer, which needs
+  // Cross-Origin-Isolation (COOP/COEP headers)
+  if (!isCrossOriginIsolated()) {
+    webgpuAvailable = false;
+    return false;
+  }
 
   if (typeof navigator === "undefined" || !("gpu" in navigator)) {
     webgpuAvailable = false;
@@ -80,11 +115,11 @@ export function useAIInference() {
     logger.info("Starting model load");
 
     loadingPromise = (async function doLoadModel() {
-      var { pipeline, env } = await import("@huggingface/transformers");
+      // Configure ONNX environment BEFORE importing pipeline
+      // This must happen first to prevent loading threaded WASM
+      await configureOnnxEnv();
 
-      // Disable multi-threading to avoid SharedArrayBuffer requirement
-      // (SharedArrayBuffer requires Cross-Origin-Isolation headers)
-      env.backends.onnx.wasm.numThreads = 1;
+      var { pipeline } = await import("@huggingface/transformers");
 
       // Check WebGPU availability BEFORE downloading
       var hasWebGPU = await checkWebGPU();
@@ -175,11 +210,22 @@ export function useAIInference() {
 
   // Check WebGPU without loading model - useful for UI hints
   async function checkBackendSupport() {
+    var crossOriginIsolated = isCrossOriginIsolated();
     var hasWebGPU = await checkWebGPU();
+
+    var webgpuReason = "Available";
+    if (!crossOriginIsolated) {
+      webgpuReason = "Cross-Origin-Isolation not enabled";
+    } else if (!hasWebGPU) {
+      webgpuReason = "WebGPU not supported by browser";
+    }
+
     return {
       webgpu: hasWebGPU,
       wasm: true, // WASM is always available in modern browsers
       recommended: hasWebGPU ? "webgpu" : "wasm",
+      crossOriginIsolated: crossOriginIsolated,
+      webgpuReason: webgpuReason,
     };
   }
 
