@@ -1,31 +1,28 @@
-// Browser-based LLM inference using Transformers.js + Qwen3
+// Browser-based LLM inference using Transformers.js + SmolLM2
 // Features:
 // - WebGPU detection BEFORE download
 // - Lazy model loading (on-demand)
 // - Progress tracking for download UI
 // - WASM fallback for browsers without WebGPU
 // - Singleton pattern (one model instance)
+// - IndexedDB caching for persistence between sessions
 
 import { ref, computed } from "vue";
 import { useLogger } from "@/composables/useLogger";
 
-// Use onnx-community models - they have pre-converted ONNX files for Transformers.js
-// Model: onnx-community/Qwen3-0.6B-ONNX
-// - q4f16 (570MB): WebGPU only (uses MatMulNBits)
-// - q4 (919MB): WebGPU only (uses MatMulNBits)
-// - int8 (618MB): WASM compatible
-// - fp16 (1.2GB): Both backends
-var MODEL_ID = "onnx-community/Qwen3-0.6B-ONNX";
+// SmolLM2-135M-Instruct - much smaller model (~70MB vs 570MB)
+// Pre-converted ONNX files available on Hugging Face
+var MODEL_ID = "HuggingFaceTB/SmolLM2-135M-Instruct";
 
 // Quantization types by backend compatibility
-// WebGPU supports MatMulNBits (q4, q4f16), WASM does not
-var WEBGPU_DTYPE = "q4f16" as const; // Smallest WebGPU-compatible (570MB)
-var WASM_DTYPE = "int8" as const; // WASM-compatible, no MatMulNBits (618MB)
+// WebGPU supports MatMulNBits (q4, q4f16), WASM works better with q8
+var WEBGPU_DTYPE = "q4f16" as const; // Smallest WebGPU-compatible (~75MB)
+var WASM_DTYPE = "q8" as const; // q8 works better for this model (~140MB)
 
 // Model sizes in MB for UI display
 export var MODEL_SIZES = {
-  webgpu: 570, // q4f16
-  wasm: 618, // int8
+  webgpu: 75, // q4f16
+  wasm: 140, // q8
 } as const;
 var modelInstance: any = null;
 var loadingPromise: Promise<any> | null = null;
@@ -41,6 +38,11 @@ async function configureOnnxEnv() {
 
   var { env } = await import("@huggingface/transformers");
 
+  // Enable caching in IndexedDB (default in v3, but be explicit)
+  // Setting cacheDir to undefined uses IndexedDB by default in browser
+  env.cacheDir = undefined;
+  env.allowLocalModels = true;
+
   // Critical: Disable multi-threading to avoid SharedArrayBuffer requirement
   // SharedArrayBuffer requires Cross-Origin-Isolation headers (COOP/COEP)
   env.backends.onnx.wasm.numThreads = 1;
@@ -49,6 +51,22 @@ async function configureOnnxEnv() {
   env.backends.onnx.wasm.proxy = false;
 
   envConfigured = true;
+}
+
+// Check if model is cached in IndexedDB
+async function checkModelCached(): Promise<boolean> {
+  try {
+    // Check if model exists in IndexedDB cache
+    // Transformers.js uses IndexedDB for caching in browser environments
+    var databases = await indexedDB.databases();
+    return databases.some(function checkDb(db) {
+      return (
+        db.name?.includes("transformers") || db.name?.includes("huggingface")
+      );
+    });
+  } catch {
+    return false;
+  }
 }
 
 // Check if Cross-Origin-Isolation is enabled (required for SharedArrayBuffer)
@@ -257,6 +275,7 @@ export function useAIInference() {
     loadModel,
     generate,
     checkBackendSupport,
+    checkModelCached,
     progress,
     status,
     error,
