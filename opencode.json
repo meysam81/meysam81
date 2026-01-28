@@ -1,0 +1,12 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "data-for-seo": {
+      "headers": {
+        "authorization": "Basic {env:DATA_FOR_SEO_CREDENTIALS}"
+      },
+      "type": "remote",
+      "url": "https://mcp.dataforseo.com/http"
+    }
+  }
+}
