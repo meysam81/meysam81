@@ -7,6 +7,11 @@ import { useClipboard } from "@/composables/useClipboard";
 import { useToolState } from "@/composables/useToolState";
 import { useDebounceFn } from "@/composables/useDebounce";
 import { useToast } from "@/composables/useToast";
+import { useAIInference } from "@/composables/useAIInference";
+import { usePirsch } from "@/composables/usePirsch";
+import AIToggle from "@/components/vue/ui/AIToggle.vue";
+import AILoadingBar from "@/components/vue/ui/AILoadingBar.vue";
+import AIPrivacyNotice from "@/components/vue/ui/AIPrivacyNotice.vue";
 
 interface Props {
   presets: Array<{ label: string; expression: string }>;
@@ -25,6 +30,32 @@ var currentExpression = ref("* * * * *");
 var showAllExamples = ref(false);
 var runsExpanded = ref(true);
 var { visible: shareToastVisible, show: showShareToast } = useToast();
+
+// AI Mode state
+var aiModeEnabled = ref(false);
+var aiIsProcessing = ref(false);
+var aiError = ref<string | null>(null);
+var showAIDownloadPrompt = ref(false);
+var aiBackendInfo = ref<{
+  webgpu: boolean;
+  wasm: boolean;
+  recommended: string;
+} | null>(null);
+
+var {
+  loadModel,
+  generate,
+  checkBackendSupport,
+  progress,
+  status,
+  isLoading,
+  isReady,
+  downloadedMB,
+  totalMB,
+  backend,
+} = useAIInference();
+var { trackAIToggleOn, trackAIModelLoaded, trackAIQuery, trackAIError } =
+  usePirsch();
 
 var humanReadable = computed(function computeHumanReadable() {
   try {
@@ -130,6 +161,13 @@ var handleEnglishInput = useDebounceFn(function handleEnglish(): void {
   var text = englishInput.value.trim();
   if (!text) {
     clearMessages();
+    aiError.value = null;
+    return;
+  }
+
+  // Use AI if enabled and ready
+  if (aiModeEnabled.value && isReady.value) {
+    generateWithAI(text);
     return;
   }
 
@@ -140,6 +178,78 @@ var handleEnglishInput = useDebounceFn(function handleEnglish(): void {
     setError('Could not parse. Try: "every 5 minutes", "daily at 9am"');
   }
 }, 300);
+
+async function handleAIToggle(enabled: boolean) {
+  aiModeEnabled.value = enabled;
+  aiError.value = null;
+  if (enabled) {
+    trackAIToggleOn("cron");
+    if (status.value === "idle") {
+      // Check backend support before showing download prompt
+      aiBackendInfo.value = await checkBackendSupport();
+      showAIDownloadPrompt.value = true;
+    }
+  } else {
+    showAIDownloadPrompt.value = false;
+  }
+}
+
+async function handleDownloadAIModel() {
+  showAIDownloadPrompt.value = false;
+  try {
+    await loadModel();
+    trackAIModelLoaded();
+  } catch (e) {
+    aiError.value = "Failed to load AI model. Please try again.";
+    trackAIError("cron", e instanceof Error ? e.message : "unknown");
+  }
+}
+
+async function generateWithAI(input: string) {
+  if (!isReady.value) {
+    return;
+  }
+
+  aiIsProcessing.value = true;
+  aiError.value = null;
+  clearMessages();
+
+  try {
+    var prompt = `Convert this natural language schedule to a cron expression. Only output the cron expression, nothing else.
+
+Input: "${input}"
+Cron expression:`;
+
+    var result = await generate(prompt, { maxTokens: 50, temperature: 0.1 });
+
+    // Extract cron expression from result (handle model output format)
+    var cronMatch = result.match(
+      /(\*|[0-9,\-\/]+)\s+(\*|[0-9,\-\/]+)\s+(\*|[0-9,\-\/]+)\s+(\*|[0-9,\-\/]+)\s+(\*|[0-9,\-\/]+)/,
+    );
+
+    if (cronMatch) {
+      var extractedCron = cronMatch[0].trim();
+
+      // Validate with cron-parser before using
+      var validation = validateCron(extractedCron);
+      if (validation.valid) {
+        currentExpression.value = extractedCron;
+        trackAIQuery("cron");
+      } else {
+        aiError.value =
+          "AI generated an invalid cron expression. Try being more specific.";
+      }
+    } else {
+      aiError.value =
+        "Could not parse AI response. Try rephrasing your schedule.";
+    }
+  } catch (e) {
+    aiError.value = "AI generation failed. Please try again.";
+    trackAIError("cron", e instanceof Error ? e.message : "unknown");
+  } finally {
+    aiIsProcessing.value = false;
+  }
+}
 
 var handleExpressionInput = useDebounceFn(function handleExpression(): void {
   var expr = expressionInput.value.trim();
@@ -207,6 +317,54 @@ onMounted(function handleMount() {
 
 <template>
   <div class="cron-tool">
+    <!-- AI Mode Section -->
+    <div class="ai-section">
+      <AIToggle
+        v-model="aiModeEnabled"
+        :disabled="aiIsProcessing"
+        @update:modelValue="handleAIToggle"
+      />
+
+      <AIPrivacyNotice v-if="aiModeEnabled" />
+
+      <!-- Download prompt -->
+      <div v-if="showAIDownloadPrompt" class="ai-download-prompt">
+        <p>
+          Download AI model (~{{ aiBackendInfo?.estimatedSizeMB || 600 }}MB) for
+          smarter natural language understanding?
+        </p>
+        <div v-if="aiBackendInfo" class="ai-backend-info">
+          <span v-if="aiBackendInfo.webgpu" class="backend-badge webgpu">
+            ⚡ WebGPU available (fast)
+          </span>
+          <span v-else class="backend-badge wasm">
+            🔧 Using WASM (slower but works everywhere)
+          </span>
+        </div>
+        <button class="ai-download-btn" @click="handleDownloadAIModel">
+          Download AI Model
+        </button>
+      </div>
+
+      <!-- Loading bar -->
+      <AILoadingBar
+        v-if="isLoading"
+        :progress="progress"
+        :downloadedMB="downloadedMB"
+        :totalMB="totalMB"
+      />
+
+      <!-- AI error message -->
+      <div v-if="aiError" class="ai-error">
+        {{ aiError }}
+      </div>
+
+      <!-- AI processing indicator -->
+      <div v-if="aiIsProcessing" class="ai-processing">
+        <span class="spinner"></span> AI is thinking...
+      </div>
+    </div>
+
     <!-- Mode Toggle -->
     <div class="mode-toggle">
       <button
@@ -454,6 +612,100 @@ onMounted(function handleMount() {
 </template>
 
 <style scoped>
+/* AI Section */
+.ai-section {
+  margin-bottom: var(--space-lg);
+  padding: var(--space-md);
+  background: var(--color-surface-elevated);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+}
+
+.ai-download-prompt {
+  margin-top: var(--space-md);
+  padding: var(--space-md);
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  text-align: center;
+}
+
+.ai-download-prompt p {
+  margin-bottom: var(--space-sm);
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+.ai-download-btn {
+  background: var(--color-accent);
+  color: var(--color-bg);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: opacity 0.2s;
+  font-family: inherit;
+}
+
+.ai-download-btn:hover {
+  opacity: 0.9;
+}
+
+.ai-backend-info {
+  margin-bottom: var(--space-sm);
+}
+
+.backend-badge {
+  display: inline-block;
+  padding: var(--space-xxs) var(--space-xs);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-xs);
+}
+
+.backend-badge.webgpu {
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+}
+
+.backend-badge.wasm {
+  background: rgba(234, 179, 8, 0.15);
+  color: #eab308;
+}
+
+.ai-error {
+  margin-top: var(--space-sm);
+  padding: var(--space-sm);
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: var(--radius-md);
+  color: #ef4444;
+  font-size: var(--text-sm);
+}
+
+.ai-processing {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-top: var(--space-sm);
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--color-border);
+  border-top-color: var(--color-accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /* Mode Toggle */
 .mode-toggle {
   display: flex;

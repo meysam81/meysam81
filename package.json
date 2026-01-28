@@ -3,6 +3,7 @@
     "@astrojs/rss": "^4.0.14",
     "@astrojs/sitemap": "^3.6.0",
     "@expressive-code/plugin-line-numbers": "^0.41.5",
+    "@huggingface/transformers": "^3.8.1",
     "@playform/compress": "^0.2.0",
     "altcha": "^2.3.0",
     "astro": "^5.16.6",

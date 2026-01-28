@@ -14,5 +14,13 @@
     "strictFunctionTypes": false,
     "strictNullChecks": false
   },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "developer-friendly-blog",
+    "social-media-presence",
+    "ignore",
+    "ralph-docs"
+  ],
   "extends": "astro/tsconfigs/base"
 }

@@ -1,0 +1,19 @@
+{
+  "embeds": [
+    {
+      "color": 5814783,
+      "description": "Body text with **markdown**",
+      "fields": [
+        {
+          "inline": true,
+          "name": "Field 1",
+          "value": "Content"
+        }
+      ],
+      "footer": {
+        "text": "Footer"
+      },
+      "title": "Title here"
+    }
+  ]
+}

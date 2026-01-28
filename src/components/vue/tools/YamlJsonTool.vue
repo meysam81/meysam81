@@ -6,6 +6,11 @@ import { useClipboard } from "@/composables/useClipboard";
 import { useDownload } from "@/composables/useDownload";
 import { useToolState } from "@/composables/useToolState";
 import { useDebounceFn } from "@/composables/useDebounce";
+import { useAIInference } from "@/composables/useAIInference";
+import { usePirsch } from "@/composables/usePirsch";
+import AIToggle from "@/components/vue/ui/AIToggle.vue";
+import AILoadingBar from "@/components/vue/ui/AILoadingBar.vue";
+import AIPrivacyNotice from "@/components/vue/ui/AIPrivacyNotice.vue";
 
 interface ParseError {
   message: string;
@@ -67,6 +72,33 @@ var { download } = useDownload();
 var { error, setError, clearMessages, logger } = useToolState({
   name: "YamlJsonTool",
 });
+var {
+  loadModel,
+  generate,
+  checkBackendSupport,
+  progress,
+  status,
+  isLoading,
+  isReady,
+  downloadedMB,
+  totalMB,
+} = useAIInference();
+var { trackAIToggleOn, trackAIModelLoaded, trackAIQuery, trackAIError } =
+  usePirsch();
+
+// AI state
+var aiModeEnabled = ref(false);
+var aiIsProcessing = ref(false);
+var aiError = ref<string | null>(null);
+var aiExplanation = ref<string | null>(null);
+var aiFixSuggestion = ref<string | null>(null);
+var showAIDownloadPrompt = ref(false);
+var aiBackendInfo = ref<{
+  webgpu: boolean;
+  wasm: boolean;
+  recommended: string;
+  estimatedSizeMB: number;
+} | null>(null);
 
 var inputText = ref("");
 var outputText = ref("");
@@ -484,6 +516,132 @@ function loadSampleJson(): void {
   handleInputChange();
 }
 
+// AI Functions
+async function handleAIToggle(enabled: boolean) {
+  aiModeEnabled.value = enabled;
+  if (enabled) {
+    trackAIToggleOn("yaml-json");
+    if (status.value === "idle") {
+      aiBackendInfo.value = await checkBackendSupport();
+      showAIDownloadPrompt.value = true;
+    }
+  } else {
+    // Clear AI-related state when disabled
+    aiExplanation.value = null;
+    aiFixSuggestion.value = null;
+  }
+}
+
+async function handleDownloadAIModel() {
+  showAIDownloadPrompt.value = false;
+  try {
+    await loadModel();
+    trackAIModelLoaded();
+  } catch (e) {
+    aiError.value = "Failed to load AI model. Please try again.";
+    trackAIError("yaml-json", e instanceof Error ? e.message : "unknown");
+  }
+}
+
+async function explainError() {
+  if (!isReady.value || !error.value) {
+    return;
+  }
+
+  aiIsProcessing.value = true;
+  aiExplanation.value = null;
+  aiError.value = null;
+
+  try {
+    var format = currentFormat.value?.toUpperCase() || "YAML/JSON";
+    var prompt = `You are a helpful assistant. Explain this ${format} parsing error in simple terms. Be concise (2-3 sentences max).
+
+Error: ${error.value.message}
+
+Input (first 500 chars):
+${inputText.value.slice(0, 500)}
+
+Explanation:`;
+
+    var result = await generate(prompt, { maxTokens: 100, temperature: 0.3 });
+
+    // Extract explanation (remove the prompt echo if present)
+    var explanation = result.replace(prompt, "").trim();
+    if (explanation.startsWith("Explanation:")) {
+      explanation = explanation.replace("Explanation:", "").trim();
+    }
+
+    aiExplanation.value = explanation || "Could not generate explanation.";
+    trackAIQuery("yaml-json-explain");
+  } catch (e) {
+    aiError.value = "Failed to explain error. Please try again.";
+    trackAIError("yaml-json", e instanceof Error ? e.message : "unknown");
+  } finally {
+    aiIsProcessing.value = false;
+  }
+}
+
+async function suggestFix() {
+  if (!isReady.value || !error.value) {
+    return;
+  }
+
+  aiIsProcessing.value = true;
+  aiFixSuggestion.value = null;
+  aiError.value = null;
+
+  try {
+    var format = currentFormat.value?.toUpperCase() || "YAML";
+    var prompt = `Fix this invalid ${format}. Only output the corrected ${format}, nothing else.
+
+Invalid input:
+${inputText.value.slice(0, 1000)}
+
+Error: ${error.value.message}
+
+Fixed ${format}:`;
+
+    var result = await generate(prompt, { maxTokens: 500, temperature: 0.1 });
+
+    // Extract fix (remove prompt echo)
+    var fix = result.replace(prompt, "").trim();
+    if (fix.startsWith(`Fixed ${format}:`)) {
+      fix = fix.replace(`Fixed ${format}:`, "").trim();
+    }
+
+    // Validate the fix
+    try {
+      if (format === "JSON") {
+        JSON.parse(fix);
+      } else {
+        // Use js-yaml to validate YAML
+        jsyaml.load(fix);
+      }
+      aiFixSuggestion.value = fix;
+      trackAIQuery("yaml-json-fix");
+    } catch {
+      aiError.value = "AI suggestion was not valid. Try manual fixes.";
+    }
+  } catch (e) {
+    aiError.value = "Failed to suggest fix. Please try again.";
+    trackAIError("yaml-json", e instanceof Error ? e.message : "unknown");
+  } finally {
+    aiIsProcessing.value = false;
+  }
+}
+
+function applyFix() {
+  if (aiFixSuggestion.value) {
+    inputText.value = aiFixSuggestion.value;
+    aiFixSuggestion.value = null;
+    aiExplanation.value = null;
+  }
+}
+
+function dismissFix() {
+  aiFixSuggestion.value = null;
+}
+
 watch(inputText, handleInputChange);
 watch(
   [optionMinify, optionIndent, optionSortKeys],
@@ -510,6 +668,34 @@ onMounted(function handleMount() {
 
 <template>
   <div class="yaml-json-tool">
+    <!-- AI Section -->
+    <div class="ai-section">
+      <AIToggle
+        v-model="aiModeEnabled"
+        :disabled="aiIsProcessing"
+        @update:modelValue="handleAIToggle"
+      />
+
+      <AIPrivacyNotice v-if="aiModeEnabled" />
+
+      <div v-if="showAIDownloadPrompt" class="ai-download-prompt">
+        <p>
+          Download AI model (~{{ aiBackendInfo?.estimatedSizeMB || 600 }}MB) for
+          error explanations and auto-fix?
+        </p>
+        <button class="ai-download-btn" @click="handleDownloadAIModel">
+          Download AI Model
+        </button>
+      </div>
+
+      <AILoadingBar
+        v-if="isLoading"
+        :progress="progress"
+        :downloadedMB="downloadedMB"
+        :totalMB="totalMB"
+      />
+    </div>
+
     <!-- Format Detection Banner -->
     <div class="format-banner">
       <span class="format-indicator" :class="currentFormat || ''">
@@ -644,6 +830,55 @@ onMounted(function handleMount() {
           </svg>
           <span>{{ error.message }}</span>
         </div>
+
+        <!-- AI Actions - show when there's an error and AI is ready -->
+        <div v-if="aiModeEnabled && isReady && error" class="ai-actions">
+          <button
+            class="ai-action-btn"
+            :disabled="aiIsProcessing"
+            @click="explainError"
+          >
+            <span class="sparkles-icon">✨</span> Explain Error
+          </button>
+          <button
+            class="ai-action-btn"
+            :disabled="aiIsProcessing"
+            @click="suggestFix"
+          >
+            <span class="sparkles-icon">✨</span> Auto-Fix
+          </button>
+        </div>
+
+        <!-- AI Processing -->
+        <div v-if="aiIsProcessing" class="ai-processing">
+          <span class="spinner"></span> AI is analyzing...
+        </div>
+
+        <!-- AI Explanation -->
+        <div v-if="aiExplanation" class="ai-explanation">
+          <h4>AI Explanation</h4>
+          <p>{{ aiExplanation }}</p>
+          <button class="ai-dismiss-btn" @click="aiExplanation = null">
+            Dismiss
+          </button>
+        </div>
+
+        <!-- AI Fix Suggestion -->
+        <div v-if="aiFixSuggestion" class="ai-fix-suggestion">
+          <h4>AI Suggested Fix</h4>
+          <pre class="ai-fix-preview">{{ aiFixSuggestion }}</pre>
+          <div class="ai-fix-actions">
+            <button class="ai-apply-btn" @click="applyFix">Apply Fix</button>
+            <button class="ai-dismiss-btn" @click="dismissFix">Dismiss</button>
+          </div>
+        </div>
+
+        <!-- AI Error -->
+        <div v-if="aiError" class="ai-error">
+          {{ aiError }}
+          <button class="ai-dismiss-btn" @click="aiError = null">×</button>
+        </div>
+
         <div v-else-if="currentData" class="success-message">
           <svg
             width="18"
@@ -1251,5 +1486,161 @@ onMounted(function handleMount() {
   color: var(--color-text-dim);
   text-transform: uppercase;
   letter-spacing: 0.05em;
+}
+
+/* AI Section Styles */
+.ai-section {
+  margin-bottom: var(--space-lg);
+  padding: var(--space-md);
+  background: var(--color-surface-elevated);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+}
+
+.ai-download-prompt {
+  margin-top: var(--space-md);
+  padding: var(--space-md);
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  text-align: center;
+}
+
+.ai-download-prompt p {
+  margin-bottom: var(--space-sm);
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+.ai-download-btn {
+  background: var(--color-accent);
+  color: var(--color-bg);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.ai-actions {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+}
+
+.ai-action-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  cursor: pointer;
+  font-size: var(--text-sm);
+  transition: border-color 0.2s;
+}
+
+.ai-action-btn:hover:not(:disabled) {
+  border-color: var(--color-accent);
+}
+
+.ai-action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ai-processing {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-top: var(--space-sm);
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--color-border);
+  border-top-color: var(--color-accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.ai-explanation,
+.ai-fix-suggestion {
+  margin-top: var(--space-md);
+  padding: var(--space-md);
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  border-radius: var(--radius-md);
+}
+
+.ai-explanation h4,
+.ai-fix-suggestion h4 {
+  margin: 0 0 var(--space-sm) 0;
+  font-size: var(--text-sm);
+  color: var(--color-accent);
+}
+
+.ai-explanation p {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.5;
+}
+
+.ai-fix-preview {
+  background: var(--color-surface);
+  padding: var(--space-sm);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-xs);
+  overflow-x: auto;
+  max-height: 200px;
+  margin-bottom: var(--space-sm);
+}
+
+.ai-fix-actions {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.ai-apply-btn {
+  background: var(--color-accent);
+  color: var(--color-bg);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  font-size: var(--text-sm);
+}
+
+.ai-dismiss-btn {
+  background: transparent;
+  color: var(--color-text-muted);
+  padding: var(--space-xs) var(--space-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: var(--text-sm);
+}
+
+.ai-error {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--space-sm);
+  padding: var(--space-sm);
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: var(--radius-md);
+  color: #ef4444;
+  font-size: var(--text-sm);
 }
 </style>

@@ -18,6 +18,10 @@ export default defineConfig({
   site: "https://meysam.io",
   server: {
     port: 3000,
+    headers: {
+      "Cross-Origin-Opener-Policy": "same-origin",
+      "Cross-Origin-Embedder-Policy": "require-corp",
+    },
   },
   integrations: [
     sitemap(),
@@ -84,7 +88,13 @@ export default defineConfig({
   vite: {
     plugins: [
       tailwindcss(),
-      VitePWA(),
+      VitePWA({
+        workbox: {
+          // Exclude large WASM files from service worker precaching
+          // AI model files are loaded on-demand, not precached
+          globIgnores: ["**/*.wasm", "**/ort-*.js"],
+        },
+      }),
       compression({
         algorithm: "brotliCompress",
         exclude: [/\.(br)$/, /\.(gz)$/],

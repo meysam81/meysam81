@@ -27,4 +27,5 @@ export type IconName =
   | "github"
   | "youtube"
   | "rss"
-  | "email";
+  | "email"
+  | "sparkles";
