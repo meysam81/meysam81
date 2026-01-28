@@ -18,6 +18,10 @@ export default defineConfig({
   site: "https://meysam.io",
   server: {
     port: 3000,
+    headers: {
+      "Cross-Origin-Opener-Policy": "same-origin",
+      "Cross-Origin-Embedder-Policy": "require-corp",
+    },
   },
   integrations: [
     sitemap(),
