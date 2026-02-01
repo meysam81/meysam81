@@ -10,6 +10,7 @@ import { useToast } from "@/composables/useToast";
 import { useAIInference, MODEL_SIZES } from "@/composables/useAIInference";
 import { useRemoteAI } from "@/composables/useRemoteAI";
 import { usePirsch } from "@/composables/usePirsch";
+import { useLogger } from "@/composables/useLogger";
 import AIToggle from "@/components/vue/ui/AIToggle.vue";
 import AILoadingBar from "@/components/vue/ui/AILoadingBar.vue";
 import AIPrivacyNotice from "@/components/vue/ui/AIPrivacyNotice.vue";
@@ -56,6 +57,7 @@ var {
   backend,
 } = useAIInference();
 var remoteAI = useRemoteAI();
+var logger = useLogger("CronTool");
 var { trackAIToggleOn, trackAIModelLoaded, trackAIQuery, trackAIError } =
   usePirsch();
 
@@ -218,14 +220,33 @@ function handleRemoteConsent(level: "once" | "always") {
   }
 }
 
-function parseAndValidateCronResult(result: string): boolean {
+function parseAndValidateCronResult(result: string, prompt: string): boolean {
+  logger.debug("Raw AI response:", result);
+
+  // Strip the prompt from the response (Transformers.js returns full text)
+  var responseOnly = result;
+  if (result.includes(prompt)) {
+    responseOnly = result.substring(result.indexOf(prompt) + prompt.length);
+  }
+
+  // Also try stripping after "Cron expression:" if present
+  var cronExprIndex = responseOnly.toLowerCase().indexOf("cron expression:");
+  if (cronExprIndex !== -1) {
+    responseOnly = responseOnly.substring(cronExprIndex + 16);
+  }
+
+  responseOnly = responseOnly.trim();
+  logger.debug("Stripped response:", responseOnly);
+
   // Extract cron expression from result (handle model output format)
-  var cronMatch = result.match(
-    /(\*|[0-9,\-\/]+)\s+(\*|[0-9,\-\/]+)\s+(\*|[0-9,\-\/]+)\s+(\*|[0-9,\-\/]+)\s+(\*|[0-9,\-\/]+)/,
+  // Match standard 5-field cron: minute hour day month weekday
+  var cronMatch = responseOnly.match(
+    /(\*|[0-9,\-\/L#]+)\s+(\*|[0-9,\-\/]+)\s+(\*|[0-9,\-\/L]+)\s+(\*|[0-9,\-\/]+)\s+(\*|[0-9,\-\/L#]+)/,
   );
 
   if (cronMatch) {
     var extractedCron = cronMatch[0].trim();
+    logger.debug("Extracted cron:", extractedCron);
 
     // Validate with cron-parser before using
     var validation = validateCron(extractedCron);
@@ -234,11 +255,13 @@ function parseAndValidateCronResult(result: string): boolean {
       trackAIQuery("cron");
       return true;
     }
+    logger.warn("Invalid cron expression:", extractedCron, validation.error);
     aiError.value =
       "AI generated an invalid cron expression. Try being more specific.";
     return false;
   }
 
+  logger.warn("No cron pattern found in:", responseOnly);
   aiError.value = "Could not parse AI response. Try rephrasing your schedule.";
   return false;
 }
@@ -248,35 +271,67 @@ async function generateWithAI(input: string) {
   aiError.value = null;
   clearMessages();
 
-  var prompt = `Convert this natural language schedule to a cron expression. Only output the cron expression, nothing else.
+  // Few-shot prompt with examples to help small models understand cron format
+  var prompt = `Convert schedule to 5-field cron: minute hour day month weekday
 
-Input: "${input}"
-Cron expression:`;
+Examples:
+"every 5 minutes" -> */5 * * * *
+"daily at 9am" -> 0 9 * * *
+"every monday at 3pm" -> 0 15 * * 1
+"weekdays at 8am" -> 0 8 * * 1-5
+"first of month" -> 0 0 1 * *
+
+"${input}" ->`;
+
+  logger.debug("Generating with prompt:", prompt);
 
   try {
+    var aiResult: string | null = null;
+
     // Tier 1: Try local AI first
     if (isReady.value) {
       var localResult = await generate(prompt, {
-        maxTokens: 50,
+        maxTokens: 20, // Cron is very short
         temperature: 0.1,
       });
-      parseAndValidateCronResult(localResult);
-      return;
+      aiResult = localResult;
     }
-
     // Tier 2: Try remote AI if consent given
-    if (remoteAI.hasConsent()) {
-      var remoteResult = await remoteAI.generate(prompt, { maxTokens: 50 });
-      parseAndValidateCronResult(remoteResult);
+    else if (remoteAI.hasConsent()) {
+      var remoteResult = await remoteAI.generate(prompt, { maxTokens: 20 });
+      aiResult = remoteResult;
+    }
+
+    // Try to parse AI result
+    if (aiResult && parseAndValidateCronResult(aiResult, prompt)) {
       return;
     }
 
-    // Neither available - should not reach here if UI is correct
-    aiError.value =
-      "AI not available. Download local model or enable remote AI.";
+    // Tier 3: Fallback to rule-based parser if AI fails
+    logger.debug("AI parsing failed, falling back to rule-based parser");
+    var ruleResult = englishToCron(input);
+    if (ruleResult && ruleResult.expression) {
+      updateOutput(ruleResult.expression);
+      aiError.value = null; // Clear AI error since rule-based worked
+      return;
+    }
+
+    // If neither AI nor rule-based worked, show helpful message
+    if (!aiResult) {
+      aiError.value =
+        "AI not available. Download local model or enable remote AI.";
+    }
+    // aiError should already be set by parseAndValidateCronResult
   } catch (e) {
     aiError.value = e instanceof Error ? e.message : "AI processing failed";
     trackAIError("cron", e instanceof Error ? e.message : "unknown");
+
+    // Try rule-based fallback even on error
+    var fallbackResult = englishToCron(input);
+    if (fallbackResult && fallbackResult.expression) {
+      updateOutput(fallbackResult.expression);
+      aiError.value = null;
+    }
   } finally {
     aiIsProcessing.value = false;
   }
@@ -347,332 +402,338 @@ onMounted(function handleMount() {
 </script>
 
 <template>
-  <div class="cron-tool">
-    <!-- AI Mode Section -->
-    <div class="ai-section">
-      <AIToggle
-        v-model="aiModeEnabled"
-        :disabled="aiIsProcessing"
-        @update:modelValue="handleAIToggle"
-      />
+  <div class="cron-tool-wrapper">
+    <div class="cron-tool">
+      <!-- AI Mode Section -->
+      <div class="ai-section">
+        <AIToggle
+          v-model="aiModeEnabled"
+          :disabled="aiIsProcessing"
+          @update:modelValue="handleAIToggle"
+        />
 
-      <AIPrivacyNotice v-if="aiModeEnabled" />
+        <AIPrivacyNotice v-if="aiModeEnabled" />
 
-      <!-- Download prompt -->
-      <div v-if="showAIDownloadPrompt" class="ai-download-prompt">
-        <p class="ai-prompt-title">
-          Choose AI mode for smarter natural language understanding:
-        </p>
-
-        <!-- Local AI Option -->
-        <div class="ai-option ai-option-local">
-          <div class="ai-option-header">
-            <span class="ai-option-icon">💻</span>
-            <span class="ai-option-title">Local AI (Recommended)</span>
-          </div>
-          <p class="ai-option-desc">
-            Download ~{{ aiBackendInfo?.estimatedSizeMB || MODEL_SIZES.wasm }}MB
-            model. Runs entirely on your device, no data sent anywhere.
+        <!-- Download prompt -->
+        <div v-if="showAIDownloadPrompt" class="ai-download-prompt">
+          <p class="ai-prompt-title">
+            Choose AI mode for smarter natural language understanding:
           </p>
-          <div v-if="aiBackendInfo" class="ai-backend-info">
-            <span v-if="aiBackendInfo.webgpu" class="backend-badge webgpu">
-              ⚡ WebGPU (~{{ MODEL_SIZES.webgpu }}MB, fast)
-            </span>
-            <span v-else class="backend-badge wasm">
-              🔧 WASM (~{{ MODEL_SIZES.wasm }}MB, compatible)
-            </span>
+
+          <!-- Local AI Option -->
+          <div class="ai-option ai-option-local">
+            <div class="ai-option-header">
+              <span class="ai-option-icon">💻</span>
+              <span class="ai-option-title">Local AI (Recommended)</span>
+            </div>
+            <p class="ai-option-desc">
+              Download ~{{
+                aiBackendInfo?.estimatedSizeMB || MODEL_SIZES.wasm
+              }}MB model. Runs entirely on your device, no data sent anywhere.
+            </p>
+            <div v-if="aiBackendInfo" class="ai-backend-info">
+              <span v-if="aiBackendInfo.webgpu" class="backend-badge webgpu">
+                ⚡ WebGPU (~{{ MODEL_SIZES.webgpu }}MB, fast)
+              </span>
+              <span v-else class="backend-badge wasm">
+                🔧 WASM (~{{ MODEL_SIZES.wasm }}MB, compatible)
+              </span>
+            </div>
+            <button class="ai-download-btn" @click="handleDownloadAIModel">
+              Download AI Model
+            </button>
           </div>
-          <button class="ai-download-btn" @click="handleDownloadAIModel">
-            Download AI Model
-          </button>
+
+          <!-- Remote AI Option -->
+          <div class="ai-option ai-option-remote">
+            <div class="ai-option-header">
+              <span class="ai-option-icon">☁️</span>
+              <span class="ai-option-title">Remote AI</span>
+            </div>
+            <p class="ai-option-desc">
+              Use cloud API. Your input is sent to HuggingFace/Cloudflare for
+              processing.
+            </p>
+            <div class="ai-remote-buttons">
+              <button
+                class="ai-remote-btn"
+                @click="handleRemoteConsent('once')"
+              >
+                Use Once
+              </button>
+              <button
+                class="ai-remote-btn ai-remote-btn-always"
+                @click="handleRemoteConsent('always')"
+              >
+                Enable Always
+              </button>
+            </div>
+          </div>
         </div>
 
-        <!-- Remote AI Option -->
-        <div class="ai-option ai-option-remote">
-          <div class="ai-option-header">
-            <span class="ai-option-icon">☁️</span>
-            <span class="ai-option-title">Remote AI</span>
-          </div>
-          <p class="ai-option-desc">
-            Use cloud API. Your input is sent to HuggingFace/Cloudflare for
-            processing.
-          </p>
-          <div class="ai-remote-buttons">
-            <button class="ai-remote-btn" @click="handleRemoteConsent('once')">
-              Use Once
-            </button>
+        <!-- Loading bar -->
+        <AILoadingBar
+          v-if="isLoading"
+          :progress="progress"
+          :downloadedMB="downloadedMB"
+          :totalMB="totalMB"
+        />
+
+        <!-- AI error message -->
+        <div v-if="aiError" class="ai-error">
+          {{ aiError }}
+        </div>
+
+        <!-- AI processing indicator -->
+        <div v-if="aiIsProcessing" class="ai-processing">
+          <span class="spinner"></span> AI is thinking...
+        </div>
+      </div>
+
+      <!-- Mode Toggle -->
+      <div class="mode-toggle">
+        <button
+          type="button"
+          class="mode-btn"
+          :class="{ active: mode === 'english' }"
+          @click="setMode('english')"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+            />
+          </svg>
+          Plain English
+        </button>
+        <button
+          type="button"
+          class="mode-btn"
+          :class="{ active: mode === 'expression' }"
+          @click="setMode('expression')"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <polyline points="16 18 22 12 16 6" />
+            <polyline points="8 6 2 12 8 18" />
+          </svg>
+          Cron Expression
+        </button>
+      </div>
+
+      <!-- English Input Mode -->
+      <div v-if="mode === 'english'" class="input-section">
+        <label for="english-input" class="input-label"
+          >Describe your schedule</label
+        >
+        <input
+          id="english-input"
+          v-model="englishInput"
+          type="text"
+          class="main-input"
+          placeholder="e.g., every weekday at 9am, every 5 minutes, first monday of month..."
+          autocomplete="off"
+          spellcheck="false"
+        />
+        <div class="input-hint">
+          Try: "every 5 minutes", "daily at 9am", "every friday at 5pm", "first
+          monday of month"
+        </div>
+      </div>
+
+      <!-- Expression Input Mode -->
+      <div v-else class="input-section">
+        <label for="expression-input" class="input-label"
+          >Enter cron expression</label
+        >
+        <input
+          id="expression-input"
+          v-model="expressionInput"
+          type="text"
+          class="main-input mono"
+          placeholder="* * * * *"
+          autocomplete="off"
+          spellcheck="false"
+        />
+        <div class="cron-fields">
+          <span>minute</span>
+          <span>hour</span>
+          <span>day</span>
+          <span>month</span>
+          <span>weekday</span>
+        </div>
+      </div>
+
+      <!-- Error Message -->
+      <div v-if="error" class="error-message">
+        {{ error.message }}
+      </div>
+
+      <!-- Output Section -->
+      <div class="output-section">
+        <div class="output-row">
+          <div class="output-label">Cron Expression</div>
+          <div class="output-value">
+            <code class="cron-expression">{{ currentExpression }}</code>
             <button
-              class="ai-remote-btn ai-remote-btn-always"
-              @click="handleRemoteConsent('always')"
+              type="button"
+              class="copy-btn"
+              :class="{ copied }"
+              aria-label="Copy expression"
+              @click="copyExpression"
             >
-              Enable Always
+              <svg
+                v-if="!copied"
+                class="copy-icon"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                <path
+                  d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+                />
+              </svg>
+              <svg
+                v-else
+                class="check-icon"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
             </button>
           </div>
         </div>
-      </div>
 
-      <!-- Loading bar -->
-      <AILoadingBar
-        v-if="isLoading"
-        :progress="progress"
-        :downloadedMB="downloadedMB"
-        :totalMB="totalMB"
-      />
-
-      <!-- AI error message -->
-      <div v-if="aiError" class="ai-error">
-        {{ aiError }}
-      </div>
-
-      <!-- AI processing indicator -->
-      <div v-if="aiIsProcessing" class="ai-processing">
-        <span class="spinner"></span> AI is thinking...
-      </div>
-    </div>
-
-    <!-- Mode Toggle -->
-    <div class="mode-toggle">
-      <button
-        type="button"
-        class="mode-btn"
-        :class="{ active: mode === 'english' }"
-        @click="setMode('english')"
-      >
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-        >
-          <path
-            d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
-          />
-        </svg>
-        Plain English
-      </button>
-      <button
-        type="button"
-        class="mode-btn"
-        :class="{ active: mode === 'expression' }"
-        @click="setMode('expression')"
-      >
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-        >
-          <polyline points="16 18 22 12 16 6" />
-          <polyline points="8 6 2 12 8 18" />
-        </svg>
-        Cron Expression
-      </button>
-    </div>
-
-    <!-- English Input Mode -->
-    <div v-if="mode === 'english'" class="input-section">
-      <label for="english-input" class="input-label"
-        >Describe your schedule</label
-      >
-      <input
-        id="english-input"
-        v-model="englishInput"
-        type="text"
-        class="main-input"
-        placeholder="e.g., every weekday at 9am, every 5 minutes, first monday of month..."
-        autocomplete="off"
-        spellcheck="false"
-      />
-      <div class="input-hint">
-        Try: "every 5 minutes", "daily at 9am", "every friday at 5pm", "first
-        monday of month"
-      </div>
-    </div>
-
-    <!-- Expression Input Mode -->
-    <div v-else class="input-section">
-      <label for="expression-input" class="input-label"
-        >Enter cron expression</label
-      >
-      <input
-        id="expression-input"
-        v-model="expressionInput"
-        type="text"
-        class="main-input mono"
-        placeholder="* * * * *"
-        autocomplete="off"
-        spellcheck="false"
-      />
-      <div class="cron-fields">
-        <span>minute</span>
-        <span>hour</span>
-        <span>day</span>
-        <span>month</span>
-        <span>weekday</span>
-      </div>
-    </div>
-
-    <!-- Error Message -->
-    <div v-if="error" class="error-message">
-      {{ error.message }}
-    </div>
-
-    <!-- Output Section -->
-    <div class="output-section">
-      <div class="output-row">
-        <div class="output-label">Cron Expression</div>
-        <div class="output-value">
-          <code class="cron-expression">{{ currentExpression }}</code>
-          <button
-            type="button"
-            class="copy-btn"
-            :class="{ copied }"
-            aria-label="Copy expression"
-            @click="copyExpression"
-          >
-            <svg
-              v-if="!copied"
-              class="copy-icon"
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-              <path
-                d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
-              />
-            </svg>
-            <svg
-              v-else
-              class="check-icon"
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <polyline points="20 6 9 17 4 12" />
-            </svg>
-          </button>
+        <div class="output-row">
+          <div class="output-label">Human Readable</div>
+          <div class="output-value">
+            <span class="human-text">{{ humanReadable }}</span>
+          </div>
         </div>
-      </div>
 
-      <div class="output-row">
-        <div class="output-label">Human Readable</div>
-        <div class="output-value">
-          <span class="human-text">{{ humanReadable }}</span>
-        </div>
-      </div>
-
-      <!-- Next Runs -->
-      <div class="next-runs">
-        <div class="next-runs-header">
-          <span class="output-label">Next 10 Runs</span>
-          <button
-            type="button"
-            class="toggle-runs"
-            :class="{ collapsed: !runsExpanded }"
-            :aria-expanded="runsExpanded"
-            @click="toggleRuns"
-          >
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
+        <!-- Next Runs -->
+        <div class="next-runs">
+          <div class="next-runs-header">
+            <span class="output-label">Next 10 Runs</span>
+            <button
+              type="button"
+              class="toggle-runs"
+              :class="{ collapsed: !runsExpanded }"
+              :aria-expanded="runsExpanded"
+              @click="toggleRuns"
             >
-              <polyline points="6 9 12 15 18 9" />
-            </svg>
-          </button>
-        </div>
-        <div v-if="runsExpanded" class="next-runs-list">
-          <div
-            v-for="(run, index) in nextRuns"
-            :key="index"
-            class="next-run-item"
-          >
-            <span class="run-date">{{ run.date }}</span>
-            <span v-if="run.relative" class="run-relative">{{
-              run.relative
-            }}</span>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </button>
+          </div>
+          <div v-if="runsExpanded" class="next-runs-list">
+            <div
+              v-for="(run, index) in nextRuns"
+              :key="index"
+              class="next-run-item"
+            >
+              <span class="run-date">{{ run.date }}</span>
+              <span v-if="run.relative" class="run-relative">{{
+                run.relative
+              }}</span>
+            </div>
           </div>
         </div>
       </div>
+
+      <!-- Share Button -->
+      <div class="share-section">
+        <button type="button" class="btn btn-secondary" @click="shareLink">
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <circle cx="18" cy="5" r="3" />
+            <circle cx="6" cy="12" r="3" />
+            <circle cx="18" cy="19" r="3" />
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+          </svg>
+          Share Link
+        </button>
+        <span v-if="shareToastVisible" class="share-toast">Link copied!</span>
+      </div>
     </div>
 
-    <!-- Share Button -->
-    <div class="share-section">
-      <button type="button" class="btn btn-secondary" @click="shareLink">
-        <svg
-          width="18"
-          height="18"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
+    <!-- Presets Section -->
+    <div class="tool-card presets-section">
+      <h2>Common Schedules</h2>
+      <div class="presets-grid">
+        <button
+          v-for="preset in presets"
+          :key="preset.expression"
+          type="button"
+          class="preset-btn"
+          @click="applyPreset(preset.expression)"
         >
-          <circle cx="18" cy="5" r="3" />
-          <circle cx="6" cy="12" r="3" />
-          <circle cx="18" cy="19" r="3" />
-          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
-          <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
-        </svg>
-        Share Link
-      </button>
-      <span v-if="shareToastVisible" class="share-toast">Link copied!</span>
+          <span class="preset-label">{{ preset.label }}</span>
+          <code class="preset-expression">{{ preset.expression }}</code>
+        </button>
+      </div>
     </div>
-  </div>
 
-  <!-- Presets Section -->
-  <div class="tool-card presets-section">
-    <h2>Common Schedules</h2>
-    <div class="presets-grid">
+    <!-- Example Phrases -->
+    <div class="tool-card examples-section">
+      <h2>Example Phrases</h2>
+      <p class="examples-intro">Click any phrase to try it:</p>
+      <div class="examples-grid">
+        <button
+          v-for="example in displayedExamples"
+          :key="example.phrase"
+          type="button"
+          class="example-btn"
+          @click="applyExample(example.phrase)"
+        >
+          {{ example.phrase }}
+        </button>
+      </div>
       <button
-        v-for="preset in presets"
-        :key="preset.expression"
+        v-if="!showAllExamples && examplePhrases.length > 24"
         type="button"
-        class="preset-btn"
-        @click="applyPreset(preset.expression)"
+        class="btn btn-secondary mt-lg"
+        @click="showAllExamples = true"
       >
-        <span class="preset-label">{{ preset.label }}</span>
-        <code class="preset-expression">{{ preset.expression }}</code>
+        Show More Examples
       </button>
     </div>
-  </div>
-
-  <!-- Example Phrases -->
-  <div class="tool-card examples-section">
-    <h2>Example Phrases</h2>
-    <p class="examples-intro">Click any phrase to try it:</p>
-    <div class="examples-grid">
-      <button
-        v-for="example in displayedExamples"
-        :key="example.phrase"
-        type="button"
-        class="example-btn"
-        @click="applyExample(example.phrase)"
-      >
-        {{ example.phrase }}
-      </button>
-    </div>
-    <button
-      v-if="!showAllExamples && examplePhrases.length > 24"
-      type="button"
-      class="btn btn-secondary mt-lg"
-      @click="showAllExamples = true"
-    >
-      Show More Examples
-    </button>
   </div>
 </template>
 

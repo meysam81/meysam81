@@ -729,315 +729,101 @@ onMounted(function handleMount() {
 </script>
 
 <template>
-  <div class="yaml-json-tool">
-    <!-- AI Section -->
-    <div class="ai-section">
-      <AIToggle
-        v-model="aiModeEnabled"
-        :disabled="aiIsProcessing"
-        @update:modelValue="handleAIToggle"
-      />
+  <div class="yaml-json-tool-wrapper">
+    <div class="yaml-json-tool">
+      <!-- AI Section -->
+      <div class="ai-section">
+        <AIToggle
+          v-model="aiModeEnabled"
+          :disabled="aiIsProcessing"
+          @update:modelValue="handleAIToggle"
+        />
 
-      <AIPrivacyNotice v-if="aiModeEnabled" />
+        <AIPrivacyNotice v-if="aiModeEnabled" />
 
-      <div v-if="showAIDownloadPrompt" class="ai-download-prompt">
-        <p class="ai-prompt-heading">
-          Choose AI option for error explanations and auto-fix:
-        </p>
+        <div v-if="showAIDownloadPrompt" class="ai-download-prompt">
+          <p class="ai-prompt-heading">
+            Choose AI option for error explanations and auto-fix:
+          </p>
 
-        <!-- Tier 1: Download Local AI -->
-        <button
-          class="ai-tier-btn ai-tier-local"
-          @click="handleDownloadAIModel"
-        >
-          <span class="ai-tier-icon">💻</span>
-          <span class="ai-tier-info">
-            <strong
-              >Download Local AI (~{{
-                aiBackendInfo?.estimatedSizeMB || 75
-              }}MB)</strong
-            >
-            <small>Runs 100% in your browser, no data sent</small>
-          </span>
-        </button>
-
-        <!-- Tier 2: Remote AI (once) -->
-        <button class="ai-tier-btn ai-tier-remote" @click="handleRemoteAIOnce">
-          <span class="ai-tier-icon">☁️</span>
-          <span class="ai-tier-info">
-            <strong>Use Remote AI (once)</strong>
-            <small>Sends text to HuggingFace API</small>
-          </span>
-        </button>
-
-        <!-- Tier 2: Remote AI (always) -->
-        <button
-          class="ai-tier-btn ai-tier-remote-always"
-          @click="handleRemoteAIAlways"
-        >
-          <span class="ai-tier-icon">🔄</span>
-          <span class="ai-tier-info">
-            <strong>Enable Remote AI (always)</strong>
-            <small>Remember my preference</small>
-          </span>
-        </button>
-      </div>
-
-      <AILoadingBar
-        v-if="isLoading"
-        :progress="progress"
-        :downloadedMB="downloadedMB"
-        :totalMB="totalMB"
-      />
-    </div>
-
-    <!-- Format Detection Banner -->
-    <div class="format-banner">
-      <span class="format-indicator" :class="currentFormat || ''">
-        <span class="format-icon" :class="currentFormat || ''">
-          {{
-            currentFormat === "yaml"
-              ? "Y"
-              : currentFormat === "json"
-                ? "J"
-                : "?"
-          }}
-        </span>
-        <span class="format-text">
-          {{
-            currentFormat
-              ? "Detected: " + currentFormat.toUpperCase()
-              : "Paste content to detect format"
-          }}
-        </span>
-      </span>
-    </div>
-
-    <!-- Editor Section -->
-    <div class="editor-section">
-      <!-- Input Editor -->
-      <div class="editor-pane input-pane">
-        <div class="editor-header">
-          <label class="editor-label">
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path
-                d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
-              />
-              <polyline points="14 2 14 8 20 8" />
-            </svg>
-            Input
-          </label>
-          <div class="editor-actions">
-            <button
-              type="button"
-              class="icon-btn"
-              title="Paste from clipboard"
-              @click="handlePaste"
-            >
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path
-                  d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"
-                />
-                <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
-              </svg>
-            </button>
-            <button
-              type="button"
-              class="icon-btn"
-              title="Clear input"
-              @click="handleClear"
-            >
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <line x1="18" y1="6" x2="6" y2="18" />
-                <line x1="6" y1="6" x2="18" y2="18" />
-              </svg>
-            </button>
-            <div class="btn-divider"></div>
-            <button
-              type="button"
-              class="icon-btn text-btn"
-              title="Load sample YAML"
-              @click="loadSampleYaml"
-            >
-              YAML
-            </button>
-            <button
-              type="button"
-              class="icon-btn text-btn"
-              title="Load sample JSON"
-              @click="loadSampleJson"
-            >
-              JSON
-            </button>
-          </div>
-        </div>
-        <div class="editor-wrapper">
-          <div class="line-numbers">
-            <span
-              v-for="num in inputLineNumbers"
-              :key="num"
-              :class="{ 'error-line': num === errorLine }"
-              >{{ num }}</span
-            >
-          </div>
-          <textarea
-            v-model="inputText"
-            class="editor-textarea"
-            placeholder="Paste your YAML or JSON here..."
-            spellcheck="false"
-            autocomplete="off"
-          ></textarea>
-        </div>
-        <!-- Error/Success Messages -->
-        <div v-if="error" class="error-message">
-          <svg
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <circle cx="12" cy="12" r="10" />
-            <line x1="12" y1="8" x2="12" y2="12" />
-            <line x1="12" y1="16" x2="12.01" y2="16" />
-          </svg>
-          <span>{{ error.message }}</span>
-        </div>
-
-        <!-- AI Actions - show when there's an error and AI is available (local or remote) -->
-        <div
-          v-if="aiModeEnabled && (isReady || remoteAI.hasConsent()) && error"
-          class="ai-actions"
-        >
+          <!-- Tier 1: Download Local AI -->
           <button
-            class="ai-action-btn"
-            :disabled="aiIsProcessing"
-            @click="explainError"
+            class="ai-tier-btn ai-tier-local"
+            @click="handleDownloadAIModel"
           >
-            <span class="sparkles-icon">✨</span> Explain Error
-          </button>
-          <button
-            class="ai-action-btn"
-            :disabled="aiIsProcessing"
-            @click="suggestFix"
-          >
-            <span class="sparkles-icon">✨</span> Auto-Fix
-          </button>
-          <span
-            v-if="currentAITier"
-            class="ai-tier-badge"
-            :class="'tier-' + currentAITier"
-          >
-            {{ currentAITier === "local" ? "Local AI" : "Remote AI" }}
-          </span>
-        </div>
-
-        <!-- AI Processing -->
-        <div v-if="aiIsProcessing" class="ai-processing">
-          <span class="spinner"></span> AI is analyzing...
-        </div>
-
-        <!-- AI Explanation -->
-        <div v-if="aiExplanation" class="ai-explanation">
-          <h4>AI Explanation</h4>
-          <p>{{ aiExplanation }}</p>
-          <button class="ai-dismiss-btn" @click="aiExplanation = null">
-            Dismiss
-          </button>
-        </div>
-
-        <!-- AI Fix Suggestion -->
-        <div v-if="aiFixSuggestion" class="ai-fix-suggestion">
-          <h4>AI Suggested Fix</h4>
-          <pre class="ai-fix-preview">{{ aiFixSuggestion }}</pre>
-          <div class="ai-fix-actions">
-            <button class="ai-apply-btn" @click="applyFix">Apply Fix</button>
-            <button class="ai-dismiss-btn" @click="dismissFix">Dismiss</button>
-          </div>
-        </div>
-
-        <!-- AI Error -->
-        <div v-if="aiError" class="ai-error">
-          {{ aiError }}
-          <button class="ai-dismiss-btn" @click="aiError = null">×</button>
-        </div>
-
-        <div v-else-if="currentData" class="success-message">
-          <svg
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-            <polyline points="22 4 12 14.01 9 11.01" />
-          </svg>
-          <span>Valid {{ currentFormat?.toUpperCase() }}</span>
-        </div>
-      </div>
-
-      <!-- Output Editor -->
-      <div class="editor-pane output-pane">
-        <div class="editor-header">
-          <label class="editor-label">
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path
-                d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
-              />
-              <polyline points="14 2 14 8 20 8" />
-              <line x1="9" y1="15" x2="15" y2="15" />
-            </svg>
-            Output
-            <span
-              v-if="outputFormat"
-              class="output-format-badge"
-              :class="outputFormat"
-            >
-              {{ outputFormat.toUpperCase() }}
+            <span class="ai-tier-icon">💻</span>
+            <span class="ai-tier-info">
+              <strong
+                >Download Local AI (~{{
+                  aiBackendInfo?.estimatedSizeMB || 75
+                }}MB)</strong
+              >
+              <small>Runs 100% in your browser, no data sent</small>
             </span>
-          </label>
-          <div class="editor-actions">
-            <button
-              type="button"
-              class="icon-btn"
-              :class="{ copied }"
-              title="Copy to clipboard"
-              :disabled="!outputText"
-              @click="handleCopy"
-            >
+          </button>
+
+          <!-- Tier 2: Remote AI (once) -->
+          <button
+            class="ai-tier-btn ai-tier-remote"
+            @click="handleRemoteAIOnce"
+          >
+            <span class="ai-tier-icon">☁️</span>
+            <span class="ai-tier-info">
+              <strong>Use Remote AI (once)</strong>
+              <small>Sends text to HuggingFace API</small>
+            </span>
+          </button>
+
+          <!-- Tier 2: Remote AI (always) -->
+          <button
+            class="ai-tier-btn ai-tier-remote-always"
+            @click="handleRemoteAIAlways"
+          >
+            <span class="ai-tier-icon">🔄</span>
+            <span class="ai-tier-info">
+              <strong>Enable Remote AI (always)</strong>
+              <small>Remember my preference</small>
+            </span>
+          </button>
+        </div>
+
+        <AILoadingBar
+          v-if="isLoading"
+          :progress="progress"
+          :downloadedMB="downloadedMB"
+          :totalMB="totalMB"
+        />
+      </div>
+
+      <!-- Format Detection Banner -->
+      <div class="format-banner">
+        <span class="format-indicator" :class="currentFormat || ''">
+          <span class="format-icon" :class="currentFormat || ''">
+            {{
+              currentFormat === "yaml"
+                ? "Y"
+                : currentFormat === "json"
+                  ? "J"
+                  : "?"
+            }}
+          </span>
+          <span class="format-text">
+            {{
+              currentFormat
+                ? "Detected: " + currentFormat.toUpperCase()
+                : "Paste content to detect format"
+            }}
+          </span>
+        </span>
+      </div>
+
+      <!-- Editor Section -->
+      <div class="editor-section">
+        <!-- Input Editor -->
+        <div class="editor-pane input-pane">
+          <div class="editor-header">
+            <label class="editor-label">
               <svg
-                v-if="!copied"
                 width="16"
                 height="16"
                 viewBox="0 0 24 24"
@@ -1045,30 +831,185 @@ onMounted(function handleMount() {
                 stroke="currentColor"
                 stroke-width="2"
               >
-                <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
                 <path
-                  d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+                  d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
                 />
+                <polyline points="14 2 14 8 20 8" />
               </svg>
-              <svg
-                v-else
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
+              Input
+            </label>
+            <div class="editor-actions">
+              <button
+                type="button"
+                class="icon-btn"
+                title="Paste from clipboard"
+                @click="handlePaste"
               >
-                <polyline points="20 6 9 17 4 12" />
-              </svg>
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"
+                  />
+                  <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+                </svg>
+              </button>
+              <button
+                type="button"
+                class="icon-btn"
+                title="Clear input"
+                @click="handleClear"
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
+              <div class="btn-divider"></div>
+              <button
+                type="button"
+                class="icon-btn text-btn"
+                title="Load sample YAML"
+                @click="loadSampleYaml"
+              >
+                YAML
+              </button>
+              <button
+                type="button"
+                class="icon-btn text-btn"
+                title="Load sample JSON"
+                @click="loadSampleJson"
+              >
+                JSON
+              </button>
+            </div>
+          </div>
+          <div class="editor-wrapper">
+            <div class="line-numbers">
+              <span
+                v-for="num in inputLineNumbers"
+                :key="num"
+                :class="{ 'error-line': num === errorLine }"
+                >{{ num }}</span
+              >
+            </div>
+            <textarea
+              v-model="inputText"
+              class="editor-textarea"
+              placeholder="Paste your YAML or JSON here..."
+              spellcheck="false"
+              autocomplete="off"
+            ></textarea>
+          </div>
+          <!-- Error/Success Messages -->
+          <div v-if="error" class="error-message">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            <span>{{ error.message }}</span>
+          </div>
+
+          <!-- AI Actions - show when there's an error and AI is available (local or remote) -->
+          <div
+            v-if="aiModeEnabled && (isReady || remoteAI.hasConsent()) && error"
+            class="ai-actions"
+          >
+            <button
+              class="ai-action-btn"
+              :disabled="aiIsProcessing"
+              @click="explainError"
+            >
+              <span class="sparkles-icon">✨</span> Explain Error
             </button>
             <button
-              type="button"
-              class="icon-btn"
-              title="Download file"
-              :disabled="!outputText"
-              @click="handleDownload"
+              class="ai-action-btn"
+              :disabled="aiIsProcessing"
+              @click="suggestFix"
             >
+              <span class="sparkles-icon">✨</span> Auto-Fix
+            </button>
+            <span
+              v-if="currentAITier"
+              class="ai-tier-badge"
+              :class="'tier-' + currentAITier"
+            >
+              {{ currentAITier === "local" ? "Local AI" : "Remote AI" }}
+            </span>
+          </div>
+
+          <!-- AI Processing -->
+          <div v-if="aiIsProcessing" class="ai-processing">
+            <span class="spinner"></span> AI is analyzing...
+          </div>
+
+          <!-- AI Explanation -->
+          <div v-if="aiExplanation" class="ai-explanation">
+            <h4>AI Explanation</h4>
+            <p>{{ aiExplanation }}</p>
+            <button class="ai-dismiss-btn" @click="aiExplanation = null">
+              Dismiss
+            </button>
+          </div>
+
+          <!-- AI Fix Suggestion -->
+          <div v-if="aiFixSuggestion" class="ai-fix-suggestion">
+            <h4>AI Suggested Fix</h4>
+            <pre class="ai-fix-preview">{{ aiFixSuggestion }}</pre>
+            <div class="ai-fix-actions">
+              <button class="ai-apply-btn" @click="applyFix">Apply Fix</button>
+              <button class="ai-dismiss-btn" @click="dismissFix">
+                Dismiss
+              </button>
+            </div>
+          </div>
+
+          <!-- AI Error -->
+          <div v-if="aiError" class="ai-error">
+            {{ aiError }}
+            <button class="ai-dismiss-btn" @click="aiError = null">×</button>
+          </div>
+
+          <div v-else-if="currentData" class="success-message">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+              <polyline points="22 4 12 14.01 9 11.01" />
+            </svg>
+            <span>Valid {{ currentFormat?.toUpperCase() }}</span>
+          </div>
+        </div>
+
+        <!-- Output Editor -->
+        <div class="editor-pane output-pane">
+          <div class="editor-header">
+            <label class="editor-label">
               <svg
                 width="16"
                 height="16"
@@ -1077,134 +1018,205 @@ onMounted(function handleMount() {
                 stroke="currentColor"
                 stroke-width="2"
               >
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                <polyline points="7 10 12 15 17 10" />
-                <line x1="12" y1="15" x2="12" y2="3" />
+                <path
+                  d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                />
+                <polyline points="14 2 14 8 20 8" />
+                <line x1="9" y1="15" x2="15" y2="15" />
               </svg>
-            </button>
+              Output
+              <span
+                v-if="outputFormat"
+                class="output-format-badge"
+                :class="outputFormat"
+              >
+                {{ outputFormat.toUpperCase() }}
+              </span>
+            </label>
+            <div class="editor-actions">
+              <button
+                type="button"
+                class="icon-btn"
+                :class="{ copied }"
+                title="Copy to clipboard"
+                :disabled="!outputText"
+                @click="handleCopy"
+              >
+                <svg
+                  v-if="!copied"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                  <path
+                    d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+                  />
+                </svg>
+                <svg
+                  v-else
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              </button>
+              <button
+                type="button"
+                class="icon-btn"
+                title="Download file"
+                :disabled="!outputText"
+                @click="handleDownload"
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="7 10 12 15 17 10" />
+                  <line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div class="editor-wrapper output">
+            <div class="line-numbers">
+              <span v-for="num in outputLineNumbers" :key="num">{{ num }}</span>
+            </div>
+            <textarea
+              v-model="outputText"
+              class="editor-textarea"
+              placeholder="Converted output will appear here..."
+              readonly
+              spellcheck="false"
+            ></textarea>
           </div>
         </div>
-        <div class="editor-wrapper output">
-          <div class="line-numbers">
-            <span v-for="num in outputLineNumbers" :key="num">{{ num }}</span>
-          </div>
-          <textarea
-            v-model="outputText"
-            class="editor-textarea"
-            placeholder="Converted output will appear here..."
-            readonly
-            spellcheck="false"
-          ></textarea>
+      </div>
+
+      <!-- Conversion Action Buttons -->
+      <div class="conversion-actions">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          :disabled="!currentData"
+          @click="handleFormatYaml"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <polyline points="4 7 4 4 20 4 20 7" />
+            <line x1="9" y1="20" x2="15" y2="20" />
+            <line x1="12" y1="4" x2="12" y2="20" />
+          </svg>
+          {{ formatYamlButtonText }}
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary btn-convert"
+          :disabled="!currentData"
+          @click="handleConvert"
+        >
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <polyline points="17 1 21 5 17 9" />
+            <path d="M3 11V9a4 4 0 0 1 4-4h14" />
+            <polyline points="7 23 3 19 7 15" />
+            <path d="M21 13v2a4 4 0 0 1-4 4H3" />
+          </svg>
+          {{ convertButtonText }}
+        </button>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          :disabled="!currentData"
+          @click="handleFormatJson"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5c0 1.1.9 2 2 2h1"
+            />
+            <path
+              d="M16 21h1a2 2 0 0 0 2-2v-5c0-1.1.9-2 2-2a2 2 0 0 1-2-2V5a2 2 0 0 0-2-2h-1"
+            />
+          </svg>
+          {{ formatJsonButtonText }}
+        </button>
+      </div>
+
+      <!-- Options Section -->
+      <div class="options-section">
+        <div class="option-group">
+          <label class="option-label">
+            <input v-model="optionMinify" type="checkbox" />
+            <span>Minify output</span>
+          </label>
+          <label class="option-label">
+            <input
+              v-model.number="optionIndent"
+              type="number"
+              min="1"
+              max="8"
+            />
+            <span>Indent spaces</span>
+          </label>
+          <label class="option-label">
+            <input v-model="optionSortKeys" type="checkbox" />
+            <span>Sort keys alphabetically</span>
+          </label>
         </div>
       </div>
     </div>
 
-    <!-- Conversion Action Buttons -->
-    <div class="conversion-actions">
-      <button
-        type="button"
-        class="btn btn-secondary"
-        :disabled="!currentData"
-        @click="handleFormatYaml"
-      >
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-        >
-          <polyline points="4 7 4 4 20 4 20 7" />
-          <line x1="9" y1="20" x2="15" y2="20" />
-          <line x1="12" y1="4" x2="12" y2="20" />
-        </svg>
-        {{ formatYamlButtonText }}
-      </button>
-      <button
-        type="button"
-        class="btn btn-primary btn-convert"
-        :disabled="!currentData"
-        @click="handleConvert"
-      >
-        <svg
-          width="18"
-          height="18"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-        >
-          <polyline points="17 1 21 5 17 9" />
-          <path d="M3 11V9a4 4 0 0 1 4-4h14" />
-          <polyline points="7 23 3 19 7 15" />
-          <path d="M21 13v2a4 4 0 0 1-4 4H3" />
-        </svg>
-        {{ convertButtonText }}
-      </button>
-      <button
-        type="button"
-        class="btn btn-secondary"
-        :disabled="!currentData"
-        @click="handleFormatJson"
-      >
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-        >
-          <path
-            d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5c0 1.1.9 2 2 2h1"
-          />
-          <path
-            d="M16 21h1a2 2 0 0 0 2-2v-5c0-1.1.9-2 2-2a2 2 0 0 1-2-2V5a2 2 0 0 0-2-2h-1"
-          />
-        </svg>
-        {{ formatJsonButtonText }}
-      </button>
-    </div>
-
-    <!-- Options Section -->
-    <div class="options-section">
-      <div class="option-group">
-        <label class="option-label">
-          <input v-model="optionMinify" type="checkbox" />
-          <span>Minify output</span>
-        </label>
-        <label class="option-label">
-          <input v-model.number="optionIndent" type="number" min="1" max="8" />
-          <span>Indent spaces</span>
-        </label>
-        <label class="option-label">
-          <input v-model="optionSortKeys" type="checkbox" />
-          <span>Sort keys alphabetically</span>
-        </label>
-      </div>
-    </div>
-  </div>
-
-  <!-- Statistics Card -->
-  <div v-if="stats" class="tool-card stats-card">
-    <h2>Document Statistics</h2>
-    <div class="stats-grid">
-      <div class="stat-item">
-        <span class="stat-value">{{ stats.lines }}</span>
-        <span class="stat-label">Lines</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-value">{{ formatNumber(stats.characters) }}</span>
-        <span class="stat-label">Characters</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-value">{{ stats.keys }}</span>
-        <span class="stat-label">Keys</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-value">{{ stats.maxDepth }}</span>
-        <span class="stat-label">Max Depth</span>
+    <!-- Statistics Card -->
+    <div v-if="stats" class="tool-card stats-card">
+      <h2>Document Statistics</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-value">{{ stats.lines }}</span>
+          <span class="stat-label">Lines</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value">{{ formatNumber(stats.characters) }}</span>
+          <span class="stat-label">Characters</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value">{{ stats.keys }}</span>
+          <span class="stat-label">Keys</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value">{{ stats.maxDepth }}</span>
+          <span class="stat-label">Max Depth</span>
+        </div>
       </div>
     </div>
   </div>
