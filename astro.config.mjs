@@ -1,4 +1,5 @@
 import mdx from "@astrojs/mdx";
+import node from "@astrojs/node";
 import sitemap from "@astrojs/sitemap";
 import vue from "@astrojs/vue";
 import playformCompress from "@playform/compress";
@@ -16,6 +17,9 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   site: "https://meysam.io",
+  adapter: node({
+    mode: "standalone",
+  }),
   server: {
     port: 3000,
     headers: {

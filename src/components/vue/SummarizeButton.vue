@@ -274,7 +274,7 @@ function getTierLabel(tier: string): string {
     </button>
 
     <div v-if="isOpen" class="summarize-panel">
-      <AIPrivacyNotice />
+      <AIPrivacyNotice :tier="currentTier" />
 
       <!-- Tier options prompt -->
       <div v-if="showTierOptions" class="tier-options">

@@ -38,6 +38,7 @@ var aiModeEnabled = ref(false);
 var aiIsProcessing = ref(false);
 var aiError = ref<string | null>(null);
 var showAIDownloadPrompt = ref(false);
+var currentAITier = ref<"local" | "remote" | null>(null);
 var aiBackendInfo = ref<{
   webgpu: boolean;
   wasm: boolean;
@@ -290,6 +291,7 @@ Examples:
 
     // Tier 1: Try local AI first
     if (isReady.value) {
+      currentAITier.value = "local";
       var localResult = await generate(prompt, {
         maxTokens: 20, // Cron is very short
         temperature: 0.1,
@@ -298,6 +300,7 @@ Examples:
     }
     // Tier 2: Try remote AI if consent given
     else if (remoteAI.hasConsent()) {
+      currentAITier.value = "remote";
       var remoteResult = await remoteAI.generate(prompt, { maxTokens: 20 });
       aiResult = remoteResult;
     }
@@ -412,7 +415,7 @@ onMounted(function handleMount() {
           @update:modelValue="handleAIToggle"
         />
 
-        <AIPrivacyNotice v-if="aiModeEnabled" />
+        <AIPrivacyNotice v-if="aiModeEnabled" :tier="currentAITier" />
 
         <!-- Download prompt -->
         <div v-if="showAIDownloadPrompt" class="ai-download-prompt">

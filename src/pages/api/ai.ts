@@ -3,42 +3,39 @@
 
 import type { APIRoute } from "astro";
 
-export var prerender = false;
+export const prerender = false;
 
 export var POST: APIRoute = async function handlePost({ request }) {
   try {
-    // Check content type
-    var contentType = request.headers.get("content-type");
-    if (!contentType || !contentType.includes("application/json")) {
-      return new Response(
-        JSON.stringify({ error: "Content-Type must be application/json" }),
-        {
-          status: 400,
-          headers: { "Content-Type": "application/json" },
-        },
-      );
-    }
-
-    // Read raw body first to handle empty body case
-    var rawBody = await request.text();
-    if (!rawBody || rawBody.trim() === "") {
-      return new Response(JSON.stringify({ error: "Request body is empty" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
-
+    // Try multiple methods to read the body (Astro SSR compatibility)
     var body: { prompt?: string; provider?: string; maxTokens?: number };
+
     try {
-      body = JSON.parse(rawBody);
+      // Method 1: Direct JSON parsing (preferred)
+      body = await request.json();
     } catch {
-      return new Response(
-        JSON.stringify({ error: "Invalid JSON in request body" }),
-        {
-          status: 400,
-          headers: { "Content-Type": "application/json" },
-        },
-      );
+      // Method 2: Fallback to text parsing
+      try {
+        var rawBody = await request.text();
+        if (!rawBody || rawBody.trim() === "") {
+          return new Response(
+            JSON.stringify({ error: "Request body is empty" }),
+            {
+              status: 400,
+              headers: { "Content-Type": "application/json" },
+            },
+          );
+        }
+        body = JSON.parse(rawBody);
+      } catch {
+        return new Response(
+          JSON.stringify({ error: "Invalid JSON in request body" }),
+          {
+            status: 400,
+            headers: { "Content-Type": "application/json" },
+          },
+        );
+      }
     }
 
     var { prompt, provider } = body;

@@ -739,7 +739,7 @@ onMounted(function handleMount() {
           @update:modelValue="handleAIToggle"
         />
 
-        <AIPrivacyNotice v-if="aiModeEnabled" />
+        <AIPrivacyNotice v-if="aiModeEnabled" :tier="currentAITier" />
 
         <div v-if="showAIDownloadPrompt" class="ai-download-prompt">
           <p class="ai-prompt-heading">
