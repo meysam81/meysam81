@@ -8,6 +8,7 @@ import {
   filterPublishedPosts,
   formatDate,
   getAllTags,
+  getPostSlug,
   getPostsByTag,
 } from "@/utils/blog";
 
@@ -53,7 +54,7 @@ var allTags = getAllTags(publishedPosts);
       <div class="grid grid-3">
         {
           posts.map(function mapPosts(post) {
-            var postSlug = post.slug || post.id;
+            var postSlug = getPostSlug(post);
             return (
               <ContentCard
                 title={post.data.title}

@@ -1,4 +1,5 @@
 import type { CollectionEntry } from "astro:content";
+import { getPostSlug } from "./blog";
 import { slugify } from "./slug";
 
 export interface SeriesInfo {
@@ -57,7 +58,7 @@ export function getSeriesInfo(
   }
 
   var currentIndex = seriesPosts.findIndex(function findCurrent(post) {
-    return post.slug === currentPost.slug;
+    return getPostSlug(post) === getPostSlug(currentPost);
   });
 
   if (currentIndex === -1) {

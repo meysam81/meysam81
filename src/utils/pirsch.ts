@@ -19,7 +19,7 @@ function getAccessToken() {
   });
 }
 
-async function getDomainId(accessToken, hostname) {
+async function getDomainId(accessToken: string, hostname: string) {
   var response = await httpClient.get("https://api.pirsch.io/api/v1/domain", {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -44,11 +44,15 @@ async function getDomainId(accessToken, hostname) {
   return null;
 }
 
-function escapeRegexSpecialChars(str) {
+function escapeRegexSpecialChars(str: string) {
   return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
-function getPageViewsForPath(accessToken, domainId, path) {
+function getPageViewsForPath(
+  accessToken: string,
+  domainId: string,
+  path: string,
+) {
   var tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
   var startDate = new Date();
@@ -74,9 +78,9 @@ function getPageViewsForPath(accessToken, domainId, path) {
   });
 }
 
-export async function getBlogPostViews(hostname, path) {
+export async function getBlogPostViews(hostname: string, path: string) {
   try {
-    var responseBody;
+    var responseBody: string;
     var tokenResponse = await getAccessToken();
 
     if (!tokenResponse.ok) {

@@ -3,13 +3,12 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import ContentCard from "@/components/ContentCard.astro";
 import BackLink from "@/components/BackLink.astro";
 import { getCollection } from "astro:content";
-import { filterPublishedPosts, formatDate } from "@/utils/blog";
+import { filterPublishedPosts, formatDate, getPostSlug } from "@/utils/blog";
 import {
   formatReadingTime,
   calculateTotalReadingTime,
 } from "@/utils/reading-time";
 import { getAllSeries } from "@/utils/series";
-import { slugify } from "@/utils/slug";
 
 export async function getStaticPaths() {
   var posts = await getCollection("blog");
@@ -107,7 +106,7 @@ var totalReadingTime = calculateTotalReadingTime(
       <div class="series-posts">
         {
           series.posts.map(function mapPost(post, index) {
-            var postSlug = post.slug || slugify(post.data.title);
+            var postSlug = getPostSlug(post);
             return (
               <div class="series-post-item">
                 <div class="post-number">{index + 1}</div>

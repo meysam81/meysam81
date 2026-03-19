@@ -184,8 +184,8 @@ const {
   function initCopyButtons() {
     var buttons = document.querySelectorAll(".copy-button[data-copy-text]");
 
-    function handleCopyClick(event) {
-      var button = event.currentTarget;
+    function handleCopyClick(event: Event) {
+      var button = event.currentTarget as HTMLButtonElement;
       var text = button.getAttribute("data-copy-text");
 
       if (!text || button.disabled) {
@@ -204,12 +204,12 @@ const {
             button.disabled = false;
           }, 2000);
         })
-        .catch(function handleClipboardError(err) {
+        .catch(function handleClipboardError(_err: unknown) {
           button.disabled = false;
         });
     }
 
-    function handleKeyDown(event) {
+    function handleKeyDown(event: KeyboardEvent) {
       if (event.key === "Enter" || event.key === " ") {
         event.preventDefault();
         handleCopyClick(event);

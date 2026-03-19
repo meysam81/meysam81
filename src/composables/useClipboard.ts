@@ -31,7 +31,8 @@ export function useClipboard() {
       textarea.select();
 
       try {
-        document.execCommand("copy");
+        // Intentional fallback for browsers without navigator.clipboard
+        (document as { execCommand(cmd: string): boolean }).execCommand("copy");
         copied.value = true;
 
         if (copyTimeout) {

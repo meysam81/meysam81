@@ -1,5 +1,5 @@
 import { getCollection } from "astro:content";
-import { filterPublishedPosts } from "@/utils/blog";
+import { filterPublishedPosts, getPostSlug } from "@/utils/blog";
 import type { APIRoute, GetStaticPaths } from "astro";
 
 export var getStaticPaths: GetStaticPaths = async function getStaticPaths() {
@@ -7,7 +7,7 @@ export var getStaticPaths: GetStaticPaths = async function getStaticPaths() {
   var publishedPosts = filterPublishedPosts(posts);
   return publishedPosts.map(function mapPosts(post) {
     return {
-      params: { slug: post.slug },
+      params: { slug: getPostSlug(post) },
       props: { post },
     };
   });
@@ -15,6 +15,7 @@ export var getStaticPaths: GetStaticPaths = async function getStaticPaths() {
 
 export var GET: APIRoute = function GET({ props }) {
   var { post } = props;
+  var slug = getPostSlug(post);
   var frontmatter = [
     "---",
     `title: "${post.data.title}"`,
@@ -26,12 +27,12 @@ export var GET: APIRoute = function GET({ props }) {
       : null,
     post.data.tags.length > 0
       ? `tags:\n${post.data.tags
-          .map(function mapTag(tag) {
+          .map(function mapTag(tag: string) {
             return `  - ${tag}`;
           })
           .join("\n")}`
       : null,
-    `url: https://meysam.io/blog/${post.slug}/`,
+    `url: https://meysam.io/blog/${slug}/`,
     "---",
   ]
     .filter(Boolean)
@@ -42,7 +43,7 @@ export var GET: APIRoute = function GET({ props }) {
   return new Response(markdown, {
     headers: {
       "Content-Type": "text/markdown; charset=utf-8",
-      "Content-Disposition": `inline; filename="${post.slug}.md"`,
+      "Content-Disposition": `inline; filename="${slug}.md"`,
     },
   });
 };

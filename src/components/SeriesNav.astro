@@ -1,5 +1,6 @@
 ---
 import type { SeriesInfo } from "@/utils/series";
+import { getPostSlug } from "@/utils/blog";
 
 interface Props {
   seriesInfo: SeriesInfo;
@@ -7,8 +8,12 @@ interface Props {
 
 var { seriesInfo } = Astro.props;
 
-var prevSlug = seriesInfo.prevPost?.slug;
-var nextSlug = seriesInfo.nextPost?.slug;
+var prevSlug = seriesInfo.prevPost
+  ? getPostSlug(seriesInfo.prevPost)
+  : undefined;
+var nextSlug = seriesInfo.nextPost
+  ? getPostSlug(seriesInfo.nextPost)
+  : undefined;
 var prevTitle = seriesInfo.prevPost?.data.title;
 var nextTitle = seriesInfo.nextPost?.data.title;
 ---

@@ -44,6 +44,12 @@ var defaultPersonStructuredData = {
     "https://youtube.com/@meysam",
   ],
 };
+
+var extraStructuredData: object[] = structuredData
+  ? Array.isArray(structuredData)
+    ? structuredData
+    : [structuredData]
+  : [];
 ---
 
 <!doctype html>
@@ -114,27 +120,22 @@ var defaultPersonStructuredData = {
     {
       !noDefaultStructuredData && (
         <script
+          is:inline
           type="application/ld+json"
           set:html={JSON.stringify(defaultPersonStructuredData)}
         />
       )
     }
     {
-      structuredData && Array.isArray(structuredData)
-        ? structuredData.map(function (data) {
-            return (
-              <script
-                type="application/ld+json"
-                set:html={JSON.stringify(data)}
-              />
-            );
-          })
-        : structuredData && (
-            <script
-              type="application/ld+json"
-              set:html={JSON.stringify(structuredData)}
-            />
-          )
+      extraStructuredData.map(function (item) {
+        return (
+          <script
+            is:inline
+            type="application/ld+json"
+            set:html={JSON.stringify(item)}
+          />
+        );
+      })
     }
 
     <!-- 13. RSS & Alternate Links -->
@@ -214,6 +215,7 @@ var defaultPersonStructuredData = {
     </script>
 
     <script
+      is:inline
       async
       defer
       src="https://analytics.meysam.io/pa.js"

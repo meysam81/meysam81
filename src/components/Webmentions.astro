@@ -38,7 +38,7 @@ var mentions = webmentions.filter(function filterMentions(mention) {
   return mention["wm-property"] === "mention-of";
 });
 
-function formatDate(dateString) {
+function formatDate(dateString: string) {
   var date = new Date(dateString);
   return new Intl.DateTimeFormat("en-US", {
     year: "numeric",
