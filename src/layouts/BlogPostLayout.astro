@@ -80,6 +80,7 @@ var fullURL = canonicalURL.toString();
   markdownUrl={markdownUrl}
 >
   <script
+    is:inline
     slot="head"
     src="https://giscus.app/client.js"
     data-repo="meysam81/meysam81"
@@ -105,7 +106,7 @@ var fullURL = canonicalURL.toString();
       );
       var currentHash = "";
 
-      function updateHash(hash) {
+      function updateHash(hash: string) {
         if (hash !== currentHash) {
           currentHash = hash;
           history.replaceState(
@@ -134,7 +135,7 @@ var fullURL = canonicalURL.toString();
         updateHash(activeId);
       }
 
-      var timeoutId;
+      var timeoutId: number;
       window.addEventListener(
         "scroll",
         function onScroll() {

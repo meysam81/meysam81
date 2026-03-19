@@ -1,8 +1,8 @@
 ---
-import { getCollection, type CollectionEntry } from "astro:content";
+import { getCollection, render, type CollectionEntry } from "astro:content";
 import BlogPostLayout from "@/layouts/BlogPostLayout.astro";
 import { calculateReadingTime } from "@/utils/reading-time";
-import { filterPublishedPosts } from "@/utils/blog";
+import { filterPublishedPosts, getPostSlug } from "@/utils/blog";
 import { getBlogPostViews } from "@/utils/pirsch";
 import { getSeriesInfo } from "@/utils/series";
 import { useLogger } from "@/composables/useLogger";
@@ -17,7 +17,7 @@ export async function getStaticPaths() {
   var publishedPosts = filterPublishedPosts(posts);
   return publishedPosts.map(function mapPosts(post) {
     return {
-      params: { slug: post.slug },
+      params: { slug: getPostSlug(post) },
       props: post,
     };
   });
@@ -26,30 +26,31 @@ export async function getStaticPaths() {
 type Props = CollectionEntry<"blog">;
 
 var post = Astro.props;
-var { Content, headings } = await post.render();
+var { Content, headings } = await render(post);
 var readingTime = calculateReadingTime(post.body);
 
 var pageViews = 0;
 var hostname = import.meta.env.PIRSCH_HOSTNAME || "meysam.io";
-var postPath = `/blog/${post.slug}/`;
+var postSlug = getPostSlug(post);
+var postPath = `/blog/${postSlug}/`;
 pageViews = await getBlogPostViews(hostname, postPath);
 log.info(`Page views for ${postPath}: ${pageViews}`);
 
 var seriesInfo = getSeriesInfo(publishedPosts, post);
 
-var markdownUrl = `/blog/${post.slug}.md`;
+var markdownUrl = `/blog/${postSlug}.md`;
 
 var relatedPosts = post.data.relatedPosts
   .map(function findRelatedPost(slug) {
     var post = publishedPosts.find(function matchSlug(p) {
-      return p.slug === slug;
+      return getPostSlug(p) === slug;
     });
     if (!post) {
       log.warn(`Related post with slug "${slug}" not found.`);
       return null;
     }
     return {
-      slug: post.slug,
+      slug: getPostSlug(post),
       data: { title: post.data.title, description: post.data.description },
     };
   })

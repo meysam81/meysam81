@@ -71,6 +71,10 @@ jobs:
           key: node-modules-${{ runner.os }}-${{ hashFiles('**/bun.lock', '**/package-lock.json') }}
           restore-keys: |
             node-modules-${{ runner.os }}-
+      - name: Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
       - name: Setup bun
         uses: oven-sh/setup-bun@v2
         with:
@@ -128,6 +132,10 @@ jobs:
           key: node-modules-${{ runner.os }}-${{ hashFiles('**/bun.lock', '**/package-lock.json') }}
           restore-keys: |
             node-modules-${{ runner.os }}-
+      - name: Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
       - name: Setup bun
         uses: oven-sh/setup-bun@v2
         with:

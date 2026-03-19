@@ -6,7 +6,7 @@ interface Props {
 
 const { variant = "long", plus = false } = Astro.props;
 
-var visitors;
+var visitors: string;
 switch (variant) {
   case "long":
     visitors = plus ? "1,500+" : "1,500";

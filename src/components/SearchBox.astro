@@ -142,7 +142,18 @@
       return;
     }
 
-    var pagefind;
+    var pagefind: {
+      init: () => Promise<void>;
+      search: (query: string) => Promise<{
+        results: Array<{
+          data: () => Promise<{
+            url: string;
+            meta?: { title?: string };
+            excerpt?: string;
+          }>;
+        }>;
+      }>;
+    };
     var isProduction = import.meta.env.PROD;
     var pagefindPath = isProduction
       ? "/pagefind/pagefind.js"
@@ -166,7 +177,7 @@
       { once: true },
     );
 
-    var debounceTimer;
+    var debounceTimer: ReturnType<typeof setTimeout>;
     searchInput.addEventListener("input", function searchInputHandler(e) {
       clearTimeout(debounceTimer);
       var target = e.target;
@@ -197,7 +208,13 @@
           }
 
           var results = await Promise.all(
-            search.results.slice(0, 5).map(function mapData(r) {
+            search.results.slice(0, 5).map(function mapData(r: {
+              data: () => Promise<{
+                url: string;
+                meta?: { title?: string };
+                excerpt?: string;
+              }>;
+            }) {
               return r.data();
             }),
           );

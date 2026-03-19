@@ -4,11 +4,11 @@ import ContentCard from "@/components/ContentCard.astro";
 import SearchBox from "@/components/SearchBox.astro";
 import TagsFilter from "@/components/TagsFilter.astro";
 import { getCollection } from "astro:content";
-import { slugify } from "@/utils/slug";
 import {
   filterPublishedPosts,
   formatDate,
   getAllTags,
+  getPostSlug,
   splitByFeatured,
 } from "@/utils/blog";
 import { formatReadingTime } from "@/utils/reading-time";
@@ -48,7 +48,7 @@ var allTags = getAllTags(publishedPosts);
             <h2 class="section-label">Featured Posts</h2>
             <div class="grid grid-cols-1">
               {featuredPosts.map(function mapFeatured(post) {
-                var postSlug = post.slug || slugify(post.data.title);
+                var postSlug = getPostSlug(post);
                 return (
                   <ContentCard
                     title={post.data.title}
@@ -73,7 +73,7 @@ var allTags = getAllTags(publishedPosts);
         <div class="grid grid-cols-3 gap-8" id="posts-grid">
           {
             regularPosts.map(function mapRegular(post) {
-              var postSlug = post.slug || slugify(post.data.title);
+              var postSlug = getPostSlug(post);
               return (
                 <div class="post-item">
                   <ContentCard

@@ -60,6 +60,14 @@ export function getPostsByTag(
 }
 
 /**
+ * Get the URL slug for a blog post.
+ * Prefers custom slug from frontmatter, falls back to entry id.
+ */
+export function getPostSlug(post: CollectionEntry<"blog">): string {
+  return post.data.slug || post.id;
+}
+
+/**
  * Split posts into featured and regular groups.
  */
 export function splitByFeatured(posts: CollectionEntry<"blog">[]) {
