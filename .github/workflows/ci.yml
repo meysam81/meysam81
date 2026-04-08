@@ -154,6 +154,6 @@ jobs:
           path: dist
       - id: deployment
         name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
         with:
           artifact_name: github-actions-${{ github.run_id }}-${{ github.run_attempt }}
