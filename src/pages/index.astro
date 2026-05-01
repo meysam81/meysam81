@@ -93,18 +93,29 @@ import BlogUniqueVisitors from "@/components/data/BlogUniqueVisitors.astro";
 
       <div class="featured-project mb-xl">
         <ContentCard
-          title="Parse DMARC"
-          description="Open-source DMARC report analyzer with beautiful dashboard. Monitor email authentication, catch spoofing attempts, and protect your domain. Self-hosted, single binary, no external dependencies. Built with Go and Vue.js."
-          url="https://github.com/meysam81/parse-dmarc"
-          badge="🔒 Security"
+          title="DMARCguard"
+          description="DMARC monitoring & email authentication for IT admins, MSPs & engineering teams. Catch spoofing, fix deliverability, ship reports your CISO actually reads. SPF, DKIM, BIMI, MTA-STS, TLS-RPT — all in one place."
+          url="https://dmarcguard.io"
+          badge="🛡️ My SaaS"
           featured={true}
-          linkText="View Parse DMARC on GitHub"
+          linkText="Try DMARCguard"
           target="_blank"
           rel="noopener noreferrer"
         />
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-(--space-lg)">
+        <ContentCard
+          title="Parse DMARC"
+          description="The open-source predecessor to DMARCguard. Self-hosted DMARC report analyzer — single binary, no external dependencies. Built with Go and Vue.js."
+          url="https://github.com/dmarcguardhq/dmarcguard"
+          badge="🔓 Open Source"
+          featured={false}
+          linkText="View Parse DMARC on GitHub"
+          target="_blank"
+          rel="noopener noreferrer"
+        />
+
         <ContentCard
           title="Puppeteer MCP"
           description="MCP server that gives Claude and ChatGPT browser automation tools. Scrape data, fill forms, take screenshots; all through natural language. No code required."
@@ -134,6 +145,28 @@ import BlogUniqueVisitors from "@/components/data/BlogUniqueVisitors.astro";
           badge="🚀 Shipped"
           featured={false}
           linkText="Try FindForce Extension"
+          target="_blank"
+          rel="noopener noreferrer"
+        />
+
+        <ContentCard
+          title="OneOff"
+          description="One-time job scheduler. Single binary, zero dependencies. Schedule HTTP requests, shell scripts, and Docker containers — no Redis, no Postgres, no message queues. The antidote to over-engineering. Built with Go."
+          url="https://tryoneoff.com"
+          badge="⚡ Self-Hosted"
+          featured={false}
+          linkText="View OneOff on GitHub"
+          target="_blank"
+          rel="noopener noreferrer"
+        />
+
+        <ContentCard
+          title="HackerNew"
+          description="A modern, open-source reimagining of Hacker News. What if HN was built today? Intentionally minimal — no algorithmic feeds, no engagement hacking, just clean content. Astro, Vue, and Supabase."
+          url="https://hackernew.dev"
+          badge="📰 Side Project"
+          featured={false}
+          linkText="Visit HackerNew"
           target="_blank"
           rel="noopener noreferrer"
         />
