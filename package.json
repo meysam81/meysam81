@@ -4,7 +4,7 @@
     "@astrojs/sitemap": "^3.7.2",
     "@expressive-code/plugin-line-numbers": "^0.41.7",
     "@playform/compress": "^0.2.2",
-    "altcha": "^2.3.0",
+    "altcha": "^3.0.0",
     "astro": "^6.1.1",
     "astro-expressive-code": "^0.41.7",
     "cron-parser": "^5.5.0",
