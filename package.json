@@ -2,7 +2,7 @@
   "dependencies": {
     "@astrojs/rss": "^4.0.18",
     "@astrojs/sitemap": "^3.7.2",
-    "@expressive-code/plugin-line-numbers": "^0.41.7",
+    "@expressive-code/plugin-line-numbers": "^0.44.0",
     "@playform/compress": "^0.2.2",
     "altcha": "^2.3.0",
     "astro": "^6.1.1",
