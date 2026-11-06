@@ -5,7 +5,7 @@
     "@expressive-code/plugin-line-numbers": "^0.41.7",
     "@playform/compress": "^0.2.2",
     "altcha": "^2.3.0",
-    "astro": "^6.1.1",
+    "astro": "^7.0.0",
     "astro-expressive-code": "^0.41.7",
     "cron-parser": "^5.5.0",
     "cronstrue": "^3.14.0",
