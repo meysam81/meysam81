@@ -1,11 +1,11 @@
 repos:
   - repo: https://github.com/oxc-project/mirrors-oxlint
-    rev: v1.56.0
+    rev: f1c34fd5e9f244b36ad20e0dcbef74b5b56b15b1 # frozen: v1.56.0
     hooks:
       - id: oxlint
         verbose: false
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v6.0.0
+    rev: 3e8a8703264a2f4a69428a0aa4dcb512790b2c8c # frozen: v6.0.0
     hooks:
       - id: check-added-large-files
         args: ["--maxkb=2000"]
@@ -59,13 +59,14 @@ repos:
           )$
       - id: end-of-file-fixer
   - repo: https://github.com/alessandrojcm/commitlint-pre-commit-hook
-    rev: v9.24.0
+    rev: 1f6454da22d006d5bb0d2e65c96c43c23c8a534f # frozen: v9.24.0
     hooks:
       - id: commitlint
+        language: node
         stages: [commit-msg]
-        additional_dependencies: ["@commitlint/config-conventional"]
+        additional_dependencies: ["@commitlint/config-conventional@21.2.4"]
   - repo: https://github.com/dnephin/pre-commit-golang
-    rev: v0.5.1
+    rev: fb24a639f7c938759fe56eeebbb7713b69d60494 # frozen: v0.5.1
     hooks:
       - id: go-fmt
       # - id: go-vet
@@ -81,21 +82,21 @@ repos:
       # - id: go-build
       - id: go-mod-tidy
   - repo: https://github.com/rhysd/actionlint
-    rev: v1.7.11
+    rev: 393031adb9afb225ee52ae2ccd7a5af5525e03e8 # frozen: v1.7.11
     hooks:
       - id: actionlint
   - repo: https://github.com/reteps/dockerfmt
-    rev: v0.3.9
+    rev: 21be1f69cec5e77953bdb40a2f1d95de0eeb56ac # frozen: v0.3.9
     hooks:
       - id: dockerfmt
         args:
           - --indent=4
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.21.2
+    rev: 75992aaa40730136014f34227e0135f63fc951b4 # frozen: v3.21.2
     hooks:
       - id: pyupgrade
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.7
+    rev: e05c5c0818279e5ac248ac9e954431ba58865e61 # frozen: v0.15.7
     hooks:
       - id: ruff-check
         args:
