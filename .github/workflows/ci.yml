@@ -103,7 +103,7 @@ jobs:
           echo "deploy_url=$deploy_url" >> "$GITHUB_OUTPUT"
         env:
           # renovate: npm=netlify-cli
-          NETLIFY_CLI_VERSION: 23.15.1
+          NETLIFY_CLI_VERSION: 26.2.0
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
       - name: Comment PR
